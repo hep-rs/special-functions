@@ -3,60 +3,267 @@
 //! At this stage, this only implements the function \\(K_2(x)\\).
 
 use std::f64;
+use polynomial::polynomial;
 
-/// Approximation of modified Bessel function \\(K_2(x)\\).
+/// Coefficients of the polynomial in \\(x\^2\\) for the non-logarithmic part of
+/// the function.  There is an overall factor of \\(x\^{-2}\\) factored out such
+/// that the first term actually corresponds to \\(x\^{-2}\\) instead of
+/// \\(x\^0\\).
+const K2_ZERO: [f64; 13] = [
+    2.0000000000000000000,
+    -0.50000000000000000000,
+    0.10824143945730155610,
+    0.015964564399219574120,
+    0.00062096294997561169124,
+    0.000011796141758852787447,
+    1.3465023364738628899e-7,
+    1.0309882406219202048e-9,
+    5.6763386749232758866e-12,
+    2.3584592426734533679e-14,
+    7.6634966018023493194e-17,
+    2.0017301655625104239e-19,
+    4.2960048324252435720e-22,
+];
+
+/// The coefficient of \\(\ln(x)\\) in the series of expansion of \\(K_2\\)
+/// around zero is a polynomial in \\(x\^2\\) whose coefficients are listed
+/// below.
+const K2_ZERO_LNX: [f64; 12] = [
+    0.0,
+    -0.12500000000000000000,
+    -0.010416666666666666667,
+    -0.00032552083333333333333,
+    -5.4253472222222222222e-6,
+    -5.6514033564814814815e-8,
+    -4.0367166832010582011e-10,
+    -2.1024566058338844797e-12,
+    -8.3430817691820812687e-15,
+    -2.6072130528694003965e-17,
+    -6.5838713456297989810e-20,
+    -1.3716398636728747877e-22,
+];
+
+/// The intervals over which the various minimax polynomials are good fits.  The
+/// polynomials are defined as:
 ///
-/// The approximation is split in three regimes:
+/// \\[
+///   K_2(x) \approx x^{c} \exp[p_0 + p_1 \log x + p_2 \log\^2 x + \dots]
+/// \\]
 ///
-/// - \\(|x| \ll 1\\), where the Taylor series expansion around \\(x = 0\\) is
-///   used;
-/// - \\(|x| \approx 1\\), where a mini-max polynomial is used which ensures the
-///   error is spread over the whole interval and overall bias is minimized.
-///   (This is unlike a Taylor series where the error is minimized at a single
-///   point and increases (sometimes rapidly) everywhere else);
-/// - \\(|x| \gg 1\\), where the Taylor series expansion around \\(x = \infty\\)
-///   is used.
+/// where the \\(c\\) are given in `K2_MINIMAX_DENOMINATOR` and each set of
+/// \\(p_i\\) are specified in `K2_MINIMAX_COEFFICIENTS`.
+const K2_INTERVALS: [f64; 9] = [3.0, 4.3, 6.3, 9.5, 14.0, 20.0, 28.0, 39.0, 50.0];
+
+/// See documentation for [`K2_INTERVALS`].
+const K2_MINIMAX_COEFFICIENTS: [[f64; 10]; 9] = [
+    [
+        0.48540945644539957092,
+        0.0,
+        -0.30945942670539099750,
+        -0.15585303693500998020,
+        -0.049732068843151215726,
+        -0.0096700043098909755815,
+        -0.00079751798558635915917,
+        -0.000012942122650534429289,
+        -0.00012518744533679282883,
+        8.4307689703819656630e-6,
+    ],
+    [
+        0.48545884942224755159,
+        0.0,
+        -0.30812481690893442952,
+        -0.15857039181904055621,
+        -0.046156327591077483262,
+        -0.012824821813243478761,
+        0.0010694000622443177862,
+        -0.00072770457939783402604,
+        0.000035506654961905029630,
+        -7.7361260348840737101e-6,
+    ],
+    [
+        0.48583971032199471072,
+        0.0,
+        -0.30190724888282491069,
+        -0.16839947352641612033,
+        -0.036125207042567928324,
+        -0.019679108908750669923,
+        0.0042054035744657127201,
+        -0.0016541275646554647829,
+        0.00019585344664021868408,
+        -0.000020124472943210240110,
+    ],
+    [
+        0.48730126544556513447,
+        0.0,
+        -0.28690601158066157644,
+        -0.18717842731324724938,
+        -0.020963239170167004125,
+        -0.027867573065163789190,
+        0.0071636375983506672253,
+        -0.0023435151459692776964,
+        0.00028989084621273493183,
+        -0.000025845035988164977030,
+    ],
+    [
+        0.49953520980803932457,
+        0.0,
+        -0.20372769565919164085,
+        -0.27174348583015395111,
+        0.034407602132475691017,
+        -0.052083585506209703027,
+        0.014237905370377986265,
+        -0.0036747277407870807902,
+        0.00043631891684200507934,
+        -0.000033018549451866270325,
+    ],
+    [
+        0.58515928733830630735,
+        0.0,
+        0.22793668638995396930,
+        -0.64934014419406776081,
+        0.24700684033794914491,
+        -0.13198461481115429553,
+        0.034283106144276448865,
+        -0.0069117878821568363455,
+        0.00074165903631901594529,
+        -0.000045836462426434200533,
+    ],
+    [
+        0.96785878444204406866,
+        0.0,
+        1.7378058064277812795,
+        -1.8171197538978631050,
+        0.82813886661447973293,
+        -0.32495047203692361112,
+        0.077037672338434225330,
+        -0.013007026707240630149,
+        0.0012490129200058368496,
+        -0.000064623007617857522892,
+    ],
+    [
+        2.3389526710622062777,
+        0.0,
+        6.1205735748277891033,
+        -4.8673926761237273707,
+        2.1937613923352097545,
+        -0.73282040855622368481,
+        0.15830472720366121457,
+        -0.023423418808222430921,
+        0.0020283664794091983507,
+        -0.000090556953327204644656,
+    ],
+    [
+        5.9335070986949618806,
+        0.0,
+        15.771382202950103566,
+        -11.020955422136142360,
+        4.7171888746843249057,
+        -1.4229830544832422616,
+        0.28419995161999745802,
+        -0.038193082347613010265,
+        0.0030395693397844018477,
+        -0.00012134012381855006703,
+    ],
+];
+
+/// See documentation for [`K2_INTERVALS`].
+const K2_MINIMAX_DENOMINATOR: [f64; 9] = [
+    -2.3704492431667649572,
+    -2.3708334975977373087,
+    -2.3731371918260266146,
+    -2.3801499518999266703,
+    -2.4279591892422368110,
+    -2.7161672883181655939,
+    -3.8559098366274834205,
+    -7.5317695789875298386,
+    -16.364670025147286701,
+];
+
+/// Coefficient of the polynomial in \\(x\^{-1}\\) with a factor of \\(e\^{-x}
+/// \sqrt{\frac{\pi}{2} x}\\) factored out.
+const K2_INFINITY: [f64; 12] = [
+    0.0,
+    1.0000000000000000000,
+    1.8750000000000000000,
+    0.82031250000000000000,
+    -0.30761718750000000000,
+    0.31723022460937500000,
+    -0.51549911499023437500,
+    1.1276543140411376953,
+    -3.0809126794338226318,
+    10.061105468776077032,
+    -38.148358235775958747,
+    164.51479489178382210,
+];
+
+/// Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x \geq
+/// 0\\).
 pub fn k_2(x: f64) -> f64 {
     debug_assert!(x >= 0.0, "Argument of BesselK must be positive.");
 
     if x == 0.0 {
+        debug!("Using exact expression at x = 0.");
         return f64::INFINITY;
-    }
-
-    // The approximation is done in the log-transformed variable (that is, the
-    // interpolation is of the function K₂(exp(x))).
-    let xln = x.ln();
-
-    if xln < 0.3 {
+    } else if x < 2.1 {
+        debug!("Using Taylor series around x = 0.");
         let x2 = x.powi(2);
-
-        -0.50000000000000000000 + x2 * (0.10824143945730155610 - 0.12500000000000000000 * xln)
-            + 2.0 * x2.powi(-1)
-            + x2.powi(2) * (0.015964564399219574120 - 0.010416666666666666667 * xln)
-            + x2.powi(3) * (0.00062096294997561169124 - 0.00032552083333333333333 * xln)
-            + x2.powi(4) * (0.000011796141758852787447 - 5.4253472222222222222e-6 * xln)
-            + x2.powi(5) * (1.3465023364738628899e-7 - 5.6514033564814814815e-8 * xln)
-            + x2.powi(6) * (1.0309882406219202048e-9 - 4.0367166832010582011e-10 * xln)
-            + x2.powi(7) * (5.6763386749232758866e-12 - 2.1024566058338844797e-12 * xln)
-    } else if xln < 3.4 {
-        let num = -0.0000180238 * xln.powi(8) - 0.0000205089 * xln.powi(7)
-            + 0.00064349 * xln.powi(6) - 0.0178769 * xln.powi(5)
-            + 0.072644 * xln.powi(4) - 0.467429 * xln.powi(3)
-            + 0.78293 * xln.powi(2) - 2.57649 * xln + 0.485409;
-        let denom = 0.0000176583 * xln.powi(6) - 0.000523792 * xln.powi(5)
-            + 0.00663565 * xln.powi(4) - 0.045622 * xln.powi(3)
-            + 0.177564 * xln.powi(2) - 0.424493 * xln + 1.0;
-
-        (num / denom).exp()
+        polynomial(x2, &K2_ZERO) / x2 + polynomial(x2, &K2_ZERO_LNX) * x.ln()
+    } else if x > 50.0 {
+        debug!("Using Taylor series around x = ∞.");
+        let xinv = x.powi(-1);
+        1.2533141373155002512 * (-x).exp() * x.sqrt() * polynomial(xinv, &K2_INFINITY)
     } else {
-        let ex = x.exp();
-        if ex == f64::INFINITY {
-            0.0
-        } else {
-            (1.4133050937925706925 - 0.64608232859088945941 * x + 0.39758912528670120579 * x.powi(2)
-                - 0.38554096997498298743 * x.powi(3)
-                + 1.0281092532666212998 * x.powi(4) + 2.3499640074665629710 * x.powi(5)
-                + 1.2533141373155002512 * x.powi(6)) / (6.5 * xln).exp() / ex
+        let xln = x.ln();
+        let (i, x_lim) = K2_INTERVALS
+            .iter()
+            .enumerate()
+            .skip_while(|&(_, &x_lim)| x > x_lim)
+            .next()
+            .expect("The intervals should cover everything between 0.22 and 2.85.");
+        debug!("Using minimax polynomial for x < {}.", x_lim);
+        polynomial(xln, &K2_MINIMAX_COEFFICIENTS[i]).exp() * x.powf(K2_MINIMAX_DENOMINATOR[i])
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use csv;
+    use utilities::test::*;
+
+    #[test]
+    fn k_2() {
+        let mut rdr = csv::Reader::from_path("test/data/bessel_k2.csv").unwrap();
+
+        for result in rdr.deserialize() {
+            let (x, v): (f64, f64) = result.unwrap();
+
+            if !v.is_nan() {
+                let n = super::k_2(x);
+                approx_eq(n, v, 12.0, 0.0);
+            }
         }
+    }
+}
+
+#[cfg(feature = "nightly")]
+#[cfg(test)]
+mod bench {
+    use test::Bencher;
+    use utilities::test::*;
+    use csv;
+
+    #[bench]
+    fn k_2(b: &mut Bencher) {
+        let rdr = csv::Reader::from_path("test/data/bessel_k2.csv").unwrap();
+        let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
+
+        b.iter(|| {
+            for &(x, v) in &data {
+                if !v.is_nan() {
+                    let n = super::k_2(x);
+                    approx_eq(n, v, 12.0, 0.0);
+                }
+            }
+        });
     }
 }
