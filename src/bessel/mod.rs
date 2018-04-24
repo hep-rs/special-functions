@@ -129,6 +129,7 @@ pub fn k_3(x: f64) -> f64 {
 #[cfg(test)]
 mod test {
     use csv;
+    use std::f64;
     use utilities::test::*;
 
     #[test]
@@ -143,6 +144,8 @@ mod test {
                 approx_eq(n, v, 12.0, 0.0);
             }
         }
+
+        assert_eq!(super::k_0(0.0), f64::INFINITY);
     }
 
     #[test]
@@ -157,6 +160,8 @@ mod test {
                 approx_eq(n, v, 12.0, 0.0);
             }
         }
+
+        assert_eq!(super::k_1(0.0), f64::INFINITY);
     }
 
     #[test]
@@ -171,6 +176,8 @@ mod test {
                 approx_eq(n, v, 12.0, 0.0);
             }
         }
+
+        assert_eq!(super::k_2(0.0), f64::INFINITY);
     }
 
     #[test]
@@ -185,6 +192,8 @@ mod test {
                 approx_eq(n, v, 12.0, 0.0);
             }
         }
+
+        assert_eq!(super::k_3(0.0), f64::INFINITY);
     }
 }
 
