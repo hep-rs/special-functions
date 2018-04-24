@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["bessel","Bessel functions"],["polylog","Polylogarithms"],["polynomial","Polynomials"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["polynomial","Given a list of coefficient \\(c = [c_0, c_1, \\dots, c_n]\\), evaluates the polynomial \\[     p(x) = c_0 + c_1 x + c_2 x^2 + \\dots + c_n x^n \\] at the specified value of \\(x\\)."]]});
