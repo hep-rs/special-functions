@@ -34,5 +34,6 @@ extern crate test;
 pub mod polylog;
 pub mod bessel;
 pub mod polynomial;
+pub mod interpolation;
 
 mod utilities;

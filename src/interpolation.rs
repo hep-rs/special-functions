@@ -1,3 +1,5 @@
+//! Interpolation functions
+
 /// Perform linear interpolation on data.
 ///
 /// The data should be provided in an array of the shape `[(x0, y0), (x1, y1),
@@ -14,7 +16,7 @@
 ///
 /// This linear interpolation repeats the boundary value for all values outside
 /// the domain of the interpolation data.
-pub(crate) fn linear(data: &[(f64, f64)], x: f64) -> f64 {
+pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
     debug_assert!(
         !data.is_empty(),
         "Interpolation data must contain at least one element."
