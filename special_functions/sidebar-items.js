@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["bessel","Bessel functions"],["polylog","Polylogarithms"],["polynomial","Polynomials"]]});
+initSidebarItems({"mod":[["bessel","Bessel functions"],["interpolation","Interpolation functions"],["polylog","Polylogarithms"],["polynomial","Utilities to handle polynomials"]]});
