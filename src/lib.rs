@@ -7,16 +7,16 @@
 //!
 //! **This library is still undergoing development.**
 //!
-//! [![Crates.io](https://img.shields.io/crates/v/hep-boltzmann-solver.svg)](https://crates.io/crates/hep-boltzmann-solver)
-//! [![Travis](https://img.shields.io/travis/hep-rs/boltzmann-solver/master.svg)](https://travis-ci.org/hep-rs/boltzmann-solver)
-//! [![Codecov](https://img.shields.io/codecov/c/github/hep-rs/boltzmann-solver/master.svg)](https://codecov.io/gh/hep-rs/boltzmann-solver)
+//! [![Crates.io](https://img.shields.io/crates/v/hep-special-functions.svg)](https://crates.io/crates/hep-special-functions)
+//! [![Travis](https://img.shields.io/travis/hep-rs/special-functions/master.svg)](https://travis-ci.org/hep-rs/special-functions)
+//! [![Codecov](https://img.shields.io/codecov/c/github/hep-rs/special-functions/master.svg)](https://codecov.io/gh/hep-rs/special-functions)
 //!
 //! Licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
 //!
 //! The documentation makes use of [MathJax](https://www.mathjax.org/) in order
 //! to display mathematics.  A version of the documentation with MathJax
 //! integrated is available
-//! [here](https://hep.rs/special-functions/special-functions).
+//! [here](https://hep.rs/special-functions/special_functions).
 
 #![cfg_attr(feature = "nightly", feature(test))]
 #![cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
