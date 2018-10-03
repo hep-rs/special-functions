@@ -76,8 +76,13 @@ mod test {
             let x = x as f64;
             approx_eq(
                 super::polynomial(x, &COEFFICIENTS),
-                1.0 + 2.0 * x + 3.0 * x.powi(2) + 4.0 * x.powi(3) + 5.0 * x.powi(4)
-                    + 6.0 * x.powi(5) + 7.0 * x.powi(6) + 8.0 * x.powi(7)
+                1.0 + 2.0 * x
+                    + 3.0 * x.powi(2)
+                    + 4.0 * x.powi(3)
+                    + 5.0 * x.powi(4)
+                    + 6.0 * x.powi(5)
+                    + 7.0 * x.powi(6)
+                    + 8.0 * x.powi(7)
                     + 9.0 * x.powi(8),
                 14.0,
                 0.0,

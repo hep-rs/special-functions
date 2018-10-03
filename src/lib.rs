@@ -31,9 +31,9 @@ extern crate csv;
 #[cfg(feature = "nightly")]
 extern crate test;
 
-pub mod polylog;
 pub mod bessel;
-pub mod polynomial;
 pub mod interpolation;
+pub mod polylog;
+pub mod polynomial;
 
 mod utilities;

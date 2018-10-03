@@ -5,8 +5,8 @@
 
 mod k_coefficients;
 
-use std::f64;
 use polynomial::polynomial;
+use std::f64;
 
 use self::k_coefficients::*;
 
@@ -200,9 +200,9 @@ mod test {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod bench {
+    use csv;
     use test::Bencher;
     use utilities::test::*;
-    use csv;
 
     #[bench]
     fn k_0(b: &mut Bencher) {

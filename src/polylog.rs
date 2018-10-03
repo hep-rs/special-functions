@@ -31,7 +31,7 @@ const BOSE_EINSTEIN_ZERO: [f64; 9] = [
 /// degree-9 minimax polynomial ensures that the error is less than the floating
 /// point error.
 const BOSE_EINSTEIN_INTERVALS: [f64; 14] = [
-    0.28, 0.36, 0.45, 0.56, 0.69, 0.84, 1.01, 1.20, 1.42, 1.65, 1.9, 2.18, 2.51, 2.85
+    0.28, 0.36, 0.45, 0.56, 0.69, 0.84, 1.01, 1.20, 1.42, 1.65, 1.9, 2.18, 2.51, 2.85,
 ];
 
 /// Minimax polynomial correspond for each interval in `BOSE_EINSTEIN_INTERVALS`.
@@ -247,7 +247,7 @@ const FERMI_DIRAC_NEG_INFINITY: [f64; 12] = [
 /// minimax polynomial ensures that the error is less than the floating point
 /// error.
 const FERMI_DIRAC_INTERVALS: [f64; 11] = [
-    -2.15, -1.67, -1.25, -0.8, -0.3, 0.1, 0.6, 1.1, 1.65, 2.05, 2.5
+    -2.15, -1.67, -1.25, -0.8, -0.3, 0.1, 0.6, 1.1, 1.65, 2.05, 2.5,
 ];
 
 /// Minimax polynomial correspond for each interval in `FERMI_DIRAC_INTERVALS`.
@@ -472,7 +472,8 @@ pub fn fermi_dirac(x: f64) -> f64 {
     } else if x > 2.5 {
         debug!("Using Taylor series around x = ∞.");
         let ex = (-x).exp();
-        polynomial(ex, &FERMI_DIRAC_INFINITY) + 0.16666666666666666667 * x.powi(3)
+        polynomial(ex, &FERMI_DIRAC_INFINITY)
+            + 0.16666666666666666667 * x.powi(3)
             + 1.6449340668482264365 * x
     } else {
         let (i, x_lim) = FERMI_DIRAC_INTERVALS

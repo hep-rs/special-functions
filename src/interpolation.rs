@@ -89,8 +89,7 @@ mod bench {
                     .map(|i| {
                         let x = i as f64 / ($n as f64);
                         (x, x)
-                    })
-                    .collect();
+                    }).collect();
                 b.iter(|| {
                     for i in 0..100_001 {
                         let x = i as f64 / 100_000.0;
@@ -99,7 +98,7 @@ mod bench {
                     }
                 });
             }
-        }
+        };
     }
 
     linear!(linear_1, 1);
