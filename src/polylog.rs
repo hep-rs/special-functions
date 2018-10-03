@@ -524,9 +524,9 @@ mod test {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod bench {
+    use csv;
     use test::Bencher;
     use utilities::test::*;
-    use csv;
 
     #[bench]
     fn bose_einstein(b: &mut Bencher) {
