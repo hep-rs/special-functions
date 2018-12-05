@@ -134,7 +134,7 @@ mod test {
 
     #[test]
     fn k_0() {
-        let mut rdr = csv::Reader::from_path("test/data/bessel_k0.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/bessel_k0.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -150,7 +150,7 @@ mod test {
 
     #[test]
     fn k_1() {
-        let mut rdr = csv::Reader::from_path("test/data/bessel_k1.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/bessel_k1.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -166,7 +166,7 @@ mod test {
 
     #[test]
     fn k_2() {
-        let mut rdr = csv::Reader::from_path("test/data/bessel_k2.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/bessel_k2.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -182,7 +182,7 @@ mod test {
 
     #[test]
     fn k_3() {
-        let mut rdr = csv::Reader::from_path("test/data/bessel_k3.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/bessel_k3.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -206,7 +206,7 @@ mod bench {
 
     #[bench]
     fn k_0(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/bessel_k0.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/bessel_k0.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
@@ -221,7 +221,7 @@ mod bench {
 
     #[bench]
     fn k_1(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/bessel_k1.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/bessel_k1.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
@@ -236,7 +236,7 @@ mod bench {
 
     #[bench]
     fn k_2(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/bessel_k2.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/bessel_k2.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
@@ -251,7 +251,7 @@ mod bench {
 
     #[bench]
     fn k_3(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/bessel_k3.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/bessel_k3.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {

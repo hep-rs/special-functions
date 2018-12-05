@@ -494,7 +494,7 @@ mod test {
 
     #[test]
     fn bose_einstein() {
-        let mut rdr = csv::Reader::from_path("test/data/polylog_bose_einstein.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/polylog_bose_einstein.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -508,7 +508,7 @@ mod test {
 
     #[test]
     fn fermi_dirac() {
-        let mut rdr = csv::Reader::from_path("test/data/polylog_fermi_dirac.csv").unwrap();
+        let mut rdr = csv::Reader::from_path("tests/data/polylog_fermi_dirac.csv").unwrap();
 
         for result in rdr.deserialize() {
             let (x, v): (f64, f64) = result.unwrap();
@@ -530,7 +530,7 @@ mod bench {
 
     #[bench]
     fn bose_einstein(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/polylog_bose_einstein.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/polylog_bose_einstein.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
@@ -545,7 +545,7 @@ mod bench {
 
     #[bench]
     fn fermi_dirac(b: &mut Bencher) {
-        let rdr = csv::Reader::from_path("test/data/polylog_fermi_dirac.csv").unwrap();
+        let rdr = csv::Reader::from_path("tests/data/polylog_fermi_dirac.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
