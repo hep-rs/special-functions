@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `eigen_symmetric_workspace` mod in crate `rgsl`."><meta name="keywords" content="rust, rustlang, rust-lang, eigen_symmetric_workspace"><title>rgsl::types::eigen_symmetric_workspace - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc mod"><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N9HX7G4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) --><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module eigen_symmetric_workspace</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../../index.html'>rgsl</a>::<wbr><a href='../index.html'>types</a></p><script>window.sidebarCurrent = {name: 'eigen_symmetric_workspace', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../../src/rgsl/types/eigen_symmetric_workspace.rs.html#5-1153' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../../index.html'>rgsl</a>::<wbr><a href='../index.html'>types</a>::<wbr><a class="mod" href=''>eigen_symmetric_workspace</a></span></h1><div class='docblock'><p>#Real Symmetric Matrices</p>
+<p>For real symmetric matrices, the library uses the symmetric bidiagonalization and QR reduction
+method. This is described in Golub &amp; van Loan, section 8.3. The computed eigenvalues are accurate to
+an absolute accuracy of \epsilon ||A||_2, where \epsilon is the machine precision.</p>
+<p>#Complex Hermitian Matrices</p>
+<p>For hermitian matrices, the library uses the complex form of the symmetric bidiagonalization and QR
+reduction method.</p>
+<p>#Real Nonsymmetric Matrices</p>
+<p>The solution of the real nonsymmetric eigensystem problem for a matrix A involves computing the
+Schur decomposition</p>
+<p>A = Z T Z^T</p>
+<p>where Z is an orthogonal matrix of Schur vectors and T, the Schur form, is quasi upper triangular
+with diagonal 1-by-1 blocks which are real eigenvalues of A, and diagonal 2-by-2 blocks whose
+eigenvalues are complex conjugate eigenvalues of A. The algorithm used is the double-shift Francis
+method.</p>
+<p>#Real Generalized Symmetric-Definite Eigensystems</p>
+<p>The real generalized symmetric-definite eigenvalue problem is to find eigenvalues \lambda and
+eigenvectors x such that</p>
+<p>A x = lambda B x</p>
+<p>where A and B are symmetric matrices, and B is positive-definite. This problem reduces to the
+standard symmetric eigenvalue problem by applying the Cholesky decomposition to B:</p>
+<pre><code class="language-latex">                      A x = lambda B x
+                      A x = lambda L L^t x
+( L^{-1} A L^{-t} ) L^t x = lambda L^t x
+</code></pre>
+<p>Therefore, the problem becomes C y = lambda y where C = L^{-1} A L^{-t} is symmetric, and y = L^t x.
+The standard symmetric eigensolver can be applied to the matrix C. The resulting eigenvectors are
+backtransformed to find the vectors of the original problem. The eigenvalues and eigenvectors of the
+generalized symmetric-definite eigenproblem are always real.</p>
+<p>#Complex Generalized Hermitian-Definite Eigensystems</p>
+<p>The complex generalized hermitian-definite eigenvalue problem is to find eigenvalues \lambda and
+eigenvectors x such that</p>
+<p>A x = \lambda B x</p>
+<p>where A and B are hermitian matrices, and B is positive-definite. Similarly to the real case, this
+can be reduced to C y = \lambda y where C = L^{-1} A L^{-H} is hermitian, and y = L^H x. The
+standard hermitian eigensolver can be applied to the matrix C. The resulting eigenvectors are
+backtransformed to find the vectors of the original problem. The eigenvalues of the generalized
+hermitian-definite eigenproblem are always real.</p>
+<p>#Real Generalized Nonsymmetric Eigensystems</p>
+<p>Given two square matrices (A, B), the generalized nonsymmetric eigenvalue problem is to find
+eigenvalues \lambda and eigenvectors x such that</p>
+<p>A x = \lambda B x</p>
+<p>We may also define the problem as finding eigenvalues \mu and eigenvectors y such that</p>
+<p>\mu A y = B y
+Note that these two problems are equivalent (with \lambda = 1/\mu) if neither \lambda nor \mu is
+zero. If say, \lambda is zero, then it is still a well defined eigenproblem, but its alternate
+problem involving \mu is not. Therefore, to allow for zero (and infinite) eigenvalues, the problem
+which is actually solved is</p>
+<p>\beta A x = \alpha B x
+The eigensolver routines below will return two values \alpha and \beta and leave it to the user to
+perform the divisions \lambda = \alpha / \beta and \mu = \beta / \alpha.</p>
+<p>If the determinant of the matrix pencil A - \lambda B is zero for all \lambda, the problem is said
+to be singular; otherwise it is called regular. Singularity normally leads to some
+\alpha = \beta = 0 which means the eigenproblem is ill-conditioned and generally does not have well
+defined eigenvalue solutions. The routines below are intended for regular matrix pencils and could
+yield unpredictable results when applied to singular pencils.</p>
+<p>The solution of the real generalized nonsymmetric eigensystem problem for a matrix pair (A, B)
+involves computing the generalized Schur decomposition</p>
+<p>A = Q S Z^T
+B = Q T Z^T
+where Q and Z are orthogonal matrices of left and right Schur vectors respectively, and (S, T) is
+the generalized Schur form whose diagonal elements give the \alpha and \beta values. The algorithm
+used is the QZ method due to Moler and Stewart (see references).</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenHermVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenHermVWorkspace'>EigenGenHermVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenHermWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenHermWorkspace'>EigenGenHermWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenSymmVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenSymmVWorkspace'>EigenGenSymmVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenSymmWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenSymmWorkspace'>EigenGenSymmWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenVWorkspace'>EigenGenVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenGenWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenGenWorkspace'>EigenGenWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenHermitianVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenHermitianVWorkspace'>EigenHermitianVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenHermitianWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenHermitianWorkspace'>EigenHermitianWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenNonSymmVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenNonSymmVWorkspace'>EigenNonSymmVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenNonSymmWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenNonSymmWorkspace'>EigenNonSymmWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenSymmetricVWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenSymmetricVWorkspace'>EigenSymmetricVWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EigenSymmetricWorkspace.html"
+                                  title='struct rgsl::types::eigen_symmetric_workspace::EigenSymmetricWorkspace'>EigenSymmetricWorkspace</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

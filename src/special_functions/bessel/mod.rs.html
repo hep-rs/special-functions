@@ -264,132 +264,120 @@
 <span id="264">264</span>
 <span id="265">265</span>
 <span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Bessel functions</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! At this stage, this only implements the function \\(K_0(x)\\), \\(K_1\\),</span>
 <span class="doccomment">//! \\(K_2\\) and \\(K_3\\).</span>
 
-<span class="kw">mod</span> <span class="ident">k_coefficients</span>;
-
-<span class="kw">use</span> <span class="ident">polynomial</span>::<span class="ident">polynomial</span>;
+<span class="kw">use</span> <span class="ident">rgsl</span>::{<span class="ident">bessel</span>, <span class="ident">Value</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
-
-<span class="kw">use</span> <span class="self">self</span>::<span class="ident">k_coefficients</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Approximation of modified Bessel function \\(K_0(x)\\) for all \\(x \geq</span>
 <span class="doccomment">/// 0\\).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_0</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">x</span> <span class="op">&gt;=</span> <span class="number">0.0</span>, <span class="string">&quot;Argument of BesselK must be positive.&quot;</span>);
-
     <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using exact expression at x = 0.&quot;</span>);
-        <span class="kw">return</span> <span class="ident">f64</span>::<span class="ident">INFINITY</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1.6</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = 0.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
-        <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K0_ZERO</span>) <span class="op">+</span> <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K0_ZERO_LNX</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">ln</span>()
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">50.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = ∞.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">xinv</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">1</span>);
-        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">xinv</span>, <span class="kw-2">&amp;</span><span class="ident">K0_INFINITY</span>)
+        <span class="ident">f64</span>::<span class="ident">INFINITY</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">7.42088696664217829e2</span> {
+        <span class="number">0.0</span>
     } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">xln</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">ln</span>();
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">x_lim</span>) <span class="op">=</span> <span class="ident">K0_INTERVALS</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">enumerate</span>()
-            .<span class="ident">skip_while</span>(<span class="op">|</span><span class="kw-2">&amp;</span>(<span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="ident">x_lim</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">x_lim</span>)
-            .<span class="ident">next</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;The intervals should cover everything between 0.22 and 2.85.&quot;</span>);
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using minimax polynomial for x &lt; {}.&quot;</span>, <span class="ident">x_lim</span>);
-        <span class="ident">polynomial</span>(<span class="ident">xln</span>, <span class="kw-2">&amp;</span><span class="ident">K0_MINIMAX_COEFFICIENTS</span>[<span class="ident">i</span>]).<span class="ident">exp</span>() <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powf</span>(<span class="ident">K0_MINIMAX_DENOMINATOR</span>[<span class="ident">i</span>])
+        <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">K0_e</span>(<span class="ident">x</span>) {
+            (<span class="ident">Value</span>::<span class="ident">Success</span>, <span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>.<span class="ident">val</span>,
+            (<span class="ident">Value</span>::<span class="ident">UnderFlow</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="number">0.0</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+        }
     }
 }
 
 <span class="doccomment">/// Approximation of modified Bessel function \\(K_1(x)\\) for all \\(x \geq</span>
 <span class="doccomment">/// 0\\).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_1</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">x</span> <span class="op">&gt;=</span> <span class="number">0.0</span>, <span class="string">&quot;Argument of BesselK must be positive.&quot;</span>);
-
     <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using exact expression at x = 0.&quot;</span>);
-        <span class="kw">return</span> <span class="ident">f64</span>::<span class="ident">INFINITY</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1.85</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = 0.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
-        <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K1_ZERO</span>) <span class="op">/</span> <span class="ident">x</span> <span class="op">+</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K1_ZERO_LNX</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">ln</span>()
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">50.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = ∞.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">xinv</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">1</span>);
-        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">xinv</span>, <span class="kw-2">&amp;</span><span class="ident">K1_INFINITY</span>)
+        <span class="ident">f64</span>::<span class="ident">INFINITY</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">7.42088696664217829e2</span> {
+        <span class="number">0.0</span>
     } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">xln</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">ln</span>();
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">x_lim</span>) <span class="op">=</span> <span class="ident">K1_INTERVALS</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">enumerate</span>()
-            .<span class="ident">skip_while</span>(<span class="op">|</span><span class="kw-2">&amp;</span>(<span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="ident">x_lim</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">x_lim</span>)
-            .<span class="ident">next</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;The intervals should cover everything between 0.22 and 2.85.&quot;</span>);
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using minimax polynomial for x &lt; {}.&quot;</span>, <span class="ident">x_lim</span>);
-        <span class="ident">polynomial</span>(<span class="ident">xln</span>, <span class="kw-2">&amp;</span><span class="ident">K1_MINIMAX_COEFFICIENTS</span>[<span class="ident">i</span>]).<span class="ident">exp</span>() <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powf</span>(<span class="ident">K1_MINIMAX_DENOMINATOR</span>[<span class="ident">i</span>])
+        <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">K1_e</span>(<span class="ident">x</span>) {
+            (<span class="ident">Value</span>::<span class="ident">Success</span>, <span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>.<span class="ident">val</span>,
+            (<span class="ident">Value</span>::<span class="ident">UnderFlow</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="number">0.0</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+        }
     }
 }
 
 <span class="doccomment">/// Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x \geq</span>
 <span class="doccomment">/// 0\\).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_2</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">x</span> <span class="op">&gt;=</span> <span class="number">0.0</span>, <span class="string">&quot;Argument of BesselK must be positive.&quot;</span>);
-
     <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using exact expression at x = 0.&quot;</span>);
-        <span class="kw">return</span> <span class="ident">f64</span>::<span class="ident">INFINITY</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">2.1</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = 0.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
-        <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K2_ZERO</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">2</span>) <span class="op">+</span> <span class="ident">x2</span> <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K2_ZERO_LNX</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">ln</span>()
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">50.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = ∞.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">xinv</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">1</span>);
-        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">xinv</span>, <span class="kw-2">&amp;</span><span class="ident">K2_INFINITY</span>)
+        <span class="ident">f64</span>::<span class="ident">INFINITY</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">7.42088696664217829e2</span> {
+        <span class="number">0.0</span>
     } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">xln</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">ln</span>();
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">x_lim</span>) <span class="op">=</span> <span class="ident">K2_INTERVALS</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">enumerate</span>()
-            .<span class="ident">skip_while</span>(<span class="op">|</span><span class="kw-2">&amp;</span>(<span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="ident">x_lim</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">x_lim</span>)
-            .<span class="ident">next</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;The intervals should cover everything between 0.22 and 2.85.&quot;</span>);
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using minimax polynomial for x &lt; {}.&quot;</span>, <span class="ident">x_lim</span>);
-        <span class="ident">polynomial</span>(<span class="ident">xln</span>, <span class="kw-2">&amp;</span><span class="ident">K2_MINIMAX_COEFFICIENTS</span>[<span class="ident">i</span>]).<span class="ident">exp</span>() <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powf</span>(<span class="ident">K2_MINIMAX_DENOMINATOR</span>[<span class="ident">i</span>])
+        <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">Kn_e</span>(<span class="number">2</span>, <span class="ident">x</span>) {
+            (<span class="ident">Value</span>::<span class="ident">Success</span>, <span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>.<span class="ident">val</span>,
+            (<span class="ident">Value</span>::<span class="ident">UnderFlow</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="number">0.0</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+        }
     }
 }
 
 <span class="doccomment">/// Approximation of modified Bessel function \\(K_3(x)\\) for all \\(x \geq</span>
 <span class="doccomment">/// 0\\).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_3</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">x</span> <span class="op">&gt;=</span> <span class="number">0.0</span>, <span class="string">&quot;Argument of BesselK must be positive.&quot;</span>);
-
     <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using exact expression at x = 0.&quot;</span>);
-        <span class="kw">return</span> <span class="ident">f64</span>::<span class="ident">INFINITY</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">2.4</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = 0.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
-        <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K3_ZERO</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">+</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">x2</span>, <span class="kw-2">&amp;</span><span class="ident">K3_ZERO_LNX</span>) <span class="op">*</span> <span class="ident">x</span>.<span class="ident">ln</span>()
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">50.0</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using Taylor series around x = ∞.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">xinv</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">1</span>);
-        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">polynomial</span>(<span class="ident">xinv</span>, <span class="kw-2">&amp;</span><span class="ident">K3_INFINITY</span>)
+        <span class="ident">f64</span>::<span class="ident">INFINITY</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">7.42088696664217829e2</span> {
+        <span class="number">0.0</span>
     } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">xln</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">ln</span>();
-        <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">x_lim</span>) <span class="op">=</span> <span class="ident">K3_INTERVALS</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">enumerate</span>()
-            .<span class="ident">skip_while</span>(<span class="op">|</span><span class="kw-2">&amp;</span>(<span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="ident">x_lim</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">x_lim</span>)
-            .<span class="ident">next</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;The intervals should cover everything between 0.22 and 2.85.&quot;</span>);
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Using minimax polynomial for x &lt; {}.&quot;</span>, <span class="ident">x_lim</span>);
-        <span class="ident">polynomial</span>(<span class="ident">xln</span>, <span class="kw-2">&amp;</span><span class="ident">K3_MINIMAX_COEFFICIENTS</span>[<span class="ident">i</span>]).<span class="ident">exp</span>() <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powf</span>(<span class="ident">K3_MINIMAX_DENOMINATOR</span>[<span class="ident">i</span>])
+        <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">Kn_e</span>(<span class="number">3</span>, <span class="ident">x</span>) {
+            (<span class="ident">Value</span>::<span class="ident">Success</span>, <span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>.<span class="ident">val</span>,
+            (<span class="ident">Value</span>::<span class="ident">UnderFlow</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="number">0.0</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+        }
+    }
+}
+
+<span class="doccomment">/// Approximation of modified Bessel function \\(K_n(x)\\) for all \\(x \geq</span>
+<span class="doccomment">/// 0\\).</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_n</span>(<span class="ident">n</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">Kn_e</span>(<span class="ident">n</span>, <span class="ident">x</span>) {
+        (<span class="ident">Value</span>::<span class="ident">Success</span>, <span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>.<span class="ident">val</span>,
+        (<span class="ident">Value</span>::<span class="ident">UnderFlow</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="number">0.0</span>,
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+    }
+}
+
+<span class="doccomment">/// Approximation of the ratio \\(K_2(x) / K_1(x)\\) for all \\(x \geq 0\\).</span>
+<span class="doccomment">/// This ratio appears as the dilation factor in (inverse) decay rates of</span>
+<span class="doccomment">/// particles.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">k_1_on_k_2</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0.0</span> {
+        <span class="number">0.0</span>
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">7.42088696664217829e2</span> {
+        <span class="number">1.</span> <span class="op">-</span> <span class="number">1.5</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">recip</span>() <span class="op">+</span> <span class="number">1.875</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">2</span>) <span class="op">-</span> <span class="number">1.875</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+            <span class="op">+</span> <span class="number">1.05469</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">4</span>)
+            <span class="op">+</span> <span class="number">1.40625</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">5</span>)
+            <span class="op">-</span> <span class="number">7.25098</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">6</span>)
+            <span class="op">+</span> <span class="number">21.0938</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">7</span>)
+            <span class="op">-</span> <span class="number">58.152</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">8</span>)
+            <span class="op">+</span> <span class="number">177.979</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">9</span>)
+    } <span class="kw">else</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> [<span class="number">0.0</span>, <span class="number">0.0</span>];
+        <span class="kw">match</span> <span class="ident">bessel</span>::<span class="ident">Kn_array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">results</span>) {
+            <span class="ident">Value</span>::<span class="ident">Success</span> <span class="op">=&gt;</span> <span class="ident">results</span>[<span class="number">0</span>] <span class="op">/</span> <span class="ident">results</span>[<span class="number">1</span>],
+            <span class="ident">Value</span>::<span class="ident">UnderFlow</span> <span class="op">=&gt;</span> <span class="number">0.0</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(),
+        }
     }
 }
 
@@ -401,7 +389,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_0</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k0.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k0.csv&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
             <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
@@ -417,7 +405,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_1</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k1.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k1.csv&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
             <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
@@ -433,7 +421,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_2</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
             <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
@@ -449,7 +437,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_3</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k3.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k3.csv&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
             <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
@@ -462,6 +450,23 @@
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">k_3</span>(<span class="number">0.0</span>), <span class="ident">f64</span>::<span class="ident">INFINITY</span>);
     }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k_1_on_k_2</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k1_on_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;x = {:.2e}, v = {:.2e}&quot;</span>, <span class="ident">x</span>, <span class="ident">v</span>);
+
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
+                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k_1_on_k_2</span>(<span class="ident">x</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">11.0</span>, <span class="number">0.0</span>);
+            }
+        }
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">k_1_on_k_2</span>(<span class="number">0.0</span>), <span class="number">0.0</span>);
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;nightly&quot;</span>)]</span>
@@ -473,7 +478,7 @@
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_0</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k0.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k0.csv&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
@@ -488,7 +493,7 @@
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_1</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k1.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k1.csv&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
@@ -503,7 +508,7 @@
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_2</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
@@ -518,7 +523,7 @@
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
     <span class="kw">fn</span> <span class="ident">k_3</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;test/data/bessel_k3.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k3.csv&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
@@ -526,6 +531,21 @@
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
                     <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k_3</span>(<span class="ident">x</span>);
                     <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">0.0</span>);
+                }
+            }
+        });
+    }
+
+    <span class="attribute">#[<span class="ident">bench</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k_1_on_k_2</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel_k1_on_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
+
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k_1_on_k_2</span>(<span class="ident">x</span>);
+                    <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">11.0</span>, <span class="number">0.0</span>);
                 }
             }
         });

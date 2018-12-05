@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `siman` mod in crate `rgsl`."><meta name="keywords" content="rust, rustlang, rust-lang, siman"><title>rgsl::types::siman - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc mod"><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N9HX7G4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) --><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module siman</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../../index.html'>rgsl</a>::<wbr><a href='../index.html'>types</a></p><script>window.sidebarCurrent = {name: 'siman', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../../src/rgsl/types/siman.rs.html#1-507' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../../index.html'>rgsl</a>::<wbr><a href='../index.html'>types</a>::<wbr><a class="mod" href=''>siman</a></span></h1><div class='docblock'><h1 id="25-simulated-annealing" class="section-header"><a href="#25-simulated-annealing">25 Simulated Annealing</a></h1>
+<p>Stochastic search techniques are used when the structure of a space is not well understood or
+is not smooth, so that techniques like Newton’s method (which requires calculating Jacobian
+derivative matrices) cannot be used. In particular, these techniques are frequently used to
+solve combinatorial optimization problems, such as the traveling salesman problem.</p>
+<p>The goal is to find a point in the space at which a real valued energy function (or cost
+function) is minimized. Simulated annealing is a minimization technique which has given
+good results in avoiding local minima; it is based on the idea of taking a random walk
+through the space at successively lower temperatures, where the probability of taking a
+step is given by a Boltzmann distribution.</p>
+<p>The functions described in this chapter are declared in the header file gsl_siman.h.</p>
+<h2 id="simulated-annealing-algorithm" class="section-header"><a href="#simulated-annealing-algorithm">Simulated Annealing algorithm</a></h2>
+<p>The simulated annealing algorithm takes random walks through the problem space, looking
+for points with low energies; in these random walks, the probability of taking a step is
+determined by the Boltzmann distribution,</p>
+<blockquote>
+<p>p = e −(E i+1 −E i )/(kT )
+if E i+1 &gt; E i , and p = 1 when E i+1 ≤ E i</p>
+</blockquote>
+<p>In other words, a step will occur if the new energy is lower. If the new energy is higher,
+the transition can still occur, and its likelihood is proportional to the temperature T and
+inversely proportional to the energy difference E i+1 − E i .</p>
+<p>The temperature T is initially set to a high value, and a random walk is carried out
+at that temperature. Then the temperature is lowered very slightly according to a cooling
+schedule, for example: T → T /μ T where μ T is slightly greater than 1.</p>
+<p>The slight probability of taking a step that gives higher energy is what allows simulated
+annealing to frequently get out of local minima.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.SimAnnealing.html"
+                                  title='struct rgsl::types::siman::SimAnnealing'>SimAnnealing</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.SimAnnealingParams.html"
+                                  title='struct rgsl::types::siman::SimAnnealingParams'>SimAnnealingParams</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
