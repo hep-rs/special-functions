@@ -11,7 +11,7 @@ use std::f64;
 pub fn k_0(x: f64) -> f64 {
     if x == 0.0 {
         f64::INFINITY
-    } else if x > 7.42088696664217829e2 {
+    } else if x > 7.053_326_979_872_539e2 {
         0.0
     } else {
         match bessel::K0_e(x) {
@@ -27,7 +27,7 @@ pub fn k_0(x: f64) -> f64 {
 pub fn k_1(x: f64) -> f64 {
     if x == 0.0 {
         f64::INFINITY
-    } else if x > 7.42088696664217829e2 {
+    } else if x > 7.053_326_979_872_539e2 {
         0.0
     } else {
         match bessel::K1_e(x) {
@@ -43,7 +43,7 @@ pub fn k_1(x: f64) -> f64 {
 pub fn k_2(x: f64) -> f64 {
     if x == 0.0 {
         f64::INFINITY
-    } else if x > 7.42088696664217829e2 {
+    } else if x > 7.053_326_979_872_539e2 {
         0.0
     } else {
         match bessel::Kn_e(2, x) {
@@ -59,7 +59,7 @@ pub fn k_2(x: f64) -> f64 {
 pub fn k_3(x: f64) -> f64 {
     if x == 0.0 {
         f64::INFINITY
-    } else if x > 7.42088696664217829e2 {
+    } else if x > 7.053_326_979_872_539e2 {
         0.0
     } else {
         match bessel::Kn_e(3, x) {
@@ -86,7 +86,7 @@ pub fn k_n(n: i32, x: f64) -> f64 {
 pub fn k_1_on_k_2(x: f64) -> f64 {
     if x == 0.0 {
         0.0
-    } else if x > 7.42088696664217829e2 {
+    } else if x > 7.053_326_979_872_539e2 {
         1. - 1.5 * x.recip() + 1.875 * x.powi(-2) - 1.875 * x.powi(-3)
             + 1.05469 * x.powi(-4)
             + 1.40625 * x.powi(-5)
