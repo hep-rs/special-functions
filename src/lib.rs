@@ -25,6 +25,7 @@
 
 #[macro_use]
 extern crate log;
+extern crate rgsl;
 
 #[cfg(test)]
 extern crate csv;
