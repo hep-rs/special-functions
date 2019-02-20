@@ -8,7 +8,7 @@
 
 use std::f64;
 
-use polynomial::polynomial;
+use crate::polynomial::polynomial;
 
 const ZETA_3: f64 = 1.202_056_903_159_594_2;
 
@@ -490,7 +490,7 @@ pub fn fermi_dirac(x: f64) -> f64 {
 #[cfg(test)]
 mod test {
     use csv;
-    use utilities::test::*;
+    use crate::utilities::test::*;
 
     #[test]
     fn bose_einstein() {

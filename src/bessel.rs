@@ -108,7 +108,7 @@ pub fn k_1_on_k_2(x: f64) -> f64 {
 mod test {
     use csv;
     use std::f64;
-    use utilities::test::*;
+    use crate::utilities::test::*;
 
     #[test]
     fn k_0() {

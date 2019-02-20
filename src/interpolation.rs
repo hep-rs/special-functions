@@ -43,7 +43,7 @@ pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
 #[cfg(test)]
 mod test {
     use std::f64;
-    use utilities::test::*;
+    use crate::utilities::test::*;
 
     pub(crate) const DATA: [(f64, f64); 4] = [(0.0, 0.0), (1.0, 1.0), (10.0, 0.0), (20.0, 1.0)];
 

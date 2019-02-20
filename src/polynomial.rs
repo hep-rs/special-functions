@@ -24,7 +24,7 @@ pub fn polynomial(x: f64, c: &[f64]) -> f64 {
 
 #[cfg(test)]
 mod test {
-    use utilities::test::*;
+    use crate::utilities::test::*;
 
     pub(crate) const COEFFICIENTS: [f64; 9] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
 
