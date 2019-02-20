@@ -106,9 +106,9 @@ pub fn k_1_on_k_2(x: f64) -> f64 {
 
 #[cfg(test)]
 mod test {
+    use crate::utilities::test::*;
     use csv;
     use std::f64;
-    use crate::utilities::test::*;
 
     #[test]
     fn k_0() {
@@ -195,9 +195,9 @@ mod test {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod bench {
+    use crate::utilities::test::*;
     use csv;
     use test::Bencher;
-    use utilities::test::*;
 
     #[bench]
     fn k_0(b: &mut Bencher) {

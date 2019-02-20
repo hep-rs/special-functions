@@ -42,8 +42,8 @@ pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
 
 #[cfg(test)]
 mod test {
-    use std::f64;
     use crate::utilities::test::*;
+    use std::f64;
 
     pub(crate) const DATA: [(f64, f64); 4] = [(0.0, 0.0), (1.0, 1.0), (10.0, 0.0), (20.0, 1.0)];
 
@@ -77,9 +77,9 @@ mod test {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod bench {
+    use crate::utilities::test::*;
     use std::f64;
     use test::Bencher;
-    use utilities::test::*;
 
     macro_rules! linear {
         ($f:ident, $n:expr) => {
@@ -89,7 +89,8 @@ mod bench {
                     .map(|i| {
                         let x = i as f64 / ($n as f64);
                         (x, x)
-                    }).collect();
+                    })
+                    .collect();
                 b.iter(|| {
                     for i in 0..100_001 {
                         let x = i as f64 / 100_000.0;
