@@ -15,10 +15,6 @@ const ZETA_3: f64 = 1.202_056_903_159_594_2;
 /// Taylor series expansion for \\(\Li_{3} e\^{-x}\\) around \\(x = 0\\) (for
 /// \\(x \geq 0\\)).  This is applicable until \\(x \approx 0.22\\) at which point the
 /// floating point error becomes larger.
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const BOSE_EINSTEIN_ZERO: [f64; 9] = [
     1.2020569031595942854,
     -1.6449340668482264365,
@@ -39,10 +35,6 @@ const BOSE_EINSTEIN_INTERVALS: [f64; 14] = [
 ];
 
 /// Minimax polynomial correspond for each interval in `BOSE_EINSTEIN_INTERVALS`.
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const BOSE_EINSTEIN_MINIMAX_COEFFICIENTS: [[f64; 10]; 14] = [
     [
         1.2016285475563033060,
@@ -218,10 +210,6 @@ const BOSE_EINSTEIN_MINIMAX_COEFFICIENTS: [[f64; 10]; 14] = [
 /// valid until \\(x \approx 2.85 \\) at which point the floating point error
 /// becomes larger.  Note that the polynomial is in \\(e\^{-x}\\) as opposed to
 /// \\(x\\).
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const BOSE_EINSTEIN_INFINITY: [f64; 11] = [
     0.0,
     1.0000000000000000000,
@@ -240,10 +228,6 @@ const BOSE_EINSTEIN_INFINITY: [f64; 11] = [
 /// valid until \\(x \approx -2.6 \\) at which point the floating point error
 /// becomes larger.  Note that the polynomial is in \\(e\^{x}\\) as opposed to
 /// \\(x\\).
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const FERMI_DIRAC_NEG_INFINITY: [f64; 12] = [
     0.0,
     1.0000000000000000000,
@@ -267,10 +251,6 @@ const FERMI_DIRAC_INTERVALS: [f64; 11] = [
 ];
 
 /// Minimax polynomial correspond for each interval in `FERMI_DIRAC_INTERVALS`.
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const FERMI_DIRAC_MINIMAX_COEFFICIENTS: [[f64; 10]; 11] = [
     [
         0.90154873299002283863,
@@ -415,10 +395,6 @@ const FERMI_DIRAC_MINIMAX_COEFFICIENTS: [[f64; 10]; 11] = [
 /// 0.16666666666666666667 * x.powi(3) + 1.6449340668482264365 * x
 /// ```
 /// which must be added for this to be accurate.
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(excessive_precision, unreadable_literal)
-)]
 const FERMI_DIRAC_INFINITY: [f64; 11] = [
     0.0,
     1.0000000000000000000,
