@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/legendre.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>legendre.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/legendre.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>legendre.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -356,7 +356,31 @@
 <span id="356">356</span>
 <span id="357">357</span>
 <span id="358">358</span>
-</pre><pre class="rust ">
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -388,7 +412,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_P1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function evaluates the Legendre polynomials P_l(x) using explicit representations for l=1, 2, 3.</span>
@@ -396,7 +420,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_P2_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function evaluates the Legendre polynomials P_l(x) using explicit representations for l=1, 2, 3.</span>
@@ -404,7 +428,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_P3_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function evaluates the Legendre polynomial P_l(x) for a specific value of l, x subject to l &gt;= 0, |x| &lt;= 1</span>
@@ -417,18 +441,28 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Pl_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes arrays of Legendre polynomials P_l(x) and derivatives dP_l(x)/dx, for l = 0, \dots, lmax, |x| &lt;= 1</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_Pl_array</span>(<span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Pl_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Pl_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>())
+        })
     }
 
     <span class="doccomment">/// This function computes arrays of Legendre polynomials P_l(x) and derivatives dP_l(x)/dx, for l = 0, \dots, lmax, |x| &lt;= 1</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_Pl_deriv_array</span>(<span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">result_deriv_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Pl_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
-            <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>()) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_Pl_deriv_array</span>(
+        <span class="ident">x</span>: <span class="ident">f64</span>,
+        <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+        <span class="ident">result_deriv_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+    ) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Pl_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>,
+                                                <span class="ident">x</span>,
+                                                <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
+                                                <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>())
+        })
     }
 
     <span class="doccomment">/// This function computes the Legendre function Q_0(x) for x &gt; -1, x != 1</span>
@@ -441,7 +475,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Q0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes the Legendre function Q_0(x) for x &gt; -1, x != 1.</span>
@@ -454,7 +488,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Q1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes the Legendre function Q_l(x) for x &gt; -1, x != 1 and l &gt;= 0.</span>
@@ -467,7 +501,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Ql_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 }
 
@@ -492,20 +526,20 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Plm_e</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes arrays of Legendre polynomials P_l^m(x) and derivatives dP_l^m(x)/dx, for m &gt;= 0, l = |m|, ..., lmax, |x| &lt;= 1.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_Plm_array</span>(<span class="ident">m</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Plm_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Plm_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
     }
 
     <span class="doccomment">/// This function computes arrays of Legendre polynomials P_l^m(x) and derivatives dP_l^m(x)/dx, for m &gt;= 0, l = |m|, ..., lmax, |x| &lt;= 1.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_Plm_deriv_array</span>(<span class="ident">m</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">result_deriv_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Plm_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
-            <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_Plm_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
+            <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>()) })
     }
 
     <span class="doccomment">/// This routine computes the normalized associated Legendre polynomial \sqrt{(2l+1)/(4\pi)} \sqrt{(l-m)!/(l+m)!} P_l^m(x) suitable for use in spherical harmonics.</span>
@@ -522,26 +556,26 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_sphPlm_e</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes arrays of normalized associated Legendre functions \sqrt{(2l+1)/(4\pi)} \sqrt{(l-m)!/(l+m)!} P_l^m(x), and derivatives, for m &gt;= 0, l = |m|, ..., lmax, |x| &lt;= 1.0</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_sphPlm_array</span>(<span class="ident">m</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_sphPlm_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_sphPlm_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
     }
 
     <span class="doccomment">/// This function computes arrays of normalized associated Legendre functions \sqrt{(2l+1)/(4\pi)} \sqrt{(l-m)!/(l+m)!} P_l^m(x), and derivatives, for m &gt;= 0, l = |m|, ..., lmax, |x| &lt;= 1.0</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_sphPlm_deriv_array</span>(<span class="ident">m</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">result_deriv_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_sphPlm_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
-            <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_sphPlm_deriv_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">m</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>(),
+            <span class="ident">result_deriv_array</span>.<span class="ident">as_mut_ptr</span>()) })
     }
 
     <span class="doccomment">/// This function returns the size of result_array[] needed for the array versions of P_l^m(x), lmax - m + 1.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_array_size</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">m</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_array_size</span>(<span class="ident">lmax</span>, <span class="ident">m</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_array_size</span>(<span class="ident">lmax</span>, <span class="ident">m</span>) })
     }
 
     <span class="doccomment">/// Returns the size of the array needed for these functions, including GSL workspace.</span>
@@ -556,20 +590,29 @@
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_alp</span>(<span class="ident">norm</span>: <span class="ident">enums</span>::<span class="ident">SfLegendreNorm</span>, <span class="ident">lmax</span>: <span class="ident">usize</span>,
-                        <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_array</span>(<span class="ident">norm</span>, <span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result</span>.<span class="ident">as_mut_ptr</span>())
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_array</span>(
+        <span class="ident">norm</span>: <span class="ident">enums</span>::<span class="ident">SfLegendreNorm</span>,
+        <span class="ident">lmax</span>: <span class="ident">usize</span>,
+        <span class="ident">x</span>: <span class="ident">f64</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+    ) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_array</span>(<span class="ident">norm</span>.<span class="ident">into</span>(), <span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result</span>.<span class="ident">as_mut_ptr</span>())
+        })
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v2&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_alp_deriv</span>(<span class="ident">norm</span>: <span class="ident">enums</span>::<span class="ident">SfLegendreNorm</span>, <span class="ident">lmax</span>: <span class="ident">usize</span>,
-                              <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">deriv</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_deriv_array</span>(<span class="ident">norm</span>, <span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result</span>.<span class="ident">as_mut_ptr</span>(),
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_deriv_array</span>(
+        <span class="ident">norm</span>: <span class="ident">enums</span>::<span class="ident">SfLegendreNorm</span>,
+        <span class="ident">lmax</span>: <span class="ident">usize</span>,
+        <span class="ident">x</span>: <span class="ident">f64</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+        <span class="ident">deriv</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+    ) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_deriv_array</span>(<span class="ident">norm</span>.<span class="ident">into</span>(), <span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result</span>.<span class="ident">as_mut_ptr</span>(),
                                              <span class="ident">deriv</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 }
 
@@ -589,7 +632,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_half_e</span>(<span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the regular Spherical Conical Function P^{-1/2}_{-1/2 + i \lambda}(x) for x &gt; -1.</span>
@@ -602,7 +645,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_mhalf_e</span>(<span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the conical function P^0_{-1/2 + i \lambda}(x) for x &gt; -1.</span>
@@ -615,7 +658,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_0_e</span>(<span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the conical function P^1_{-1/2 + i \lambda}(x) for x &gt; -1.</span>
@@ -628,7 +671,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_1_e</span>(<span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the Regular Spherical Conical Function P^{-1/2-l}_{-1/2 + i \lambda}(x) for x &gt; -1, l &gt;= -1.</span>
@@ -641,7 +684,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_sph_reg_e</span>(<span class="ident">l</span>, <span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the Regular Cylindrical Conical Function P^{-m}_{-1/2 + i \lambda}(x) for x &gt; -1, m &gt;= -1.</span>
@@ -654,7 +697,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_conicalP_cyl_reg_e</span>(<span class="ident">m</span>, <span class="ident">lambda</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 }
 
@@ -677,7 +720,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_H3d_0_e</span>(<span class="ident">lambda</span>, <span class="ident">eta</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the first radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L^{H3d}_1(\lambda,\eta) := 1/\sqrt{\lambda^2 + 1} \sin(\lambda \eta)/(\lambda \sinh(\eta))</span>
@@ -694,7 +737,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_H3d_1_e</span>(<span class="ident">lambda</span>, <span class="ident">eta</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This routine computes the l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space \eta &gt;= 0, l &gt;= 0. In the flat limit this takes the form L^{H3d}_l(\lambda,\eta) = j_l(\lambda\eta).</span>
@@ -707,12 +750,18 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_H3d_e</span>(<span class="ident">l</span>, <span class="ident">lambda</span>, <span class="ident">eta</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-        (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+        (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
     }
 
     <span class="doccomment">/// This function computes an array of radial eigenfunctions L^{H3d}_l(\lambda, \eta) for 0 &lt;= l &lt;= lmax.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">legendre_H3d_array</span>(<span class="ident">lambda</span>: <span class="ident">f64</span>, <span class="ident">eta</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_H3d_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">lambda</span>, <span class="ident">eta</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_sf_legendre_H3d_array</span>(<span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>,
+                                            <span class="ident">lambda</span>,
+                                            <span class="ident">eta</span>,
+                                            <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>())
+        })
     }
-}</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-files.js"></script><script src="../../source-script.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

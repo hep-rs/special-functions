@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/ffi/linalg.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>linalg.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/ffi/linalg.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>linalg.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1233,14 +1233,12 @@
 <span id="1233">1233</span>
 <span id="1234">1234</span>
 <span id="1235">1235</span>
-<span id="1236">1236</span>
-</pre><pre class="rust ">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Matrix operations and linear algebra.</span>
 
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_double</span>, <span class="ident">c_int</span>, <span class="ident">c_float</span>, <span class="ident">size_t</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">gsl_complex</span>, <span class="ident">gsl_complex_float</span>, <span class="ident">gsl_permutation</span>};
-<span class="kw">use</span> <span class="ident">enums</span>;
 
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="comment">// Vector functions</span>
@@ -1252,16 +1250,16 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_set_all</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">x</span>: <span class="ident">c_double</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_set_zero</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_set_basis</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">i</span>: <span class="ident">size_t</span>);
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_swap</span>(<span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_swap_elements</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_mul</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_div</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_swap</span>(<span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_swap_elements</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_mul</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_div</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_max</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_min</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_minmax</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
@@ -1304,31 +1302,31 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_set_basis</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>, <span class="ident">i</span>: <span class="ident">size_t</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                      <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_swap</span>(<span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                    <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_swap_elements</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                             <span class="ident">i</span>: <span class="ident">size_t</span>,
                                             <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_mul</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_div</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>, <span class="ident">x</span>: <span class="ident">gsl_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>, <span class="ident">x</span>: <span class="ident">gsl_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                            <span class="ident">x</span>: <span class="ident">gsl_complex</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_isnull</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_ispos</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_isneg</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
@@ -1348,29 +1346,29 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_set_basis</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>, <span class="ident">i</span>: <span class="ident">size_t</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                    <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_swap</span>(<span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                  <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_swap_elements</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                           <span class="ident">i</span>: <span class="ident">size_t</span>,
                                           <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_mul</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_div</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_max</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>) <span class="op">-&gt;</span> <span class="ident">c_float</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_min</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>) <span class="op">-&gt;</span> <span class="ident">c_float</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_float_minmax</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>,
@@ -1403,33 +1401,33 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_set_basis</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>, <span class="ident">i</span>: <span class="ident">size_t</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                            <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_swap</span>(<span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                          <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_swap_elements</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                                   <span class="ident">i</span>: <span class="ident">size_t</span>,
                                                   <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_reverse</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_mul</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_div</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                           <span class="ident">x</span>: <span class="ident">gsl_complex_float</span>)
-                                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                                  <span class="ident">x</span>: <span class="ident">gsl_complex_float</span>)
-                                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_isnull</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_ispos</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_vector_complex_float_isneg</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
@@ -1447,31 +1445,31 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_all</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="ident">c_double</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_zero</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_identity</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>);
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_get_row</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">i</span>: <span class="ident">size_t</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_get_col</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">j</span>: <span class="ident">size_t</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_row</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_col</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">j</span>: <span class="ident">size_t</span>, <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_rows</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_columns</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_rowcol</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_row</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_set_col</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">j</span>: <span class="ident">size_t</span>, <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_rows</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_columns</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_swap_rowcol</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">i</span>: <span class="ident">size_t</span>, <span class="ident">j</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_transpose_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                        <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>)
-                                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_mul_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_div_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                       <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_mul_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_div_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_max</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_min</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_minmax</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
@@ -1521,56 +1519,56 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_set_identity</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                    <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_swap</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                  <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_get_row</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                     <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>,
                                     <span class="ident">i</span>: <span class="ident">size_t</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_get_col</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_float</span>,
                                     <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>,
                                     <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_set_row</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                     <span class="ident">i</span>: <span class="ident">size_t</span>,
                                     <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_set_col</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                     <span class="ident">j</span>: <span class="ident">size_t</span>,
                                     <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_float</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_swap_rows</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                       <span class="ident">i</span>: <span class="ident">size_t</span>,
                                       <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_swap_columns</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                          <span class="ident">i</span>: <span class="ident">size_t</span>,
                                          <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_swap_rowcol</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                         <span class="ident">i</span>: <span class="ident">size_t</span>,
                                         <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_transpose_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                              <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                 <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_mul_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                          <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_div_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>,
                                          <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_float</span>, <span class="ident">x</span>: <span class="ident">c_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_max</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>) <span class="op">-&gt;</span> <span class="ident">c_float</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_min</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>) <span class="op">-&gt;</span> <span class="ident">c_float</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_float_minmax</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_float</span>,
@@ -1610,58 +1608,58 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_set_identity</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                      <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_swap</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                    <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_get_row</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                       <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                       <span class="ident">i</span>: <span class="ident">size_t</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_get_col</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                       <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                       <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_set_row</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                       <span class="ident">i</span>: <span class="ident">size_t</span>,
                                       <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_set_col</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                       <span class="ident">j</span>: <span class="ident">size_t</span>,
                                       <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_swap_rows</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                         <span class="ident">i</span>: <span class="ident">size_t</span>,
                                         <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_swap_columns</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                            <span class="ident">i</span>: <span class="ident">size_t</span>,
                                            <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_swap_rowcol</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                           <span class="ident">i</span>: <span class="ident">size_t</span>,
                                           <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_transpose_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                                <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                   <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_mul_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                            <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_div_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                            <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>, <span class="ident">x</span>: <span class="ident">gsl_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>, <span class="ident">x</span>: <span class="ident">gsl_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                            <span class="ident">x</span>: <span class="ident">gsl_complex</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_isnull</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_ispos</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_isneg</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
@@ -1692,60 +1690,60 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_set_identity</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                            <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_swap</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                          <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_get_row</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                             <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>,
                                             <span class="ident">i</span>: <span class="ident">size_t</span>)
-                                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_get_col</span>(<span class="ident">vector</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex_float</span>,
                                             <span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>,
                                             <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_set_row</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                             <span class="ident">i</span>: <span class="ident">size_t</span>,
                                             <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_set_col</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                             <span class="ident">j</span>: <span class="ident">size_t</span>,
                                             <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex_float</span>)
-                                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_swap_rows</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                               <span class="ident">i</span>: <span class="ident">size_t</span>,
                                               <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_swap_columns</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                  <span class="ident">i</span>: <span class="ident">size_t</span>,
                                                  <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_swap_rowcol</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                 <span class="ident">i</span>: <span class="ident">size_t</span>,
                                                 <span class="ident">j</span>: <span class="ident">size_t</span>)
-                                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_transpose_memcpy</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                      <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_transpose</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_add</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_sub</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                         <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_mul_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                  <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_div_elements</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                  <span class="ident">src</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>)
-                                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_scale</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                           <span class="ident">x</span>: <span class="ident">gsl_complex_float</span>)
-                                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_add_constant</span>(<span class="ident">dest</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex_float</span>,
                                                  <span class="ident">x</span>: <span class="ident">gsl_complex_float</span>)
-                                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_isnull</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_ispos</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_matrix_complex_float_isneg</span>(<span class="ident">m</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex_float</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
@@ -1760,28 +1758,28 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_symm</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                           <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                           <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_symm_workspace</span>)
-                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_symmv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_symmv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_symmv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_symmv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_symmv</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                            <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                            <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                            <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_symmv_workspace</span>)
-                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Complex Hermitian Matrices</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_herm_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_herm_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_herm_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_herm_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_herm</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                           <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                           <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_herm_workspace</span>)
-                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_hermv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_hermv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_hermv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_hermv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_hermv</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                            <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                            <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                            <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_hermv_workspace</span>)
-                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Real Nonsymmetric Matrices</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymm_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymm_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymm_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymm_workspace</span>);
@@ -1791,12 +1789,12 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymm</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                              <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymm_workspace</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymm_Z</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                <span class="ident">z</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymm_workspace</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymmv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymmv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymmv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymmv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymmv_params</span>(<span class="ident">balance</span>: <span class="ident">c_int</span>, <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymmv_workspace</span>);
@@ -1804,13 +1802,13 @@
                               <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                               <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                               <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymmv_workspace</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymmv_Z</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                 <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                 <span class="ident">z</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_nonsymmv_workspace</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Real Generalized Symmetric-Definite Eigensystems</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymm_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymm_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymm_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymm_workspace</span>);
@@ -1818,7 +1816,7 @@
                              <span class="ident">B</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                              <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymm_workspace</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymmv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymmv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymmv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymmv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymmv</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
@@ -1826,7 +1824,7 @@
                               <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gensymmv_workspace</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Complex Generalized Hermitian-Definite Eigensystems</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genherm_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genherm_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genherm_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genherm_workspace</span>);
@@ -1834,7 +1832,7 @@
                              <span class="ident">B</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                              <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                              <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genherm_workspace</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genhermv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genhermv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genhermv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genhermv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genhermv</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
@@ -1842,7 +1840,7 @@
                               <span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                               <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genhermv_workspace</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Real Generalized Nonsymmetric Eigensystems</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gen_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gen_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gen_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gen_workspace</span>);
@@ -1855,7 +1853,7 @@
                          <span class="ident">alpha</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                          <span class="ident">beta</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                          <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gen_workspace</span>)
-                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gen_QZ</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                             <span class="ident">B</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                             <span class="ident">alpha</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
@@ -1863,7 +1861,7 @@
                             <span class="ident">Q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                             <span class="ident">Z</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                             <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gen_workspace</span>)
-                            <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genv_alloc</span>(<span class="ident">n</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genv_workspace</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genv_free</span>(<span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genv_workspace</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genv</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
@@ -1872,7 +1870,7 @@
                           <span class="ident">beta</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                           <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                           <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genv_workspace</span>)
-                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                          <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genv_QZ</span>(<span class="ident">A</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">B</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">alpha</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
@@ -1881,83 +1879,83 @@
                              <span class="ident">Q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">Z</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_genv_workspace</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Sorting Eigenvalues and Eigenvectors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_symmv_sort</span>(<span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
-                                <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_hermv_sort</span>(<span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
-                                <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_nonsymmv_sort</span>(<span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                    <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
-                                   <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_gensymmv_sort</span>(<span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                    <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
-                                   <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genhermv_sort</span>(<span class="ident">eval</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                    <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
-                                   <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_eigen_genv_sort</span>(<span class="ident">alpha</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                <span class="ident">beta</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">evec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
-                               <span class="ident">sort_type</span>: ::<span class="ident">EigenSort</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="ident">sort_type</span>: <span class="ident">c_int</span>)
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 
     <span class="comment">// LU Decomposition</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_permutation</span>,
                                 <span class="ident">signum</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_int</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                         <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_permutation</span>,
                                         <span class="ident">signum</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_int</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_solve</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_solve</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                        <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                        <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                        <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                       <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_svx</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                              <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_svx</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                      <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                      <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_refine</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                 <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">residual</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_refine</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                         <span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                         <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                         <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                         <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>,
                                         <span class="ident">residual</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_invert</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                 <span class="ident">inverse</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_invert</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                         <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                         <span class="ident">inverse</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_det</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">signum</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_det</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>, <span class="ident">signum</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">gsl_complex</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_lndet</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
@@ -1965,66 +1963,66 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_LU_sgndet</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">signum</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_LU_sgndet</span>(<span class="ident">lu</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>, <span class="ident">signum</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">gsl_complex</span>;
     <span class="comment">// QR Decomposition</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_solve</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_svx</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                              <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                              <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_lssolve</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                  <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">residual</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_QTvec</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_Qvec</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_QTmat</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_Rsolve</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_Rsvx</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_Rsvx</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_unpack</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_QRsolve</span>(<span class="ident">q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                  <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                  <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QR_update</span>(<span class="ident">q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_R_solve</span>(<span class="ident">r</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                               <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_R_svx</span>(<span class="ident">r</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_R_svx</span>(<span class="ident">r</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// QR Decomposition with Column Pivoting</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                   <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_permutation</span>,
                                   <span class="ident">signum</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_int</span>,
                                   <span class="ident">norm</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_decomp2</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                    <span class="ident">q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                    <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
@@ -2032,130 +2030,130 @@
                                    <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_permutation</span>,
                                    <span class="ident">signum</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_int</span>,
                                    <span class="ident">norm</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_solve</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                  <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                  <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_svx</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_QRsolve</span>(<span class="ident">q</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                    <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                    <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                    <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                    <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_update</span>(<span class="ident">q</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                   <span class="ident">r</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                   <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                   <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_Rsolve</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                   <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                   <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_QRPT_Rsvx</span>(<span class="ident">qr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">p</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_permutation</span>,
                                 <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Singular Value Decomposition</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                 <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                 <span class="ident">work</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_decomp_mod</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">work</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_decomp_jacobi</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                        <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                        <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                       <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_solve</span>(<span class="ident">u</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_leverage</span>(<span class="ident">u</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">h</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_SV_leverage</span>(<span class="ident">u</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>, <span class="ident">h</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Cholesky Decomposition</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_solve</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_solve</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                              <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                              <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_svx</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                    <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_svx</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                            <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                           <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                           <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Tridiagonal Decomposition of Real Symmetric Matrices</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_symmtd_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_symmtd_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_symmtd_unpack</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">q</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">subdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_symmtd_unpack_T</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                       <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">subdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Tridiagonal Decomposition of Hermitian Matrices</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hermtd_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                     <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector_complex</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hermtd_unpack</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                     <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                     <span class="ident">u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>,
                                     <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">subdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hermtd_unpack_T</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix_complex</span>,
                                       <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">subdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Hessenberg Decomposition of Real Matrices</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_unpack</span>(<span class="ident">h</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                         <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                         <span class="ident">u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_unpack_accum</span>(<span class="ident">h</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                               <span class="ident">tau</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                               <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_set_zero</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hessenberg_set_zero</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Hessenberg-Triangular Decomposition of Real Matrices</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_hesstri_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">work</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Bidiagonalization</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_bidiag_decomp</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">tau_u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">tau_v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_bidiag_unpack</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">tau_u</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
@@ -2163,16 +2161,16 @@
                                     <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                     <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">superdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_bidiag_unpack2</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                      <span class="ident">tau_u</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">tau_v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_bidiag_unpack_B</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                       <span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">superdiag</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Givens Rotations</span>
     <span class="comment">//pub fn gsl_linalg_givens();</span>
     <span class="comment">//pub fn gsl_linalg_givens_gv();</span>
@@ -2182,58 +2180,58 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_householder_hm</span>(<span class="ident">tau</span>: <span class="ident">c_double</span>,
                                      <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_householder_hm</span>(<span class="ident">tau</span>: <span class="ident">gsl_complex</span>,
                                              <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                              <span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_householder_mh</span>(<span class="ident">tau</span>: <span class="ident">c_double</span>,
                                      <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_householder_mh</span>(<span class="ident">tau</span>: <span class="ident">gsl_complex</span>,
                                              <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                              <span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_householder_hv</span>(<span class="ident">tau</span>: <span class="ident">c_double</span>,
                                      <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                      <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                     <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_complex_householder_hv</span>(<span class="ident">tau</span>: <span class="ident">gsl_complex</span>,
                                              <span class="ident">v</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector_complex</span>,
                                              <span class="ident">w</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix_complex</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Householder solver for linear systems</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_HH_solve</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_HH_svx</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_HH_svx</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Tridiagonal Systems</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_solve_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">e</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                     <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_solve_symm_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                          <span class="ident">e</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                          <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                          <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                         <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_solve_cyc_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                         <span class="ident">e</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                         <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                         <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                         <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                        <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_solve_symm_cyc_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                              <span class="ident">e</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                              <span class="ident">b</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                              <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                             <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">// Balancing</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_balance_matrix</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">d</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_linalg_balance_matrix</span>(<span class="ident">a</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="ident">d</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 }
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
@@ -2471,5 +2469,5 @@
     <span class="kw">pub</span> <span class="ident">Z</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>, <span class="comment">// pointer to right Schur vectors</span>
     <span class="kw">pub</span> <span class="ident">gen_workspace_p</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_eigen_gen_workspace</span>,
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-files.js"></script><script src="../../../source-script.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

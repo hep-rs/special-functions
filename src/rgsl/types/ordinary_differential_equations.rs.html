@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/types/ordinary_differential_equations.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ordinary_differential_equations.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/types/ordinary_differential_equations.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ordinary_differential_equations.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -850,7 +850,17 @@
 <span id="850">850</span>
 <span id="851">851</span>
 <span id="852">852</span>
-</pre><pre class="rust ">
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -968,21 +978,21 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
 
 <span class="doccomment">/// Default handler for calling the function closure.</span>
 <span class="kw">extern</span> <span class="kw">fn</span> <span class="ident">function_handler</span>(<span class="ident">t</span>: <span class="ident">f64</span>, <span class="ident">t_y</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">f64</span>, <span class="ident">t_f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>)
-        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+        <span class="op">-&gt;</span> <span class="ident">libc</span>::<span class="ident">c_int</span> {
     <span class="kw">let</span> <span class="ident">sys</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span>(<span class="ident">params</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ODEiv2System</span>) };
     <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">sys</span>.<span class="ident">dimension</span> <span class="kw">as</span> <span class="ident">usize</span>;
     <span class="kw">let</span> <span class="ident">t_y</span> <span class="op">=</span> <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>(<span class="ident">t_y</span>, <span class="ident">n</span>) };
     <span class="kw">let</span> <span class="ident">t_f</span> <span class="op">=</span> <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>(<span class="ident">t_f</span>, <span class="ident">n</span>) };
 
     <span class="kw">match</span> (<span class="ident">sys</span>.<span class="ident">function</span>)(<span class="ident">t</span>, <span class="ident">t_y</span>, <span class="ident">t_f</span>) {
-        <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">Success</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>,
+        <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">Success</span>.<span class="ident">into</span>(),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>.<span class="ident">into</span>(),
     }
 }
 
 <span class="doccomment">/// Default handler for calling the jacobian closure.</span>
 <span class="kw">extern</span> <span class="kw">fn</span> <span class="ident">jacobian_handler</span>(<span class="ident">t</span>: <span class="ident">f64</span>, <span class="ident">t_y</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">f64</span>, <span class="ident">t_dfdy</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">t_dfdt</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
-                           <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+                           <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>) <span class="op">-&gt;</span> <span class="ident">libc</span>::<span class="ident">c_int</span> {
     <span class="kw">let</span> <span class="ident">sys</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span>(<span class="ident">params</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ODEiv2System</span>) };
     <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">sys</span>.<span class="ident">dimension</span> <span class="kw">as</span> <span class="ident">usize</span>;
     <span class="kw">let</span> <span class="ident">t_y</span> <span class="op">=</span> <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>(<span class="ident">t_y</span>, <span class="ident">n</span>) };
@@ -992,10 +1002,10 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="kw">match</span> <span class="ident">sys</span>.<span class="ident">jacobian</span> {
         <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">j</span>) <span class="op">=&gt;</span>
             <span class="kw">match</span> <span class="ident">j</span>(<span class="ident">t</span>, <span class="ident">t_y</span>, <span class="ident">t_dfdy</span>, <span class="ident">t_dfdt</span>) {
-                <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">Success</span>,
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>,
+                <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">Success</span>.<span class="ident">into</span>(),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>.<span class="ident">into</span>(),
             },
-        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">BadFunction</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">BadFunction</span>.<span class="ident">into</span>(),
     }
 }
 
@@ -1022,7 +1032,7 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// This function resets the stepping function s. It should be used whenever the next use of s will not be a continuation of a previous</span>
     <span class="doccomment">/// step.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_step_reset</span>(<span class="self">self</span>.<span class="ident">s</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_step_reset</span>(<span class="self">self</span>.<span class="ident">s</span>) }))
     }
 
     <span class="doccomment">/// This function returns a pointer to the name of the stepping function. For example,</span>
@@ -1051,7 +1061,7 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// the driver object. This is a requirement for some steppers, to get the desired error level for internal iteration of stepper.</span>
     <span class="doccomment">/// Allocation of a driver object calls this function automatically.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_driver</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ODEiv2Driver</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_step_set_driver</span>(<span class="self">self</span>.<span class="ident">s</span>, <span class="ident">d</span>.<span class="ident">d</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_step_set_driver</span>(<span class="self">self</span>.<span class="ident">s</span>, <span class="ident">d</span>.<span class="ident">d</span>) }))
     }
 
     <span class="doccomment">/// This function applies the stepping function s to the system of equations defined by sys, using the step-size h to advance the system</span>
@@ -1074,7 +1084,7 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
         <span class="kw">let</span> <span class="ident">sys_raw</span> <span class="op">=</span> <span class="ident">sys</span>.<span class="ident">to_raw</span>();
         <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_step_apply</span>(<span class="self">self</span>.<span class="ident">s</span>, <span class="ident">t</span>, <span class="ident">h</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">yerr</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">dydt_in</span>.<span class="ident">as_ptr</span>(), <span class="ident">dydt_out</span>.<span class="ident">as_mut_ptr</span>(),
             <span class="kw-2">&amp;</span><span class="ident">sys_raw</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_system</span>) };
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">r</span>)
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">r</span>))
     }
 }
 
@@ -1342,7 +1352,9 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// This function initializes the control function c with the parameters eps_abs (absolute error), eps_rel (relative error), a_y</span>
     <span class="doccomment">/// (scaling factor for y) and a_dydt (scaling factor for derivatives).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">eps_abs</span>: <span class="ident">f64</span>, <span class="ident">eps_rel</span>: <span class="ident">f64</span>, <span class="ident">a_y</span>: <span class="ident">f64</span>, <span class="ident">a_dydt</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_init</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">eps_abs</span>, <span class="ident">eps_rel</span>, <span class="ident">a_y</span>, <span class="ident">a_dydt</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_init</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">eps_abs</span>, <span class="ident">eps_rel</span>, <span class="ident">a_y</span>, <span class="ident">a_dydt</span>)
+        }))
     }
 
     <span class="doccomment">/// This function adjusts the step-size h using the control function c, and the current values of y, yerr and dydt. The stepping function</span>
@@ -1351,7 +1363,7 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// ODEiv::Inc is returned. The function returns ODEiv::Nil if the step-size is unchanged. The goal of the function is to estimate</span>
     <span class="doccomment">/// the largest step-size which satisfies the user-specified accuracy requirements for the current point.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hadjust</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">ODEiv2Step</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">yerr</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">dydt</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">ODEiv</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_hadjust</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">y</span>.<span class="ident">as_ptr</span>(), <span class="ident">yerr</span>.<span class="ident">as_ptr</span>(), <span class="ident">dydt</span>.<span class="ident">as_ptr</span>(), <span class="ident">h</span>) }
+        ::<span class="ident">ODEiv</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_hadjust</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">y</span>.<span class="ident">as_ptr</span>(), <span class="ident">yerr</span>.<span class="ident">as_ptr</span>(), <span class="ident">dydt</span>.<span class="ident">as_ptr</span>(), <span class="ident">h</span>) })
     }
 
     <span class="doccomment">/// This function returns a pointer to the name of the control function. For example,</span>
@@ -1373,12 +1385,16 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// This function calculates the desired error level of the ind-th component to errlev. It requires the value (y) and value of the derivative</span>
     <span class="doccomment">/// (dydt) of the component, and the current step size h.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">errlevel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">y</span>: <span class="ident">f64</span>, <span class="ident">dydt</span>: <span class="ident">f64</span>, <span class="ident">h</span>: <span class="ident">f64</span>, <span class="ident">ind</span>: <span class="ident">usize</span>, <span class="ident">errlev</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_errlevel</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">y</span>, <span class="ident">dydt</span>, <span class="ident">h</span>, <span class="ident">ind</span>, <span class="ident">errlev</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_errlevel</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">y</span>, <span class="ident">dydt</span>, <span class="ident">h</span>, <span class="ident">ind</span>, <span class="ident">errlev</span>)
+        }))
     }
 
     <span class="doccomment">/// This function sets a pointer of the driver object d for control object c.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_driver</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ODEiv2Driver</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_set_driver</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">d</span>.<span class="ident">d</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_control_set_driver</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">d</span>.<span class="ident">d</span>)
+        }))
     }
 }
 
@@ -1492,7 +1508,9 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
         <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">sys_raw</span> <span class="op">=</span> <span class="ident">sys</span>.<span class="ident">to_raw</span>();
         <span class="kw">let</span> <span class="ident">psys</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">sys_raw</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_apply</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">c</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">psys</span>, <span class="ident">t</span>, <span class="ident">t1</span>, <span class="ident">h</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_apply</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">c</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">psys</span>, <span class="ident">t</span>, <span class="ident">t1</span>, <span class="ident">h</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>())
+        }))
     }
 
     <span class="doccomment">/// This function advances the ODE-system (e, sys, con) from time t and position y using the stepping function step by a specified step</span>
@@ -1502,13 +1520,15 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
         <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">sys_raw</span> <span class="op">=</span> <span class="ident">sys</span>.<span class="ident">to_raw</span>();
         <span class="kw">let</span> <span class="ident">psys</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">sys_raw</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_apply_fixed_step</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">c</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">psys</span>, <span class="ident">t</span>, <span class="ident">h</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_apply_fixed_step</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">c</span>.<span class="ident">c</span>, <span class="ident">s</span>.<span class="ident">s</span>, <span class="ident">psys</span>, <span class="ident">t</span>, <span class="ident">h</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>())
+        }))
     }
 
     <span class="doccomment">/// This function resets the evolution function e. It should be used whenever the next use of e will not be a continuation of a previous</span>
     <span class="doccomment">/// step.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_reset</span>(<span class="self">self</span>.<span class="ident">e</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_reset</span>(<span class="self">self</span>.<span class="ident">e</span>) }))
     }
 
     <span class="doccomment">/// This function sets a pointer of the driver object d for evolve object e.</span>
@@ -1517,7 +1537,7 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// in sequence. For example, if a step-change in an external driving force occurs at times t_a, t_b and t_c then evolution should be carried</span>
     <span class="doccomment">/// out over the ranges (t_0,t_a), (t_a,t_b), (t_b,t_c), and (t_c,t_1) separately and not directly over the range (t_0,t_1).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_driver</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ODEiv2Driver</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_set_driver</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">d</span>.<span class="ident">d</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_evolve_set_driver</span>(<span class="self">self</span>.<span class="ident">e</span>, <span class="ident">d</span>.<span class="ident">d</span>) }))
     }
 }
 
@@ -1640,17 +1660,17 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
 
     <span class="doccomment">/// The function sets a minimum for allowed step size hmin for driver self. Default value is 0.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_hmin</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hmin</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_hmin</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hmin</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_hmin</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hmin</span>) }))
     }
 
     <span class="doccomment">/// The function sets a maximum for allowed step size hmax for driver self. Default value is ::DBL_MAX.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_hmax</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hmax</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_hmax</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hmax</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_hmax</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hmax</span>) }))
     }
 
     <span class="doccomment">/// The function sets a maximum for allowed number of steps nmax for driver self. Default value of 0 sets no limit for steps.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_nmax</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">nmax</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_nmax</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">nmax</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_set_nmax</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">nmax</span>) }))
     }
 
     <span class="doccomment">/// This function evolves the driver system d from t to t1. Initially vector y should contain the values of dependent variables at</span>
@@ -1662,24 +1682,24 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
     <span class="doccomment">/// returns immediately with the same return code. In this case the user must call gsl_odeiv2_driver_reset before calling this</span>
     <span class="doccomment">/// function again.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">t1</span>: <span class="ident">f64</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_apply</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">t</span>, <span class="ident">t1</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_apply</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">t</span>, <span class="ident">t1</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) }))
     }
 
     <span class="doccomment">/// This function evolves the driver system d from t with n steps of size h. If the function is unable to complete the calculation, an</span>
     <span class="doccomment">/// error code from gsl_odeiv2_evolve_apply_fixed_step is returned, and t and y contain the values from last successful step.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_fixed_step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">h</span>: <span class="ident">f64</span>, <span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_apply_fixed_step</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">t</span>, <span class="ident">h</span>, <span class="ident">n</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_apply_fixed_step</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">t</span>, <span class="ident">h</span>, <span class="ident">n</span>, <span class="ident">y</span>.<span class="ident">as_mut_ptr</span>()) }))
     }
 
     <span class="doccomment">/// This function resets the evolution and stepper objects.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_reset</span>(<span class="self">self</span>.<span class="ident">d</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_reset</span>(<span class="self">self</span>.<span class="ident">d</span>) }))
     }
 
     <span class="doccomment">/// The routine resets the evolution and stepper objects and sets new initial step size to hstart. This function can be used e.g. to</span>
     <span class="doccomment">/// change the direction of integration.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset_hstart</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hstart</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">GSLResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_reset_hstart</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hstart</span>) })
+        <span class="ident">GSLResult</span>::<span class="ident">from</span>(<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_odeiv2_driver_reset_hstart</span>(<span class="self">self</span>.<span class="ident">d</span>, <span class="ident">hstart</span>) }))
     }
 }
 
@@ -1703,5 +1723,5 @@ Differential/Algebraic Equation Solvers.”, ACM Trans. Math. Software 31, 363�
 <span class="comment">//         d.d</span>
 <span class="comment">//     }</span>
 <span class="comment">// }</span>
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-files.js"></script><script src="../../../source-script.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

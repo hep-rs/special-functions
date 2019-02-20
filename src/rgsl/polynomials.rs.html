@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/polynomials.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>polynomials.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/polynomials.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>polynomials.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -169,7 +169,31 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
-</pre><pre class="rust ">
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -194,8 +218,9 @@ Abramowitz and Stegun, Handbook of Mathematical Functions, Sections 25.1.4 and 2
 R. L. Burden and J. D. Faires, Numerical Analysis, 9th edition, ISBN 0-538-73351-9, 2011.
 !*/</span>
 
-<span class="doccomment">/// The functions described here evaluate the polynomial P(x) = c[0] + c[1] x + c[2] x^2 + \dots + c[len-1] x^{len-1} using Horner’s method</span>
-<span class="doccomment">/// for stability.</span>
+<span class="doccomment">/// The functions described here evaluate the polynomial</span>
+<span class="doccomment">/// `P(x) = c[0] + c[1] x + c[2] x^2 + \dots + c[len-1] x^{len-1}` using Horner’s method for</span>
+<span class="doccomment">/// stability.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">evaluation</span> {
     <span class="kw">use</span> <span class="ident">ffi</span>;
     <span class="kw">use</span> <span class="ident">enums</span>;
@@ -225,7 +250,9 @@ R. L. Burden and J. D. Faires, Numerical Analysis, 9th edition, ISBN 0-538-73351
     <span class="doccomment">/// This function evaluates a polynomial and its derivatives storing the results in the array res of size lenres. The output array contains</span>
     <span class="doccomment">/// the values of d^k P/d x^k for the specified value of x starting with k = 0.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_eval_derivs</span>(<span class="ident">c</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">res</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_eval_derivs</span>(<span class="ident">c</span>.<span class="ident">as_ptr</span>(), <span class="ident">c</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">x</span>, <span class="ident">res</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">res</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_poly_eval_derivs</span>(<span class="ident">c</span>.<span class="ident">as_ptr</span>(), <span class="ident">c</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">x</span>, <span class="ident">res</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">res</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>)
+        })
     }
 }
 
@@ -253,19 +280,27 @@ R. L. Burden and J. D. Faires, Numerical Analysis, 9th edition, ISBN 0-538-73351
     <span class="doccomment">/// xa and ya of length size. On output the divided-differences of (xa,ya) are stored in the array dd, also of length size. Using the</span>
     <span class="doccomment">/// notation above, dd[k] = [x_0,x_1,...,x_k].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_dd_init</span>(<span class="ident">dd</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">xa</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">ya</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_init</span>(<span class="ident">dd</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">ya</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_init</span>(<span class="ident">dd</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">ya</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>)
+        })
     }
 
     <span class="doccomment">/// This function evaluates the polynomial stored in divided-difference form in the arrays dd and xa of length size at the point x.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_dd_eval</span>(<span class="ident">dd</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">xa</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_eval</span>(<span class="ident">dd</span>.<span class="ident">as_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">x</span>) }
+        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_eval</span>(<span class="ident">dd</span>.<span class="ident">as_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">x</span>) }
     }
 
     <span class="doccomment">/// This function converts the divided-difference representation of a polynomial to a Taylor expansion. The divided-difference representation</span>
     <span class="doccomment">/// is supplied in the arrays dd and xa of length size. On output the Taylor coefficients of the polynomial expanded about the point xp are</span>
     <span class="doccomment">/// stored in the array c also of length size. A workspace of length size must be provided in the array w.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_dd_taylor</span>(<span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">xp</span>: <span class="ident">f64</span>, <span class="ident">dd</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">xa</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_taylor</span>(<span class="ident">c</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">xp</span>, <span class="ident">dd</span>.<span class="ident">as_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">w</span>.<span class="ident">as_mut_ptr</span>()) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_taylor</span>(<span class="ident">c</span>.<span class="ident">as_mut_ptr</span>(),
+                                    <span class="ident">xp</span>, <span class="ident">dd</span>.<span class="ident">as_ptr</span>(),
+                                    <span class="ident">xa</span>.<span class="ident">as_ptr</span>(),
+                                    <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>,
+                                    <span class="ident">w</span>.<span class="ident">as_mut_ptr</span>())
+        })
     }
 
     <span class="doccomment">/// This function computes a divided-difference representation of the interpolating Hermite polynomial for the points (x, y) stored in the</span>
@@ -274,8 +309,21 @@ R. L. Burden and J. D. Faires, Numerical Analysis, 9th edition, ISBN 0-538-73351
     <span class="doccomment">/// new dataset z = \{x_0,x_0,x_1,x_1,...\}, which is stored in the array za of length 2*size on output. On output the divided-differences</span>
     <span class="doccomment">/// of the Hermite representation are stored in the array dd, also of length 2*size. Using the notation above, dd[k] = [z_0,z_1,...,z_k].</span>
     <span class="doccomment">/// The resulting Hermite polynomial can be evaluated by calling gsl_poly_dd_eval and using za for the input argument xa.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_dd_hermite_init</span>(<span class="ident">dd</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">za</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">xa</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">ya</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">dya</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_hermite_init</span>(<span class="ident">dd</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">za</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">xa</span>.<span class="ident">as_ptr</span>(), <span class="ident">ya</span>.<span class="ident">as_ptr</span>(), <span class="ident">dya</span>.<span class="ident">as_ptr</span>(), <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_dd_hermite_init</span>(
+        <span class="ident">dd</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+        <span class="ident">za</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+        <span class="ident">xa</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>],
+        <span class="ident">ya</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>],
+        <span class="ident">dya</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>],
+    ) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_poly_dd_hermite_init</span>(<span class="ident">dd</span>.<span class="ident">as_mut_ptr</span>(),
+                                          <span class="ident">za</span>.<span class="ident">as_mut_ptr</span>(),
+                                          <span class="ident">xa</span>.<span class="ident">as_ptr</span>(),
+                                          <span class="ident">ya</span>.<span class="ident">as_ptr</span>(),
+                                          <span class="ident">dya</span>.<span class="ident">as_ptr</span>(),
+                                          <span class="ident">dd</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>)
+        })
     }
 }
 
@@ -340,5 +388,6 @@ R. L. Burden and J. D. Faires, Numerical Analysis, 9th edition, ISBN 0-538-73351
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poly_complex_solve_cubic</span>(<span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">c</span>: <span class="ident">f64</span>, <span class="ident">z0</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ComplexF64</span>, <span class="ident">z1</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ComplexF64</span>, <span class="ident">z2</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_poly_complex_solve_cubic</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">transmute</span>(<span class="ident">z0</span>), <span class="ident">transmute</span>(<span class="ident">z1</span>), <span class="ident">transmute</span>(<span class="ident">z2</span>)) }
     }
-}</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-files.js"></script><script src="../../source-script.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

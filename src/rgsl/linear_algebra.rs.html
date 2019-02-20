@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/linear_algebra.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>linear_algebra.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/linear_algebra.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>linear_algebra.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1206,7 +1206,69 @@
 <span id="1206">1206</span>
 <span id="1207">1207</span>
 <span id="1208">1208</span>
-</pre><pre class="rust ">
+<span id="1209">1209</span>
+<span id="1210">1210</span>
+<span id="1211">1211</span>
+<span id="1212">1212</span>
+<span id="1213">1213</span>
+<span id="1214">1214</span>
+<span id="1215">1215</span>
+<span id="1216">1216</span>
+<span id="1217">1217</span>
+<span id="1218">1218</span>
+<span id="1219">1219</span>
+<span id="1220">1220</span>
+<span id="1221">1221</span>
+<span id="1222">1222</span>
+<span id="1223">1223</span>
+<span id="1224">1224</span>
+<span id="1225">1225</span>
+<span id="1226">1226</span>
+<span id="1227">1227</span>
+<span id="1228">1228</span>
+<span id="1229">1229</span>
+<span id="1230">1230</span>
+<span id="1231">1231</span>
+<span id="1232">1232</span>
+<span id="1233">1233</span>
+<span id="1234">1234</span>
+<span id="1235">1235</span>
+<span id="1236">1236</span>
+<span id="1237">1237</span>
+<span id="1238">1238</span>
+<span id="1239">1239</span>
+<span id="1240">1240</span>
+<span id="1241">1241</span>
+<span id="1242">1242</span>
+<span id="1243">1243</span>
+<span id="1244">1244</span>
+<span id="1245">1245</span>
+<span id="1246">1246</span>
+<span id="1247">1247</span>
+<span id="1248">1248</span>
+<span id="1249">1249</span>
+<span id="1250">1250</span>
+<span id="1251">1251</span>
+<span id="1252">1252</span>
+<span id="1253">1253</span>
+<span id="1254">1254</span>
+<span id="1255">1255</span>
+<span id="1256">1256</span>
+<span id="1257">1257</span>
+<span id="1258">1258</span>
+<span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -1391,11 +1453,11 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">///</span>
 <span class="doccomment">/// See Golub &amp; Van Loan, Matrix Computations, Algorithm 3.4.1 (Gauss Elimination with Partial Pivoting).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">LU_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>, <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_LU_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">p</span>),
                                   <span class="ident">signum</span>)
-    }
+    })
 }
 
 <span class="doccomment">/// Factorise a general N x N complex matrix A into,</span>
@@ -1413,53 +1475,56 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// signum gives the sign of the permutation, (-1)^n, where n is the number of interchanges in the permutation.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// See Golub &amp; Van Loan, Matrix Computations, Algorithm 3.4.1 (Gauss Elimination with Partial Pivoting).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
-                         <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
-                         <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>)
-                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_decomp</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
+    <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_LU_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">p</span>),
                                           <span class="ident">signum</span>)
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b using the LU decomposition of A into (LU, p) given by LU_decomp or LU_decomp as input.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">LU_solve</span>(<span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">LU_solve</span>(
+    <span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_LU_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b using the LU decomposition of A into (LU, p) given by LU_decomp or LU_decomp as input.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_solve</span>(<span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
-                        <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                        <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                        <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>)
-                        <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_solve</span>(
+    <span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_LU_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                          <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                          <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                          <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b in-place using the precomputed LU decomposition of A into (LU,p). On input x should contain</span>
 <span class="doccomment">/// the right-hand side b, which is replaced by the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">LU_svx</span>(<span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_LU_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b in-place using the precomputed LU decomposition of A into (LU,p). On input x should contain</span>
@@ -1468,11 +1533,11 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                       <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
                       <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>)
                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_LU_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies an iterative improvement to x, the solution of A x = b, from the precomputed LU decomposition of A into (LU,p). The</span>
@@ -1484,14 +1549,14 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
                  <span class="ident">residual</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_LU_refine</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">residual</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies an iterative improvement to x, the solution of A x = b, from the precomputed LU decomposition of A into (LU,p). The</span>
@@ -1503,14 +1568,14 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                          <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>,
                          <span class="ident">residual</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>)
                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_LU_refine</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">residual</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the inverse of a matrix A from its LU decomposition (LU,p), storing the result in the matrix inverse. The inverse</span>
@@ -1518,26 +1583,27 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// whenever possible, as the linear solver functions can obtain the same result more efficiently and reliably (consult any introductory</span>
 <span class="doccomment">/// textbook on numerical linear algebra for details).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">LU_invert</span>(<span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>, <span class="ident">inverse</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_LU_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">inverse</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the inverse of a matrix A from its LU decomposition (LU,p), storing the result in the matrix inverse. The inverse</span>
 <span class="doccomment">/// is computed by solving the system A x = b for each column of the identity matrix. It is preferable to avoid direct use of the inverse</span>
 <span class="doccomment">/// whenever possible, as the linear solver functions can obtain the same result more efficiently and reliably (consult any introductory</span>
 <span class="doccomment">/// textbook on numerical linear algebra for details).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_invert</span>(<span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
-                         <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                         <span class="ident">inverse</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>)
-                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_LU_invert</span>(
+    <span class="ident">lu</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">inverse</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_LU_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">lu</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">inverse</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the determinant of a matrix A from its LU decomposition, LU. The determinant is computed as the product of the</span>
@@ -1582,32 +1648,35 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">///</span>
 <span class="doccomment">/// The algorithm used to perform the decomposition is Householder QR (Golub &amp; Van Loan, Matrix Computations, Algorithm 5.2.1).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>))
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b using the QR decomposition of A held in (QR, tau) which must have been computed previously</span>
 <span class="doccomment">/// with gsl_linalg_QR_decomp. The least-squares solution for rectangular systems can be found using QR_lssolve.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_solve</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_solve</span>(
+    <span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b in-place using the QR decomposition of A held in (QR,tau) which must have been computed</span>
 <span class="doccomment">/// previously by gsl_linalg_QR_decomp. On input x should contain the right-hand side b, which is replaced by the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_svx</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function finds the least squares solution to the overdetermined system A x = b where the matrix A has more rows than columns. The</span>
@@ -1620,118 +1689,125 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                   <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
                   <span class="ident">residual</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_lssolve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">residual</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the matrix Q^T encoded in the decomposition (QR,tau) to the vector v, storing the result Q^T v in v. The matrix</span>
 <span class="doccomment">/// multiplication is carried out directly using the encoding of the Householder vectors without needing to form the full matrix Q^T.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_QTvec</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_QTvec</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the matrix Q encoded in the decomposition (QR,tau) to the vector v, storing the result Q v in v. The matrix</span>
 <span class="doccomment">/// multiplication is carried out directly using the encoding of the Householder vectors without needing to form the full matrix Q.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_Qvec</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_Qvec</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the matrix Q^T encoded in the decomposition (QR,tau) to the matrix A, storing the result Q^T A in A. The matrix</span>
 <span class="doccomment">/// multiplication is carried out directly using the encoding of the Householder vectors without needing to form the full matrix Q^T.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_QTmat</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_QTmat</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R x = b for x. It may be useful if the product b&#39; = Q^T b has already been computed using</span>
 <span class="doccomment">/// gsl_linalg_QR_QTvec.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_Rsolve</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_Rsolve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R x = b for x in-place. On input x should contain the right-hand side b and is replaced by</span>
 <span class="doccomment">/// the solution on output. This function may be useful if the product b&#39; = Q^T b has already been computed using gsl_linalg_QR_QTvec.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_Rsvx</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_Rsvx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_Rsvx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
+    })
 }
 
 <span class="doccomment">/// This function unpacks the encoded QR decomposition (QR,tau) into the matrices Q and R, where Q is M-by-M and R is M-by-N.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_unpack</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                 <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                 <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                 <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>)
-                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_unpack</span>(
+    <span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_unpack</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">q</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">r</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system R x = Q^T b for x. It can be used when the QR decomposition of a matrix is available in unpacked</span>
 <span class="doccomment">/// form as (Q, R).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_QRsolve</span>(<span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                  <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                  <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_QRsolve</span>(
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_QRsolve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">q</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">r</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function performs a rank-1 update w v^T of the QR decomposition (Q, R). The update is given by Q&#39;R&#39; = Q (R + w v^T) where the</span>
 <span class="doccomment">/// output matrices Q&#39; and R&#39; are also orthogonal and right triangular. Note that w is destroyed by the update.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_update</span>(<span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                 <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                 <span class="kw-2">mut</span> <span class="ident">w</span>: ::<span class="ident">VectorF64</span>,
-                 <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>)
-                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QR_update</span>(
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="kw-2">mut</span> <span class="ident">w</span>: ::<span class="ident">VectorF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QR_update</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">q</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">r</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">w</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R x = b for the N-by-N matrix R.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">R_solve</span>(<span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_R_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">r</span>),
                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R x = b in-place. On input x should contain the right-hand side b, which is replaced by</span>
 <span class="doccomment">/// the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">R_svx</span>(<span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_R_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">r</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_R_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">r</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
+    })
 }
 
 <span class="doccomment">/// This function factorizes the M-by-N matrix A into the QRP^T decomposition A = Q R P^T. On output the diagonal and upper triangular part</span>
@@ -1743,32 +1819,34 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// a workspace of length N used for column pivoting.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The algorithm used to perform the decomposition is Householder QR with column pivoting (Golub &amp; Van Loan, Matrix Computations, Algorithm 5.4.1).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                   <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                   <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
-                   <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>,
-                   <span class="ident">norm</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_decomp</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
+    <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>,
+    <span class="ident">norm</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">p</span>),
                                     <span class="ident">signum</span>,
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">norm</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function factorizes the matrix A into the decomposition A = Q R P^T without modifying A itself and storing the output in the separate</span>
 <span class="doccomment">/// matrices q and r.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_decomp2</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                    <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                    <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                    <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
-                    <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>,
-                    <span class="ident">norm</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_decomp2</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">Permutation</span>,
+    <span class="ident">signum</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span>,
+    <span class="ident">norm</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_decomp2</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">q</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">r</span>),
@@ -1776,97 +1854,102 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">p</span>),
                                      <span class="ident">signum</span>,
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">norm</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b using the QRP^T decomposition of A held in (QR, tau, p) which must have been computed previously</span>
 <span class="doccomment">/// by QRPT_decomp.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_solve</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                  <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                  <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                  <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_solve</span>(
+    <span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                    <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system A x = b in-place using the QRP^T decomposition of A held in (QR,tau,p). On input x should contain the</span>
 <span class="doccomment">/// right-hand side b, which is replaced by the solution on output.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_svx</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_svx</span>(
+    <span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the square system R P^T x = Q^T b for x. It can be used when the QR decomposition of a matrix is available in unpacked</span>
 <span class="doccomment">/// form as (Q, R).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_QRsolve</span>(<span class="ident">q</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                    <span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_QRsolve</span>(
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_QRsolve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">q</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">r</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function performs a rank-1 update w v^T of the QRP^T decomposition (Q, R, p). The update is given by Q&#39;R&#39; = Q (R + w v^T P) where the</span>
 <span class="doccomment">/// output matrices Q&#39; and R&#39; are also orthogonal and right triangular. Note that w is destroyed by the update. The permutation p is not changed.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_update</span>(<span class="ident">q</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                   <span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                   <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                   <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                   <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>)
-                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_update</span>(
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">r</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_update</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">q</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">r</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">w</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R P^T x = b for the N-by-N matrix R contained in QR.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_Rsolve</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                   <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
-                   <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                   <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_Rsolve</span>(
+    <span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_Rsolve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                     <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the triangular system R P^T x = b in-place for the N-by-N matrix R contained in QR. On input x should contain the</span>
 <span class="doccomment">/// right-hand side b, which is replaced by the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">QRPT_Rsvx</span>(<span class="ident">qr</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span>::<span class="ident">Permutation</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_QRPT_Rsvx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">qr</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">p</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function factorizes the M-by-N matrix A into the singular value decomposition A = U S V^T for M &gt;= N. On output the matrix A is replaced</span>
@@ -1875,44 +1958,46 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// necessary to take the transpose of V. A workspace of length N is required in work.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This routine uses the Golub-Reinsch SVD algorithm.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                 <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                 <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                 <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_decomp</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">s</span>),
                                   <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">work</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the SVD using the modified Golub-Reinsch algorithm, which is faster for M&gt;&gt;N. It requires the vector work of length</span>
 <span class="doccomment">/// N and the N-by-N matrix X as additional working space.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_decomp_mod</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                     <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_decomp_mod</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_decomp_mod</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">s</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">work</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the SVD of the M-by-N matrix A using one-sided Jacobi orthogonalization for M &gt;= N. The Jacobi method can compute</span>
 <span class="doccomment">/// singular values to higher relative accuracy than Golub-Reinsch algorithms (see references for details).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_decomp_jacobi</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_decomp_jacobi</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                          <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>),
                                          <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">s</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b using the singular value decomposition (U, S, V) of A which must have been computed previously</span>
@@ -1923,26 +2008,29 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">///</span>
 <span class="doccomment">/// In the over-determined case where A has more rows than columns the system is solved in the least squares sense, returning the solution</span>
 <span class="doccomment">/// x which minimizes ||A x - b||_2.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_solve</span>(<span class="ident">u</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                <span class="ident">s</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_solve</span>(
+    <span class="ident">u</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">s</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">u</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">s</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the statistical leverage values h_i of a matrix A using its singular value decomposition (U, S, V) previously computed</span>
 <span class="doccomment">/// with gsl_linalg_SV_decomp. h_i are the diagonal values of the matrix A (A^T A)^{-1} A^T and depend only on the matrix U which is the input to</span>
 <span class="doccomment">/// this function.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SV_leverage</span>(<span class="ident">u</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_leverage</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">u</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_SV_leverage</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">u</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>))
+    })
 }
 
 <span class="doccomment">/// This function factorizes the symmetric, positive-definite square matrix A into the Cholesky decomposition A = L L^T (or A = L L^H for</span>
@@ -1953,7 +2041,7 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">///</span>
 <span class="doccomment">/// When testing whether a matrix is positive-definite, disable the error handler first to avoid triggering an error.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>)) })
 }
 
 <span class="doccomment">/// This function factorizes the symmetric, positive-definite square matrix A into the Cholesky decomposition A = L L^T (or A = L L^H for</span>
@@ -1964,65 +2052,73 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">///</span>
 <span class="doccomment">/// When testing whether a matrix is positive-definite, disable the error handler first to avoid triggering an error.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_cholesky_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>))
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b using the Cholesky decomposition of A held in the matrix cholesky which must have been previously</span>
 <span class="doccomment">/// computed by gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cholesky_solve</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                      <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                      <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cholesky_solve</span>(
+    <span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">cholesky</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b using the Cholesky decomposition of A held in the matrix cholesky which must have been previously</span>
 <span class="doccomment">/// computed by gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_cholesky_solve</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
-                              <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                              <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_cholesky_solve</span>(
+    <span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">cholesky</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b in-place using the Cholesky decomposition of A held in the matrix cholesky which must have been</span>
 <span class="doccomment">/// previously computed by gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp. On input x should contain the right-hand side</span>
 <span class="doccomment">/// b, which is replaced by the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cholesky_svx</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">cholesky</span>),
                                      <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b in-place using the Cholesky decomposition of A held in the matrix cholesky which must have been</span>
 <span class="doccomment">/// previously computed by gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp. On input x should contain the right-hand side</span>
 <span class="doccomment">/// b, which is replaced by the solution on output.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_cholesky_svx</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">cholesky</span>),
                                              <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the inverse of a matrix from its Cholesky decomposition cholesky, which must have been previously computed by</span>
 <span class="doccomment">/// gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp. On output, the inverse is stored in-place in cholesky.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">cholesky</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_cholesky_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">cholesky</span>))
+    })
 }
 
 <span class="doccomment">/// This function computes the inverse of a matrix from its Cholesky decomposition cholesky, which must have been previously computed by</span>
 <span class="doccomment">/// gsl_linalg_cholesky_decomp or gsl_linalg_complex_cholesky_decomp. On output, the inverse is stored in-place in cholesky.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_cholesky_invert</span>(<span class="ident">cholesky</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">cholesky</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_cholesky_invert</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">cholesky</span>))
+    })
 }
 
 <span class="doccomment">/// This function factorizes the symmetric square matrix A into the symmetric tridiagonal decomposition Q T Q^T. On output the diagonal and</span>
@@ -2030,39 +2126,41 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// the Householder vectors which, together with the Householder coefficients tau, encode the orthogonal matrix Q. This storage scheme is</span>
 <span class="doccomment">/// the same as used by LAPACK. The upper triangular part of A is not referenced.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmtd_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_symmtd_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the encoded symmetric tridiagonal decomposition (A, tau) obtained from gsl_linalg_symmtd_decomp into the orthogonal</span>
 <span class="doccomment">/// matrix Q, the vector of diagonal elements diag and the vector of subdiagonal elements subdiag.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmtd_unpack</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                     <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                     <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmtd_unpack</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_symmtd_unpack</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">q</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">subdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the diagonal and subdiagonal of the encoded symmetric tridiagonal decomposition (A, tau) obtained from</span>
 <span class="doccomment">/// gsl_linalg_symmtd_decomp into the vectors diag and subdiag.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmtd_unpack_T</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                       <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                       <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmtd_unpack_T</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_symmtd_unpack_T</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">subdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function factorizes the hermitian matrix A into the symmetric tridiagonal decomposition U T U^T. On output the real parts of the</span>
@@ -2070,39 +2168,41 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// matrix contains the Householder vectors which, together with the Householder coefficients tau, encode the unitary matrix U. This storage</span>
 <span class="doccomment">/// scheme is the same as used by LAPACK. The upper triangular part of A and imaginary parts of the diagonal are not referenced.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hermtd_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hermtd_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the encoded tridiagonal decomposition (A, tau) obtained from gsl_linalg_hermtd_decomp into the unitary matrix U,</span>
 <span class="doccomment">/// the real vector of diagonal elements diag and the real vector of subdiagonal elements subdiag.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hermtd_unpack</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
-                     <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                     <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
-                     <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                     <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hermtd_unpack</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hermtd_unpack</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">u</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">subdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the diagonal and subdiagonal of the encoded tridiagonal decomposition (A, tau) obtained from the</span>
 <span class="doccomment">/// gsl_linalg_hermtd_decomp into the real vectors diag and subdiag.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hermtd_unpack_T</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
-                       <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                       <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hermtd_unpack_T</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixComplexF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">subdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hermtd_unpack_T</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">subdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function computes the Hessenberg decomposition of the matrix A by applying the similarity transformation H = U^T A U. On output, H</span>
@@ -2110,89 +2210,94 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// U is a product of N - 2 Householder matrices. The Householder vectors are stored in the lower portion of A (below the subdiagonal) and</span>
 <span class="doccomment">/// the Householder coefficients are stored in the vector tau. tau must be of length N.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hessenberg_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function constructs the orthogonal matrix U from the information stored in the Hessenberg matrix H along with the vector tau. H and</span>
 <span class="doccomment">/// tau are outputs from gsl_linalg_hessenberg_decomp.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_unpack</span>(<span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                         <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                         <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>)
-                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_unpack</span>(
+    <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hessenberg_unpack</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">u</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function is similar to gsl_linalg_hessenberg_unpack, except it accumulates the matrix U into V, so that V&#39; = VU. The matrix V must</span>
 <span class="doccomment">/// be initialized prior to calling this function. Setting V to the identity matrix provides the same result as gsl_linalg_hessenberg_unpack.</span>
 <span class="doccomment">/// If H is order N, then V must have N columns but may have any number of rows.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_unpack_accum</span>(<span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                               <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                               <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_unpack_accum</span>(
+    <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hessenberg_unpack_accum</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>),
                                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau</span>),
                                                 <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function sets the lower triangular portion of H, below the subdiagonal, to zero. It is useful for clearing out the Householder</span>
 <span class="doccomment">/// vectors after calling gsl_linalg_hessenberg_decomp.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hessenberg_set_zero</span>(<span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hessenberg_set_zero</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hessenberg_set_zero</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">h</span>)) })
 }
 
 <span class="doccomment">/// This function computes the Hessenberg-Triangular decomposition of the matrix pair (A, B). On output, H is stored in A, and R is stored</span>
 <span class="doccomment">/// in B. If U and V are provided (they may be null), the similarity transformations are stored in them. Additional workspace of length N</span>
 <span class="doccomment">/// is needed in work.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hesstri_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                      <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                      <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                      <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                      <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hesstri_decomp</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">work</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_hesstri_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">b</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">u</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">work</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function factorizes the M-by-N matrix A into bidiagonal form U B V^T. The diagonal and superdiagonal of the matrix B are stored in</span>
 <span class="doccomment">/// the diagonal and superdiagonal of A. The orthogonal matrices U and V are stored as compressed Householder vectors in the remaining elements</span>
 <span class="doccomment">/// of A. The Householder coefficients are stored in the vectors tau_U and tau_V. The length of tau_U must equal the number of elements in</span>
 <span class="doccomment">/// the diagonal of A and the length of tau_V should be one element shorter.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_decomp</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                     <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_decomp</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_bidiag_decomp</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau_u</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau_v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the bidiagonal decomposition of A produced by gsl_linalg_bidiag_decomp, (A, tau_U, tau_V) into the separate orthogonal</span>
 <span class="doccomment">/// matrices U, V and the diagonal vector diag and superdiagonal superdiag. Note that U is stored as a compact M-by-N orthogonal matrix satisfying</span>
 <span class="doccomment">/// U^T U = I for efficiency.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                     <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                     <span class="ident">superdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">superdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_bidiag_unpack</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">tau_u</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">u</span>),
@@ -2200,35 +2305,37 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">superdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the bidiagonal decomposition of A produced by gsl_linalg_bidiag_decomp, (A, tau_U, tau_V) into the separate orthogonal</span>
 <span class="doccomment">/// matrices U, V and the diagonal vector diag and superdiagonal superdiag. The matrix U is stored in-place in A.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack2</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
-                      <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                      <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                      <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>)
-                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack2</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+    <span class="ident">tau_u</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">tau_v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_bidiag_unpack2</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau_u</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">tau_v</span>),
                                        <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">v</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function unpacks the diagonal and superdiagonal of the bidiagonal decomposition of A from gsl_linalg_bidiag_decomp, into the diagonal</span>
 <span class="doccomment">/// vector diag and superdiagonal vector superdiag.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack_B</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
-                       <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
-                       <span class="ident">superdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                       <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bidiag_unpack_B</span>(
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span>::<span class="ident">MatrixF64</span>,
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+    <span class="ident">superdiag</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_bidiag_unpack_B</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">a</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">diag</span>),
                                         <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">superdiag</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function prepares a Householder transformation P = I - \tau v v^T which can be used to zero all the elements of the input vector except</span>
@@ -2248,172 +2355,189 @@ http://www.netlib.org/lapack/ in the lawns or lawnspdf directories.
 <span class="doccomment">/// This function applies the Householder matrix P defined by the scalar tau and the vector v to the left-hand side of the matrix A. On output</span>
 <span class="doccomment">/// the result P A is stored in A.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">householder_hm</span>(<span class="ident">tau</span>: <span class="ident">f64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_householder_hm</span>(<span class="ident">tau</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the Householder matrix P defined by the scalar tau and the vector v to the left-hand side of the matrix A. On output</span>
 <span class="doccomment">/// the result P A is stored in A.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_hm</span>(<span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
-                              <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                              <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_hm</span>(
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_householder_hm</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">tau</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the Householder matrix P defined by the scalar tau and the vector v to the right-hand side of the matrix A. On output</span>
 <span class="doccomment">/// the result A P is stored in A.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">householder_mh</span>(<span class="ident">tau</span>: <span class="ident">f64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_householder_mh</span>(<span class="ident">tau</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the Householder matrix P defined by the scalar tau and the vector v to the right-hand side of the matrix A. On output</span>
 <span class="doccomment">/// the result A P is stored in A.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_mh</span>(<span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
-                              <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                              <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_mh</span>(
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_householder_mh</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">tau</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the Householder transformation P defined by the scalar tau and the vector v to the vector w. On output the result P</span>
 <span class="doccomment">/// w is stored in w.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">householder_hv</span>(<span class="ident">tau</span>: <span class="ident">f64</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_householder_hv</span>(<span class="ident">tau</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">w</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function applies the Householder transformation P defined by the scalar tau and the vector v to the vector w. On output the result P</span>
 <span class="doccomment">/// w is stored in w.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_hv</span>(<span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
-                              <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
-                              <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complex_householder_hv</span>(
+    <span class="ident">tau</span>: <span class="kw-2">&amp;</span>::<span class="ident">ComplexF64</span>,
+    <span class="ident">v</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorComplexF64</span>,
+    <span class="ident">w</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixComplexF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_complex_householder_hv</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">tau</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">w</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b directly using Householder transformations. On output the solution is stored in x and b is not</span>
 <span class="doccomment">/// modified. The matrix A is destroyed by the Householder transformations.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">HH_solve</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: ::<span class="ident">MatrixF64</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_HH_solve</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">a</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                  <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the system A x = b in-place using Householder transformations. On input x should contain the right-hand side b,</span>
 <span class="doccomment">/// which is replaced by the solution on output. The matrix A is destroyed by the Householder transformations.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">HH_svx</span>(<span class="kw-2">mut</span> <span class="ident">a</span>: ::<span class="ident">MatrixF64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_linalg_HH_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>)) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+        <span class="ident">ffi</span>::<span class="ident">gsl_linalg_HH_svx</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
+    })
 }
 
 <span class="doccomment">/// This function solves the general N-by-N system A x = b where A is tridiagonal (N &gt;= 2). The super-diagonal and sub-diagonal vectors</span>
 <span class="doccomment">/// e and f must be one element shorter than the diagonal vector diag. The form of A for the 4-by-4 case is shown below,</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// ```text</span>
 <span class="doccomment">/// A = ( d_0 e_0  0   0  )</span>
 <span class="doccomment">///     ( f_0 d_1 e_1  0  )</span>
 <span class="doccomment">///     (  0  f_1 d_2 e_2 )</span>
 <span class="doccomment">///     (  0   0  f_2 d_3 )</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">f</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                     <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                     <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_tridiag</span>(
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">f</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_solve_tridiag</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">diag</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">e</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">f</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                       <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the general N-by-N system A x = b where A is symmetric tridiagonal (N &gt;= 2). The off-diagonal vector e must be one</span>
 <span class="doccomment">/// element shorter than the diagonal vector diag. The form of A for the 4-by-4 case is shown below,</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// ```text</span>
 <span class="doccomment">/// A = ( d_0 e_0  0   0  )</span>
 <span class="doccomment">///     ( e_0 d_1 e_1  0  )</span>
 <span class="doccomment">///     (  0  e_1 d_2 e_2 )</span>
 <span class="doccomment">///     (  0   0  e_2 d_3 )</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_symm_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                          <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                          <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                          <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                          <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_symm_tridiag</span>(
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_solve_symm_tridiag</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">diag</span>),
                                            <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">e</span>),
                                            <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                            <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the general N-by-N system A x = b where A is cyclic tridiagonal (N &gt;= 3). The cyclic super-diagonal and sub-diagonal</span>
 <span class="doccomment">/// vectors e and f must have the same number of elements as the diagonal vector diag. The form of A for the 4-by-4 case is shown below,</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// ```text</span>
 <span class="doccomment">/// A = ( d_0 e_0  0  f_3 )</span>
 <span class="doccomment">///     ( f_0 d_1 e_1  0  )</span>
 <span class="doccomment">///     (  0  f_1 d_2 e_2 )</span>
 <span class="doccomment">///     ( e_3  0  f_2 d_3 )</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_cyc_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                         <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                         <span class="ident">f</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                         <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                         <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                         <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_cyc_tridiag</span>(
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">f</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_solve_cyc_tridiag</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">diag</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">e</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">f</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                           <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function solves the general N-by-N system A x = b where A is symmetric cyclic tridiagonal (N &gt;= 3). The cyclic off-diagonal vector</span>
 <span class="doccomment">/// e must have the same number of elements as the diagonal vector diag. The form of A for the 4-by-4 case is shown below,</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// ```text</span>
 <span class="doccomment">/// A = ( d_0 e_0  0  e_3 )</span>
 <span class="doccomment">///     ( e_0 d_1 e_1  0  )</span>
 <span class="doccomment">///     (  0  e_1 d_2 e_2 )</span>
 <span class="doccomment">///     ( e_3  0  e_2 d_3 )</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_symm_cyc_tridiag</span>(<span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                              <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                              <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
-                              <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_symm_cyc_tridiag</span>(
+    <span class="ident">diag</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">e</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">b</span>: <span class="kw-2">&amp;</span>::<span class="ident">VectorF64</span>,
+    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>,
+) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_solve_symm_cyc_tridiag</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">diag</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">e</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">b</span>),
                                                <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-    }
+    })
 }
 
 <span class="doccomment">/// This function replaces the matrix A with its balanced counterpart and stores the diagonal elements of the similarity transformation into</span>
 <span class="doccomment">/// the vector D.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">balance_matrix</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">MatrixF64</span>, <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> {
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
         <span class="ident">ffi</span>::<span class="ident">gsl_linalg_balance_matrix</span>(<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>), <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">d</span>))
-    }
+    })
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-files.js"></script><script src="../../source-script.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

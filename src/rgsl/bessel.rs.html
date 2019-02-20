@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/bessel.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bessel.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/bessel.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bessel.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -657,7 +657,42 @@
 <span id="657">657</span>
 <span id="658">658</span>
 <span id="659">659</span>
-</pre><pre class="rust ">
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -676,7 +711,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_I0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular modified cylindrical Bessel function of first order, I_1(x).</span>
@@ -689,7 +724,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_I1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular modified cylindrical Bessel function of order n, I_n(x).</span>
@@ -702,14 +737,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the regular modified cylindrical Bessel functions I_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The start of the range nmin must be positive or zero.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">In_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">In_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">x</span>,
+                                                            <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified cylindrical Bessel function of zeroth order \exp(-|x|) I_0(x).</span>
@@ -722,7 +761,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_I0_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified cylindrical Bessel function of first order \exp(-|x|) I_1(x).</span>
@@ -735,7 +774,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_I1_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified cylindrical Bessel function of order n, \exp(-|x|) I_n(x)</span>
@@ -748,14 +787,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_scaled_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the scaled regular cylindrical Bessel functions \exp(-|x|) I_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The start of the range nmin must be positive or zero.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">In_scaled_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_scaled_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">In_scaled_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_In_scaled_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">x</span>,
+                                                                   <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified spherical Bessel function of zeroth order, \exp(-|x|) i_0(x).</span>
@@ -768,7 +811,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_i0_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified spherical Bessel function of first order, \exp(-|x|) i_1(x).</span>
@@ -781,7 +824,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_i1_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified spherical Bessel function of second order, \exp(-|x|) i_2(x)</span>
@@ -794,7 +837,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_i2_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified spherical Bessel function of order l, \exp(-|x|) i_l(x)</span>
@@ -807,12 +850,15 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_il_scaled_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the scaled regular modified cylindrical Bessel functions \exp(-|x|) i_l(x) for l from 0 to lmax inclusive for lmax &gt;= 0, storing the results in the array result_array. The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">il_scaled_array</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_il_scaled_array</span>(<span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">il_scaled_array</span>(<span class="ident">lmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lmax</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_il_scaled_array</span>(<span class="ident">lmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">x</span>,
+                                                                   <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the regular modified Bessel function of fractional order \nu, I_\nu(x) for x&gt;0, \nu&gt;0.</span>
@@ -825,7 +871,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Inu_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled regular modified Bessel function of fractional order \nu, \exp(-|x|)I_\nu(x) for x&gt;0, \nu&gt;0.</span>
@@ -838,7 +884,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Inu_scaled_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular cylindrical Bessel function of zeroth order, J_0(x).</span>
@@ -851,7 +897,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_J0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular cylindrical Bessel function of first order, J_1(x).</span>
@@ -864,7 +910,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_J1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular cylindrical Bessel function of order n, J_n(x).</span>
@@ -877,13 +923,14 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Jn_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the regular cylindrical Bessel functions J_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Jn_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Jn_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Jn_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Jn_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the regular spherical Bessel function of zeroth order, j_0(x) = \sin(x)/x.</span>
@@ -896,7 +943,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_j0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular spherical Bessel function of first order, j_1(x) = (\sin(x)/x - \cos(x))/x.</span>
@@ -909,7 +956,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_j1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular spherical Bessel function of second order, j_2(x) = ((3/x^2 - 1)\sin(x) - 3\cos(x)/x)/x.</span>
@@ -922,7 +969,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_j2_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the regular spherical Bessel function of order l, j_l(x), for l &gt;= 0 and x &gt;= 0.</span>
@@ -935,19 +982,23 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_jl_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the regular spherical Bessel functions j_l(x) for l from 0 to lmax inclusive for lmax &gt;= 0 and x &gt;= 0, storing the results in the array result_array.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">jl_array</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_jl_array</span>(<span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">jl_array</span>(<span class="ident">lmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lmax</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_jl_array</span>(<span class="ident">lmax</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine uses Steed’s method to compute the values of the regular spherical Bessel functions j_l(x) for l from 0 to lmax inclusive for lmax &gt;= 0 and x &gt;= 0, storing the results in the array result_array.</span>
 <span class="doccomment">/// The Steed/Barnett algorithm is described in Comp. Phys. Comm. 21, 297 (1981). Steed’s method is more stable than the recurrence used in the other functions but is also slower.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">jl_steed_array</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_jl_steed_array</span>(<span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">jl_steed_array</span>(<span class="ident">lmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lmax</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_jl_steed_array</span>(<span class="ident">lmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                  <span class="ident">x</span>,
+                                                                  <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the regular cylindrical Bessel function of fractional order \nu, J_\nu(x).</span>
@@ -960,13 +1011,16 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Jnu_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This function computes the regular cylindrical Bessel function of fractional order \nu, J_\nu(x), evaluated at a series of x values. The array v of length size contains the x values.</span>
 <span class="doccomment">/// They are assumed to be strictly ordered and positive. The array is over-written with the values of J_\nu(x_i).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sequence_Jnu</span>(<span class="ident">nu</span>: <span class="ident">f64</span>, <span class="ident">mode</span>: ::<span class="ident">Mode</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_sequence_Jnu_e</span>(<span class="ident">nu</span>, <span class="ident">mode</span>, <span class="ident">v</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i64</span>, <span class="ident">v</span>.<span class="ident">as_mut_ptr</span>()) }
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_sequence_Jnu_e</span>(<span class="ident">nu</span>,
+                                                                  <span class="ident">mode</span>,
+                                                                  <span class="ident">v</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i64</span>,
+                                                                  <span class="ident">v</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the irregular modified cylindrical Bessel function of zeroth order, K_0(x), for x &gt; 0.</span>
@@ -979,7 +1033,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_K0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular modified cylindrical Bessel function of first order, K_1(x), for x &gt; 0.</span>
@@ -992,7 +1046,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_K1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular modified cylindrical Bessel function of order n, K_n(x), for x &gt; 0.</span>
@@ -1005,14 +1059,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the irregular modified cylindrical Bessel functions K_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The start of the range nmin must be positive or zero. The domain of the function is x&gt;0.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Kn_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Kn_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">x</span>,
+                                                            <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified cylindrical Bessel function of zeroth order \exp(x) K_0(x) for x&gt;0.</span>
@@ -1025,7 +1083,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_K0_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified cylindrical Bessel function of first order \exp(x) K_1(x) for x&gt;0.</span>
@@ -1038,7 +1096,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_K1_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified cylindrical Bessel function of order n, \exp(x) K_n(x), for x&gt;0.</span>
@@ -1051,14 +1109,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_scaled_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the scaled irregular cylindrical Bessel functions \exp(x) K_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The start of the range nmin must be positive or zero. The domain of the function is x&gt;0.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Kn_scaled_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_scaled_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Kn_scaled_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Kn_scaled_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">x</span>,
+                                                                   <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// The irregular modified spherical Bessel functions k_l(x) are related to the irregular modified Bessel functions of fractional order, k_l(x) = \sqrt{\pi/(2x)} K_{l+1/2}(x).</span>
@@ -1073,7 +1135,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_k0_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified spherical Bessel function of first order, \exp(x) k_1(x), for x&gt;0.</span>
@@ -1086,7 +1148,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_k1_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified spherical Bessel function of second order, \exp(x) k_2(x), for x&gt;0.</span>
@@ -1099,7 +1161,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_k2_scaled_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified spherical Bessel function of order l, \exp(x) k_l(x), for x&gt;0.</span>
@@ -1112,13 +1174,16 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_kl_scaled_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the scaled irregular modified spherical Bessel functions \exp(x) k_l(x) for l from 0 to lmax inclusive for lmax &gt;= 0 and x&gt;0, storing the results in the array result_array.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kl_scaled_array</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_kl_scaled_array</span>(<span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kl_scaled_array</span>(<span class="ident">lmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lmax</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_kl_scaled_array</span>(<span class="ident">lmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                                   <span class="ident">x</span>,
+                                                                   <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the irregular modified Bessel function of fractional order \nu, K_\nu(x) for x&gt;0, \nu&gt;0.</span>
@@ -1131,7 +1196,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Knu_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the logarithm of the irregular modified Bessel function of fractional order \nu, \ln(K_\nu(x)) for x&gt;0, \nu&gt;0.</span>
@@ -1144,7 +1209,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_lnKnu_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the scaled irregular modified Bessel function of fractional order \nu, \exp(+|x|) K_\nu(x) for x&gt;0, \nu&gt;0.</span>
@@ -1157,7 +1222,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Knu_scaled_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular cylindrical Bessel function of zeroth order, Y_0(x), for x&gt;0.</span>
@@ -1170,7 +1235,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Y0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular cylindrical Bessel function of first order, Y_1(x), for x&gt;0.</span>
@@ -1183,7 +1248,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Y1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular cylindrical Bessel function of order n, Y_n(x), for x&gt;0.</span>
@@ -1196,14 +1261,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Yn_e</span>(<span class="ident">n</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the irregular cylindrical Bessel functions Y_n(x) for n from nmin to nmax inclusive, storing the results in the array result_array.</span>
 <span class="doccomment">/// The domain of the function is x&gt;0.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Yn_array</span>(<span class="ident">nmin</span>: <span class="ident">i32</span>, <span class="ident">nmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Yn_array</span>(<span class="ident">nmin</span>, <span class="ident">nmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Yn_array</span>(<span class="ident">nmin</span>: <span class="ident">u32</span>, <span class="ident">nmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nmax</span> <span class="op">-</span> <span class="ident">nmin</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Yn_array</span>(<span class="ident">nmin</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">nmax</span> <span class="kw">as</span> <span class="kw">_</span>,
+                                                            <span class="ident">x</span>,
+                                                            <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the irregular spherical Bessel function of zeroth order, y_0(x) = -\cos(x)/x.</span>
@@ -1216,7 +1285,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_y0_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular spherical Bessel function of first order, y_1(x) = -(\cos(x)/x + \sin(x))/x.</span>
@@ -1229,7 +1298,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_y1_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular spherical Bessel function of second order, y_2(x) = (-3/x^3 + 1/x)\cos(x) - (3/x^2)\sin(x).</span>
@@ -1242,7 +1311,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_y2_e</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the irregular spherical Bessel function of order l, y_l(x), for l &gt;= 0.</span>
@@ -1255,13 +1324,14 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_yl_e</span>(<span class="ident">l</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the values of the irregular spherical Bessel functions y_l(x) for l from 0 to lmax inclusive for lmax &gt;= 0, storing the results in the array result_array.</span>
 <span class="doccomment">/// The values are computed using recurrence relations for efficiency, and therefore may differ slightly from the exact values.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">yl_array</span>(<span class="ident">lmax</span>: <span class="ident">i32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_yl_array</span>(<span class="ident">lmax</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) }
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">yl_array</span>(<span class="ident">lmax</span>: <span class="ident">u32</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">result_array</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lmax</span> <span class="op">&lt;</span> <span class="ident">result_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>);
+    <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_yl_array</span>(<span class="ident">lmax</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">x</span>, <span class="ident">result_array</span>.<span class="ident">as_mut_ptr</span>()) })
 }
 
 <span class="doccomment">/// This routine computes the irregular cylindrical Bessel function of fractional order \nu, Y_\nu(x).</span>
@@ -1274,7 +1344,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_Ynu_e</span>(<span class="ident">nu</span>, <span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the location of the s-th positive zero of the Bessel function J_0(x).</span>
@@ -1287,7 +1357,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_zero_J0_e</span>(<span class="ident">s</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the location of the s-th positive zero of the Bessel function J_1(x).</span>
@@ -1300,7 +1370,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_zero_J1_e</span>(<span class="ident">s</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
 
 <span class="doccomment">/// This routine computes the location of the s-th positive zero of the Bessel function J_\nu(x).</span>
@@ -1315,7 +1385,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">zeroed</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">gsl_sf_result</span><span class="op">&gt;</span>() };
     <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_sf_bessel_zero_Jnu_e</span>(<span class="ident">nu</span>, <span class="ident">s</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>) };
 
-    (<span class="ident">ret</span>, ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
+    (<span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>), ::<span class="ident">types</span>::<span class="prelude-ty">Result</span>{<span class="ident">val</span>: <span class="ident">result</span>.<span class="ident">val</span>, <span class="ident">err</span>: <span class="ident">result</span>.<span class="ident">err</span>})
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-files.js"></script><script src="../../source-script.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

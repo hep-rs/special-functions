@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/types/matrix_complex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>matrix_complex.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/types/matrix_complex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>matrix_complex.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -577,7 +577,27 @@
 <span id="577">577</span>
 <span id="578">578</span>
 <span id="579">579</span>
-</pre><pre class="rust ">
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -647,17 +667,17 @@
 
     <span class="doccomment">/// This function copies the elements of the other matrix into the self matrix. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_memcpy</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_memcpy</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function copies the elements of the self matrix into the other matrix. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_memcpy</span>(<span class="ident">other</span>.<span class="ident">mat</span>, <span class="self">self</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_memcpy</span>(<span class="ident">other</span>.<span class="ident">mat</span>, <span class="self">self</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the elements of the matrices self and other by copying. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function copies the elements of the y-th row of the matrix into the returned vector.</span>
@@ -669,7 +689,7 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_get_row</span>(<span class="ident">tmp</span>, <span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
@@ -682,35 +702,39 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_get_col</span>(<span class="ident">tmp</span>, <span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
     <span class="doccomment">/// This function copies the elements of the vector v into the y-th row of the matrix.</span>
     <span class="doccomment">/// The length of the vector must be the same as the length of the row.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_row</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">y</span>: <span class="ident">usize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">VectorComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_set_row</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_set_row</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
+        })
     }
 
     <span class="doccomment">/// This function copies the elements of the vector v into the x-th column of the matrix.</span>
     <span class="doccomment">/// The length of the vector must be the same as the length of the column.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_col</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">VectorComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_set_col</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_set_col</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
+        })
     }
 
     <span class="doccomment">/// This function exchanges the y1-th and y2-th rows of the matrix in-place.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_rows</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">y1</span>: <span class="ident">usize</span>, <span class="ident">y2</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_rows</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y1</span>, <span class="ident">y2</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_rows</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y1</span>, <span class="ident">y2</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the x1-th and x2-th columns of the matrix in-place.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_columns</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x1</span>: <span class="ident">usize</span>, <span class="ident">x2</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_columns</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x1</span>, <span class="ident">x2</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_columns</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x1</span>, <span class="ident">x2</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the i-th row and j-th column of the matrix in-place. The matrix must be square for this operation to be possible.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_row_col</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">j</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_rowcol</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">i</span>, <span class="ident">j</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_swap_rowcol</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">i</span>, <span class="ident">j</span>) })
     }
 
     <span class="doccomment">/// This function returns the transpose of the matrix by copying the elements into it.</span>
@@ -723,48 +747,52 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_transpose_memcpy</span>(<span class="ident">dest</span>, <span class="self">self</span>.<span class="ident">mat</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">MatrixComplexF64</span>{<span class="ident">mat</span>: <span class="ident">dest</span>}, <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">MatrixComplexF64</span>{<span class="ident">mat</span>: <span class="ident">dest</span>}, <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
     <span class="doccomment">/// This function replaces the matrix m by its transpose by copying the elements of the matrix in-place.</span>
     <span class="doccomment">/// The matrix must be square for this operation to be possible.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transpose</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_transpose</span>(<span class="self">self</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_transpose</span>(<span class="self">self</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function adds the elements of the other matrix to the elements of the self matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) + other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_add</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_add</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function subtracts the elements of the other matrix from the elements of the self matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) - other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sub</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_sub</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_sub</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function multiplies the elements of the self matrix by the elements of the other matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) * other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mul_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_mul_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_mul_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function divides the elements of the self matrix by the elements of the other matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) / other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_div_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_div_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function multiplies the elements of the self matrix by the constant factor x. The result self(i,j) &lt;- x self(i,j) is stored in self.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scale</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">ComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_scale</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_scale</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>))
+        })
     }
 
     <span class="doccomment">/// This function adds the constant value x to the elements of the self matrix. The result self(i,j) &lt;- self(i,j) + x is stored in self.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_constant</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">ComplexF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_add_constant</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_add_constant</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>))
+        })
     }
 
     <span class="doccomment">/// This function returns true if all the elements of the self matrix are stricly zero.</span>
@@ -931,17 +959,17 @@
 
     <span class="doccomment">/// This function copies the elements of the other matrix into the self matrix. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_memcpy</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_memcpy</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function copies the elements of the self matrix into the other matrix. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_to</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_memcpy</span>(<span class="ident">other</span>.<span class="ident">mat</span>, <span class="self">self</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_memcpy</span>(<span class="ident">other</span>.<span class="ident">mat</span>, <span class="self">self</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the elements of the matrices self and other by copying. The two matrices must have the same size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function copies the elements of the y-th row of the matrix into the returned vector.</span>
@@ -953,7 +981,7 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_get_row</span>(<span class="ident">tmp</span>, <span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
@@ -966,35 +994,39 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_get_col</span>(<span class="ident">tmp</span>, <span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">wrap</span>(<span class="ident">tmp</span>), <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
     <span class="doccomment">/// This function copies the elements of the vector v into the y-th row of the matrix.</span>
     <span class="doccomment">/// The length of the vector must be the same as the length of the row.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_row</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">y</span>: <span class="ident">usize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">VectorComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_set_row</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_set_row</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
+        })
     }
 
     <span class="doccomment">/// This function copies the elements of the vector v into the x-th column of the matrix.</span>
     <span class="doccomment">/// The length of the vector must be the same as the length of the column.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_col</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">usize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">VectorComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_set_col</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_set_col</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x</span>, <span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">v</span>))
+        })
     }
 
     <span class="doccomment">/// This function exchanges the y1-th and y2-th rows of the matrix in-place.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_rows</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">y1</span>: <span class="ident">usize</span>, <span class="ident">y2</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_rows</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y1</span>, <span class="ident">y2</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_rows</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">y1</span>, <span class="ident">y2</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the x1-th and x2-th columns of the matrix in-place.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_columns</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x1</span>: <span class="ident">usize</span>, <span class="ident">x2</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_columns</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x1</span>, <span class="ident">x2</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_columns</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">x1</span>, <span class="ident">x2</span>) })
     }
 
     <span class="doccomment">/// This function exchanges the i-th row and j-th column of the matrix in-place. The matrix must be square for this operation to be possible.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_row_col</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">j</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_rowcol</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">i</span>, <span class="ident">j</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_swap_rowcol</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">i</span>, <span class="ident">j</span>) })
     }
 
     <span class="doccomment">/// This function returns the transpose of the matrix by copying the elements into it.</span>
@@ -1007,48 +1039,56 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_transpose_memcpy</span>(<span class="ident">dest</span>, <span class="self">self</span>.<span class="ident">mat</span>) };
 
-            <span class="prelude-val">Some</span>((<span class="ident">MatrixComplexF32</span>{<span class="ident">mat</span>: <span class="ident">dest</span>}, <span class="ident">ret</span>))
+            <span class="prelude-val">Some</span>((<span class="ident">MatrixComplexF32</span>{<span class="ident">mat</span>: <span class="ident">dest</span>}, <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="ident">ret</span>)))
         }
     }
 
     <span class="doccomment">/// This function replaces the matrix m by its transpose by copying the elements of the matrix in-place.</span>
     <span class="doccomment">/// The matrix must be square for this operation to be possible.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transpose</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_transpose</span>(<span class="self">self</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_transpose</span>(<span class="self">self</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function adds the elements of the other matrix to the elements of the self matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) + other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_add</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_add</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function subtracts the elements of the other matrix from the elements of the self matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) - other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sub</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_sub</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_sub</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) })
     }
 
     <span class="doccomment">/// This function multiplies the elements of the self matrix by the elements of the other matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) * other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mul_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_mul_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_mul_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>)
+        })
     }
 
     <span class="doccomment">/// This function divides the elements of the self matrix by the elements of the other matrix.</span>
     <span class="doccomment">/// The result self(i,j) &lt;- self(i,j) / other(i,j) is stored in self and other remains unchanged. The two matrices must have the same dimensions.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_elements</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">MatrixComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_div_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_div_elements</span>(<span class="self">self</span>.<span class="ident">mat</span>, <span class="ident">other</span>.<span class="ident">mat</span>)
+        })
     }
 
     <span class="doccomment">/// This function multiplies the elements of the self matrix by the constant factor x. The result self(i,j) &lt;- x self(i,j) is stored in self.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scale</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">ComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_scale</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_scale</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>))
+        })
     }
 
     <span class="doccomment">/// This function adds the constant value x to the elements of the self matrix. The result self(i,j) &lt;- self(i,j) + x is stored in self.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_constant</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">ComplexF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_add_constant</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_matrix_complex_float_add_constant</span>(<span class="self">self</span>.<span class="ident">mat</span>, ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">x</span>))
+        })
     }
 
     <span class="doccomment">/// This function returns true if all the elements of the self matrix are stricly zero.</span>
@@ -1157,5 +1197,5 @@
         <span class="ident">m</span>.<span class="ident">mat</span>
     }
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-files.js"></script><script src="../../../source-script.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

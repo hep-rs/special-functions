@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/types/integration.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>integration.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/types/integration.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>integration.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -4929,7 +4929,100 @@
 <span id="4929">4929</span>
 <span id="4930">4930</span>
 <span id="4931">4931</span>
-</pre><pre class="rust ">
+<span id="4932">4932</span>
+<span id="4933">4933</span>
+<span id="4934">4934</span>
+<span id="4935">4935</span>
+<span id="4936">4936</span>
+<span id="4937">4937</span>
+<span id="4938">4938</span>
+<span id="4939">4939</span>
+<span id="4940">4940</span>
+<span id="4941">4941</span>
+<span id="4942">4942</span>
+<span id="4943">4943</span>
+<span id="4944">4944</span>
+<span id="4945">4945</span>
+<span id="4946">4946</span>
+<span id="4947">4947</span>
+<span id="4948">4948</span>
+<span id="4949">4949</span>
+<span id="4950">4950</span>
+<span id="4951">4951</span>
+<span id="4952">4952</span>
+<span id="4953">4953</span>
+<span id="4954">4954</span>
+<span id="4955">4955</span>
+<span id="4956">4956</span>
+<span id="4957">4957</span>
+<span id="4958">4958</span>
+<span id="4959">4959</span>
+<span id="4960">4960</span>
+<span id="4961">4961</span>
+<span id="4962">4962</span>
+<span id="4963">4963</span>
+<span id="4964">4964</span>
+<span id="4965">4965</span>
+<span id="4966">4966</span>
+<span id="4967">4967</span>
+<span id="4968">4968</span>
+<span id="4969">4969</span>
+<span id="4970">4970</span>
+<span id="4971">4971</span>
+<span id="4972">4972</span>
+<span id="4973">4973</span>
+<span id="4974">4974</span>
+<span id="4975">4975</span>
+<span id="4976">4976</span>
+<span id="4977">4977</span>
+<span id="4978">4978</span>
+<span id="4979">4979</span>
+<span id="4980">4980</span>
+<span id="4981">4981</span>
+<span id="4982">4982</span>
+<span id="4983">4983</span>
+<span id="4984">4984</span>
+<span id="4985">4985</span>
+<span id="4986">4986</span>
+<span id="4987">4987</span>
+<span id="4988">4988</span>
+<span id="4989">4989</span>
+<span id="4990">4990</span>
+<span id="4991">4991</span>
+<span id="4992">4992</span>
+<span id="4993">4993</span>
+<span id="4994">4994</span>
+<span id="4995">4995</span>
+<span id="4996">4996</span>
+<span id="4997">4997</span>
+<span id="4998">4998</span>
+<span id="4999">4999</span>
+<span id="5000">5000</span>
+<span id="5001">5001</span>
+<span id="5002">5002</span>
+<span id="5003">5003</span>
+<span id="5004">5004</span>
+<span id="5005">5005</span>
+<span id="5006">5006</span>
+<span id="5007">5007</span>
+<span id="5008">5008</span>
+<span id="5009">5009</span>
+<span id="5010">5010</span>
+<span id="5011">5011</span>
+<span id="5012">5012</span>
+<span id="5013">5013</span>
+<span id="5014">5014</span>
+<span id="5015">5015</span>
+<span id="5016">5016</span>
+<span id="5017">5017</span>
+<span id="5018">5018</span>
+<span id="5019">5019</span>
+<span id="5020">5020</span>
+<span id="5021">5021</span>
+<span id="5022">5022</span>
+<span id="5023">5023</span>
+<span id="5024">5024</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -6323,9 +6416,20 @@
     <span class="doccomment">/// On each iteration the adaptive integration strategy bisects the interval with the largest error estimate. The subintervals and their</span>
     <span class="doccomment">/// results are stored in the memory provided by workspace. The maximum number of subintervals is given by limit, which may not exceed the</span>
     <span class="doccomment">/// allocated size of the workspace.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qag</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">key</span>: <span class="ident">enums</span>::<span class="ident">GaussKonrodRule</span>,
-        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">match</span> <span class="ident">key</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qag</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">a</span>: <span class="ident">f64</span>,
+        <span class="ident">b</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">key</span>: <span class="ident">enums</span>::<span class="ident">GaussKonrodRule</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">match</span> <span class="ident">key</span> {
             ::<span class="ident">GaussKonrodRule</span>::<span class="ident">Gauss15</span> <span class="op">=&gt;</span> {
                 <span class="ident">intern_qag</span>(<span class="ident">f</span>, <span class="ident">arg</span>, <span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>,
                     ::<span class="ident">integration</span>::<span class="ident">qk15</span>)
@@ -6360,7 +6464,7 @@
                 // this line is not used but just for compilation...
                 ::integration::qk15
             }*/</span>
-        }
+        })
     }
 
     <span class="doccomment">/// This function applies the Gauss-Kronrod 21-point integration rule adaptively until an estimate of the integral of f over (a,b) is achieved</span>
@@ -6369,9 +6473,21 @@
     <span class="doccomment">/// final approximation from the extrapolation, result, and an estimate of the absolute error, abserr. The subintervals and their results are</span>
     <span class="doccomment">/// stored in the memory provided by workspace. The maximum number of subintervals is given by limit, which may not exceed the allocated size</span>
     <span class="doccomment">/// of the workspace.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qags</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
-        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">intern_qags</span>(<span class="ident">f</span>, <span class="ident">arg</span>, <span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk21</span>) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qags</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">a</span>: <span class="ident">f64</span>,
+        <span class="ident">b</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">intern_qags</span>(<span class="ident">f</span>, <span class="ident">arg</span>, <span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk21</span>)
+        })
     }
 
     <span class="doccomment">/// This function applies the adaptive integration algorithm QAGS taking account of the user-supplied locations of singular points. The array</span>
@@ -6387,9 +6503,20 @@
     <span class="doccomment">/// with npts = 5.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If you know the locations of the singular points in the integration region then this routine will be faster than QAGS.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagp</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">pts</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
-        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">intern_qagp</span>(<span class="ident">f</span>, <span class="ident">arg</span>, <span class="ident">pts</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk21</span>) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagp</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">pts</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>],
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">intern_qagp</span>(<span class="ident">f</span>, <span class="ident">arg</span>, <span class="ident">pts</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk21</span>)
+        })
     }
 
     <span class="doccomment">/// This function computes the integral of the function f over the infinite interval (-\infty,+\infty). The integral is mapped onto the</span>
@@ -6400,10 +6527,21 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// It is then integrated using the QAGS algorithm. The normal 21-point Gauss-Kronrod rule of QAGS is replaced by a 15-point rule, because</span>
     <span class="doccomment">/// the transformation can generate an integrable singularity at the origin. In this case a lower-order rule is more efficient.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagi</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagi</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">InternParam</span>{<span class="ident">func</span>: <span class="ident">f</span>, <span class="ident">param</span>: <span class="ident">arg</span>, <span class="ident">p2</span>: <span class="number">0f64</span>};
 
-        <span class="kw">unsafe</span> { <span class="ident">intern_qags</span>(<span class="ident">i_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">intern_qags</span>(<span class="ident">i_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>)
+        })
     }
 
     <span class="doccomment">/// This function computes the integral of the function f over the semi-infinite interval (a,+\infty). The integral is mapped onto the</span>
@@ -6413,10 +6551,22 @@
     <span class="doccomment">///      \int_0^1 dt f(a + (1-t)/t)/t^2</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// and then integrated using the QAGS algorithm.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagiu</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagiu</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">a</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">InternParam</span>{<span class="ident">func</span>: <span class="ident">f</span>, <span class="ident">param</span>: <span class="ident">arg</span>, <span class="ident">p2</span>: <span class="ident">a</span>};
 
-        <span class="kw">unsafe</span> { <span class="ident">intern_qags</span>(<span class="ident">iu_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">intern_qags</span>(<span class="ident">iu_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>)
+        })
     }
 
     <span class="doccomment">/// This function computes the integral of the function f over the semi-infinite interval (-\infty,b). The integral is mapped onto the semi-open</span>
@@ -6426,10 +6576,22 @@
     <span class="doccomment">///      \int_0^1 dt f(b - (1-t)/t)/t^2</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// and then integrated using the QAGS algorithm.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagil</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qagil</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">b</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">InternParam</span>{<span class="ident">func</span>: <span class="ident">f</span>, <span class="ident">param</span>: <span class="ident">arg</span>, <span class="ident">p2</span>: <span class="ident">b</span>};
 
-        <span class="kw">unsafe</span> { <span class="ident">intern_qags</span>(<span class="ident">il_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">intern_qags</span>(<span class="ident">il_transform</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>, <span class="number">0f64</span>, <span class="number">1f64</span>, <span class="ident">epsabs</span>, <span class="ident">epsrel</span>, <span class="ident">limit</span>, <span class="self">self</span>, <span class="ident">result</span>, <span class="ident">abserr</span>, ::<span class="ident">integration</span>::<span class="ident">qk15</span>)
+        })
     }
 
     <span class="doccomment">/// This function computes the Cauchy principal value of the integral of f over (a,b), with a singularity at c,</span>
@@ -6440,8 +6602,19 @@
     <span class="doccomment">/// When a subinterval contains the point x = c or is close to it then a special 25-point modified Clenshaw-Curtis rule is used to control</span>
     <span class="doccomment">/// the singularity. Further away from the singularity the algorithm uses an ordinary 15-point Gauss-Kronrod integration rule.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_assignments</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qawc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">c</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>,
-        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qawc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">a</span>: <span class="ident">f64</span>,
+        <span class="ident">b</span>: <span class="ident">f64</span>,
+        <span class="ident">c</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result0</span> <span class="op">=</span> <span class="number">0f64</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">abserr0</span> <span class="op">=</span> <span class="number">0f64</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">roundoff_type1</span> <span class="op">=</span> <span class="number">0i32</span>;
@@ -6921,7 +7094,9 @@
 
     <span class="doccomment">/// This function modifies the parameters (\alpha, \beta, \mu, \nu)</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">alpha</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>, <span class="ident">mu</span>: <span class="ident">i32</span>, <span class="ident">nu</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qaws_table_set</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">alpha</span>, <span class="ident">beta</span>, <span class="ident">mu</span>, <span class="ident">nu</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">gsl_integration_qaws_table_set</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">alpha</span>, <span class="ident">beta</span>, <span class="ident">mu</span>, <span class="ident">nu</span>)
+        })
     }
 
     <span class="doccomment">/// This function computes the integral of the function f(x) over the interval (a,b) with the singular weight function (x-a)^\alpha</span>
@@ -6934,8 +7109,19 @@
     <span class="doccomment">/// Clenshaw-Curtis rule is used to control the singularities. For subintervals which do not include the endpoints an ordinary 15-point</span>
     <span class="doccomment">/// Gauss-Kronrod integration rule is used.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_assignments</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qaws</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">epsabs</span>: <span class="ident">f64</span>, <span class="ident">epsrel</span>: <span class="ident">f64</span>, <span class="ident">limit</span>: <span class="ident">usize</span>, <span class="ident">workspace</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">IntegrationWorkspace</span>,
-        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qaws</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">f</span>: ::<span class="ident">function</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>,
+        <span class="ident">a</span>: <span class="ident">f64</span>,
+        <span class="ident">b</span>: <span class="ident">f64</span>,
+        <span class="ident">epsabs</span>: <span class="ident">f64</span>,
+        <span class="ident">epsrel</span>: <span class="ident">f64</span>,
+        <span class="ident">limit</span>: <span class="ident">usize</span>,
+        <span class="ident">workspace</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">IntegrationWorkspace</span>,
+        <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+        <span class="ident">abserr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>,
+    ) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result0</span> <span class="op">=</span> <span class="number">0f64</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">abserr0</span> <span class="op">=</span> <span class="number">0f64</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">roundoff_type1</span> <span class="op">=</span> <span class="number">0i32</span>;
@@ -7148,7 +7334,7 @@
     <span class="doccomment">/// sufficient for subintervals down to the length L/2^n. The integration routine gsl_integration_qawo returns the error ::Table if the</span>
     <span class="doccomment">/// number of levels is insufficient for the requested accuracy.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">omega</span>: <span class="ident">f64</span>, <span class="ident">l</span>: <span class="ident">f64</span>, <span class="ident">sine</span>: ::<span class="ident">IntegrationQawo</span>, <span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">IntegrationQawoTable</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_alloc</span>(<span class="ident">omega</span>, <span class="ident">l</span>, <span class="ident">sine</span>, <span class="ident">n</span>) };
+        <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_alloc</span>(<span class="ident">omega</span>, <span class="ident">l</span>, <span class="ident">sine</span>.<span class="ident">into</span>(), <span class="ident">n</span>) };
 
         <span class="kw">if</span> <span class="ident">tmp</span>.<span class="ident">is_null</span>() {
             <span class="prelude-val">None</span>
@@ -7161,12 +7347,12 @@
 
     <span class="doccomment">/// This function changes the parameters omega, L and sine of the existing self workspace.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">omega</span>: <span class="ident">f64</span>, <span class="ident">l</span>: <span class="ident">f64</span>, <span class="ident">sine</span>: ::<span class="ident">IntegrationQawo</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_set</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">omega</span>, <span class="ident">l</span>, <span class="ident">sine</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_set</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">omega</span>, <span class="ident">l</span>, <span class="ident">sine</span>.<span class="ident">into</span>()) })
     }
 
     <span class="doccomment">/// This function allows the length parameter l of the self workspace to be changed.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_length</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">l</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_set_length</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">l</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_qawo_table_set_length</span>(<span class="self">self</span>.<span class="ident">w</span>, <span class="ident">l</span>) })
     }
 
     <span class="doccomment">/// This function uses an adaptive algorithm to compute the integral of f over (a,b) with the weight function \sin(\omega x) or \cos(\omega x)</span>
@@ -8127,7 +8313,7 @@
     <span class="doccomment">/// For i in [0, …, t-&gt;n - 1], this function obtains the i-th Gauss-Legendre point xi and weight wi on the interval [a,b]. The points</span>
     <span class="doccomment">/// and weights are ordered by increasing point value. A function f may be integrated on [a,b] by summing wi * f(xi) over i.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">point</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">i</span>: <span class="ident">usize</span>, <span class="ident">xi</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>, <span class="ident">wi</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> ::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_glfixed_point</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">i</span>, <span class="ident">xi</span>, <span class="ident">wi</span>, <span class="self">self</span>.<span class="ident">w</span>) }
+        ::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">gsl_integration_glfixed_point</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">i</span>, <span class="ident">xi</span>, <span class="ident">wi</span>, <span class="self">self</span>.<span class="ident">w</span>) })
     }
 
     <span class="doccomment">/// This function applies the Gauss-Legendre integration rule contained in table self and returns the result.</span>
@@ -9712,7 +9898,7 @@
     <span class="kw">if</span> <span class="ident">par</span>.<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="number">2f64</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fn_params</span> <span class="op">=</span> <span class="ident">fn_fourier_params</span>{<span class="ident">omega</span>: <span class="ident">omega</span>, <span class="ident">function</span>: <span class="ident">f</span>, <span class="ident">arg</span>: <span class="ident">arg</span>};
 
-        ::<span class="ident">integration</span>::<span class="ident">qk15</span>(<span class="kw">if</span> (<span class="kw-2">*</span><span class="ident">wf</span>).<span class="ident">sine</span> <span class="op">==</span> ::<span class="ident">IntegrationQawo</span>::<span class="ident">Sine</span> {
+        ::<span class="ident">integration</span>::<span class="ident">qk15</span>(<span class="kw">if</span> (<span class="kw-2">*</span><span class="ident">wf</span>).<span class="ident">sine</span> <span class="op">==</span> ::<span class="ident">IntegrationQawo</span>::<span class="ident">Sine</span>.<span class="ident">into</span>() {
                 <span class="ident">fn_sin</span>
             } <span class="kw">else</span> {
                 <span class="ident">fn_cos</span>
@@ -9761,7 +9947,7 @@
         <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">half_length</span> <span class="op">*</span> (<span class="ident">center</span> <span class="op">*</span> <span class="ident">omega</span>).<span class="ident">cos</span>();
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">half_length</span> <span class="op">*</span> (<span class="ident">center</span> <span class="op">*</span> <span class="ident">omega</span>).<span class="ident">sin</span>();
 
-        <span class="kw">if</span> (<span class="kw-2">*</span><span class="ident">wf</span>).<span class="ident">sine</span> <span class="op">==</span> ::<span class="ident">IntegrationQawo</span>::<span class="ident">Sine</span> {
+        <span class="kw">if</span> (<span class="kw-2">*</span><span class="ident">wf</span>).<span class="ident">sine</span> <span class="op">==</span> ::<span class="ident">IntegrationQawo</span>::<span class="ident">Sine</span>.<span class="ident">into</span>() {
             <span class="kw-2">*</span><span class="ident">result</span> <span class="op">=</span> <span class="ident">c</span> <span class="op">*</span> <span class="ident">res24_sin</span> <span class="op">+</span> <span class="ident">s</span> <span class="op">*</span> <span class="ident">res24_cos</span>;
             <span class="kw-2">*</span><span class="ident">abserr</span> <span class="op">=</span> (<span class="ident">c</span> <span class="op">*</span> <span class="ident">est_sin</span>).<span class="ident">abs</span>() <span class="op">+</span> (<span class="ident">s</span> <span class="op">*</span> <span class="ident">est_cos</span>).<span class="ident">abs</span>();
         } <span class="kw">else</span> {
@@ -9861,5 +10047,5 @@
     }
 
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-files.js"></script><script src="../../../source-script.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

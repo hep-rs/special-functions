@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/blas.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>blas.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/blas.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>blas.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1582,7 +1582,15 @@
 <span id="1582">1582</span>
 <span id="1583">1583</span>
 <span id="1584">1584</span>
-</pre><pre class="rust ">
+<span id="1585">1585</span>
+<span id="1586">1586</span>
+<span id="1587">1587</span>
+<span id="1588">1588</span>
+<span id="1589">1589</span>
+<span id="1590">1590</span>
+<span id="1591">1591</span>
+<span id="1592">1592</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">//</span>
 <span class="comment">// A rust binding for the GSL library by Guillaume Gomez (guillaume1.gomez@gmail.com)</span>
 <span class="comment">//</span>
@@ -1596,39 +1604,39 @@
                   <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>,
                   <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f32</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sdsdot</span>(<span class="ident">alpha</span>,
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                    <span class="ident">result</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the scalar product x^T y for the vectors x and y, returning the result in result.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sdot</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sdot</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                  <span class="ident">result</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the scalar product x^T y for the vectors x and y, returning the result in result.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dsdot</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsdot</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   <span class="ident">result</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the scalar product x^T y for the vectors x and y, returning the result in result.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ddot</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>, <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ddot</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                  <span class="ident">result</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the complex scalar product x^T y for the vectors x and y, returning the result in dotu.</span>
@@ -1636,11 +1644,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">dotu</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">ComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cdotu</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">dotu</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the complex scalar product x^T y for the vectors x and y, returning the result in dotu.</span>
@@ -1648,11 +1656,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">dotu</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">ComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zdotu</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">dotu</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the complex conjugate scalar product x^H y for the vectors x and y, returning the result in dotc.</span>
@@ -1660,11 +1668,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">dotc</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">ComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cdotc</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">dotc</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the complex conjugate scalar product x^H y for the vectors x and y, returning the result in dotc.</span>
@@ -1672,11 +1680,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">dotc</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">ComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zdotc</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">dotc</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the Euclidean norm ||x||_2 = \sqrt {\sum x_i^2} of the vector x.</span>
@@ -1753,68 +1761,76 @@
 
     <span class="doccomment">/// This function exchanges the elements of the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sswap</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function exchanges the elements of the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dswap</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function exchanges the elements of the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cswap</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function exchanges the elements of the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">zswap</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zswap</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function copy the elements of the vector x into the vector y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scopy</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_scopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_scopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function copy the elements of the vector x into the vector y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dcopy</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dcopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dcopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function copy the elements of the vector x into the vector y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ccopy</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ccopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ccopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function copy the elements of the vector x into the vector y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">zcopy</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zcopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>), ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) }
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> { ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zcopy</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
+                                                          ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>)) })
     }
 
     <span class="doccomment">/// This function computes the sum y = \alpha x + y for the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">saxpy</span>(<span class="ident">alpha</span>: <span class="ident">f32</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_saxpy</span>(<span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the sum y = \alpha x + y for the vectors x and y.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">daxpy</span>(<span class="ident">alpha</span>: <span class="ident">f64</span>, <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_daxpy</span>(<span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the sum y = \alpha x + y for the vectors x and y.</span>
@@ -1822,11 +1838,11 @@
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_caxpy</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the sum y = \alpha x + y for the vectors x and y.</span>
@@ -1834,11 +1850,11 @@
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zaxpy</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function rescales the vector x by the multiplicative factor alpha.</span>
@@ -1883,12 +1899,12 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The variables a and b are overwritten by the routine.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">srotg</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>], <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>], <span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>], <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_srotg</span>(<span class="ident">a</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">b</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">c</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">d</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a Givens rotation (c,s) which zeroes the vector (a,b),</span>
@@ -1899,12 +1915,12 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The variables a and b are overwritten by the routine.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">drotg</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>], <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_drotg</span>(<span class="ident">a</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">b</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">c</span>.<span class="ident">as_mut_ptr</span>(),
                                   <span class="ident">d</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 
     <span class="doccomment">/// This function applies a Givens rotation (x&#39;, y&#39;) = (c x + s y, -s x + c y) to the vectors x, y.</span>
@@ -1913,12 +1929,12 @@
                 <span class="ident">c</span>: <span class="ident">f32</span>,
                 <span class="ident">d</span>: <span class="ident">f32</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_srot</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">b</span>),
                                  <span class="ident">c</span>,
                                  <span class="ident">d</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function applies a Givens rotation (x&#39;, y&#39;) = (c x + s y, -s x + c y) to the vectors x, y.</span>
@@ -1927,12 +1943,12 @@
                 <span class="ident">c</span>: <span class="ident">f64</span>,
                 <span class="ident">d</span>: <span class="ident">f64</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_drot</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">a</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">b</span>),
                                  <span class="ident">c</span>,
                                  <span class="ident">d</span>)
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a modified Givens transformation.</span>
@@ -1943,13 +1959,13 @@
                   <span class="ident">b2</span>: <span class="ident">f32</span>,
                   <span class="ident">P</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>])
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_srotmg</span>(<span class="ident">d1</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">d2</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">b1</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">b2</span>,
                                    <span class="ident">P</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a modified Givens transformation.</span>
@@ -1960,13 +1976,13 @@
                   <span class="ident">b2</span>: <span class="ident">f64</span>,
                   <span class="ident">P</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>])
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_drotmg</span>(<span class="ident">d1</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">d2</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">b1</span>.<span class="ident">as_mut_ptr</span>(),
                                    <span class="ident">b2</span>,
                                    <span class="ident">P</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 
     <span class="doccomment">/// This function applies a modified Givens transformation.</span>
@@ -1974,11 +1990,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>,
                  <span class="ident">P</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f32</span>])
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_srotm</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>),
                                   <span class="ident">P</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 
     <span class="doccomment">/// This function applies a modified Givens transformation.</span>
@@ -1986,11 +2002,11 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>,
                  <span class="ident">P</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">f64</span>])
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_drotm</span>(::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>),
                                   <span class="ident">P</span>.<span class="ident">as_mut_ptr</span>())
-        }
+        })
     }
 }
 
@@ -2005,14 +2021,14 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sgemv</span>(<span class="ident">transA</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product and sum y = \alpha op(A) x + \beta y, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2023,14 +2039,14 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dgemv</span>(<span class="ident">transA</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product and sum y = \alpha op(A) x + \beta y, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2041,14 +2057,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cgemv</span>(<span class="ident">transA</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product and sum y = \alpha op(A) x + \beta y, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2059,14 +2075,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zgemv</span>(<span class="ident">transA</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product x = op(A) x for the triangular matrix A, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2078,13 +2094,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF32</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_strmv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product x = op(A) x for the triangular matrix A, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2096,13 +2112,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF64</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dtrmv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product x = op(A) x for the triangular matrix A, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2114,13 +2130,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ctrmv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-vector product x = op(A) x for the triangular matrix A, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2132,13 +2148,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ztrmv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes inv(op(A)) x for x, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2150,13 +2166,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF32</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_strsv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes inv(op(A)) x for x, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2168,13 +2184,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF64</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dtrsv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes inv(op(A)) x for x, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2186,13 +2202,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ctrsv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes inv(op(A)) x for x, where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.</span>
@@ -2204,13 +2220,13 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>,
                  <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ztrsv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
                                   <span class="ident">diag</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">x</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the matrix-vector product and sum y = \alpha A x + \beta y for the symmetric matrix A.</span>
@@ -2223,14 +2239,14 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssymv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the matrix-vector product and sum y = \alpha A x + \beta y for the symmetric matrix A.</span>
@@ -2243,14 +2259,14 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsymv</span>(<span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the matrix-vector product and sum y = \alpha A x + \beta y for the hermitian matrix A.</span>
@@ -2263,14 +2279,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_chemv</span>(<span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the matrix-vector product and sum y = \alpha A x + \beta y for the hermitian matrix A.</span>
@@ -2283,14 +2299,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zhemv</span>(<span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">y</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the rank-1 update A = \alpha x y^T + A of the matrix A.</span>
@@ -2299,12 +2315,12 @@
                 <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sger</span>(<span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the rank-1 update A = \alpha x y^T + A of the matrix A.</span>
@@ -2313,12 +2329,12 @@
                 <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dger</span>(<span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the rank-1 update A = \alpha x y^T + A of the matrix A.</span>
@@ -2327,12 +2343,12 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cgeru</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the rank-1 update A = \alpha x y^T + A of the matrix A.</span>
@@ -2341,12 +2357,12 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zgeru</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the conjugate rank-1 update A = \alpha x y^H + A of the matrix A.</span>
@@ -2355,12 +2371,12 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cgerc</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the conjugate rank-1 update A = \alpha x y^H + A of the matrix A.</span>
@@ -2369,12 +2385,12 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zgerc</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the symmetric rank-1 update A = \alpha x x^T + A of the symmetric matrix A. Since the matrix A is symmetric only its upper half or lower half need to be stored.</span>
@@ -2384,12 +2400,12 @@
                 <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssyr</span>(<span class="ident">uplo</span>,
                                  <span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the symmetric rank-1 update A = \alpha x x^T + A of the symmetric matrix A. Since the matrix A is symmetric only its upper half or lower half need to be stored.</span>
@@ -2399,12 +2415,12 @@
                 <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsyr</span>(<span class="ident">uplo</span>,
                                  <span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the hermitian rank-1 update A = \alpha x x^H + A of the hermitian matrix A.</span>
@@ -2416,12 +2432,12 @@
                 <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cher</span>(<span class="ident">uplo</span>,
                                  <span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the hermitian rank-1 update A = \alpha x x^H + A of the hermitian matrix A.</span>
@@ -2433,12 +2449,12 @@
                 <span class="ident">x</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                 <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zher</span>(<span class="ident">uplo</span>,
                                  <span class="ident">alpha</span>,
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                  ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the symmetric rank-2 update A = \alpha x y^T + \alpha y x^T + A of the symmetric matrix A.</span>
@@ -2450,13 +2466,13 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF32</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssyr2</span>(<span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the symmetric rank-2 update A = \alpha x y^T + \alpha y x^T + A of the symmetric matrix A.</span>
@@ -2468,13 +2484,13 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorF64</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsyr2</span>(<span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the hermitian rank-2 update A = \alpha x y^H + \alpha^* y x^H + A of the hermitian matrix A.</span>
@@ -2487,13 +2503,13 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF32</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cher2</span>(<span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute the hermitian rank-2 update A = \alpha x y^H + \alpha^* y x^H + A of the hermitian matrix A.</span>
@@ -2506,13 +2522,13 @@
                  <span class="ident">y</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">VectorComplexF64</span>,
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zher2</span>(<span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">x</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">y</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">A</span>))
-        }
+        })
     }
 }
 
@@ -2528,7 +2544,7 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_sgemm</span>(<span class="ident">transA</span>,
                                   <span class="ident">transB</span>,
                                   <span class="ident">alpha</span>,
@@ -2536,7 +2552,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha op(A) op(B) + \beta C where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans and similarly for the parameter TransB.</span>
@@ -2548,7 +2564,7 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dgemm</span>(<span class="ident">transA</span>,
                                   <span class="ident">transB</span>,
                                   <span class="ident">alpha</span>,
@@ -2556,7 +2572,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha op(A) op(B) + \beta C where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans and similarly for the parameter TransB.</span>
@@ -2568,7 +2584,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cgemm</span>(<span class="ident">transA</span>,
                                   <span class="ident">transB</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2576,7 +2592,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha op(A) op(B) + \beta C where op(A) = A, A^T, A^H for TransA = CblasNoTrans, CblasTrans, CblasConjTrans and similarly for the parameter TransB.</span>
@@ -2588,7 +2604,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zgemm</span>(<span class="ident">transA</span>,
                                   <span class="ident">transB</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2596,7 +2612,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is CblasLeft and C = \alpha B A + \beta C for Side is CblasRight, where the matrix A is symmetric.</span>
@@ -2609,7 +2625,7 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssymm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
@@ -2617,7 +2633,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is CblasLeft and C = \alpha B A + \beta C for Side is CblasRight, where the matrix A is symmetric.</span>
@@ -2630,7 +2646,7 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsymm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">alpha</span>,
@@ -2638,7 +2654,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is CblasLeft and C = \alpha B A + \beta C for Side is CblasRight, where the matrix A is symmetric.</span>
@@ -2651,7 +2667,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_csymm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2659,7 +2675,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is CblasLeft and C = \alpha B A + \beta C for Side is CblasRight, where the matrix A is symmetric.</span>
@@ -2672,7 +2688,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zsymm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2680,7 +2696,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is Left and C = \alpha B A + \beta C for Side is Right, where the matrix A is hermitian.</span>
@@ -2694,7 +2710,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_chemm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2702,7 +2718,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product and sum C = \alpha A B + \beta C for Side is CblasLeft and C = \alpha B A + \beta C for Side is CblasRight, where the matrix A is hermitian.</span>
@@ -2716,7 +2732,7 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zhemm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -2724,7 +2740,7 @@
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product B = \alpha op(A) B for Side is Left and B = \alpha B op(A) for Side is CblasRight.</span>
@@ -2739,7 +2755,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF32</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_strmm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2747,7 +2763,7 @@
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product B = \alpha op(A) B for Side is Left and B = \alpha B op(A) for Side is CblasRight.</span>
@@ -2762,7 +2778,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF64</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dtrmm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2770,7 +2786,7 @@
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product B = \alpha op(A) B for Side is Left and B = \alpha B op(A) for Side is CblasRight.</span>
@@ -2785,7 +2801,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ctrmm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2793,7 +2809,7 @@
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the matrix-matrix product B = \alpha op(A) B for Side is Left and B = \alpha B op(A) for Side is CblasRight.</span>
@@ -2808,7 +2824,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ztrmm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2816,7 +2832,7 @@
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the inverse-matrix matrix product B = \alpha op(inv(A))B for Side is Left and B = \alpha B op(inv(A)) for Side is Right.</span>
@@ -2831,7 +2847,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF32</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_strsm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2839,7 +2855,7 @@
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the inverse-matrix matrix product B = \alpha op(inv(A))B for Side is Left and B = \alpha B op(inv(A)) for Side is Right.</span>
@@ -2854,7 +2870,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixF64</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dtrsm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2862,7 +2878,7 @@
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the inverse-matrix matrix product B = \alpha op(inv(A))B for Side is Left and B = \alpha B op(inv(A)) for Side is Right.</span>
@@ -2877,7 +2893,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ctrsm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2885,7 +2901,7 @@
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes the inverse-matrix matrix product B = \alpha op(inv(A))B for Side is Left and B = \alpha B op(inv(A)) for Side is Right.</span>
@@ -2900,7 +2916,7 @@
                  <span class="ident">A</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>,
                  <span class="ident">B</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ztrsm</span>(<span class="ident">side</span>,
                                   <span class="ident">uplo</span>,
                                   <span class="ident">transA</span>,
@@ -2908,7 +2924,7 @@
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">B</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-k update of the symmetric matrix C, C = \alpha A A^T + \beta C when Trans is NoTrans and C = \alpha A^T A + \beta C when Trans is Trans.</span>
@@ -2921,14 +2937,14 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssyrk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-k update of the symmetric matrix C, C = \alpha A A^T + \beta C when Trans is NoTrans and C = \alpha A^T A + \beta C when Trans is Trans.</span>
@@ -2941,14 +2957,14 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsyrk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-k update of the symmetric matrix C, C = \alpha A A^T + \beta C when Trans is NoTrans and C = \alpha A^T A + \beta C when Trans is Trans.</span>
@@ -2961,14 +2977,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_csyrk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-k update of the symmetric matrix C, C = \alpha A A^T + \beta C when Trans is NoTrans and C = \alpha A^T A + \beta C when Trans is Trans.</span>
@@ -2981,14 +2997,14 @@
                  <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zsyrk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute a rank-k update of the hermitian matrix C, C = \alpha A A^H + \beta C when Trans is NoTrans and C = \alpha A^H A + \beta C when Trans is ConjTrans.</span>
@@ -3002,14 +3018,14 @@
                  <span class="ident">beta</span>: <span class="ident">f32</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cherk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// These functions compute a rank-k update of the hermitian matrix C, C = \alpha A A^H + \beta C when Trans is NoTrans and C = \alpha A^H A + \beta C when Trans is ConjTrans.</span>
@@ -3023,14 +3039,14 @@
                  <span class="ident">beta</span>: <span class="ident">f64</span>,
                  <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zherk</span>(<span class="ident">uplo</span>,
                                   <span class="ident">trans</span>,
                                   <span class="ident">alpha</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">A</span>),
                                   <span class="ident">beta</span>,
                                   ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the symmetric matrix C, C = \alpha A B^T + \alpha B A^T + \beta C when Trans is NoTrans and C = \alpha A^T B + \alpha B^T A + \beta C when Trans is Trans.</span>
@@ -3044,7 +3060,7 @@
                   <span class="ident">beta</span>: <span class="ident">f32</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF32</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_ssyr2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    <span class="ident">alpha</span>,
@@ -3052,7 +3068,7 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    <span class="ident">beta</span>,
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the symmetric matrix C, C = \alpha A B^T + \alpha B A^T + \beta C when Trans is NoTrans and C = \alpha A^T B + \alpha B^T A + \beta C when Trans is Trans.</span>
@@ -3066,7 +3082,7 @@
                   <span class="ident">beta</span>: <span class="ident">f64</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixF64</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_dsyr2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    <span class="ident">alpha</span>,
@@ -3074,7 +3090,7 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    <span class="ident">beta</span>,
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the symmetric matrix C, C = \alpha A B^T + \alpha B A^T + \beta C when Trans is NoTrans and C = \alpha A^T B + \alpha B^T A + \beta C when Trans is Trans.</span>
@@ -3088,7 +3104,7 @@
                   <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF32</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_csyr2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -3096,7 +3112,7 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the symmetric matrix C, C = \alpha A B^T + \alpha B A^T + \beta C when Trans is NoTrans and C = \alpha A^T B + \alpha B^T A + \beta C when Trans is Trans.</span>
@@ -3110,7 +3126,7 @@
                   <span class="ident">beta</span>: <span class="kw-2">&amp;</span>::<span class="ident">types</span>::<span class="ident">ComplexF64</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zsyr2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -3118,7 +3134,7 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">beta</span>),
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the hermitian matrix C, C = \alpha A B^H + \alpha^* B A^H + \beta C when Trans is NoTrans and C = \alpha A^H B + \alpha^* B^H A + \beta C when Trans is ConjTrans.</span>
@@ -3133,7 +3149,7 @@
                   <span class="ident">beta</span>: <span class="ident">f32</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF32</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_cher2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -3141,7 +3157,7 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    <span class="ident">beta</span>,
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 
     <span class="doccomment">/// This function computes a rank-2k update of the hermitian matrix C, C = \alpha A B^H + \alpha^* B A^H + \beta C when Trans is NoTrans and C = \alpha A^H B + \alpha^* B^H A + \beta C when Trans is ConjTrans.</span>
@@ -3156,7 +3172,7 @@
                   <span class="ident">beta</span>: <span class="ident">f64</span>,
                   <span class="ident">C</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">types</span>::<span class="ident">MatrixComplexF64</span>)
                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span> {
-        <span class="kw">unsafe</span> {
+        <span class="ident">enums</span>::<span class="ident">Value</span>::<span class="ident">from</span>(<span class="kw">unsafe</span> {
             ::<span class="ident">ffi</span>::<span class="ident">gsl_blas_zher2k</span>(<span class="ident">uplo</span>,
                                    <span class="ident">trans</span>,
                                    ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="kw-2">*</span><span class="ident">alpha</span>),
@@ -3164,8 +3180,8 @@
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_shared</span>(<span class="ident">B</span>),
                                    <span class="ident">beta</span>,
                                    ::<span class="ident">ffi</span>::<span class="ident">FFI</span>::<span class="ident">unwrap_unique</span>(<span class="ident">C</span>))
-        }
+        })
     }
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rgsl";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-files.js"></script><script src="../../source-script.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>

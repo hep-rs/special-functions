@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.0.0/src/ffi/solvers.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>solvers.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/GSL-1.1.0/src/ffi/solvers.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>solvers.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -245,14 +245,10 @@
 <span id="245">245</span>
 <span id="246">246</span>
 <span id="247">247</span>
-<span id="248">248</span>
-<span id="249">249</span>
-</pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_double</span>, <span class="ident">c_char</span>, <span class="ident">c_void</span>, <span class="ident">size_t</span>};
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_double</span>, <span class="ident">c_char</span>, <span class="ident">c_void</span>, <span class="ident">size_t</span>, <span class="ident">c_int</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">gsl_vector</span>, <span class="ident">gsl_matrix</span>};
-
-<span class="kw">use</span> <span class="ident">enums</span>;
 
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">gsl_multifit_fdfsolver_lmder</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fdfsolver_type</span>;
@@ -270,7 +266,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_covar</span>(<span class="ident">j</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                               <span class="ident">epsrel</span>: <span class="ident">c_double</span>,
                               <span class="ident">covar</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                              <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                              <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_alloc</span>(<span class="ident">T</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_multifit_fdfsolver_type</span>,
                                         <span class="ident">n</span>: <span class="ident">size_t</span>,
@@ -279,8 +275,8 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_set</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fdfsolver</span>,
                                       <span class="ident">fdf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_function_fdf</span>,
                                       <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fdfsolver</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fdfsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_free</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fdfsolver</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_name</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_multifit_fdfsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fdfsolver_position</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_multifit_fdfsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>;
@@ -293,8 +289,8 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fsolver_set</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fsolver</span>,
                                     <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">MultiFitFunction</span>,
                                     <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>)
-                                    <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                    <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fsolver_name</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_multifit_fsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_fsolver_position</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_multifit_fsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>;
 
@@ -304,13 +300,13 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_gradient</span>(<span class="ident">j</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_matrix</span>,
                                  <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                  <span class="ident">g</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_multifit_test_delta</span>(<span class="ident">dx</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                    <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_vector</span>,
                                    <span class="ident">epsabs</span>: <span class="ident">c_double</span>,
                                    <span class="ident">epsrel</span>: <span class="ident">c_double</span>)
-                                   <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                   <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="comment">//pub fn gsl_multifit_test_gradient();</span>
 
     <span class="comment">// one-dimensional root</span>
@@ -320,8 +316,8 @@
                                 <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_function</span>,
                                 <span class="ident">x_lower</span>: <span class="ident">c_double</span>,
                                 <span class="ident">x_upper</span>: <span class="ident">c_double</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_root_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_root_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fsolver_name</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_root_fsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fsolver_root</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_root_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fsolver_x_lower</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_root_fsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
@@ -332,8 +328,8 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fdfsolver_set</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_root_fdfsolver</span>,
                                   <span class="ident">fdf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_function_fdf</span>,
                                   <span class="ident">root</span>: <span class="ident">c_double</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fdfsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_root_fdfsolver</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fdfsolver_iterate</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_root_fdfsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fdfsolver_name</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_root_fdfsolver</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_fdfsolver_root</span>(<span class="ident">s</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">gsl_root_fdfsolver</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span>;
 
@@ -341,13 +337,13 @@
                                   <span class="ident">x_upper</span>: <span class="ident">c_double</span>,
                                   <span class="ident">epsabs</span>: <span class="ident">c_double</span>,
                                   <span class="ident">epsrel</span>: <span class="ident">c_double</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_test_residual</span>(<span class="ident">f</span>: <span class="ident">c_double</span>, <span class="ident">epsabs</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_test_residual</span>(<span class="ident">f</span>: <span class="ident">c_double</span>, <span class="ident">epsabs</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gsl_root_test_delta</span>(<span class="ident">x1</span>: <span class="ident">c_double</span>,
                                <span class="ident">x0</span>: <span class="ident">c_double</span>,
                                <span class="ident">epsabs</span>: <span class="ident">c_double</span>,
                                <span class="ident">epsrel</span>: <span class="ident">c_double</span>)
-                               <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span>;
+                               <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 }
 
 <span class="comment">// multifit fsolver/fdfsolver types:</span>
@@ -356,19 +352,19 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">gsl_multifit_fsolver_type</span> {
     <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
     <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">size_t</span>,
-    <span class="kw">pub</span> <span class="ident">alloc</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">n</span>: <span class="ident">size_t</span>, <span class="ident">p</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">alloc</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">n</span>: <span class="ident">size_t</span>, <span class="ident">p</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">set</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                   <span class="ident">function</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">MultiFitFunction</span>,
                                   <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">dx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">iterate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                       <span class="ident">function</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">MultiFitFunction</span>,
                                       <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">dx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">free</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>)<span class="op">&gt;</span>,
 }
 
@@ -385,14 +381,14 @@
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">gsl_multifit_function_fdf</span> {
     <span class="kw">pub</span> <span class="ident">f</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">df</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>, <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">df</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                 <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                 <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">fdf</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                   <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">df</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">n</span>: <span class="ident">size_t</span>,
     <span class="kw">pub</span> <span class="ident">p</span>: <span class="ident">size_t</span>,
     <span class="kw">pub</span> <span class="ident">params</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
@@ -402,21 +398,21 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">gsl_multifit_fdfsolver_type</span> {
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
     <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">size_t</span>,
-    <span class="kw">pub</span> <span class="ident">alloc</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">n</span>: <span class="ident">size_t</span>, <span class="ident">p</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">alloc</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">n</span>: <span class="ident">size_t</span>, <span class="ident">p</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">set</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                   <span class="ident">fdf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_function_fdf</span>,
                                   <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                   <span class="ident">J</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                   <span class="ident">dx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">iterate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                       <span class="ident">fdf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_multifit_function_fdf</span>,
                                       <span class="ident">x</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>,
                                       <span class="ident">J</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_matrix</span>,
                                       <span class="ident">dx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_vector</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">free</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>)<span class="op">&gt;</span>,
 }
 
@@ -448,13 +444,13 @@
                                   <span class="ident">root</span>: <span class="ident">c_double</span>,
                                   <span class="ident">x_lower</span>: <span class="ident">c_double</span>,
                                   <span class="ident">x_upper</span>: <span class="ident">c_double</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">iterate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                       <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_function</span>,
                                       <span class="ident">root</span>: <span class="ident">c_double</span>,
                                       <span class="ident">x_lower</span>: <span class="ident">c_double</span>,
                                       <span class="ident">x_upper</span>: <span class="ident">c_double</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
@@ -483,11 +479,11 @@
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">c_char</span>,
     <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">size_t</span>,
     <span class="kw">pub</span> <span class="ident">set</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_function_fdf</span>, <span class="ident">root</span>: <span class="ident">c_double</span>)
-                                  <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                  <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">iterate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                                       <span class="ident">f</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">gsl_function_fdf</span>,
                                       <span class="ident">root</span>: <span class="ident">c_double</span>)
-                                      <span class="op">-&gt;</span> <span class="ident">enums</span>::<span class="ident">Value</span><span class="op">&gt;</span>,
+                                      <span class="op">-&gt;</span> <span class="ident">c_int</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
@@ -497,5 +493,5 @@
     <span class="kw">pub</span> <span class="ident">root</span>: <span class="ident">c_double</span>,
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "rgsl";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-files.js"></script><script src="../../../source-script.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}"}}});</script></body></html>
