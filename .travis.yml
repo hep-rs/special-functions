@@ -13,7 +13,7 @@ matrix:
 
 env:
   global:
-  - RUSTFLAGS="-C link-dead-code"
+  - RUSTFLAGS="-C link-dead-code -D warnings -D missing_docs"
 
 cache: cargo
 
@@ -31,19 +31,13 @@ addons:
       - libgsl0-dev
 
 before_script:
-  - export PATH=$PATH:~/.cargo/bin
   - |
     if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
-        export FEATURES="--all-features";
+        export FEATURES="--features nightly";
     else
-        export FEATURES="--features strict";
+        export FEATURES="";
     fi
-  - |
-    if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]] && cargo install clippy ; then
-        export CLIPPY=true;
-    else
-        export CLIPPY=false;
-    fi
+  - bash ./ci/before_script.sh
 
 script:
   - bash ./ci/script.sh

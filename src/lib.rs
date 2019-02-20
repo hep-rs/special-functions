@@ -19,8 +19,6 @@
 //! [here](https://hep.rs/special-functions/special_functions).
 
 #![cfg_attr(feature = "nightly", feature(test))]
-#![cfg_attr(feature = "strict", deny(missing_docs))]
-#![cfg_attr(feature = "strict", deny(warnings))]
 
 #[macro_use]
 extern crate log;
