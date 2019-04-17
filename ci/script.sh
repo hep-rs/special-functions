@@ -1,28 +1,31 @@
-#!/usr/bin/bash
+#!/bin/bash
 
+# Echo all commands before executing them
+set -o xtrace
+# Forbid any unset variables
+set -o nounset
 # Exit on any error
-set -eux
+set -o errexit
 
-# Run clippy and see if it has anything to say
-clippy_lints() {
+# Ensure there are no outstanding lints.
+check_lints() {
     cargo clippy $FEATURES
 }
 
-# Run rustfmt
+# Ensure the code is correctly formatted.
 check_format() {
     cargo fmt -- --check
 }
 
-# Run the standard build and test suite.
-build_and_test() {
-    cargo build $FEATURES
+# Run the test suite.
+check_tests() {
     cargo test $FEATURES
 }
 
 main() {
-    clippy_lints
+    check_lints
     check_format
-    build_and_test
+    check_tests
 }
 
 main
