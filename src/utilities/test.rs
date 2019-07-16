@@ -22,7 +22,7 @@ pub(crate) fn approx_eq(a: f64, b: f64, precision: f64, abs: f64) {
     // If they are already identical, return.  They could both be infinite
     // at this stage (which is fine)
     if a == b {
-        debug!("a and b are identical");
+        log::debug!("a and b are identical");
         return;
     }
 
@@ -38,7 +38,7 @@ pub(crate) fn approx_eq(a: f64, b: f64, precision: f64, abs: f64) {
 
     // Check if their absolute error is acceptable
     if (a - b).abs() < abs {
-        debug!(
+        log::debug!(
             "a and b are within the absolute error ({} < {}).",
             (a - b).abs(),
             abs
@@ -56,14 +56,18 @@ pub(crate) fn approx_eq(a: f64, b: f64, precision: f64, abs: f64) {
 
     let p = (a_scaled - b_scaled).abs();
     if p <= 10f64.powf(-precision) {
-        debug!(
-            "a and b have the necessary precision ({} ≥ {})",
+        log::debug!(
+            "a ({:e}) and b ({:e}) have the necessary precision ({:.3} ≥ {:.3})",
+            a,
+            b,
             -p.log10(),
             precision
         );
     } else {
         panic!(
-            "a and b do not have the necessary precision ({} !≥ {})",
+            "a ({:e}) and b ({:e}) do not have the necessary precision ({:.3} !≥ {:.3})",
+            a,
+            b,
             -p.log10(),
             precision
         )
