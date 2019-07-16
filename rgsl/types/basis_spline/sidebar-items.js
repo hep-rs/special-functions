@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BSpLineDerivWorkspace",""],["BSpLineWorkspace",""]]});
+initSidebarItems({"struct":[["BSpLineWorkspace",""]]});

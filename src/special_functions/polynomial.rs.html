@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/polynomial.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>polynomial.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../special_functions/index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/polynomial.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>polynomial.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../special_functions/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -108,15 +108,34 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Utilities to handle polynomials</span>
 
 <span class="doccomment">/// Evaluates an arbitrary single-variable polynomial at a particular point.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Given a list of coefficient \\(c = [c_0, c_1, \dots, c_n]\\), evaluates the</span>
+<span class="doccomment">/// Given a list of coefficient \\(a = [a_0, a_1, \dots, a_n]\\), evaluates the</span>
 <span class="doccomment">/// polynomial</span>
 <span class="doccomment">/// \\[</span>
-<span class="doccomment">///     p(x) = c_0 + c_1 x + c_2 x\^2 + \dots + c_n x\^n</span>
+<span class="doccomment">///     p(x) = a_0 + a_1 x + a_2 x\^2 + \dots + a_n x\^n</span>
 <span class="doccomment">/// \\]</span>
 <span class="doccomment">/// at the specified value of \\(x\\).</span>
 <span class="doccomment">///</span>
@@ -126,11 +145,30 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This function does not perform any checks on the coefficients.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">polynomial</span>(<span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">c</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">polynomial</span>(<span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="comment">// This expands the polynomial as:</span>
     <span class="comment">//</span>
-    <span class="comment">// c0 + x * (c1 + x * (c2 + x * (...)))</span>
-    <span class="ident">c</span>.<span class="ident">iter</span>().<span class="ident">rev</span>().<span class="ident">fold</span>(<span class="number">0.0</span>, <span class="op">|</span><span class="ident">ans</span>, <span class="kw-2">&amp;</span><span class="ident">ci</span><span class="op">|</span> <span class="ident">ci</span> <span class="op">+</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">ans</span>)
+    <span class="comment">// a0 + x * (a1 + x * (a2 + x * (...)))</span>
+    <span class="ident">a</span>.<span class="ident">iter</span>().<span class="ident">rev</span>().<span class="ident">fold</span>(<span class="number">0.0</span>, <span class="op">|</span><span class="ident">ans</span>, <span class="kw-2">&amp;</span><span class="ident">ai</span><span class="op">|</span> <span class="ident">ai</span> <span class="op">+</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">ans</span>)
+}
+
+<span class="doccomment">/// Evaluates an arbitrary ratio of single-variable polynomials at a particular</span>
+<span class="doccomment">/// point.  The coefficient of the polynomial in the numerator are given in `a`,</span>
+<span class="doccomment">/// and `b` for the denominator.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If the list of denominator coefficients is empty, the denominator is set to</span>
+<span class="doccomment">/// `1`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Warning</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This function does not perform any checks on the coefficients.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">polynomial_ratio</span>(<span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">a</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>], <span class="ident">b</span>: <span class="kw-2">&amp;</span>[<span class="ident">f64</span>]) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">b</span>.<span class="ident">is_empty</span>() {
+        <span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="ident">a</span>)
+    } <span class="kw">else</span> {
+        <span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="ident">a</span>) <span class="op">/</span> <span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="ident">b</span>)
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -139,67 +177,67 @@
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="ident">f64</span>; <span class="number">9</span>] <span class="op">=</span> [<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>, <span class="number">7.0</span>, <span class="number">8.0</span>, <span class="number">9.0</span>];
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_0</span>() {
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
-            <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="number">0</span>]), <span class="number">0.0</span>, <span class="number">14.0</span>, <span class="number">0.0</span>);
-        }
+    <span class="kw">fn</span> <span class="ident">f</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+        <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>
+            <span class="op">+</span> <span class="number">3.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>)
+            <span class="op">+</span> <span class="number">4.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">3</span>)
+            <span class="op">+</span> <span class="number">5.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">4</span>)
+            <span class="op">+</span> <span class="number">6.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">5</span>)
+            <span class="op">+</span> <span class="number">7.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">6</span>)
+            <span class="op">+</span> <span class="number">8.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">7</span>)
+            <span class="op">+</span> <span class="number">9.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">8</span>)
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_1</span>() {
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
-            <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="number">1</span>]), <span class="number">1.0</span>, <span class="number">14.0</span>, <span class="number">0.0</span>);
-        }
+    <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">poly_test</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {
+            <span class="attribute">#[<span class="ident">test</span>]</span>
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>() {
+                <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
+                    <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
+                    <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>]), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">x</span>), <span class="number">14.0</span>, <span class="number">0.0</span>);
+                }
+            }
+        };
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_2</span>() {
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
-            <span class="ident">approx_eq</span>(
-                <span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="number">2</span>]),
-                <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>,
-                <span class="number">14.0</span>,
-                <span class="number">0.0</span>,
-            );
-        }
+    <span class="macro">poly_test</span><span class="macro">!</span>(<span class="ident">len_0</span>, <span class="number">0</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">0.0</span>);
+    <span class="macro">poly_test</span><span class="macro">!</span>(<span class="ident">len_1</span>, <span class="number">1</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">1.0</span>);
+    <span class="macro">poly_test</span><span class="macro">!</span>(<span class="ident">len_2</span>, <span class="number">2</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>);
+    <span class="macro">poly_test</span><span class="macro">!</span>(<span class="ident">len_9</span>, <span class="number">9</span>, <span class="ident">f</span>);
+
+    <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">ratio_test</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {
+            <span class="attribute">#[<span class="ident">test</span>]</span>
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>() {
+                <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
+                    <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
+                    <span class="ident">approx_eq</span>(
+                        <span class="kw">super</span>::<span class="ident">polynomial_ratio</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>], <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="macro-nonterminal">$</span><span class="macro-nonterminal">m</span>]),
+                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">x</span>),
+                        <span class="number">14.0</span>,
+                        <span class="number">0.0</span>,
+                    );
+                }
+            }
+        };
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_3</span>() {
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
-            <span class="ident">approx_eq</span>(
-                <span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>[..<span class="number">3</span>]),
-                <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span> <span class="op">+</span> <span class="number">3.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>),
-                <span class="number">14.0</span>,
-                <span class="number">0.0</span>,
-            );
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_9</span>() {
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">100</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">f64</span>;
-            <span class="ident">approx_eq</span>(
-                <span class="kw">super</span>::<span class="ident">polynomial</span>(<span class="ident">x</span>, <span class="kw-2">&amp;</span><span class="ident">COEFFICIENTS</span>),
-                <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>
-                    <span class="op">+</span> <span class="number">3.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>)
-                    <span class="op">+</span> <span class="number">4.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">3</span>)
-                    <span class="op">+</span> <span class="number">5.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">4</span>)
-                    <span class="op">+</span> <span class="number">6.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">5</span>)
-                    <span class="op">+</span> <span class="number">7.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">6</span>)
-                    <span class="op">+</span> <span class="number">8.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">7</span>)
-                    <span class="op">+</span> <span class="number">9.0</span> <span class="op">*</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">8</span>),
-                <span class="number">14.0</span>,
-                <span class="number">0.0</span>,
-            );
-        }
-    }
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_0_0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">0.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_1_0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">1.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_2_0</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_9_0</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="ident">f</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_0_1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">0.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_1_1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">1.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_2_1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_9_1</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="ident">f</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_0_2</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">0.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_1_2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="number">1.0</span> <span class="op">/</span> (<span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>));
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_2_2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">1.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_9_2</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">f</span>(<span class="ident">x</span>) <span class="op">/</span> (<span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>));
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_0_9</span>, <span class="number">0</span>, <span class="number">9</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">0.0</span>);
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_1_9</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="number">1.0</span> <span class="op">/</span> <span class="ident">f</span>(<span class="ident">x</span>));
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_2_9</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> (<span class="number">1.0</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span>) <span class="op">/</span> <span class="ident">f</span>(<span class="ident">x</span>));
+    <span class="macro">ratio_test</span><span class="macro">!</span>(<span class="ident">ratio_9_9</span>, <span class="number">9</span>, <span class="number">9</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="number">1.0</span>);
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;nightly&quot;</span>)]</span>
