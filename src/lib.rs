@@ -20,15 +20,6 @@
 
 #![cfg_attr(feature = "nightly", feature(test))]
 
-#[macro_use]
-extern crate log;
-extern crate rgsl;
-
-#[cfg(test)]
-extern crate csv;
-#[cfg(feature = "nightly")]
-extern crate test;
-
 pub mod bessel;
 pub mod interpolation;
 pub mod polylog;
