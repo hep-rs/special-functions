@@ -429,13 +429,13 @@ pub fn bose_einstein(x: f64) -> f64 {
     let x = -x;
 
     if x == 0.0 {
-        debug!("Using exact expression at x = 0.");
+        log::debug!("Using exact expression at x = 0.");
         ZETA_3
     } else if x < 0.22 {
-        debug!("Using Taylor series around x = 0.");
+        log::debug!("Using Taylor series around x = 0.");
         polynomial(x, &BOSE_EINSTEIN_ZERO) - 0.5 * x.powi(2) * x.ln()
     } else if x > 2.85 {
-        debug!("Using Taylor series around x = ∞.");
+        log::debug!("Using Taylor series around x = ∞.");
         let ex = (-x).exp();
         polynomial(ex, &BOSE_EINSTEIN_INFINITY)
     } else {
@@ -445,7 +445,7 @@ pub fn bose_einstein(x: f64) -> f64 {
             .skip_while(|&(_, &x_lim)| x > x_lim)
             .next()
             .expect("The intervals should cover everything between 0.22 and 2.85.");
-        debug!("Using minimax polynomial for x < {}.", x_lim);
+        log::debug!("Using minimax polynomial for x < {}.", x_lim);
         polynomial(x, &BOSE_EINSTEIN_MINIMAX_COEFFICIENTS[i])
     }
 }
@@ -466,11 +466,11 @@ pub fn bose_einstein(x: f64) -> f64 {
 ///   is used.
 pub fn fermi_dirac(x: f64) -> f64 {
     if x < -2.6 {
-        debug!("Using Taylor series around x = -∞.");
+        log::debug!("Using Taylor series around x = -∞.");
         let ex = x.exp();
         polynomial(ex, &FERMI_DIRAC_NEG_INFINITY)
     } else if x > 2.5 {
-        debug!("Using Taylor series around x = ∞.");
+        log::debug!("Using Taylor series around x = ∞.");
         let ex = (-x).exp();
         polynomial(ex, &FERMI_DIRAC_INFINITY)
             + 0.166_666_666_666_666_66 * x.powi(3)
@@ -482,7 +482,7 @@ pub fn fermi_dirac(x: f64) -> f64 {
             .skip_while(|&(_, &x_lim)| x > x_lim)
             .next()
             .expect("The intervals should cover everything between -2.6 and 2.5.");
-        debug!("Using minimax polynomial for x < {}.", x_lim);
+        log::debug!("Using minimax polynomial for x < {}.", x_lim);
         polynomial(x, &FERMI_DIRAC_MINIMAX_COEFFICIENTS[i])
     }
 }
