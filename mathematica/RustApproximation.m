@@ -164,7 +164,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
       out,
       StringTemplate["    &[``],\n"][
         StringRiffle[ToString@CForm@N[#] & /@ row,", "]
-    ]];
+      ]];
   ,
     {row,numerators}
   ];
@@ -180,8 +180,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
       out,
       StringTemplate["    &[``],\n"][
         StringRiffle[ToString@CForm@N[#] & /@ row,", "]
-                                    ]];
-    WriteString[out,StringRiffle[ToString@CForm@N[#]&/@row,", "]];
+      ]];
   ,
     {row,denominators}
   ];
