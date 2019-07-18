@@ -9,7 +9,12 @@ approx = PiecewiseApproximate[
   {x, 0, Infinity},
   "StartGuess" -> 0.1,
   "EndGuess" -> 2
-         ];
+];
+
+DumpSave[
+  FileBaseName[$InputFileName] <> ".mx",
+  approx
+];
 
 output = OpenWrite[FileNameJoin[{
   Directory[],

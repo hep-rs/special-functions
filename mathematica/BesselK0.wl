@@ -11,6 +11,11 @@ approx = PiecewiseApproximate[
   "EndGuess" -> 2
 ];
 
+DumpSave[
+  FileBaseName[$InputFileName] <> ".mx",
+  approx
+];
+
 output = OpenWrite[FileNameJoin[{
   Directory[],
   "../src/data/k0.rs"
