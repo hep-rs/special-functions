@@ -163,7 +163,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
     WriteString[
       out,
       StringTemplate["    &[``],\n"][
-        StringRiffle[ToString@CForm@N[#]&/@row,", "]
+        StringRiffle[ToString@CForm@N[#] & /@ row,", "]
     ]];
   ,
     {row,numerators}
@@ -179,7 +179,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
     WriteString[
       out,
       StringTemplate["    &[``],\n"][
-        StringRiffle[ToString@CForm@N[#]&/@row,", "]
+        StringRiffle[ToString@CForm@N[#] & /@ row,", "]
                                     ]];
     WriteString[out,StringRiffle[ToString@CForm@N[#]&/@row,", "]];
   ,
@@ -192,8 +192,15 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
     out,
     StringTemplate["pub const SPLITS: [f64; ``] = [``];"][
       Length@splits,
-      StringRiffle[ToString@CForm@N[#]&/@splits,", "]
+      StringRiffle[ToString@CForm@N[#] & /@ splits /. {
+        "DirectedInfinity(-1)" -> "std::f64::NEG_INFINITY",
+        "DirectedInfinity(1)" -> "std::f64::INFINITY"
+     },", "]
   ]];
 ];
 
 Protect[ApproximationToRust];
+
+(* Local Variables: *)
+(* mode: wolfram *)
+(* End: *)
