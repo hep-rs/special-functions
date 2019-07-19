@@ -77,9 +77,10 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     OptionValue["StartGuess"]
   ];
   xStart = FindRoot[
-    Abs[approx - f] / f == SetPrecision[OptionValue["TargetError"], \[Infinity]],
+    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
     {x, startGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision]
+    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
+    MaxIterations -> Infinity
            ][[1,2]];
   AppendTo[xs, {x0, xStart}];
   AppendTo[approxes, approx];
@@ -91,9 +92,10 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     OptionValue["EndGuess"]
   ];
   xEnd = FindRoot[
-    Abs[approx - f] / f == SetPrecision[OptionValue["TargetError"], \[Infinity]],
+    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
     {x, endGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision]
+    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
+    MaxIterations -> Infinity
          ][[1,2]];
   AppendTo[xs, {xEnd, x1}];
   AppendTo[approxes, approx];
