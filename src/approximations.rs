@@ -33,7 +33,8 @@ pub fn polynomial(x: f64, a: &[f64]) -> f64 {
 /// and `b` for the denominator.
 ///
 /// If the list of denominator coefficients is empty, the denominator is set to
-/// `1`.
+/// `1.0`.  For the numerator, if the coefficients list is empty, the functions
+/// returns `0.0` always.
 ///
 /// # Warning
 ///
