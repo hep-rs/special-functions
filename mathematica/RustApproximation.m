@@ -72,7 +72,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     Dynamic@Row[
       {
         StringTemplate["`` subdivisions"][Length[approxes]],
-        ProgressIndicator[xStart, {x0, x1}],
+        ProgressIndicator[xStart, {xs[[1, 2]], xs[[2, 1]]}],
         N[xs, 3]
       },
       "  "]
