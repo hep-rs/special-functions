@@ -24,5 +24,4 @@ pub mod bessel;
 pub mod interpolation;
 pub mod polylog;
 pub mod polynomial;
-
 mod utilities;

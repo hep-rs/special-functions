@@ -18,7 +18,7 @@ DumpSave[
 
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/data/k6.rs"
+  "../src/bessel/k6.rs"
   }]];
 
 n = 6;
