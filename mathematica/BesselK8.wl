@@ -7,7 +7,7 @@ $Assumptions = x >= 0;
 approx = PiecewiseApproximate[
   BesselK[8, x],
   {x, 0, Infinity},
-  "StartGuess" -> 0.1,
+  "StartGuess" -> 2,
   "EndGuess" -> 2
 ];
 
