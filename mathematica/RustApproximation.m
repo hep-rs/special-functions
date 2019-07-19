@@ -150,7 +150,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
   tmp = f[[2,1]];
   tmp = tmp /. {a___, {___, False}, b___} :> {a, b};
   tmp = SortBy[tmp, #[[2,1]]&];
-  numerators = CoefficientList[Numerator[tmp[[;;, 1]]], x];
+  numerators = CoefficientList[Numerator[tmp[[;;, 1]]], x] /. {0} -> {};
   denominators = CoefficientList[Denominator[tmp[[;;, 1]]], x] /. {1} -> {};
   splits = DeleteDuplicates@Sort@Flatten[{tmp[[;;, 2, 1]], tmp[[;;, 2, -1]]}];
 
@@ -162,9 +162,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
   Do[
     WriteString[
       out,
-      StringTemplate["    &[``],\n"][
-        StringRiffle[ToString@CForm@N[#] & /@ row,", "]
-      ]];
+      StringTemplate["    &``,\n"][ToRustList[row]]];
   ,
     {row,numerators}
   ];
@@ -178,9 +176,8 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
   Do[
     WriteString[
       out,
-      StringTemplate["    &[``],\n"][
-        StringRiffle[ToString@CForm@N[#] & /@ row,", "]
-      ]];
+      StringTemplate["    &``,\n"][ToRustList[row]]
+    ];
   ,
     {row,denominators}
   ];
@@ -189,16 +186,21 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
   (* Write the splits *)
   WriteString[
     out,
-    StringTemplate["pub const SPLITS: [f64; ``] = [``];"][
+    StringTemplate["pub const SPLITS: [f64; ``] = ``;"][
       Length@splits,
-      StringRiffle[ToString@CForm@N[#] & /@ splits /. {
+      StringReplace[ToRustList[splits], {
         "DirectedInfinity(-1)" -> "std::f64::NEG_INFINITY",
         "DirectedInfinity(1)" -> "std::f64::INFINITY"
-     },", "]
+                    }]
   ]];
 ];
-
 Protect[ApproximationToRust];
+
+ToRustList[l_List] := "[" <> StringRiffle[
+  ToString@CForm@N[#] & /@ l,
+  ", "
+] <> "]";
+Protect[ToRustList];
 
 (* Local Variables: *)
 (* mode: wolfram *)
