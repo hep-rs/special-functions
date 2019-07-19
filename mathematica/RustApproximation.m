@@ -67,15 +67,6 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     startGuess, endGuess,
     tmp
   },
-  PrintTemporary[
-    Dynamic@Row[
-      {
-        StringTemplate["`` subdivisions"][Length[approxes]],
-        ProgressIndicator[xStart, {x0, x1}],
-        N[xs, 3]
-      },
-      "  "]
-  ];
 
   (* Find the points in the interval where a usual series no longer work, at
   both the start and the end. *)
@@ -109,6 +100,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
 
   (* Now subdivide the remaining (inner) interval until the local errors on each
   is sufficiently small *)
+  Print[StringTemplate["`` Intervals; `` - ``"][Length[xs], xStart, xEnd]]
   xi = (9 * xStart + xEnd)/10;
   While[
     xStart < xEnd,
@@ -122,6 +114,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
        AppendTo[xs, {xStart, xi}];
        xStart = xi;
        xi = Max[(9 * xStart + xEnd)/10, xStart + (xEnd - x0)/10];
+       Print[StringTemplate["`` Intervals; `` - ``"][Length[xs], xStart, xEnd]];
      ,
        xi=(xStart+xi)/2;
     ];
