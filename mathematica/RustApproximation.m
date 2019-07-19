@@ -76,14 +76,15 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     (99 * x0 + x1) / 100,
     OptionValue["StartGuess"]
   ];
-  xStart = FindRoot[
+  xStart = x /. FindRoot[
     ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
     {x, startGuess, x0, x1},
     WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
     MaxIterations -> Infinity
-           ][[1,2]];
+           ];
   AppendTo[xs, {x0, xStart}];
   AppendTo[approxes, approx];
+  Print[StringTemplate["Lower approximation valid from `` to ``."][N[x0, 4], N[xStart, 4]]];
 
   approx = Normal@Series[f, {x, x1, OptionValue["MaxOrder"]}];
   endGuess = If[
@@ -91,18 +92,19 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     (99 * x1 + x0) / 100,
     OptionValue["EndGuess"]
   ];
-  xEnd = FindRoot[
+  xEnd = x /. FindRoot[
     ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
     {x, endGuess, x0, x1},
     WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
     MaxIterations -> Infinity
-         ][[1,2]];
+         ];
   AppendTo[xs, {xEnd, x1}];
   AppendTo[approxes, approx];
+  Print[StringTemplate["Lower approximation valid from `` to ``."][N[xEnd, 4], N[x0, 4]]];
 
   (* Now subdivide the remaining (inner) interval until the local errors on each
   is sufficiently small *)
-  Print[StringTemplate["`` Intervals; `` - ``"][Length[xs], xStart, xEnd]]
+  Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
   xi = (9 * xStart + xEnd)/10;
   While[
     xStart < xEnd,
@@ -116,7 +118,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
        AppendTo[xs, {xStart, xi}];
        xStart = xi;
        xi = Max[(9 * xStart + xEnd)/10, xStart + (xEnd - x0)/10];
-       Print[StringTemplate["`` Intervals; `` - ``"][Length[xs], xStart, xEnd]];
+       Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
      ,
        xi=(xStart+xi)/2;
     ];
