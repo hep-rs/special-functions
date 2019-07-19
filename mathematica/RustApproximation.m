@@ -132,7 +132,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
        AppendTo[approxes, approx];
        AppendTo[xs, {xStart, xi}];
        xStart = xi;
-       xi = Min[xEnd, xStart + 5 * (xs[[-1, 2]] - xs[[-1, 1]])];
+       xi = Min[xEnd, xStart + 2 * (xs[[-1, 2]] - xs[[-1, 1]])];
        Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
      ,
        xi = (xStart + xi)/2;
