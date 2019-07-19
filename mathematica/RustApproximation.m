@@ -68,6 +68,16 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     tmp
   },
 
+  PrintTemporary[
+    Dynamic@Row[
+      {
+        StringTemplate["`` subdivisions"][Length[approxes]],
+        ProgressIndicator[xStart, {x0, x1}],
+        N[xs, 3]
+      },
+      "  "]
+  ];
+
   (* Find the points in the interval where a usual series no longer work, at
   both the start and the end. *)
   approx = Normal@Series[f, {x, x0, OptionValue["MaxOrder"]}];
@@ -104,6 +114,11 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
 
   (* Now subdivide the remaining (inner) interval until the local errors on each
   is sufficiently small *)
+  PrintTemporary[
+    Dynamic@StringTemplate["Current Interval = [``, ``]"][
+      N[xStart, 4],
+      N[xi, 4]]
+  ];
   Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
   xi = xEnd;
   While[
