@@ -37,5 +37,30 @@ output = OpenWrite[FileNameJoin[{
   Directory[],
   "../src/data/bose_einstein.rs"
   }]];
+
+upper = CoefficientList[approx[[2, 1, 2, 1]], Exp[-x]];
+
+approx[[2, 1, 1, 1]] = ExpandAll[approx[[2, 1, 1, 1]] + x^2 Log[x] / 2];
+approx[[2, 1, 2, 1]] = 0;
+
+WriteString[output,
+  StringTemplate["use crate::polynomial::polynomial;
+
+pub fn lower(x: f64) -> f64 {
+    - x.powi(2) * x.ln() / 2.0
+}
+
+pub fn upper(x: f64) -> f64 {
+    polynomial(
+        (-x).exp(),
+        &`upper`,
+    )
+}
+
+"][<|
+  "upper" -> ToRustList[upper]
+  |>]
+]
+
 ApproximationToRust[approx, output];
 Close[output];
