@@ -41,7 +41,7 @@ pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::utilities::test::*;
     use std::f64;
 
@@ -76,7 +76,7 @@ mod test {
 
 #[cfg(feature = "nightly")]
 #[cfg(test)]
-mod bench {
+mod benches {
     use crate::utilities::test::*;
     use std::f64;
     use test::Bencher;

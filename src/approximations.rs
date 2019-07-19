@@ -44,9 +44,6 @@ pub fn polynomial_ratio(x: f64, a: &[f64], b: &[f64]) -> f64 {
     if b.is_empty() {
         polynomial(x, a)
     } else {
-        // println!(
-        //     "--------------------------------------------------------------------------------"
-        // );
         polynomial(x, a) / polynomial(x, b)
     }
 }
@@ -92,7 +89,7 @@ pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::utilities::test::*;
 
     pub(crate) const COEFFICIENTS: [f64; 9] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
@@ -162,13 +159,13 @@ mod test {
 
 #[cfg(feature = "nightly")]
 #[cfg(test)]
-mod bench {
+mod benches {
     use test::{black_box, Bencher};
 
-    use super::test::COEFFICIENTS;
+    use super::tests::COEFFICIENTS;
 
     #[bench]
-    fn len_9(b: &mut Bencher) {
+    fn poly_9(b: &mut Bencher) {
         b.iter(|| {
             for x in -100..100 {
                 let x = x as f64;
@@ -178,7 +175,7 @@ mod bench {
     }
 
     #[bench]
-    fn len_0_0(b: &mut Bencher) {
+    fn ratio_0_0(b: &mut Bencher) {
         b.iter(|| {
             for x in -100..100 {
                 let x = x as f64;
@@ -188,7 +185,7 @@ mod bench {
     }
 
     #[bench]
-    fn len_9_0(b: &mut Bencher) {
+    fn ratio_9_0(b: &mut Bencher) {
         b.iter(|| {
             for x in -100..100 {
                 let x = x as f64;
@@ -198,7 +195,7 @@ mod bench {
     }
 
     #[bench]
-    fn len_0_9(b: &mut Bencher) {
+    fn ratio_0_9(b: &mut Bencher) {
         b.iter(|| {
             for x in -100..100 {
                 let x = x as f64;
@@ -208,7 +205,7 @@ mod bench {
     }
 
     #[bench]
-    fn len_9_9(b: &mut Bencher) {
+    fn ratio_9_9(b: &mut Bencher) {
         b.iter(|| {
             for x in -100..100 {
                 let x = x as f64;

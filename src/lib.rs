@@ -20,8 +20,10 @@
 
 #![cfg_attr(feature = "nightly", feature(test))]
 
-pub mod bessel;
-pub mod interpolation;
-pub mod polylog;
-pub mod polynomial;
+#[cfg(feature = "nightly")]
+extern crate test;
+
+pub mod approximations;
+// pub mod bessel;
+// pub mod polylog;
 mod utilities;
