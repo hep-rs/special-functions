@@ -100,12 +100,12 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
          ];
   AppendTo[xs, {xEnd, x1}];
   AppendTo[approxes, approx];
-  Print[StringTemplate["Lower approximation valid from `` to ``."][N[xEnd, 4], N[x0, 4]]];
+  Print[StringTemplate["Lower approximation valid from `` to ``."][N[xEnd, 4], N[x1, 4]]];
 
   (* Now subdivide the remaining (inner) interval until the local errors on each
   is sufficiently small *)
   Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
-  xi = (9 * xStart + xEnd)/10;
+  xi = xEnd;
   While[
     xStart < xEnd,
     {approx, err} = Approximate[
@@ -117,10 +117,10 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
        AppendTo[approxes, approx];
        AppendTo[xs, {xStart, xi}];
        xStart = xi;
-       xi = Max[(9 * xStart + xEnd)/10, xStart + (xEnd - x0)/10];
+       xi = Min[xEnd, xStart + 5 * (xs[[-1, 2]] - xs[[-1, 1]])];
        Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
      ,
-       xi=(xStart+xi)/2;
+       xi = (xStart + xi)/2;
     ];
   ];
 
