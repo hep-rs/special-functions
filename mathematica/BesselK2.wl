@@ -3,9 +3,10 @@
 << RustApproximation`;
 
 $Assumptions = x >= 0;
+n = 2;
 
 approx = PiecewiseApproximate[
-  BesselK[2, x],
+  BesselK[n, x],
   {x, 0, Infinity},
   "StartGuess" -> 2,
   "EndGuess" -> 2
@@ -18,10 +19,9 @@ DumpSave[
 
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/bessel/k2.rs"
+  "../src/bessel/k" <> ToString[n] <> ".rs"
   }]];
 
-n = 2;
 lower = CoefficientList[approx[[2, 1, 1, 1]], Log[x]];
 lowerC = CoefficientList[x^n lower[[1]], x^2];
 lowerLn = CoefficientList[x^(-n) lower[[2]], x^2];
