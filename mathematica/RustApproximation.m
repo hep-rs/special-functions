@@ -4,9 +4,9 @@
 <<FunctionApproximations`;
 
 Options[Approximate] = {
-  "TargetError" -> $MachineEpsilon,
+  "TargetError" -> $MachineEpsilon / 100,
   "MaxOrder" -> 10,
-  WorkingPrecision -> 100
+  WorkingPrecision -> 200
 };
 
 Approximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
@@ -52,9 +52,9 @@ Protect[Approximate];
 
 (* ::Input::Initialization:: *)
 Options[PiecewiseApproximate] = {
-  "TargetError" -> $MachineEpsilon,
+  "TargetError" -> $MachineEpsilon / 100,
   "MaxOrder" -> 10,
-  WorkingPrecision -> 100,
+  WorkingPrecision -> 200,
   "StartGuess" -> Automatic,
   "EndGuess" -> Automatic
 };
