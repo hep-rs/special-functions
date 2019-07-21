@@ -23,6 +23,41 @@ approx = PiecewiseApproximate[
   "EndGuess" -> 2
 ];
 
+lowerExp = CoefficientList[approx[[2, 1, 1, 1]], Exp[x]];
+upperExp = CoefficientList[approx[[2, 1, 2, 1]], Exp[-x]];
+upperC = CoefficientList[upperExp[[1]], x];
+upperExp = Rest@upperExp;
+
+approx[[2, 1, 1, 1]] = 0;
+approx[[2, 1, 2, 1]] = 0;
+
+WriteString[output,
+  StringTemplate["use crate::polynomial::polynomial;
+
+pub fn lower(x: f64) -> f64 {
+    polynomial(
+        x.exp(),
+        &`lowerExp`
+    )
+}
+
+pub fn upper(x: f64) -> f64 {
+    polynomial(
+        (-x).exp(),
+        &`upperExp`,
+    ) + polynomial(
+        x,
+        &`upperC`
+    )
+}
+
+"][<|
+  "lowerExp" -> ToRustList[lowerExp],
+  "upperExp" -> ToRustList[upperExp],
+  "upperC" -> ToRustList[upperC]
+  |>]
+]
+
 DumpSave[
   FileBaseName[$InputFileName] <> ".mx",
   approx
