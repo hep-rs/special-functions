@@ -5,7 +5,7 @@
 $Assumptions = x < 1;
 n = 6;
 
-approx = PiecewiseApproximate[
+approx = PiecewiseMiniMax[
   PolyLog[n, x],
   {x, -Infinity, 1},
   "StartGuess" -> 0.5,

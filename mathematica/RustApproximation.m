@@ -5,7 +5,7 @@
 
 $MaxExtraPrecision = 1000;
 
-Options[Approximate] = {
+Options[BestMiniMax] = {
   "TargetError" -> $MachineEpsilon / 100,
   "MaxOrder" -> 10,
   "MaxNumeratorOrder" -> Automatic,
@@ -13,7 +13,7 @@ Options[Approximate] = {
   WorkingPrecision -> 200
 };
 
-Approximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
+BestMiniMax[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   {
     maxNumeratorOrder, maxDenominatorOrder,
     bestApprox = None, bestErr = \[Infinity], bestNM,
@@ -63,18 +63,20 @@ Approximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   {bestApprox,bestErr}
 ];
 
-Protect[Approximate];
+Protect[BestMiniMax];
 
 (* ::Input::Initialization:: *)
-Options[PiecewiseApproximate] = {
+Options[PiecewiseMiniMax] = {
   "TargetError" -> $MachineEpsilon / 100,
   "MaxOrder" -> 10,
+  "MaxNumeratorOrder" -> 4,
+  "MaxDenominatorOrder" -> 0,
   WorkingPrecision -> 200,
   "StartGuess" -> Automatic,
   "EndGuess" -> Automatic
 };
 
-PiecewiseApproximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
+PiecewiseMiniMax[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   {
     approxes={}, approx, xs={},
     xStart, xEnd,
@@ -138,9 +140,9 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   xi = xEnd;
   While[
     xStart < xEnd,
-    {approx, err} = Approximate[
+    {approx, err} = BestMiniMax[
       f, {x, xStart, xi},
-      FilterRules[{opts}, Options[Approximate]]];
+      FilterRules[{opts}, Options[BestMiniMax]]];
     If[err < OptionValue["TargetError"],
        AppendTo[approxes, approx];
        AppendTo[xs, {xStart, xi}];
@@ -158,7 +160,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
     Evaluate@Piecewise[tmp]
   ]
 ];
-Protect[PiecewiseApproximate];
+Protect[PiecewiseMiniMax];
 
 
 (* ::Input::Initialization:: *)
@@ -218,7 +220,7 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
                     }]
   ]];
 ];
-Protect[ApproximationToRust];
+Protect[PiecewiseMiniMax];
 
 ToRustList[l_List] := "[" <> StringRiffle[
   ToString@CForm@N[#] & /@ l,

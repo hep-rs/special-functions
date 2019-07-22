@@ -16,7 +16,7 @@ We neglect the division by (Pi^2 * β^3)
 
 $Assumptions = x \[Element] Reals;
 
-approx = PiecewiseApproximate[
+approx = PiecewiseMiniMax[
   - PolyLog[3, - Exp[x]],
   {x, - Infinity, Infinity},
   "StartGuess" -> -2,

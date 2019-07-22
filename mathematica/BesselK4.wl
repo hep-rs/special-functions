@@ -5,7 +5,7 @@
 $Assumptions = x >= 0;
 n = 4;
 
-approx = PiecewiseApproximate[
+approx = PiecewiseMiniMax[
   BesselK[n, x],
   {x, 0, Infinity},
   "StartGuess" -> 2,

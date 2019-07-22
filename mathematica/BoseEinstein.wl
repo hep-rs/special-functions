@@ -21,7 +21,7 @@ We neglect the division by (Pi^2 * β^3)
 
 $Assumptions = x >= 0;
 
-approx = PiecewiseApproximate[
+approx = PiecewiseBestMiniMax[
   PolyLog[3, Exp[-x]],
   {x, 0, Infinity},
   "StartGuess" -> 2,
