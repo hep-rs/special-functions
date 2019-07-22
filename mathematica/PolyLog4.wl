@@ -33,7 +33,7 @@ approx[[2, 1, 1, 1]] = 0;
 approx[[2, 1, 2, 1]] = 0;
 
 WriteString[output,
-  StringTemplate["use crate::polynomial::polynomial;
+  StringTemplate["use crate::approximations::polynomial;
 
 pub fn lower(x: f64) -> f64 {
     polynomial(

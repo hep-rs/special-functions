@@ -44,7 +44,7 @@ approx[[2, 1, 1, 1]] = ExpandAll[approx[[2, 1, 1, 1]] + x^2 Log[x] / 2];
 approx[[2, 1, 2, 1]] = 0;
 
 WriteString[output,
-  StringTemplate["use crate::polynomial::polynomial;
+  StringTemplate["use crate::approximations::polynomial;
 
 pub fn lower(x: f64) -> f64 {
     - x.powi(2) * x.ln() / 2.0
