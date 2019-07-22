@@ -3,17 +3,32 @@
 
 <<FunctionApproximations`;
 
+$MaxExtraPrecision = 1000;
+
 Options[Approximate] = {
   "TargetError" -> $MachineEpsilon / 100,
   "MaxOrder" -> 10,
+  "MaxNumeratorOrder" -> Automatic,
+  "MaxDenominatorOrder" -> Automatic,
   WorkingPrecision -> 200
 };
 
-Approximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
+Approximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   {
-    bestApprox=None,bestErr=\[Infinity],bestNM,
-    approx,err
+    maxNumeratorOrder, maxDenominatorOrder,
+    bestApprox = None, bestErr = \[Infinity], bestNM,
+    approx, err
   },
+
+  maxNumeratorOrder = If[
+    OptionValue["MaxNumeratorOrder"] === Automatic,
+    OptionValue["MaxOrder"],
+    OptionValue["MaxNumeratorOrder"]];
+  maxDenominatorOrder = If[
+    OptionValue["MaxDenominatorOrder"] === Automatic,
+    OptionValue["MaxOrder"],
+    OptionValue["MaxDenominatorOrder"]];
+
 
   Do[
     (* If the best error is smaller than the target error and we would be
@@ -41,8 +56,8 @@ Approximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
        {bestErr, bestApprox, bestNM} = {err, approx, n+m};
     ];
   ,
-    {n,Range[0,OptionValue["MaxOrder"]]},
-    {m,Range[0,OptionValue["MaxOrder"]]}
+    {n,Range[0, maxNumeratorOrder]},
+    {m,Range[0, maxDenominatorOrder]}
   ];
 
   {bestApprox,bestErr}
@@ -59,7 +74,7 @@ Options[PiecewiseApproximate] = {
   "EndGuess" -> Automatic
 };
 
-PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
+PiecewiseApproximate[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   {
     approxes={}, approx, xs={},
     xStart, xEnd,
@@ -125,9 +140,7 @@ PiecewiseApproximate[f_, {x_, x0_, x1_}, OptionsPattern[]] := Module[
     xStart < xEnd,
     {approx, err} = Approximate[
       f, {x, xStart, xi},
-      "TargetError" -> OptionValue["TargetError"],
-      "MaxOrder" -> OptionValue["MaxOrder"],
-      WorkingPrecision -> OptionValue[WorkingPrecision]];
+      FilterRules[{opts}, Options[Approximate]]];
     If[err < OptionValue["TargetError"],
        AppendTo[approxes, approx];
        AppendTo[xs, {xStart, xi}];
@@ -153,8 +166,7 @@ ClearAll[ApproximationToRust];
 ApproximationToRust[f_Function, out_OutputStream] := Module[
   {
     x,approxes,tmp,
-    splits,numerators,denominators,
-    maxNumerator,maxDenominator
+    splits,numerators,denominators
   },
 
   (* Deconstruct the Piecewise function *)
