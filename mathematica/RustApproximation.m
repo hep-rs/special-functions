@@ -231,10 +231,19 @@ PiecewiseInterpolation[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
   xi = xEnd;
   While[
     xStart < xEnd,
-    approx = InterpolatingPolynomial[Table[{x, f}, {x, Subdivide[xStart, xi, OptionValue[Order]]}], x];
-    {approx, err} = BestMiniMax[
-      f, {x, xStart, xi},
-      FilterRules[{opts}, Options[BestMiniMax]]];
+    approx = InterpolatingPolynomial[
+      Table[{x, f},
+            {x, Subdivide[xStart, xi, OptionValue[Order]]}],
+      x];
+    tmp = 0; err = 0;
+    While[
+      err < OptionValue["TargetError"] && tmp++ < 1000,
+      err = Max[
+        err,
+        Abs[approx/f - 1] /. x -> RandomReal[
+          {xStart, xi},
+          WorkingPrecision -> OptionValue[WorkingPrecision]]
+            ]];
     If[err < OptionValue["TargetError"],
        AppendTo[approxes, approx];
        AppendTo[xs, {xStart, xi}];
