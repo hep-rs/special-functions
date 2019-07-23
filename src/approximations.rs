@@ -27,11 +27,44 @@ pub fn polynomial(x: f64, a: &[f64]) -> f64 {
     a.iter().rev().fold(0.0, |ans, &ai| ans.mul_add(x, ai))
 }
 
-    // print!("(");
-    // a.iter().for_each(|&ai| print!("{:e} + x * (", ai));
-    // a.iter().for_each(|_| print!(")"));
-    // println!(")");
+/// Evaluates an arbitrary piecewise single-variable polynomial at a particular
+/// point.
+///
+/// The splits divide the domain in closed-open intervals (except for the last
+/// one which is closed-closed) and thus the length of `splits` must be one
+/// longer than the list of coefficient arrays.  The [`polynomial`] function
+/// used within each interval.
+///
+/// # Warning
+///
+/// For values outside the domain of the piecewise polynomial, the first or last
+/// polynomial is used for extrapolation.
+pub fn piecewise_polynomial(x: f64, a: &[&[f64]], splits: &[f64]) -> f64 {
+    debug_assert_eq!(
+        splits.len(),
+        a.len() + 1,
+        "The number of splits must be one longer than number of coefficient arrays."
+    );
 
+    unsafe {
+        match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
+            Ok(idx) if idx == splits.len() - 1 => polynomial(x, a.get_unchecked(idx - 2)),
+            Ok(idx) => polynomial(x, a.get_unchecked(idx)),
+            Err(0) => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                polynomial(x, a.get_unchecked(0))
+            }
+            Err(idx) if idx == splits.len() => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                polynomial(x, a.get_unchecked(idx - 2))
+            }
+            Err(idx) => polynomial(x, a.get_unchecked(idx - 1)),
+        }
+    }
 }
 
 /// Evaluates an arbitrary ratio of single-variable polynomials at a particular
