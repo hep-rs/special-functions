@@ -71,14 +71,14 @@ pub fn piecewise_polynomial(x: f64, a: &[&[f64]], splits: &[f64]) -> f64 {
 /// point.  The coefficient of the polynomial in the numerator are given in `a`,
 /// and `b` for the denominator.
 ///
-/// If the list of denominator coefficients is empty, the denominator is set to
-/// `1.0`.  For the numerator, if the coefficients list is empty, the functions
-/// returns `0.0` always.
+/// # Implementation Details
+///
+/// If the array of denominator coefficients is empty, the denominator is
+/// ignored entirely (or equivalently, is treated as being equal to `1.0`).
 ///
 /// # Warning
 ///
 /// This function does not perform any checks on the coefficients.
-#[inline]
 pub fn polynomial_ratio(x: f64, a: &[f64], b: &[f64]) -> f64 {
     if b.is_empty() {
         polynomial(x, a)
