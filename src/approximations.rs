@@ -87,42 +87,49 @@ pub fn polynomial_ratio(x: f64, a: &[f64], b: &[f64]) -> f64 {
     }
 }
 
-/// Perform linear interpolation on data.
+/// Evaluates an arbitrary piecewise ratio of single-variable polynomial at a
+/// particular point.
 ///
-/// The data should be provided in an array of the shape `[(x0, y0), (x1, y1),
-/// ...]`.  The interpolation is done linearly such that a point half-way in
-/// between `x0` and `x1` will yield a value half-way between `y0` and `y1`.
+/// The splits divide the domain in closed-open intervals (except for the last
+/// one which is closed-closed) and thus the length of `splits` must be one
+/// longer than the two list of coefficient arrays.  The [`polynomial_ratio`]
+/// function used within each interval.
 ///
 /// # Warning
 ///
-/// The slice if input values must be sorted in strictly ascending `x` values.
-/// Any repeated values, unordered entries or `NaN` values will result in
-/// undefined behaviour.
-///
-/// # Extrapolation
-///
-/// This linear interpolation repeats the boundary value for all values outside
-/// the domain of the interpolation data.
-pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
-    debug_assert!(
-        !data.is_empty(),
-        "Interpolation data must contain at least one element."
+/// For values outside the domain of the piecewise polynomial, the first or last
+/// polynomial is used for extrapolation.
+pub fn piecewise_polynomial_ratio(x: f64, a: &[&[f64]], b: &[&[f64]], splits: &[f64]) -> f64 {
+    debug_assert_eq!(
+        a.len(),
+        b.len(),
+        "The list of numerator and denominator coefficient arrays must be equal in length."
     );
-    debug_assert!(
-        !x.is_nan(),
-        "Interpolation to a NaN value is not supported."
+    debug_assert_eq!(
+        splits.len(),
+        a.len() + 1,
+        "The number of splits must be one longer than number of coefficient arrays."
     );
 
     unsafe {
-        match data.binary_search_by(|&(xi, _)| xi.partial_cmp(&x).unwrap()) {
-            Ok(idx) => data.get_unchecked(idx).1,
-            Err(0) => data.get_unchecked(0).1,
-            Err(idx) if idx >= data.len() => data.get_unchecked(idx - 1).1,
-            Err(idx) => {
-                let &(x0, y0) = data.get_unchecked(idx - 1);
-                let &(x1, y1) = data.get_unchecked(idx);
-                (y0 * (x1 - x) + y1 * (x - x0)) / (x1 - x0)
+        match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
+            Ok(idx) if idx == splits.len() - 1 => {
+                polynomial_ratio(x, a.get_unchecked(idx - 2), b.get_unchecked(idx - 2))
             }
+            Ok(idx) => polynomial_ratio(x, a.get_unchecked(idx), b.get_unchecked(idx)),
+            Err(0) => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                polynomial_ratio(x, a.get_unchecked(0), b.get_unchecked(0))
+            }
+            Err(idx) if idx == splits.len() => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                polynomial_ratio(x, a.get_unchecked(idx - 2), b.get_unchecked(idx - 2))
+            }
+            Err(idx) => polynomial_ratio(x, a.get_unchecked(idx - 1), b.get_unchecked(idx - 1)),
         }
     }
 }
