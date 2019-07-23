@@ -2,8 +2,8 @@
 
 /// Evaluates an arbitrary single-variable polynomial at a particular point.
 ///
-/// Given a list of coefficient \\(a = [a_0, a_1, \dots, a_n]\\), evaluates the
-/// polynomial
+/// Given an array of coefficients \\(a = [a_0, a_1, \dots, a_n]\\), evaluates
+/// the polynomial
 /// \\[
 ///     p(x) = a_0 + a_1 x + a_2 x\^2 + \dots + a_n x\^n
 /// \\]
@@ -18,14 +18,20 @@
 pub fn polynomial(x: f64, a: &[f64]) -> f64 {
     // This expands the polynomial as:
     //
-    // a0 + x * (a1 + x * (a2 + x * (...)))
+    // > a0 + x * (a1 + x * (a2 + x * (...)))
+    //
+    // This is significantly more efficient than computing the mathematically
+    // equivalent
+    //
+    // > a0 + a1 * x + a2 * x.powi(2) + ...
+    a.iter().rev().fold(0.0, |ans, &ai| ans.mul_add(x, ai))
+}
 
     // print!("(");
     // a.iter().for_each(|&ai| print!("{:e} + x * (", ai));
     // a.iter().for_each(|_| print!(")"));
     // println!(")");
 
-    a.iter().rev().fold(0.0, |ans, &ai| ai + x * ans)
 }
 
 /// Evaluates an arbitrary ratio of single-variable polynomials at a particular
