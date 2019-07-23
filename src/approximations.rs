@@ -134,6 +134,89 @@ pub fn piecewise_polynomial_ratio(x: f64, a: &[&[f64]], b: &[&[f64]], splits: &[
     }
 }
 
+#[macro_export]
+macro_rules! approx_fn {
+    (
+        $(#[$outer:meta])*
+        fn $fn:ident($mod:ident, ratio);
+    ) => {
+        $(#[$outer])*
+        fn $fn(x: f64) -> f64 {
+            $crate::approximations::piecewise_polynomial_ratio(
+                x,
+                &$mod::NUMERATORS,
+                &$mod::DENOMINATORS,
+                &$mod::SPLITS,
+            ) + if x < k0::SPLITS[1] {
+                $mod::lower(x)
+            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+                $mod::upper(x)
+            } else {
+                0.0
+            }
+        }
+    };
+    (
+        $(#[$outer:meta])*
+        pub fn $fn:ident($mod:ident, ratio);
+    ) => {
+        $(#[$outer])*
+        pub fn $fn(x: f64) -> f64 {
+            $crate::approximations::piecewise_polynomial_ratio(
+                x,
+                &$mod::NUMERATORS,
+                &$mod::DENOMINATORS,
+                &$mod::SPLITS,
+            ) + if x < k0::SPLITS[1] {
+                $mod::lower(x)
+            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+                $mod::upper(x)
+            } else {
+                0.0
+            }
+        }
+    };
+
+    (
+        $(#[$outer:meta])*
+        fn $fn:ident($mod:ident, poly);
+    ) => {
+        $(#[$outer])*
+        fn $fn(x: f64) -> f64 {
+            $crate::approximations::piecewise_polynomial(
+                x,
+                &$mod::NUMERATORS,
+                &$mod::SPLITS,
+            ) + if x < k0::SPLITS[1] {
+                $mod::lower(x)
+            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+                $mod::upper(x)
+            } else {
+                0.0
+            }
+        }
+    };
+    (
+        $(#[$outer:meta])*
+        pub fn $fn:ident($mod:ident, poly);
+    ) => {
+        $(#[$outer])*
+        pub fn $fn(x: f64) -> f64 {
+            $crate::approximations::piecewise_polynomial(
+                x,
+                &$mod::NUMERATORS,
+                &$mod::SPLITS,
+            ) + if x < k0::SPLITS[1] {
+                $mod::lower(x)
+            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+                $mod::upper(x)
+            } else {
+                0.0
+            }
+        }
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
