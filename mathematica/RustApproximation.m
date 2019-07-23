@@ -295,19 +295,21 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
   WriteString[out,"];\n\n"];
 
   (* Write out the denominators *)
-  WriteString[
-    out,
-    StringTemplate["pub const DENOMINATORS: [&[f64]; ``] = [\n"][Length@denominators]
-  ];
-  Do[
+  If[Max[Length /@ denominators] > 0,
     WriteString[
       out,
-      StringTemplate["    &``,\n"][ToRustList[row]]
+      StringTemplate["pub const DENOMINATORS: [&[f64]; ``] = [\n"][Length@denominators]
     ];
-  ,
-    {row,denominators}
+    Do[
+      WriteString[
+        out,
+        StringTemplate["    &``,\n"][ToRustList[row]]
+      ];
+    ,
+      {row,denominators}
+    ];
+    WriteString[out,"];\n\n"];
   ];
-  WriteString[out,"];\n\n"];
 
   (* Write the splits *)
   WriteString[
@@ -322,7 +324,6 @@ ApproximationToRust[f_Function, out_OutputStream] := Module[
 ];
 Protect[PiecewiseMiniMax];
 
-(* ::Input::Initialization:: *)
 ClearAll[ApproximationToRust];
 ApproximationToRust[f_Function, out_OutputStream] := Module[
   {
