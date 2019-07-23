@@ -289,58 +289,37 @@ mod tests {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod benches {
+    use std::f64::consts::PI;
     use test::{black_box, Bencher};
 
-    use super::tests::COEFFICIENTS;
-
     #[bench]
-    fn poly_9(b: &mut Bencher) {
+    fn poly_1(b: &mut Bencher) {
+        let c: Vec<_> = (0..1).map(|i| i as f64).collect();
         b.iter(|| {
-            for x in -100..100 {
-                let x = x as f64;
-                black_box(super::polynomial(x, &COEFFICIENTS));
-            }
+            black_box(super::polynomial(PI, &c));
         })
     }
 
     #[bench]
-    fn ratio_0_0(b: &mut Bencher) {
+    fn poly_10(b: &mut Bencher) {
+        let c: Vec<_> = (0..10).map(|i| i as f64).collect();
         b.iter(|| {
-            for x in -100..100 {
-                let x = x as f64;
-                black_box(super::polynomial_ratio(x, &[], &[]));
-            }
+            black_box(super::polynomial(PI, &c));
         })
     }
 
     #[bench]
-    fn ratio_9_0(b: &mut Bencher) {
+    fn poly_100(b: &mut Bencher) {
+        let c: Vec<_> = (0..100).map(|i| i as f64).collect();
         b.iter(|| {
-            for x in -100..100 {
-                let x = x as f64;
-                black_box(super::polynomial_ratio(x, &COEFFICIENTS, &[]));
-            }
+            black_box(super::polynomial(PI, &c));
         })
     }
-
     #[bench]
-    fn ratio_0_9(b: &mut Bencher) {
+    fn poly_1000(b: &mut Bencher) {
+        let c: Vec<_> = (0..1000).map(|i| i as f64).collect();
         b.iter(|| {
-            for x in -100..100 {
-                let x = x as f64;
-                black_box(super::polynomial_ratio(x, &[], &COEFFICIENTS));
-            }
+            black_box(super::polynomial(PI, &c));
         })
     }
-
-    #[bench]
-    fn ratio_9_9(b: &mut Bencher) {
-        b.iter(|| {
-            for x in -100..100 {
-                let x = x as f64;
-                black_box(super::polynomial_ratio(x, &COEFFICIENTS, &COEFFICIENTS));
-            }
-        })
-    }
-
 }
