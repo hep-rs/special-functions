@@ -239,7 +239,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k0(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -254,7 +254,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k1(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -269,7 +269,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k2(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -284,7 +284,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k3(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -299,7 +299,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k4(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -314,7 +314,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k5(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -329,7 +329,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k6(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -344,7 +344,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k7(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -359,7 +359,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k8(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -374,7 +374,7 @@ mod bench {
             for &(x, v) in &data {
                 if !v.is_nan() {
                     let n = super::k9(x);
-                    approx_eq(n, v, 10.0, 0.0);
+                    test::black_box((x, v, n));
                 }
             }
         });
@@ -389,7 +389,7 @@ mod bench {
     //         for &(x, v) in &data {
     //             if !v.is_nan() {
     //                 let n = super::k1_on_k2(x);
-    //                 approx_eq(n, v, 11.0, 0.0);
+    //                 test::black_box((x, v, n));
     //             }
     //         }
     //     });
