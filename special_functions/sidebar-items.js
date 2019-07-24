@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["approximations","Approximations"]]});
+initSidebarItems({"macro":[["approx_fn","Create a function from a module containing all the information for the split."]],"mod":[["approximations","Approximations"],["basic","Basic functions."],["bessel","Bessel functions"],["polylog","Polylogarithms functions"]]});
