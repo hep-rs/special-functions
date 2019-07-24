@@ -147,6 +147,15 @@ pub fn chebyshev(x: f64, c: &[f64], a: f64, b: f64) -> f64 {
     }
 }
 
+/// Evaluates an arbitrary piecewise Chebyshev function at a particular point.
+///
+/// The splits divide the domain in closed-open intervals (except for the last
+/// one which is closed-closed) and thus the length of `splits` must be one
+/// longer than the two list of coefficient arrays.  The [`chebyshev`] function
+/// used within each interval.
+///
+/// For values outside the domain of the piecewise polynomial, the first or last
+/// polynomial is used for extrapolation.
 pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
     debug_assert_eq!(
         splits.len(),
@@ -195,6 +204,30 @@ pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
     }
 }
 
+/// Create a function from a module containing all the information for the split.
+///
+/// The module must contain the following:
+///
+/// - `fn lower(x: f64) -> f64` which provides a (generally Taylor series)
+///   approximation near the lower bound of the domain.  This function is used
+///   for values of `x` smaller than the first split.
+/// - `fn upper(x: f64) -> f64` which provides a (generally Taylor series)
+///   approximation near the upper bound of the domain.  This functinon is used
+///   for values of `x` larger than the last split.
+/// - `const COEFFICIENTS: &[...]` contains a list of list of coefficients, as
+///   used in the relevant `piecewise` function.
+/// - `const SPLITS: &[f64]` contains a list of splits.  Within the splits, the
+///   relevant `piecewise` function is used.
+///
+/// The macro is used as:
+///
+/// ```ignore
+/// approx_fn! {
+///     fn foo(mod = path::to::module, type = approx_type);
+/// }`
+///
+/// The `approx_type` can be either one of `polynomial`, `polynomial_ratio` or
+/// `chebyshev`.
 #[macro_export]
 macro_rules! approx_fn {
     (
