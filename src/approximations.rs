@@ -2,29 +2,24 @@
 
 /// Evaluates an arbitrary single-variable polynomial at a particular point.
 ///
-/// Given an array of coefficients \\(a = [a_0, a_1, \dots, a_n]\\), evaluates
+/// Given an array of coefficients \\(c = [c_0, c_1, \dots, c_n]\\), evaluates
 /// the polynomial
-/// \\[
-///     p(x) = a_0 + a_1 x + a_2 x\^2 + \dots + a_n x\^n
-/// \\]
+/// \\begin{equation}
+///     p(x) = c_0 + c_1 x + c_2 x\^2 + \dots + c_n x\^n
+/// \\end{equation}
 /// at the specified value of \\(x\\).
 ///
 /// If the list of coefficients is empty, the function returns `0.0`.
 ///
-/// # Warning
-///
 /// This function does not perform any checks on the coefficients.
 #[inline]
-pub fn polynomial(x: f64, a: &[f64]) -> f64 {
-    // This expands the polynomial as:
+pub fn polynomial(x: f64, c: &[f64]) -> f64 {
+    // The Clenshaw algorithm relation is:
     //
-    // > a0 + x * (a1 + x * (a2 + x * (...)))
+    // >b(k, x) := a(k) + x b(k + 1, x)
     //
-    // This is significantly more efficient than computing the mathematically
-    // equivalent
-    //
-    // > a0 + a1 * x + a2 * x.powi(2) + ...
-    a.iter().rev().fold(0.0, |ans, &ai| ans.mul_add(x, ai))
+    // with the final value being simply b(0, x).
+    c.iter().rev().fold(0.0, |ans, &ci| ans.mul_add(x, ci))
 }
 
 /// Evaluates an arbitrary piecewise single-variable polynomial at a particular
@@ -35,34 +30,32 @@ pub fn polynomial(x: f64, a: &[f64]) -> f64 {
 /// longer than the list of coefficient arrays.  The [`polynomial`] function
 /// used within each interval.
 ///
-/// # Warning
-///
 /// For values outside the domain of the piecewise polynomial, the first or last
 /// polynomial is used for extrapolation.
-pub fn piecewise_polynomial(x: f64, a: &[&[f64]], splits: &[f64]) -> f64 {
+pub fn piecewise_polynomial(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
     debug_assert_eq!(
         splits.len(),
-        a.len() + 1,
+        c.len() + 1,
         "The number of splits must be one longer than number of coefficient arrays."
     );
 
     unsafe {
         match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
-            Ok(idx) if idx == splits.len() - 1 => polynomial(x, a.get_unchecked(idx - 2)),
-            Ok(idx) => polynomial(x, a.get_unchecked(idx)),
+            Ok(idx) if idx == splits.len() - 1 => polynomial(x, c.get_unchecked(idx - 2)),
+            Ok(idx) => polynomial(x, c.get_unchecked(idx)),
             Err(0) => {
                 if cfg!(debug_assertions) {
                     log::warn!("Extrapolation is being used.");
                 }
-                polynomial(x, a.get_unchecked(0))
+                polynomial(x, c.get_unchecked(0))
             }
             Err(idx) if idx == splits.len() => {
                 if cfg!(debug_assertions) {
                     log::warn!("Extrapolation is being used.");
                 }
-                polynomial(x, a.get_unchecked(idx - 2))
+                polynomial(x, c.get_unchecked(idx - 2))
             }
-            Err(idx) => polynomial(x, a.get_unchecked(idx - 1)),
+            Err(idx) => polynomial(x, c.get_unchecked(idx - 1)),
         }
     }
 }
@@ -71,15 +64,11 @@ pub fn piecewise_polynomial(x: f64, a: &[&[f64]], splits: &[f64]) -> f64 {
 /// point.  The coefficient of the polynomial in the numerator are given in `a`,
 /// and `b` for the denominator.
 ///
-/// # Implementation Details
-///
 /// If the array of denominator coefficients is empty, the denominator is
 /// ignored entirely (or equivalently, is treated as being equal to `1.0`).
 ///
-/// # Warning
-///
 /// This function does not perform any checks on the coefficients.
-pub fn polynomial_ratio(x: f64, a: &[f64], b: &[f64]) -> f64 {
+pub fn polynomial_ratio(x: f64, (a, b): (&[f64], &[f64])) -> f64 {
     if b.is_empty() {
         polynomial(x, a)
     } else {
@@ -95,41 +84,113 @@ pub fn polynomial_ratio(x: f64, a: &[f64], b: &[f64]) -> f64 {
 /// longer than the two list of coefficient arrays.  The [`polynomial_ratio`]
 /// function used within each interval.
 ///
-/// # Warning
-///
 /// For values outside the domain of the piecewise polynomial, the first or last
 /// polynomial is used for extrapolation.
-pub fn piecewise_polynomial_ratio(x: f64, a: &[&[f64]], b: &[&[f64]], splits: &[f64]) -> f64 {
-    debug_assert_eq!(
-        a.len(),
-        b.len(),
-        "The list of numerator and denominator coefficient arrays must be equal in length."
-    );
+pub fn piecewise_polynomial_ratio(x: f64, c: &[(&[f64], &[f64])], splits: &[f64]) -> f64 {
     debug_assert_eq!(
         splits.len(),
-        a.len() + 1,
+        c.len() + 1,
         "The number of splits must be one longer than number of coefficient arrays."
     );
 
     unsafe {
         match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
-            Ok(idx) if idx == splits.len() - 1 => {
-                polynomial_ratio(x, a.get_unchecked(idx - 2), b.get_unchecked(idx - 2))
-            }
-            Ok(idx) => polynomial_ratio(x, a.get_unchecked(idx), b.get_unchecked(idx)),
+            Ok(idx) if idx == splits.len() - 1 => polynomial_ratio(x, *c.get_unchecked(idx - 2)),
+            Ok(idx) => polynomial_ratio(x, *c.get_unchecked(idx)),
             Err(0) => {
                 if cfg!(debug_assertions) {
                     log::warn!("Extrapolation is being used.");
                 }
-                polynomial_ratio(x, a.get_unchecked(0), b.get_unchecked(0))
+                polynomial_ratio(x, *c.get_unchecked(0))
             }
             Err(idx) if idx == splits.len() => {
                 if cfg!(debug_assertions) {
                     log::warn!("Extrapolation is being used.");
                 }
-                polynomial_ratio(x, a.get_unchecked(idx - 2), b.get_unchecked(idx - 2))
+                polynomial_ratio(x, *c.get_unchecked(idx - 2))
             }
-            Err(idx) => polynomial_ratio(x, a.get_unchecked(idx - 1), b.get_unchecked(idx - 1)),
+            Err(idx) => polynomial_ratio(x, *c.get_unchecked(idx - 1)),
+        }
+    }
+}
+
+/// Evaluates a series of Chebyshev functions at x.
+///
+/// The argument should lie in the interval `[a, b]` (the rescaling to the
+/// Chebyshev functions domain is done by the function), though this is *not*
+/// checked by the function, allowing for extrapolation outside of the domain.
+///
+/// If the list of coefficients is empty, `0.0` is returned.
+///
+/// This function does not perform any checks on the coefficients.
+pub fn chebyshev(x: f64, c: &[f64], a: f64, b: f64) -> f64 {
+    if let Some(c0) = c.first() {
+        let x = (2.0 * x - a - b) / (b - a);
+        let x2 = 2.0 * x;
+
+        // The Clenshaw algorithm relation is:
+        //
+        // > b(k, x) := c(k) + 2 x b(k + 1, x) - b(k + 2, x)
+        //
+        // with the final value being
+        //
+        // c(0) + x * b(1, x) - b(2, x)
+        let (b1, b2) = c
+            .iter()
+            .skip(1)
+            .rev()
+            .fold((0.0, 0.0), |(b, bp), &ci| (ci + x2 * b - bp, b));
+
+        c0 + x * b1 - b2
+    } else {
+        0.0
+    }
+}
+
+pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
+    debug_assert_eq!(
+        splits.len(),
+        c.len() + 1,
+        "The number of splits must be one longer than number of coefficient arrays."
+    );
+
+    unsafe {
+        match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
+            Ok(idx) if idx == splits.len() - 1 => chebyshev(
+                x,
+                c.get_unchecked(idx - 2),
+                *splits.get_unchecked(idx - 2),
+                x,
+            ),
+            Ok(idx) => chebyshev(x, c.get_unchecked(idx), *splits.get_unchecked(idx - 1), x),
+            Err(0) => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                chebyshev(
+                    x,
+                    c.get_unchecked(0),
+                    *splits.get_unchecked(0),
+                    *splits.get_unchecked(1),
+                )
+            }
+            Err(idx) if idx == splits.len() => {
+                if cfg!(debug_assertions) {
+                    log::warn!("Extrapolation is being used.");
+                }
+                chebyshev(
+                    x,
+                    c.get_unchecked(idx - 2),
+                    *splits.get_unchecked(idx - 2),
+                    *splits.get_unchecked(idx - 1),
+                )
+            }
+            Err(idx) => chebyshev(
+                x,
+                c.get_unchecked(idx - 1),
+                *splits.get_unchecked(idx - 1),
+                *splits.get_unchecked(idx),
+            ),
         }
     }
 }
@@ -138,80 +199,93 @@ pub fn piecewise_polynomial_ratio(x: f64, a: &[&[f64]], b: &[&[f64]], splits: &[
 macro_rules! approx_fn {
     (
         $(#[$outer:meta])*
-        fn $fn:ident($mod:ident, ratio);
+        fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
     ) => {
-        $(#[$outer])*
-        fn $fn(x: f64) -> f64 {
-            $crate::approximations::piecewise_polynomial_ratio(
-                x,
-                &$mod::NUMERATORS,
-                &$mod::DENOMINATORS,
-                &$mod::SPLITS,
-            ) + if x < k0::SPLITS[1] {
-                $mod::lower(x)
-            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
-                $mod::upper(x)
-            } else {
-                0.0
-            }
-        }
-    };
-    (
-        $(#[$outer:meta])*
-        pub fn $fn:ident($mod:ident, ratio);
-    ) => {
-        $(#[$outer])*
-        pub fn $fn(x: f64) -> f64 {
-            $crate::approximations::piecewise_polynomial_ratio(
-                x,
-                &$mod::NUMERATORS,
-                &$mod::DENOMINATORS,
-                &$mod::SPLITS,
-            ) + if x < k0::SPLITS[1] {
-                $mod::lower(x)
-            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
-                $mod::upper(x)
-            } else {
-                0.0
-            }
+        approx_fn!{
+            $(#[$outer])*
+            () $fn(mod = $mod, type = $t);
         }
     };
 
     (
         $(#[$outer:meta])*
-        fn $fn:ident($mod:ident, poly);
+        pub fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
+    ) => {
+        approx_fn!{
+            $(#[$outer])*
+            (pub) $fn(mod = $mod, type = $t);
+        }
+    };
+
+    (
+        $(#[$outer:meta])*
+        pub(crate) fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
+    ) => {
+        approx_fn!{
+            $(#[$outer])*
+            (pub(crate)) $fn(mod = $mod, type = $t);
+        }
+    };
+
+    // Polynomial approximation
+    (
+        $(#[$outer:meta])*
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = polynomial);
     ) => {
         $(#[$outer])*
-        fn $fn(x: f64) -> f64 {
-            $crate::approximations::piecewise_polynomial(
-                x,
-                &$mod::NUMERATORS,
-                &$mod::SPLITS,
-            ) + if x < k0::SPLITS[1] {
+        $($vis)* fn $fn(x: f64) -> f64 {
+            if x < *$mod::SPLITS.first().unwrap() {
                 $mod::lower(x)
-            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+            } else if x > *$mod::SPLITS.last().unwrap() {
                 $mod::upper(x)
             } else {
-                0.0
+                $crate::approximations::piecewise_polynomial(
+                    x,
+                    &$mod::COEFFICIENTS,
+                    &$mod::SPLITS,
+                )
             }
         }
     };
+
+    // Polynomial ratio approximation
     (
         $(#[$outer:meta])*
-        pub fn $fn:ident($mod:ident, poly);
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = ratio);
     ) => {
         $(#[$outer])*
-        pub fn $fn(x: f64) -> f64 {
-            $crate::approximations::piecewise_polynomial(
-                x,
-                &$mod::NUMERATORS,
-                &$mod::SPLITS,
-            ) + if x < k0::SPLITS[1] {
+        $($vis)* fn $fn(x: f64) -> f64 {
+            if x < *$mod::SPLITS.first().unwrap() {
                 $mod::lower(x)
-            } else if x > $mod::SPLITS[$mod::SPLITS.len() - 2] {
+            } else if x > *$mod::SPLITS.last().unwrap() {
                 $mod::upper(x)
             } else {
-                0.0
+                $crate::approximations::piecewise_polynomial_ratio(
+                    x,
+                    &$mod::COEFFICIENTS,
+                    &$mod::SPLITS,
+                )
+            }
+        }
+    };
+
+    // Chebyshev approximation
+    (
+        $(#[$outer:meta])*
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = chebyshev);
+    ) => {
+        $(#[$outer])*
+        $($vis)* fn $fn(x: f64) -> f64 {
+            if x < *$mod::SPLITS.first().unwrap() {
+                $mod::lower(x)
+            } else if x > *$mod::SPLITS.last().unwrap() {
+                $mod::upper(x)
+            } else {
+                $crate::approximations::piecewise_chebyshev(
+                    x,
+                    &$mod::COEFFICIENTS,
+                    &$mod::SPLITS,
+                )
             }
         }
     };
@@ -221,69 +295,147 @@ macro_rules! approx_fn {
 mod tests {
     use crate::utilities::test::*;
 
-    pub(crate) const COEFFICIENTS: [f64; 9] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
+    pub(crate) const COEFFICIENTS: [f64; 10] = [
+        -0.0699331, 0.632915, 0.909728, 0.890992, 0.119426, 0.0752009, 0.223267, 0.185299,
+        0.0170517, -0.640204,
+    ];
 
-    fn f(x: f64) -> f64 {
-        1.0 + 2.0 * x
-            + 3.0 * x.powi(2)
-            + 4.0 * x.powi(3)
-            + 5.0 * x.powi(4)
-            + 6.0 * x.powi(5)
-            + 7.0 * x.powi(6)
-            + 8.0 * x.powi(7)
-            + 9.0 * x.powi(8)
-    }
-
-    macro_rules! poly_test {
-        ($name:ident, $n:expr, $f:expr) => {
-            #[test]
-            fn $name() {
-                for x in -100..100 {
-                    let x = x as f64;
-                    approx_eq(super::polynomial(x, &COEFFICIENTS[..$n]), $f(x), 14.0, 0.0);
-                }
+    fn f(n: usize, x: f64) -> f64 {
+        match n {
+            0 => 0.0,
+            1 => -0.0699331,
+            2 => 0.632915 * x - 0.0699331,
+            3 => 0.909728 * x.powi(2) + 0.632915 * x - 0.0699331,
+            4 => 0.890992 * x.powi(3) + 0.909728 * x.powi(2) + 0.632915 * x - 0.0699331,
+            5 => {
+                0.119426 * x.powi(4) + 0.890992 * x.powi(3) + 0.909728 * x.powi(2) + 0.632915 * x
+                    - 0.0699331
             }
-        };
+            6 => {
+                0.0752009 * x.powi(5)
+                    + 0.119426 * x.powi(4)
+                    + 0.890992 * x.powi(3)
+                    + 0.909728 * x.powi(2)
+                    + 0.632915 * x
+                    - 0.0699331
+            }
+            7 => {
+                0.223267 * x.powi(6)
+                    + 0.0752009 * x.powi(5)
+                    + 0.119426 * x.powi(4)
+                    + 0.890992 * x.powi(3)
+                    + 0.909728 * x.powi(2)
+                    + 0.632915 * x
+                    - 0.0699331
+            }
+            8 => {
+                0.185299 * x.powi(7)
+                    + 0.223267 * x.powi(6)
+                    + 0.0752009 * x.powi(5)
+                    + 0.119426 * x.powi(4)
+                    + 0.890992 * x.powi(3)
+                    + 0.909728 * x.powi(2)
+                    + 0.632915 * x
+                    - 0.0699331
+            }
+            9 => {
+                0.0170517 * x.powi(8)
+                    + 0.185299 * x.powi(7)
+                    + 0.223267 * x.powi(6)
+                    + 0.0752009 * x.powi(5)
+                    + 0.119426 * x.powi(4)
+                    + 0.890992 * x.powi(3)
+                    + 0.909728 * x.powi(2)
+                    + 0.632915 * x
+                    - 0.0699331
+            }
+            10 => {
+                -0.640204 * x.powi(9)
+                    + 0.0170517 * x.powi(8)
+                    + 0.185299 * x.powi(7)
+                    + 0.223267 * x.powi(6)
+                    + 0.0752009 * x.powi(5)
+                    + 0.119426 * x.powi(4)
+                    + 0.890992 * x.powi(3)
+                    + 0.909728 * x.powi(2)
+                    + 0.632915 * x
+                    - 0.0699331
+            }
+            _ => unimplemented!(),
+        }
     }
 
-    poly_test!(len_0, 0, |_| 0.0);
-    poly_test!(len_1, 1, |_| 1.0);
-    poly_test!(len_2, 2, |x| 1.0 + 2.0 * x);
-    poly_test!(len_9, 9, f);
+    #[test]
+    fn polynomial() {
+        for n in 0..=COEFFICIENTS.len() {
+            for x in -100..=100 {
+                let x = x as f64;
+                approx_eq(super::polynomial(x, &COEFFICIENTS[..n]), f(n, x), 10.0, 0.0);
+            }
+        }
+    }
 
-    macro_rules! ratio_test {
-        ($name:ident, $n:expr, $m:expr, $f:expr) => {
-            #[test]
-            fn $name() {
-                for x in -100..100 {
+    #[test]
+    fn ratio() {
+        for n in 0..=COEFFICIENTS.len() {
+            for m in 1..=COEFFICIENTS.len() {
+                for x in -100..=100 {
                     let x = x as f64;
                     approx_eq(
-                        super::polynomial_ratio(x, &COEFFICIENTS[..$n], &COEFFICIENTS[..$m]),
-                        $f(x),
-                        14.0,
+                        super::polynomial_ratio(x, (&COEFFICIENTS[..n], &COEFFICIENTS[..m])),
+                        f(n, x) / f(m, x),
+                        10.0,
                         0.0,
                     );
                 }
             }
-        };
+        }
     }
 
-    ratio_test!(ratio_0_0, 0, 0, |_| 0.0);
-    ratio_test!(ratio_1_0, 1, 0, |_| 1.0);
-    ratio_test!(ratio_2_0, 2, 0, |x| 1.0 + 2.0 * x);
-    ratio_test!(ratio_9_0, 9, 0, f);
-    ratio_test!(ratio_0_1, 0, 1, |_| 0.0);
-    ratio_test!(ratio_1_1, 1, 1, |_| 1.0);
-    ratio_test!(ratio_2_1, 2, 1, |x| 1.0 + 2.0 * x);
-    ratio_test!(ratio_9_1, 9, 1, f);
-    ratio_test!(ratio_0_2, 0, 2, |_| 0.0);
-    ratio_test!(ratio_1_2, 1, 2, |x| 1.0 / (1.0 + 2.0 * x));
-    ratio_test!(ratio_2_2, 2, 2, |_| 1.0);
-    ratio_test!(ratio_9_2, 9, 2, |x| f(x) / (1.0 + 2.0 * x));
-    ratio_test!(ratio_0_9, 0, 9, |_| 0.0);
-    ratio_test!(ratio_1_9, 1, 9, |x| 1.0 / f(x));
-    ratio_test!(ratio_2_9, 2, 9, |x| (1.0 + 2.0 * x) / f(x));
-    ratio_test!(ratio_9_9, 9, 9, |_| 1.0);
+    fn f_chebyshev(n: usize, x: f64) -> f64 {
+        match n {
+            0 => 1.0,
+            1 => x,
+            2 => 2.0 * x.powi(2) - 1.0,
+            3 => 4.0 * x.powi(3) - 3.0 * x,
+            4 => 8.0 * x.powi(4) - 8.0 * x.powi(2) + 1.0,
+            5 => 16.0 * x.powi(5) - 20.0 * x.powi(3) + 5.0 * x,
+            6 => 32.0 * x.powi(6) - 48.0 * x.powi(4) + 18.0 * x.powi(2) - 1.0,
+            7 => 64.0 * x.powi(7) - 112.0 * x.powi(5) + 56.0 * x.powi(3) - 7.0 * x,
+            8 => 128.0 * x.powi(8) - 256.0 * x.powi(6) + 160.0 * x.powi(4) - 32.0 * x.powi(2) + 1.0,
+            9 => {
+                256.0 * x.powi(9) - 576.0 * x.powi(7) + 432.0 * x.powi(5) - 120.0 * x.powi(3)
+                    + 9.0 * x
+            }
+            10 => {
+                512.0 * x.powi(10) - 1280.0 * x.powi(8) + 1120.0 * x.powi(6) - 400.0 * x.powi(4)
+                    + 50.0 * x.powi(2)
+                    - 1.0
+            }
+            _ => unimplemented!(),
+        }
+    }
+
+    #[test]
+    fn chebyshev() {
+        for n in 0..=10 {
+            let c: Vec<_> = std::iter::repeat(0.0)
+                .take(n)
+                .chain(std::iter::repeat(1.0).take(1))
+                .collect();
+
+            for x in -100..=100 {
+                let x = (x as f64) / 100.0;
+                approx_eq(
+                    super::chebyshev(x, &c, -1.0, 1.0),
+                    f_chebyshev(n, x),
+                    10.0,
+                    0.0,
+                );
+            }
+        }
+    }
+
 }
 
 #[cfg(feature = "nightly")]
@@ -320,6 +472,38 @@ mod benches {
         let c: Vec<_> = (0..1000).map(|i| i as f64).collect();
         b.iter(|| {
             black_box(super::polynomial(PI, &c));
+        })
+    }
+
+    #[bench]
+    fn chebyshev_1(b: &mut Bencher) {
+        let c: Vec<_> = (0..1).map(|i| i as f64).collect();
+        b.iter(|| {
+            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
+        })
+    }
+
+    #[bench]
+    fn chebyshev_10(b: &mut Bencher) {
+        let c: Vec<_> = (0..10).map(|i| i as f64).collect();
+        b.iter(|| {
+            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
+        })
+    }
+
+    #[bench]
+    fn chebyshev_100(b: &mut Bencher) {
+        let c: Vec<_> = (0..100).map(|i| i as f64).collect();
+        b.iter(|| {
+            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
+        })
+    }
+
+    #[bench]
+    fn chebyshev_1000(b: &mut Bencher) {
+        let c: Vec<_> = (0..1000).map(|i| i as f64).collect();
+        b.iter(|| {
+            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
         })
     }
 }
