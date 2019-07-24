@@ -5,8 +5,7 @@ Notebook[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"$MaxExtraPrecision", "=", "1000"}], ";"}]], "Input",
- InitializationCell->
-  True],
+ InitializationCell->True],
 
 Cell[CellGroupData[{
 
@@ -32,6 +31,8 @@ Cell["Bessel", "Section"],
 Cell[CellGroupData[{
 
 Cell["BesselK", "Subsection"],
+
+Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
@@ -59,7 +60,7 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"Table", "[", "\[IndentingNewLine]",
        RowBox[{
-        RowBox[{"SetPrecision", "[",
+        RowBox[{"N", "[",
          RowBox[{
           RowBox[{"{",
            RowBox[{"x", ",",
@@ -89,11 +90,14 @@ Cell[BoxData[{
       RowBox[{"0", ",", "9"}], "]"}]}], "}"}]}], "\[IndentingNewLine]",
   "]"}]}], "Input"]
 }]]
+}]]
 }]],
 
 Cell[CellGroupData[{
 
 Cell["PolyLog", "Section"],
+
+Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
@@ -121,7 +125,7 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"Table", "[", "\[IndentingNewLine]",
        RowBox[{
-        RowBox[{"SetPrecision", "[",
+        RowBox[{"N", "[",
          RowBox[{
           RowBox[{"{",
            RowBox[{"x", ",",
@@ -158,6 +162,110 @@ Cell[BoxData[{
      RowBox[{"Range", "[",
       RowBox[{"0", ",", "9"}], "]"}]}], "}"}]}], "\[IndentingNewLine]",
   "]"}]}], "Input"]
+}]]
+}]],
+
+Cell[CellGroupData[{
+
+Cell["Particle Statistics", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"CreateDirectory", "[",
+    RowBox[{
+     RowBox[{"FileNameJoin", "[",
+      RowBox[{"{",
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",",
+        "\"\<../tests/data/particle_statistics/\>\""}], "}"}], "]"}], ",",
+     RowBox[{"CreateIntermediateDirectories", "\[Rule]", "True"}]}], "]"}],
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"Export", "[", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{"FileNameJoin", "[",
+     RowBox[{"{",
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",",
+       "\"\<../tests/data/particle_statistics/bose_einstein.csv\>\""}], "}"}],
+      "]"}], ",", "\[IndentingNewLine]",
+    RowBox[{
+     RowBox[{"Table", "[", "\[IndentingNewLine]",
+      RowBox[{
+       RowBox[{"N", "[",
+        RowBox[{
+         RowBox[{"{",
+          RowBox[{"x", ",",
+           RowBox[{"PolyLog", "[",
+            RowBox[{"3", ",",
+             RowBox[{"Exp", "[",
+              RowBox[{"-", "x"}], "]"}]}], "]"}]}], "}"}], ",",
+         "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
+       RowBox[{"{",
+        RowBox[{"x", ",",
+         RowBox[{"10", "^",
+          RowBox[{"Subdivide", "[",
+           RowBox[{
+            RowBox[{"-", "10"}], ",", "10", ",", "1000"}], "]"}]}]}], "}"}]}],
+       "\[IndentingNewLine]", "]"}], "//.",
+     RowBox[{"{", "\[IndentingNewLine]",
+      RowBox[{
+       RowBox[{"x_", "\[RuleDelayed]",
+        RowBox[{"0", "/;",
+         RowBox[{
+          RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
+        "\[IndentingNewLine]",
+       RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
+      "}"}]}]}], "\[IndentingNewLine]", "]"}],
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{"Export", "[", "\[IndentingNewLine]",
+  RowBox[{
+   RowBox[{"FileNameJoin", "[",
+    RowBox[{"{",
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",",
+      "\"\<../tests/data/particle_statistics/fermi_dirac.csv\>\""}], "}"}],
+    "]"}], ",", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{"Table", "[", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{"N", "[",
+       RowBox[{
+        RowBox[{"{",
+         RowBox[{"x", ",",
+          RowBox[{"-",
+           RowBox[{"PolyLog", "[",
+            RowBox[{"3", ",",
+             RowBox[{"-",
+              RowBox[{"Exp", "[", "x", "]"}]}]}], "]"}]}]}], "}"}], ",",
+        "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",",
+        RowBox[{"Join", "[",
+         RowBox[{
+          RowBox[{"-",
+           RowBox[{"10", "^",
+            RowBox[{"Subdivide", "[",
+             RowBox[{"10", ",",
+              RowBox[{"-", "10"}], ",", "500"}], "]"}]}]}], ",",
+          RowBox[{"10", "^",
+           RowBox[{"Subdivide", "[",
+            RowBox[{
+             RowBox[{"-", "10"}], ",", "10", ",", "500"}], "]"}]}]}], "]"}]}],
+        "}"}]}], "\[IndentingNewLine]", "]"}], "//.",
+    RowBox[{"{", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{"x_", "\[RuleDelayed]",
+       RowBox[{"0", "/;",
+        RowBox[{
+         RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
+     "}"}]}]}], "\[IndentingNewLine]", "]"}]}], "Input"]
+}]]
 }]]
 }]
 (* End of Notebook Content *)
