@@ -1,3 +1,5 @@
+#![allow(clippy::all)]
+
 use crate::approximations::polynomial;
 
 pub fn lower(x: f64) -> f64 {

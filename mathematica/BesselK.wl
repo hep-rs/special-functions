@@ -18,7 +18,9 @@ Do[
 
   WriteString[
     output,
-    "use crate::approximations::polynomial;\n\n"
+    "#![allow(clippy::all)]
+
+use crate::approximations::polynomial;\n\n"
   ];
 
   (* Find the series approximation for small x *)
