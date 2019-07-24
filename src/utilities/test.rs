@@ -54,22 +54,19 @@ pub(crate) fn approx_eq(a: f64, b: f64, precision: f64, abs: f64) {
     let a_scaled = a / scale;
     let b_scaled = b / scale;
 
-    let p = (a_scaled - b_scaled).abs();
-    if p <= 10f64.powf(-precision) {
+    let p = -((a_scaled - b_scaled).abs().log10());
+    if p >= precision {
         log::debug!(
             "a ({:e}) and b ({:e}) have the necessary precision ({:.3} ≥ {:.3})",
             a,
             b,
-            -p.log10(),
+            p,
             precision
         );
     } else {
         panic!(
             "a ({:e}) and b ({:e}) do not have the necessary precision ({:.3} !≥ {:.3})",
-            a,
-            b,
-            -p.log10(),
-            precision
+            a, b, p, precision
         )
     }
 }
