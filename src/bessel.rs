@@ -59,9 +59,8 @@ approx_fn! {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::utilities::test::*;
-    use csv;
     use std::f64;
 
     #[test]
