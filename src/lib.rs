@@ -25,6 +25,7 @@ extern crate test;
 
 #[macro_use]
 pub mod approximations;
+pub mod basic;
 pub mod bessel;
 pub mod polylog;
 mod utilities;
