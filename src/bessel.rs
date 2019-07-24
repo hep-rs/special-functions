@@ -15,47 +15,47 @@ mod k9;
 
 approx_fn! {
    #[doc = "Approximation of modified Bessel function \\(K_0(x)\\) for all \\(x > 0\\)."]
-   pub fn k0(k0, poly);
+   (pub) fn k0(mod = k0, type = chebyshev);
 }
 
 approx_fn! {
    #[doc = "Approximation of modified Bessel function \\(K_1(x)\\) for all \\(x > 0\\)."]
-   pub fn k1(k1, poly);
+   (pub) fn k1(mod = k1, type = chebyshev);
 }
 
 approx_fn! {    #[doc = "Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x > 0\\)."]
-    pub fn k2(k2, poly);
+    (pub) fn k2(mod = k2, type = chebyshev);
 }
 
 approx_fn! {     #[doc = "Approximation of modified Bessel function \\(K_3(x)\\) for all \\(x > 0\\)."]
-   pub fn k3(k3, poly);
+   (pub) fn k3(mod = k3, type = chebyshev);
 }
 
 approx_fn! { #[doc = "Approximation of modified Bessel function \\(K_4(x)\\) for all \\(x > 0\\)."]
-   pub fn k4(k4, poly);
+   (pub) fn k4(mod = k4, type = chebyshev);
 }
 
 approx_fn! { #[doc = "Approximation of modified Bessel function \\(K_5(x)\\) for all \\(x > 0\\)."]
-   pub fn k5(k5, poly);
+   (pub) fn k5(mod = k5, type = chebyshev);
 }
 
 approx_fn! {     #[doc = "Approximation of modified Bessel function \\(K_6(x)\\) for all \\(x > 0\\)."]
-   pub fn k6(k6, poly);
+   (pub) fn k6(mod = k6, type = chebyshev);
 }
 
 approx_fn! {
    #[doc = "Approximation of modified Bessel function \\(K_7(x)\\) for all \\(x > 0\\)."]
-   pub fn k7(k7, poly);
+   (pub) fn k7(mod = k7, type = chebyshev);
 }
 
 approx_fn! {
    #[doc = "Approximation of modified Bessel function \\(K_8(x)\\) for all \\(x > 0\\)."]
-   pub fn k8(k8, poly);
+   (pub) fn k8(mod = k8, type = chebyshev);
 }
 
 approx_fn! {
    #[doc = "Approximation of modified Bessel function \\(K_9(x)\\) for all \\(x > 0\\)."]
-   pub fn k9(k9, poly);
+   (pub) fn k9(mod = k9, type = chebyshev);
 }
 
 #[cfg(test)]
@@ -72,7 +72,6 @@ mod test {
             let (x, v): (f64, f64) = result.unwrap();
 
             if !v.is_nan() {
-                println!("x = {}", x);
                 let n = super::k0(x);
                 approx_eq(n, v, 10.0, 0.0);
             }
@@ -226,8 +225,6 @@ mod test {
 #[cfg(feature = "nightly")]
 #[cfg(test)]
 mod bench {
-    use crate::utilities::test::*;
-    use csv;
     use test::Bencher;
 
     #[bench]

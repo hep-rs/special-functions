@@ -23,7 +23,8 @@
 #[cfg(feature = "nightly")]
 extern crate test;
 
+#[macro_use]
 pub mod approximations;
-// pub mod bessel;
-// pub mod polylog;
+pub mod bessel;
+pub mod polylog;
 mod utilities;
