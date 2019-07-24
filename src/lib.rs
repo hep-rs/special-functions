@@ -27,5 +27,6 @@ extern crate test;
 pub mod approximations;
 pub mod basic;
 pub mod bessel;
+pub mod particle_statistics;
 pub mod polylog;
 mod utilities;

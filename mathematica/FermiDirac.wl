@@ -16,56 +16,76 @@ We neglect the division by (Pi^2 * β^3)
 
 $Assumptions = x \[Element] Reals;
 
-approx = PiecewiseMiniMax[
-  - PolyLog[3, - Exp[x]],
-  {x, - Infinity, Infinity},
-  "StartGuess" -> -2,
-  "EndGuess" -> 2
-];
-
-lowerExp = CoefficientList[approx[[2, 1, 1, 1]], Exp[x]];
-upperExp = CoefficientList[approx[[2, 1, 2, 1]], Exp[-x]];
-upperC = CoefficientList[upperExp[[1]], x];
-upperExp = Rest@upperExp;
-
-approx[[2, 1, 1, 1]] = 0;
-approx[[2, 1, 2, 1]] = 0;
-
-WriteString[output,
-  StringTemplate["use crate::approximations::polynomial;
-
-pub fn lower(x: f64) -> f64 {
-    polynomial(
-        x.exp(),
-        &`lowerExp`
-    )
-}
-
-pub fn upper(x: f64) -> f64 {
-    polynomial(
-        (-x).exp(),
-        &`upperExp`,
-    ) + polynomial(
-        x,
-        &`upperC`
-    )
-}
-
-"][<|
-  "lowerExp" -> ToRustList[lowerExp],
-  "upperExp" -> ToRustList[upperExp],
-  "upperC" -> ToRustList[upperC]
-  |>]
-]
-
-DumpSave[
-  FileBaseName[$InputFileName] <> ".mx",
-  approx
-];
-
+Print["Approximating Bose-Einstein statistic."];
+f[x_] := -PolyLog[3, - Exp[x]];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/data/fermi_dirac.rs"
+  "../src/particle_statistics/fermi_dirac.rs"
   }]];
-ApproximationToRust[approx, output];
+
+WriteString[
+  output,
+  "#![allow(clippy::all)]
+
+use crate::approximations::polynomial;\n\n"
+];
+
+lower = Normal@Series[f[x], {x, -Infinity, 10}];
+xLower = x /. FindRoot[
+  Abs[lower / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+  {x, -2, -Infinity, Infinity},
+  WorkingPrecision -> 5 $MachinePrecision,
+  MaxIterations -> Infinity
+];
+Print[StringTemplate["Lower approximation valid from `` to ``."][-Infinity, N[xLower, 4]]];
+
+(* Write out the approximation valid for small x. *)
+lower = CoefficientList[lower, Exp[x]];
+WriteString[
+  output,
+  StringTemplate["pub fn lower(x: f64) -> f64 {
+    polynomial(
+        x.exp(),
+        &`lower`,
+    )
+}\n\n"][<|
+  "lower" -> ToRustList@lower|>]];
+
+(* Find the series approximation for large x *)
+upper = Normal@Series[f[x], {x, Infinity, 10}];
+xUpper = x /. FindRoot[
+  Abs[upper / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+  {x, 2, -Infinity, Infinity},
+  WorkingPrecision -> 5 $MachinePrecision,
+  MaxIterations -> Infinity
+              ];
+Print[StringTemplate["Upper approximation valid from `` to ``."][N[xUpper, 4], Infinity]];
+
+(* Write out the approximation valid for large x. *)
+upper = CoefficientList[upper, Exp[-x]];
+upperPoly = CoefficientList[upper[[1]], x];
+upperExp = {0} ~Join~ Rest@upper;
+WriteString[
+  output,
+  StringTemplate["pub fn upper(x: f64) -> f64 {
+    polynomial(
+        x,
+        &`upperPoly`
+    )
+    + polynomial(
+        (-x).exp(),
+        &`upperExp`
+    )
+}\n\n"][<|
+  "upperPoly" -> ToRustList@upperPoly,
+  "upperExp" -> ToRustList@upperExp
+  |>]
+];
+
+(* Subdivide the remaining interval using Chebyshev polynomials *)
+splits = ChebyshevSplits[
+    f[x], {x, xLower, xUpper},
+    PrecisionGoal -> $MachinePrecision];
+ChebyshevSplitsToRust[splits, output];
+
 Close[output];
