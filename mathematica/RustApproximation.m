@@ -44,6 +44,13 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     - https://mathematica.stackexchange.com/a/96663/2440
       *)
 
+    If[OptionValue["RecursionDepth"] < OptionValue[MinRecursion],
+       Return@Join[
+         ChebyshevSplits[f, {x, a, (a + b) / 2}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts],
+         ChebyshevSplits[f, {x, (a + b) / 2, b}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts]
+       ]
+    ];
+
     wp = OptionValue[WorkingPrecision] /. Automatic -> 4 * OptionValue[PrecisionGoal];
 
     Print[StringTemplate["Finding coefficients for interval [``, ``]"][N[a, 4], N[b, 4]]];
