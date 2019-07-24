@@ -1,394 +1,151 @@
 (* ::Package:: *)
 
-<<FunctionApproximations`;
+Needs["Integration`NIntegrateUtilities`"];
 
-Options[BestMiniMax] = {
-  "TargetError" -> $MachineEpsilon / 100,
-  "MaxOrder" -> 10,
-  "MaxNumeratorOrder" -> Automatic,
-  "MaxDenominatorOrder" -> Automatic,
-  WorkingPrecision -> 200
-};
-
-BestMiniMax[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
-  {
-    maxNumeratorOrder, maxDenominatorOrder,
-    bestApprox = None, bestErr = \[Infinity], bestNM,
-    approx, err
-  },
-
-  maxNumeratorOrder = If[
-    OptionValue["MaxNumeratorOrder"] === Automatic,
-    OptionValue["MaxOrder"],
-    OptionValue["MaxNumeratorOrder"]];
-  maxDenominatorOrder = If[
-    OptionValue["MaxDenominatorOrder"] === Automatic,
-    OptionValue["MaxOrder"],
-    OptionValue["MaxDenominatorOrder"]];
-
-
-  Do[
-    (* If the best error is smaller than the target error and we would be
-    finding a more complication approximation, skip ahead. *)
-    If[
-      bestErr < OptionValue["TargetError"] && bestNM < n+m,
-      Continue[]
-    ];
-
-    (* Get the MiniMax approximation *)
-    Quiet@Check[
-      {approx, err} = MiniMaxApproximation[
-        f,
-        {x, {x0, x1}, n, m},
-        WorkingPrecision -> OptionValue[WorkingPrecision]
-                      ][[2]],
-      {approx, err} = {None, \[Infinity]},
-      {Set::shape}
-    ];
-    err = Abs@err;
-
-    (* If we have an improvement, or if the approximation is both simpler and
-    sufficiently good, then use it. *)
-    If[ err < bestErr || (err < OptionValue["TargetError"] && m+n < bestNM),
-       {bestErr, bestApprox, bestNM} = {err, approx, n+m};
-    ];
-  ,
-    {n,Range[0, maxNumeratorOrder]},
-    {m,Range[0, maxDenominatorOrder]}
+ChebyshevSeries::usage = "Process function samples into corresponding ChebyshevT coefficients.";
+ChebyshevSeries[{}] = {};
+ChebyshevSeries[y_List] :=
+  Module[
+    {
+      cc
+    },
+    (* Get coefficients from values *)
+    cc = Sqrt[2/(Length[y] - 1)] FourierDCT[y, 1];
+    (* Adjust first & last coefficients *)
+    cc[[{1, -1}]] /= 2;
+    cc
   ];
 
-  {bestApprox,bestErr}
+ChebyshevSplits::usage = "Split a broader interval into sub-intervals and get the corresponding ChebyshevT coefficients.";
+
+Options[ChebyshevSplits] = Join[
+  {
+    "Points" -> 24,
+    "RecursionDepth" -> 0,
+    PrecisionGoal -> $MachinePrecision,
+    WorkingPrecision -> Automatic,
+    MaxRecursion -> 16
+  },
+  Options[NIntegrate]
 ];
 
-Protect[BestMiniMax];
+ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
+  Module[
+    {
+      wp, steps, sowTag, sampling, approx, err, i
+    },
 
-Options[PiecewiseMiniMax] = {
-  "TargetError" -> $MachineEpsilon / 100,
-  "MaxOrder" -> 10,
-  "MaxNumeratorOrder" -> Automatic,
-  "MaxDenominatorOrder" -> Automatic,
-  WorkingPrecision -> 200,
-  "StartGuess" -> Automatic,
-  "EndGuess" -> Automatic
-};
+    (* Use the ClenshawCurtisRule as this uses Chebyshev polynomials
+    internally to evaluate the integral.  Use the IntegrationMonitor in order
+    to inspect how the integrator subdivides the larger interval.
 
-PiecewiseMiniMax[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
-  {
-    approxes={}, approx, xs={},
-    xStart, xEnd,
-    xi, err=\[Infinity],
-    startGuess, endGuess,
-    tmp
-  },
+    Based on:
+    - https://mathematica.stackexchange.com/a/114065/2440
+    - https://mathematica.stackexchange.com/a/96663/2440
+      *)
 
-  PrintTemporary[
-    Dynamic@Row[
-      {
-        StringTemplate["`` subdivisions"][Length[approxes]],
-        ProgressIndicator[xStart, {xs[[1, 2]], xs[[2, 1]]}],
-        N[xs, 3]
-      },
-      "  "]
-  ];
+    wp = OptionValue[WorkingPrecision] /. Automatic -> 4 * OptionValue[PrecisionGoal];
 
-  (* Find the points in the interval where a usual series no longer work, at
-  both the start and the end. *)
-  approx = Normal@Series[f, {x, x0, OptionValue["MaxOrder"]}];
-  startGuess = If[
-    OptionValue["StartGuess"] === Automatic,
-    (99 * x0 + x1) / 100,
-    OptionValue["StartGuess"]
-  ];
-  xStart = x /. FindRoot[
-    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
-    {x, startGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
-    MaxIterations -> Infinity
-           ];
-  AppendTo[xs, {x0, xStart}];
-  AppendTo[approxes, approx];
-  Print[StringTemplate["Lower approximation valid from `` to ``."][N[x0, 4], N[xStart, 4]]];
+    Print[StringTemplate["Finding coefficients for interval [``, ``]"][N[a, 4], N[b, 4]]];
+    steps = Reap[
+      NIntegrate[
+        f, {x, a, b},
+        Method -> {
+          "ClenshawCurtisRule",
+          "Points" -> OptionValue["Points"]
+                },
+        IntegrationMonitor :> (Sow[Map[{First[#1@"Boundaries"], #1@"GetValues"} &, #1], sowTag] &),
+        WorkingPrecision -> wp,
+        Evaluate@FilterRules[{opts}, Options[NIntegrate]]
+      ],
+      sowTag][[2, 1]];
 
-  approx = Normal@Series[f, {x, x1, OptionValue["MaxOrder"]}];
-  endGuess = If[
-    OptionValue["EndGuess"] === Automatic,
-    (99 * x1 + x0) / 100,
-    OptionValue["EndGuess"]
-  ];
-  xEnd = x /. FindRoot[
-    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
-    {x, endGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
-    MaxIterations -> Infinity
-         ];
-  AppendTo[xs, {xEnd, x1}];
-  AppendTo[approxes, approx];
-  Print[StringTemplate["Upper approximation valid from `` to ``."][N[xEnd, 4], N[x1, 4]]];
+    sampling = Join[
+      Flatten[Table[
+        If[
+          MemberQ[steps[[n + 1]], {{s[[1, 1]], _}, __}],
+          Nothing,
+          s],
+        {n, Length@steps - 1},
+        {s, steps[[n]]}
+              ], 1],
+      DeleteCases[Last@steps, {{-Infinity, Infinity}, __}]
+               ];
 
-  (* Now subdivide the remaining (inner) interval until the local errors on each
-  is sufficiently small *)
-  PrintTemporary[
-    Dynamic@StringTemplate["Current Interval = [``, ``]"][
-      N[xStart, 4],
-      N[xi, 4]]
-  ];
-  Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
-  xi = xEnd;
-  While[
-    xStart < xEnd,
-    {approx, err} = BestMiniMax[
-      f, {x, xStart, xi},
-      FilterRules[{opts}, Options[BestMiniMax]]];
-    If[err < OptionValue["TargetError"],
-       AppendTo[approxes, approx];
-       AppendTo[xs, {xStart, xi}];
-       xStart = xi;
-       xi = Min[xEnd, xStart + 2 * (xs[[-1, 2]] - xs[[-1, 1]])];
-       Print[StringTemplate["`` Intervals; [``, ``] :: ``"][Length[xs], N[xStart, 4], N[xi, 4], N[xEnd, 4]]];
-     ,
-       xi = (xStart + xi)/2;
-    ];
-  ];
+    samplings = Sort@MapAt[ChebyshevSeries@*Reverse, sampling, {All, 2}];
 
-  tmp = Transpose[{approxes, #1 <= x <#2 & @@@ xs}];
-  Function[
-    Evaluate[{x}],
-    Evaluate@Piecewise[tmp]
-  ]
-];
-Protect[PiecewiseMiniMax];
+    approx = ChebyshevEval[samplings];
 
-
-Options[PiecewiseInterpolation] = {
-  "TargetError" -> $MachineEpsilon / 100,
-  Order -> 10,
-  WorkingPrecision -> 200,
-  "StartGuess" -> Automatic,
-  "EndGuess" -> Automatic
-};
-
-PiecewiseInterpolation[f_, {x_, x0_, x1_}, opts : OptionsPattern[]] := Module[
-  {
-    approxes={}, approx, xs={},
-    xStart, xEnd,
-    xi, err=\[Infinity],
-    startGuess, endGuess,
-    tmp
-  },
-
-  PrintTemporary[
-    Dynamic@Row[
-      {
-        StringTemplate["`` subdivisions"][Length[approxes]],
-        ProgressIndicator[xStart, {xs[[1, 2]], xs[[2, 1]]}],
-        N[xs, 3]
-      },
-      "  "]
-  ];
-
-  (* Find the points in the interval where a usual series no longer work, at
-  both the start and the end. *)
-  approx = Normal@Series[f, {x, x0, OptionValue[Order]}];
-  startGuess = If[
-    OptionValue["StartGuess"] === Automatic,
-    (99 * x0 + x1) / 100,
-    OptionValue["StartGuess"]
-  ];
-  xStart = x /. FindRoot[
-    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
-    {x, startGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
-    MaxIterations -> Infinity
-           ];
-  AppendTo[xs, {x0, xStart}];
-  AppendTo[approxes, approx];
-  Print[StringTemplate["Lower approximation valid from `` to ``."][N[x0, 4], N[xStart, 4]]];
-
-  approx = Normal@Series[f, {x, x1, OptionValue[Order]}];
-  endGuess = If[
-    OptionValue["EndGuess"] === Automatic,
-    (99 * x1 + x0) / 100,
-    OptionValue["EndGuess"]
-  ];
-  xEnd = x /. FindRoot[
-    ((approx - f) / f)^2 == SetPrecision[OptionValue["TargetError"], \[Infinity]]^2,
-    {x, endGuess, x0, x1},
-    WorkingPrecision -> 2 * OptionValue[WorkingPrecision],
-    MaxIterations -> Infinity
-         ];
-  AppendTo[xs, {xEnd, x1}];
-  AppendTo[approxes, approx];
-  Print[StringTemplate["Upper approximation valid from `` to ``."][N[xEnd, 4], N[x1, 4]]];
-
-  (* Now subdivide the remaining (inner) interval until the local errors on each
-  is sufficiently small *)
-  PrintTemporary[
-    Dynamic@StringTemplate["Current Interval = [``, ``]"][
-      N[xStart, 4],
-      N[xi, 4]]
-  ];
-  Print[StringTemplate["`` Intervals; `` :: ``"][Length[xs], N[xStart, 4], N[xEnd, 4]]];
-  xi = xEnd;
-  While[
-    xStart < xEnd,
-    approx = InterpolatingPolynomial[
-      Table[{x, f},
-            {x, Subdivide[xStart, xi, OptionValue[Order]]}],
-      x];
-    tmp = 0; err = 0;
+    err = 0; i = 0;
     While[
-      err < OptionValue["TargetError"] && tmp++ < 1000,
-      err = Max[
-        err,
-        Abs[approx/f - 1] /. x -> RandomReal[
-          {xStart, xi},
-          WorkingPrecision -> OptionValue[WorkingPrecision]]
-            ]];
-    If[err < OptionValue["TargetError"],
-       AppendTo[approxes, approx];
-       AppendTo[xs, {xStart, xi}];
-       xStart = xi;
-       xi = Min[xEnd, xStart + 2 * (xs[[-1, 2]] - xs[[-1, 1]])];
-       Print[StringTemplate["`` Intervals; [``, ``] :: ``"][Length[xs], N[xStart, 4], N[xi, 4], N[xEnd, 4]]];
-     ,
-       xi = (xStart + xi)/2;
+      err < 10^(- OptionValue[PrecisionGoal]) && i++ < 1000,
+      err = Max[err, Abs[approx[x] / f - 1] /. x -> RandomReal[{a, b}, WorkingPrecision -> wp]];
     ];
+
+    If[
+      err > 10^(- OptionValue[PrecisionGoal]) && OptionValue["RecursionDepth"] < OptionValue[MaxRecursion],
+      Join[
+        ChebyshevSplits[f, {x, a, (a + b) / 2}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts],
+        ChebyshevSplits[f, {x, (a + b) / 2, b}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts]
+      ],
+      samplings
+    ]
   ];
 
-  tmp = Transpose[{approxes, #1 <= x <#2 & @@@ xs}];
-  Function[
-    Evaluate[{x}],
-    Evaluate@Piecewise[tmp]
-  ]
-];
-Protect[PiecewiseInterpolation];
-
-
-ClearAll[ApproximationToRust];
-ApproximationToRust[f_Function, out_OutputStream] := Module[
+ChebyshevSplitsToRust::usage = "Write the splits from ChebyshevSplit into a Rust module."
+ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
   {
-    x,approxes,tmp,
-    splits,numerators,denominators
+    splits = DeleteDuplicates@Sort@Flatten@chebySplits[[;; , 1]],
+    coefficients = chebySplits[[;; , 2]]
   },
 
-  (* Deconstruct the Piecewise function *)
-  x = f[[1,1]];
-  tmp = f[[2,1]];
-  tmp = tmp /. {a___, {___, False}, b___} :> {a, b};
-  tmp = SortBy[tmp, #[[2,1]]&];
-  numerators = CoefficientList[Numerator[tmp[[;;, 1]]], x] /. {0} -> {};
-  denominators = CoefficientList[Denominator[tmp[[;;, 1]]], x] /. {1} -> {};
-  splits = DeleteDuplicates@Sort@Flatten[{tmp[[;;, 2, 1]], tmp[[;;, 2, -1]]}];
-
-  (* Write out the numerators *)
   WriteString[
     out,
-    StringTemplate["pub const NUMERATORS: [&[f64]; ``] = [\n"][Length@numerators]
+    StringTemplate["pub const COEFFICIENTS: [&[f64]; ``] = [\n"][Length@coefficients]
   ];
   Do[
     WriteString[
       out,
       StringTemplate["    &``,\n"][ToRustList[row]]];
   ,
-    {row,numerators}
-  ];
-  WriteString[out,"];\n\n"];
-
-  (* Write out the denominators *)
-  If[Max[Length /@ denominators] > 0,
-    WriteString[
-      out,
-      StringTemplate["pub const DENOMINATORS: [&[f64]; ``] = [\n"][Length@denominators]
-    ];
-    Do[
-      WriteString[
-        out,
-        StringTemplate["    &``,\n"][ToRustList[row]]
-      ];
-    ,
-      {row,denominators}
-    ];
-    WriteString[out,"];\n\n"];
-  ];
-
-  (* Write the splits *)
-  WriteString[
-    out,
-    StringTemplate["pub const SPLITS: [f64; ``] = ``;"][
-      Length@splits,
-      StringReplace[ToRustList[splits], {
-        "DirectedInfinity(-1)" -> "std::f64::NEG_INFINITY",
-        "DirectedInfinity(1)" -> "std::f64::INFINITY"
-                    }]
-  ]];
-];
-Protect[PiecewiseMiniMax];
-
-ClearAll[ApproximationToRust];
-ApproximationToRust[f_Function, out_OutputStream] := Module[
-  {
-    x,approxes,tmp,
-    splits,numerators,denominators
-  },
-
-  (* Deconstruct the Piecewise function *)
-  x = f[[1,1]];
-  tmp = f[[2,1]];
-  tmp = tmp /. {a___, {___, False}, b___} :> {a, b};
-  tmp = SortBy[tmp, #[[2,1]]&];
-  numerators = CoefficientList[Numerator[tmp[[;;, 1]]], x] /. {0} -> {};
-  denominators = CoefficientList[Denominator[tmp[[;;, 1]]], x] /. {1} -> {};
-  splits = DeleteDuplicates@Sort@Flatten[{tmp[[;;, 2, 1]], tmp[[;;, 2, -1]]}];
-
-  (* Write out the numerators *)
-  WriteString[
-    out,
-    StringTemplate["pub const NUMERATORS: [&[f64]; ``] = [\n"][Length@numerators]
-  ];
-  Do[
-    WriteString[
-      out,
-      StringTemplate["    &``,\n"][ToRustList[row]]];
-  ,
-    {row,numerators}
-  ];
-  WriteString[out,"];\n\n"];
-
-  (* Write out the denominators *)
-  WriteString[
-    out,
-    StringTemplate["pub const DENOMINATORS: [&[f64]; ``] = [\n"][Length@denominators]
-  ];
-  Do[
-    WriteString[
-      out,
-      StringTemplate["    &``,\n"][ToRustList[row]]
-    ];
-  ,
-    {row,denominators}
+    {row,coefficients}
   ];
   WriteString[out,"];\n\n"];
 
   (* Write the splits *)
   WriteString[
     out,
-    StringTemplate["pub const SPLITS: [f64; ``] = ``;"][
+    StringTemplate["pub const SPLITS: [f64; ``] = ``;\n"][
       Length@splits,
       StringReplace[ToRustList[splits], {
         "DirectedInfinity(-1)" -> "std::f64::NEG_INFINITY",
         "DirectedInfinity(1)" -> "std::f64::INFINITY"
                     }]
-  ]];
+    ]
+  ];
 ];
-Protect[PiecewiseMiniMax];
 
-
-
+ToRustList::usage = "Helper function that converts a Mathematica list of numbers into a Rust array.";
 ToRustList[l_List] := "[" <> StringRiffle[
-  ToString@CForm@N[#] & /@ l,
+  StringReplace[
+    ToString@CForm@N[#] & /@ l,
+    RegularExpression["(\\d)\\.e"] -> "$1e"
+  ],
   ", "
 ] <> "]";
-Protect[ToRustList];
+
+ChebyshevEval::usage = "Helper function to evaluation a single or a list of Chebyshev splits.";
+ChebyshevEval[{{a_?NumericQ, b_?NumericQ}, cs : {_?NumericQ .. }}] := Function[
+  {x},
+  Evaluate[
+    cs.Table[
+      ChebyshevT[n, Rescale[x, {a, b}, {-1, 1}]],
+      {n, Range[0, Length@cs - 1]}]]];
+ChebyshevEval[splits : {{{_?NumericQ, _?NumericQ}, {_?NumericQ .. }} ..}] := Function[
+  {x},
+  Evaluate@Piecewise[
+    Table[{ChebyshevEval[s][x], s[[1, 1]] <= x <= s[[1, 2]]},
+          {s, splits}]]];
 
 (* Local Variables: *)
 (* mode: wolfram *)
