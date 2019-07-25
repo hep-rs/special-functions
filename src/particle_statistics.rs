@@ -146,7 +146,7 @@ mod bench {
         b.iter(|| {
             for &(x, v) in &data {
                 if !v.is_nan() {
-                    let n = super::bose_einstein(x);
+                    let n = super::bose_einstein(1.0, x);
                     test::black_box((x, v, n));
                 }
             }
@@ -163,7 +163,7 @@ mod bench {
         b.iter(|| {
             for &(x, v) in &data {
                 if !v.is_nan() {
-                    let n = super::bose_einstein_normalized(x);
+                    let n = super::bose_einstein_normalized(1.0, x);
                     test::black_box((x, v, n));
                 }
             }
@@ -171,15 +171,14 @@ mod bench {
     }
 
     #[bench]
-    fn fermi_dirac() {
-        let mut rdr =
-            csv::Reader::from_path("tests/data/particle_statistics/fermi_dirac.csv").unwrap();
+    fn fermi_dirac(b: &mut Bencher) {
+        let rdr = csv::Reader::from_path("tests/data/particle_statistics/fermi_dirac.csv").unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
 
         b.iter(|| {
             for &(x, v) in &data {
                 if !v.is_nan() {
-                    let n = super::fermi_dirac(x);
+                    let n = super::fermi_dirac(1.0, x);
                     test::black_box((x, v, n));
                 }
             }
@@ -187,8 +186,8 @@ mod bench {
     }
 
     #[bench]
-    fn fermi_dirac_normalized() {
-        let mut rdr =
+    fn fermi_dirac_normalized(b: &mut Bencher) {
+        let rdr =
             csv::Reader::from_path("tests/data/particle_statistics/fermi_dirac_normalized.csv")
                 .unwrap();
         let data: Vec<(f64, f64)> = rdr.into_deserialize().map(|x| x.unwrap()).collect();
@@ -196,7 +195,7 @@ mod bench {
         b.iter(|| {
             for &(x, v) in &data {
                 if !v.is_nan() {
-                    let n = super::fermi_dirac_normalized(x);
+                    let n = super::fermi_dirac_normalized(1.0, x);
                     test::black_box((x, v, n));
                 }
             }
