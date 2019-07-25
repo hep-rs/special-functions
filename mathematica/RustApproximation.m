@@ -79,9 +79,9 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
       DeleteCases[Last@steps, {{-Infinity, Infinity}, __}]
                ];
 
-    samplings = Sort@MapAt[ChebyshevSeries@*Reverse, sampling, {All, 2}];
+    sampling = SortBy[N[#[[1, 1]]] &]@MapAt[ChebyshevSeries@*Reverse, sampling, {All, 2}];
 
-    approx = ChebyshevEval[samplings];
+    approx = ChebyshevEval[sampling];
 
     err = 0; i = 0;
     While[
@@ -95,14 +95,14 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
         ChebyshevSplits[f, {x, a, (a + b) / 2}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts],
         ChebyshevSplits[f, {x, (a + b) / 2, b}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts]
       ],
-      samplings
+      sampling
     ]
   ];
 
 ChebyshevSplitsToRust::usage = "Write the splits from ChebyshevSplit into a Rust module."
 ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
   {
-    splits = DeleteDuplicates@Sort@Flatten@chebySplits[[;; , 1]],
+    splits = DeleteDuplicates@Flatten@chebySplits[[;; , 1]],
     coefficients = chebySplits[[;; , 2]]
   },
 
