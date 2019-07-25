@@ -64,7 +64,6 @@ approx_fn! {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use csv;
     use std::f64;
 
     #[test]
@@ -103,7 +102,6 @@ mod tests {
             let (x, v): (f64, f64) = result.unwrap();
 
             if !v.is_nan() {
-                println!("x0 = {:e};", x);
                 let n = super::li2(x);
                 approx_eq(n, v, 9.0, 10f64.powi(-10));
             }

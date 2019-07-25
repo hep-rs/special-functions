@@ -209,7 +209,6 @@ mod tests {
 
     //     for result in rdr.deserialize() {
     //         let (x, v): (f64, f64) = result.unwrap();
-    //         println!("x = {:.2e}, v = {:.2e}", x, v);
 
     //         if !v.is_nan() {
     //             let n = super::k1_on_k2(x);
