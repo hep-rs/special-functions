@@ -390,6 +390,11 @@
 <span id="390">390</span>
 <span id="391">391</span>
 <span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Bessel functions</span>
 
@@ -397,6 +402,7 @@
 
 <span class="kw">mod</span> <span class="ident">k0</span>;
 <span class="kw">mod</span> <span class="ident">k1</span>;
+<span class="kw">mod</span> <span class="ident">k1_on_k2</span>;
 <span class="kw">mod</span> <span class="ident">k2</span>;
 <span class="kw">mod</span> <span class="ident">k3</span>;
 <span class="kw">mod</span> <span class="ident">k4</span>;
@@ -449,6 +455,11 @@
 <span class="macro">approx_fn</span><span class="macro">!</span> {
    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Approximation of modified Bessel function \\(K_9(x)\\) for all \\(x &gt; 0\\).&quot;</span>]</span>
    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k9</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k9</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
+}
+
+<span class="macro">approx_fn</span><span class="macro">!</span> {
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Approximation of the ratio of modified Bessel function \\(K_1(x) / K_2(x)\\) for all \\(x &gt; 0\\).&quot;</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k1_on_k2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k1_on_k2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -596,21 +607,20 @@
         }
     }
 
-    <span class="comment">// #[test]</span>
-    <span class="comment">// fn k1_on_k2() {</span>
-    <span class="comment">//     let mut rdr = csv::Reader::from_path(&quot;tests/data/bessel_k1_on_k2.csv&quot;).unwrap();</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k1_on_k2</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel/k1_on_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
 
-    <span class="comment">//     for result in rdr.deserialize() {</span>
-    <span class="comment">//         let (x, v): (f64, f64) = result.unwrap();</span>
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
 
-    <span class="comment">//         if !v.is_nan() {</span>
-    <span class="comment">//             let n = super::k1_on_k2(x);</span>
-    <span class="comment">//             approx_eq(n, v, 11.0, 0.0);</span>
-    <span class="comment">//         }</span>
-    <span class="comment">//     }</span>
-
-    <span class="comment">//     assert_eq!(super::k1_on_k2(0.0), 0.0);</span>
-    <span class="comment">// }</span>
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;x0 = {:e}&quot;</span>, <span class="ident">x</span>);
+                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k1_on_k2</span>(<span class="ident">x</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">10.0</span>, <span class="number">0.0</span>);
+            }
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;nightly&quot;</span>)]</span>
@@ -768,20 +778,20 @@
         });
     }
 
-    <span class="comment">// #[bench]</span>
-    <span class="comment">// fn k1_on_k2(b: &amp;mut Bencher) {</span>
-    <span class="comment">//     let rdr = csv::Reader::from_path(&quot;tests/data/bessel_k1_on_k2.csv&quot;).unwrap();</span>
-    <span class="comment">//     let data: Vec&lt;(f64, f64)&gt; = rdr.into_deserialize().map(|x| x.unwrap()).collect();</span>
+    <span class="attribute">#[<span class="ident">bench</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k1_on_k2</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
+        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/bessel/k1_on_k2.csv&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
 
-    <span class="comment">//     b.iter(|| {</span>
-    <span class="comment">//         for &amp;(x, v) in &amp;data {</span>
-    <span class="comment">//             if !v.is_nan() {</span>
-    <span class="comment">//                 let n = super::k1_on_k2(x);</span>
-    <span class="comment">//                 test::black_box((x, v, n));</span>
-    <span class="comment">//             }</span>
-    <span class="comment">//         }</span>
-    <span class="comment">//     });</span>
-    <span class="comment">// }</span>
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k1_on_k2</span>(<span class="ident">x</span>);
+                    <span class="ident">test</span>::<span class="ident">black_box</span>((<span class="ident">x</span>, <span class="ident">v</span>, <span class="ident">n</span>));
+                }
+            }
+        });
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "special_functions";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}", textsc: ["\\mathrm{\\scriptsize #1}", 1], vt: ["\\boldsymbol{#1}", 1], pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2], ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2], defeq: "\\mathrel{\\vcenter:}=", abs: ["\\lvert #1 \\rvert", 1], angles: ["\\langle #1 \\rangle", 1]}}});</script></body></html>
