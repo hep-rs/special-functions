@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["linear","Perform linear interpolation on data."]]});
