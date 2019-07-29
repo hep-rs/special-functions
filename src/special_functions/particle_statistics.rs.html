@@ -207,6 +207,7 @@
 <span id="207">207</span>
 <span id="208">208</span>
 <span id="209">209</span>
+<span id="210">210</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
@@ -226,11 +227,12 @@
 <span class="doccomment">/// temperature.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>;
-    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1.622_619_748_345_855e-16</span> {
-        <span class="number">1.202_056_903_159_594</span>
-    } <span class="kw">else</span> {
-        <span class="ident">_bose_einstein</span>(<span class="ident">x</span>) <span class="op">/</span> (<span class="ident">PI</span> <span class="op">*</span> <span class="ident">PI</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="number">3</span>))
-    }
+    (<span class="ident">PI</span> <span class="op">*</span> <span class="ident">PI</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="number">3</span>)).<span class="ident">recip</span>()
+        <span class="op">*</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1.622_619_748_345_855e-16</span> {
+            <span class="number">1.202_056_903_159_594</span>
+        } <span class="kw">else</span> {
+            <span class="ident">_bose_einstein</span>(<span class="ident">x</span>)
+        }
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
