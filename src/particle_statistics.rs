@@ -15,7 +15,13 @@ mod fermi_dirac_normalized;
 /// unitless, where `mu` is the chemical potential and `beta` is the inverse
 /// temperature.
 pub fn bose_einstein(mu: f64, beta: f64) -> f64 {
-    _bose_einstein(-mu * beta) / (PI * PI * beta.powi(3))
+    let x = -mu * beta;
+    (PI * PI * beta.powi(3)).recip()
+        * if x < 1.622_619_748_345_855e-16 {
+            1.202_056_903_159_594
+        } else {
+            _bose_einstein(x)
+        }
 }
 
 approx_fn! {
