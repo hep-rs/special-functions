@@ -1,5 +1,7 @@
 //! Approximations
 
+pub mod interpolation;
+
 /// Evaluates an arbitrary single-variable polynomial at a particular point.
 ///
 /// Given an array of coefficients \\(c = [c_0, c_1, \dots, c_n]\\), evaluates
