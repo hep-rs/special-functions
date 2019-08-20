@@ -33,11 +33,19 @@ WriteString[
 ];
 
 (* Write out the approximation valid for small x. *)
-xLower = Log[10^(-8)];
+(* xLower = Log[10^(-8)]; *)
+lower = 0.75 - 0.1441585742783913 x^2;
+xLower = x /. FindRoot[
+  Abs[lower / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+  {x, 2, 0, Infinity},
+  WorkingPrecision -> 5 $MachinePrecision,
+  MaxIterations -> Infinity
+];
+Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]]];
 WriteString[
   output,
   "pub fn lower(_x: f64) -> f64 {
-    0.75
+    0.75 - 0.1441585742783913 * x.powi(2)
 }\n\n"];
 
 (* Write out the approximation valid for large x. *)
