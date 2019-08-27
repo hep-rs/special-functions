@@ -25,7 +25,7 @@ use crate::approximations::polynomial;\n\n"
   (* Find the series approximation for small x *)
   lower = Normal@Series[f[x], {x, -Infinity, 10}];
   xLower = x /. FindRoot[
-    Abs[lower / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+    Abs[lower / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
     {x, -2, -Infinity, 1},
     WorkingPrecision -> 5 $MachinePrecision,
     MaxIterations -> Infinity

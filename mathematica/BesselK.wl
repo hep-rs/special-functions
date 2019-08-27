@@ -26,7 +26,7 @@ use crate::approximations::polynomial;\n\n"
   (* Find the series approximation for small x *)
   lower = Normal@Series[f[x], {x, 0, 10}];
   xLower = x /. FindRoot[
-    Abs[lower / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+    Abs[lower / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
     {x, 2, 0, Infinity},
     WorkingPrecision -> 5 $MachinePrecision,
     MaxIterations -> Infinity
@@ -64,7 +64,7 @@ use crate::approximations::polynomial;\n\n"
   (* Find the series approximation for large x *)
   upper = Normal@Series[f[x], {x, Infinity, 10}];
   xUpper = x /. FindRoot[
-    Abs[upper / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+    Abs[upper / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
     {x, 2, 0, Infinity},
     WorkingPrecision -> 5 $MachinePrecision,
     MaxIterations -> Infinity
@@ -118,7 +118,7 @@ use crate::approximations::polynomial;\n\n"
 (* Find the series approximation for small x *)
 lower = Normal@Series[f[x], {x, 0, 10}];
 xLower = x / 50 /. FindRoot[
-  Abs[lower / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+  Abs[lower / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
   {x, 2, 0, Infinity},
   WorkingPrecision -> 5 $MachinePrecision,
   MaxIterations -> Infinity
@@ -154,7 +154,7 @@ WriteString[
 (* Find the series approximation for large x *)
 upper = Normal@Series[f[x], {x, Infinity, 10}];
 xUpper = x /. FindRoot[
-  Abs[upper / f[x] - 1] == SetPrecision[$MachineEpsilon, Infinity],
+  Abs[upper / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
   {x, 2, 0, Infinity},
   WorkingPrecision -> 5 $MachinePrecision,
   MaxIterations -> Infinity
