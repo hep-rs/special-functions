@@ -62,8 +62,8 @@ WriteString[
   StringTemplate["pub fn lower(x: f64) -> f64 {
     1.0 + x.powi(2) * (`a` + `b` * x.ln())
 }\n\n"][<|
-  "a" -> CForm[N[a /. fit["BestFitParameters"]]],
-  "b" -> CForm[N[b /. fit["BestFitParameters"]]]
+  "a" -> RustForm[a /. fit["BestFitParameters"]],
+  "b" -> RustForm[b /. fit["BestFitParameters"]]
        |>]];
 
 (* Write out the approximation valid for large x. *)
@@ -81,12 +81,8 @@ WriteString[
 }\n\n"];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[
-  f[x], {x, xLower, xUpper},
-  PrecisionGoal -> $MachinePrecision,
-  WorkingPrecision -> 400,
-  AccuracyGoal -> 200];
-ChebyshevSplitsToRust[splits, output];
+splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
+ChebyshevSplitsRustForm[splits, output];
 
 Close[output];
 
@@ -120,8 +116,8 @@ WriteString[
   StringTemplate["pub fn lower(x: f64) -> f64 {
     x * (`a` + `b` * x.ln())
 }\n\n"][<|
-  "a" -> CForm[N[a /. fit["BestFitParameters"]]],
-  "b" -> CForm[N[b /. fit["BestFitParameters"]]]
+  "a" -> RustForm[a /. fit["BestFitParameters"]],
+  "b" -> RustForm[b /. fit["BestFitParameters"]]
        |>]];
 
 (* Write out the approximation valid for large x. *)
@@ -139,11 +135,7 @@ WriteString[
 }\n\n"];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[
-  f'[x], {x, xLower, xUpper},
-  PrecisionGoal -> $MachinePrecision,
-  WorkingPrecision -> 400,
-  AccuracyGoal -> 200];
-ChebyshevSplitsToRust[splits, output];
+splits = ChebyshevSplits[f'[x], {x, xLower, xUpper}];
+ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

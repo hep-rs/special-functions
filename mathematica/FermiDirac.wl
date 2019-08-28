@@ -43,7 +43,7 @@ use crate::approximations::polynomial;\n\n"
 
 (* Find the approximation for small x *)
 data = Table[{x, f[x]}, {x, 10^Subdivide[-30, -20, 20]}];
-fit = NonlinearModelFit[data, a x^(-3), {a}, x];
+fit = NonlinearModelFit[data, 1/x^3 (a - b x^2 + c x^4), {a, b, c}, x];
 lower[x_] = fit["BestFit"];
 xLower = x /. FindRoot[
   Abs[lower[x]/f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
@@ -56,9 +56,11 @@ Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    `a` * x.powi(-3)
+    x.powi(-3) * (`a` - `b` * x.powi(2) + `c` * x.powi(4))
 }\n\n"][<|
-  "a" -> CForm[N[a /. fit["BestFitParameters"]]]
+  "a" -> RustForm[a /. fit["BestFitParameters"]],
+  "b" -> RustForm[b /. fit["BestFitParameters"]],
+  "c" -> RustForm[c /. fit["BestFitParameters"]]
   |>]];
 
 (*Find the series approximation for large x*)
@@ -78,11 +80,8 @@ WriteString[
 }\n\n"][<||>]];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[
-  f[x], {x, xLower, xUpper},
-  MinRecursion -> 2,
-  PrecisionGoal -> $MachinePrecision];
-ChebyshevSplitsToRust[splits, output];
+splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
+ChebyshevSplitsRustForm[splits, output];
 
 Close[output];
 
@@ -104,7 +103,7 @@ use crate::approximations::polynomial;\n\n"
 
 (* Find the approximation for small x *)
 data = Table[{x, f'[x]}, {x, 10^Subdivide[-30, -20, 20]}];
-fit = NonlinearModelFit[data, a x^(-4), {a}, x];
+fit = NonlinearModelFit[data, 1/x^4 (a - b x^2 + c x^4), {a, b, c}, x];
 lower[x_] = fit["BestFit"];
 xLower = x /. FindRoot[
   Abs[lower[x]/f'[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
@@ -117,9 +116,11 @@ Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    `a` * x.powi(-4)
+    x.powi(-4) * (`a` - `b` * x.powi(2) + `c` * x.powi(4))
 }\n\n"][<|
-  "a" -> CForm[N[a /. fit["BestFitParameters"]]]
+  "a" -> RustForm[a /. fit["BestFitParameters"]],
+  "b" -> RustForm[b /. fit["BestFitParameters"]],
+  "c" -> RustForm[c /. fit["BestFitParameters"]]
   |>]];
 
 (*Find the series approximation for large x*)
@@ -139,10 +140,7 @@ WriteString[
 }\n\n"][<| |>]];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[
-  f'[x], {x, xLower, xUpper},
-  MinRecursion -> 2,
-  PrecisionGoal -> $MachinePrecision];
-ChebyshevSplitsToRust[splits, output];
+splits = ChebyshevSplits[f'[x], {x, xLower, xUpper}];
+ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

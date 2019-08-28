@@ -22,8 +22,9 @@ Options[ChebyshevSplits] = Join[
   {
     "Points" -> 24,
     "RecursionDepth" -> 0,
-    PrecisionGoal -> $MachinePrecision,
+    PrecisionGoal -> 2 * $MachinePrecision,
     WorkingPrecision -> Automatic,
+    AccuracyGoal -> Automatic,
     MaxRecursion -> 16
   },
   Options[NIntegrate]
@@ -52,6 +53,7 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     ];
 
     wp = OptionValue[WorkingPrecision] /. Automatic -> 4 * OptionValue[PrecisionGoal];
+    ap = OptionValue[AccuracyGoal] /. Automatic -> Min[10^(-2 * OptionValue[PrecisionGoal]), GeometricMean[Abs@{f[a], f[b]}] / 1000];
 
     Print[StringTemplate["Finding coefficients for interval [``, ``]"][N[a, 4], N[b, 4]]];
     steps = Reap[

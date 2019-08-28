@@ -11,10 +11,6 @@ Do[
     Directory[],
     "../src/bessel/k" <> ToString[n] <> ".rs"
     }]];
-  pg = Which[
-    n <= 3, 1,
-    n <= 10, 1.5
-       ] $MachinePrecision;
 
   WriteString[
     output,
@@ -89,10 +85,7 @@ use crate::approximations::polynomial;\n\n"
 
 
   (* Subdivide the remaining interval using Chebyshev polynomials *)
-  splits = ChebyshevSplits[
-    f[x], {x, xLower, xUpper},
-    PrecisionGoal -> pg,
-    AccuracyGoal -> Min[10^(-pg), GeometricMean[f[{xLower, xUpper}]]]];
+  splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
   ChebyshevSplitsRustForm[splits, output];
 
   Close[output];
@@ -174,10 +167,7 @@ WriteString[
 
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[
-  f[x], {x, xLower, xUpper},
-  PrecisionGoal -> 2 $MachinePrecision,
-  AccuracyGoal -> Min[10^(-2 $MachinePrecision), GeometricMean[f[{xLower, xUpper}]]]];
+splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
 ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

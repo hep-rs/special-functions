@@ -11,9 +11,6 @@ Do[
     Directory[],
     "../src/polylog/li" <> ToString[n] <> ".rs"
     }]];
-  pg = Which[
-    n <= 10, 1
-       ] $MachinePrecision;
 
   WriteString[
     output,
@@ -65,9 +62,7 @@ use crate::approximations::polynomial;\n\n"
 
 
   (* Subdivide the remaining interval using Chebyshev polynomials *)
-  splits = ChebyshevSplits[
-    f[x], {x, xLower, xUpper},
-    PrecisionGoal -> pg];
+  splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
   ChebyshevSplitsRustForm[splits, output];
 
   Close[output];
