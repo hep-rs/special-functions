@@ -48,8 +48,8 @@ use crate::approximations::polynomial;\n\n"
         &`lowerLn`,
       )
 }\n\n"][<|
-    "lowerPoly" -> ToRustList@lowerPoly,
-    "lowerLn" -> ToRustList@lowerLn
+    "lowerPoly" -> RustForm@lowerPoly,
+    "lowerLn" -> RustForm@lowerLn
     |>]
   ];
 
@@ -68,7 +68,7 @@ use crate::approximations::polynomial;\n\n"
   splits = ChebyshevSplits[
     f[x], {x, xLower, xUpper},
     PrecisionGoal -> pg];
-  ChebyshevSplitsToRust[splits, output];
+  ChebyshevSplitsRustForm[splits, output];
 
   Close[output];
 ,

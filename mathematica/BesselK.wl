@@ -55,8 +55,8 @@ use crate::approximations::polynomial;\n\n"
           )
 }\n\n"][<|
     "n" -> n,
-    "lowerPoly" -> ToRustList@lowerPoly,
-    "lowerLn" -> ToRustList@lowerLn
+    "lowerPoly" -> RustForm@lowerPoly,
+    "lowerLn" -> RustForm@lowerLn
     |>]
   ];
 
@@ -83,7 +83,7 @@ use crate::approximations::polynomial;\n\n"
             &`upper`
         )
 }\n\n"][<|
-    "upper" -> ToRustList@upper
+    "upper" -> RustForm@upper
     |>]
   ];
 
@@ -93,7 +93,7 @@ use crate::approximations::polynomial;\n\n"
     f[x], {x, xLower, xUpper},
     PrecisionGoal -> pg,
     AccuracyGoal -> Min[10^(-pg), GeometricMean[f[{xLower, xUpper}]]]];
-  ChebyshevSplitsToRust[splits, output];
+  ChebyshevSplitsRustForm[splits, output];
 
   Close[output];
 ,
@@ -144,9 +144,9 @@ WriteString[
         + x6 * ln2 * polynomial(x2, &`lowerLn2`)
     )
 }\n\n"][<|
-  "lowerPoly" -> ToRustList@lowerPoly,
-  "lowerLn" -> ToRustList@lowerLn,
-  "lowerLn2" -> ToRustList@lowerLn2
+  "lowerPoly" -> RustForm@lowerPoly,
+  "lowerLn" -> RustForm@lowerLn,
+  "lowerLn2" -> RustForm@lowerLn2
   |>]
 ];
 
@@ -168,7 +168,7 @@ WriteString[
   StringTemplate["pub fn upper(x: f64) -> f64 {
     polynomial(x.recip(), &`upper`)
 }\n\n"][<|
-  "upper" -> ToRustList@upper
+  "upper" -> RustForm@upper
   |>]
 ];
 
@@ -178,6 +178,6 @@ splits = ChebyshevSplits[
   f[x], {x, xLower, xUpper},
   PrecisionGoal -> 2 $MachinePrecision,
   AccuracyGoal -> Min[10^(-2 $MachinePrecision), GeometricMean[f[{xLower, xUpper}]]]];
-ChebyshevSplitsToRust[splits, output];
+ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

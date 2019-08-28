@@ -99,8 +99,8 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     ]
   ];
 
-ChebyshevSplitsToRust::usage = "Write the splits from ChebyshevSplit into a Rust module."
-ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
+ChebyshevSplitsRustForm::usage = "Write the splits from ChebyshevSplit into a Rust module."
+ChebyshevSplitsRustForm[chebySplits_List, out_OutputStream] := Module[
   {
     splits = DeleteDuplicates@Flatten@chebySplits[[;; , 1]],
     coefficients = chebySplits[[;; , 2]]
@@ -113,7 +113,7 @@ ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
   Do[
     WriteString[
       out,
-      StringTemplate["    &``,\n"][ToRustList[row]]];
+      StringTemplate["    &``,\n"][RustForm[row]]];
   ,
     {row,coefficients}
   ];
@@ -124,7 +124,7 @@ ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
     out,
     StringTemplate["pub const SPLITS: [f64; ``] = ``;\n"][
       Length@splits,
-      StringReplace[ToRustList[splits], {
+      StringReplace[RustForm[splits], {
         "DirectedInfinity(-1)" -> "std::f64::NEG_INFINITY",
         "DirectedInfinity(1)" -> "std::f64::INFINITY"
                     }]
@@ -132,14 +132,16 @@ ChebyshevSplitsToRust[chebySplits_List, out_OutputStream] := Module[
   ];
 ];
 
-ToRustList::usage = "Helper function that converts a Mathematica list of numbers into a Rust array.";
-ToRustList[l_List] := "[" <> StringRiffle[
-  StringReplace[
-    ToString@CForm@N[#] & /@ l,
-    RegularExpression["(\\d)\\.e"] -> "$1e"
-  ],
-  ", "
-] <> "]";
+RustForm::usage = "Convert certain Mathematica objects into Rust";
+RustForm::unimplemented = "Unable to convert `` into Rust form.";
+RustForm[Infinity] = "std::f64::INFINITY";
+RustForm[-Infinity] = "std::f64::NEG_INFINITY";
+RustForm[ComplexInfinity] = "std::f64::INFINITY";
+RustForm[n_?NumericQ] := StringReplace[
+  ToString[CForm[N[n, $MachinePrecision]]],
+  RegularExpression["(\\d)\\.e"] -> "$1e"];
+RustForm[l_List] := "[" <> StringRiffle[RustForm /@ l, ", "] <> "]";
+RustForm[x_] := ( Message[RustForm::unimplemented, x]; StringTemplate["RustForm[``]"][x] );
 
 ChebyshevEval::usage = "Helper function to evaluation a single or a list of Chebyshev splits.";
 ChebyshevEval[{{a_?NumericQ, b_?NumericQ}, cs : {_?NumericQ .. }}] := Function[
