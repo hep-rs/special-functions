@@ -7,22 +7,38 @@ Cell[BoxData[
   RowBox[{"$MaxExtraPrecision", "=", "1000"}], ";"}]], "Input",
  InitializationCell->True],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
  RowBox[{"SetDirectory", "[",
   RowBox[{"DirectoryName", "[",
    RowBox[{"$InputFileName", "/.",
     RowBox[{"\"\<\>\"", "\[RuleDelayed]",
      RowBox[{"NotebookFileName", "[", "]"}]}]}], "]"}], "]"}]], "Input",
- InitializationCell->True]
-}]],
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetSystemOptions", "[",
+   RowBox[{"\"\<ParallelOptions\>\"", "\[Rule]",
+    RowBox[{"\"\<MathLinkTimeout\>\"", "\[Rule]", "30."}]}], "]"}],
+  ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"SetSystemOptions", "[",
+    RowBox[{"\"\<ParallelOptions\>\"", "\[Rule]",
+     RowBox[{"\"\<RelaunchFailedKernels\>\"", "\[Rule]", "True"}]}], "]"}],
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{"While", "[",
+  RowBox[{
+   RowBox[{
+    RowBox[{"Length", "[",
+     RowBox[{"LaunchKernels", "[", "]"}], "]"}], "\[NotEqual]",
+    RowBox[{"4", "+", "8"}]}], ",", "\[IndentingNewLine]",
+   RowBox[{"CloseKernels", "[", "]"}]}], "\[IndentingNewLine]",
+  "]"}]}], "Input"],
 
 Cell[CellGroupData[{
 
 Cell["Basic", "Section"],
-
-Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{
@@ -31,7 +47,6 @@ Cell[BoxData[
     RowBox[{"CreateIntermediateDirectories", "\[Rule]", "True"}]}], "]"}],
   ";"}]], "Input",
  InitializationCell->True]
-}]]
 }]],
 
 Cell[CellGroupData[{
@@ -50,57 +65,53 @@ Cell[BoxData[
   ";"}]], "Input",
  InitializationCell->True],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
- RowBox[{"Do", "[", "\[IndentingNewLine]",
-  RowBox[{
-   RowBox[{"Export", "[", "\[IndentingNewLine]",
-    RowBox[{
-     RowBox[{"\"\<../tests/data/bessel/k\>\"", "<>",
-      RowBox[{"ToString", "[", "n", "]"}], "<>", "\"\<.csv\>\""}], ",",
-     "\[IndentingNewLine]",
+ RowBox[{"Export", "[", "\[IndentingNewLine]",
+  RowBox[{"\"\<../tests/data/bessel/k.csv\>\"", ",", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
      RowBox[{
-      RowBox[{"Table", "[", "\[IndentingNewLine]",
+      RowBox[{"N", "[",
        RowBox[{
-        RowBox[{"N", "[",
-         RowBox[{
-          RowBox[{"{",
-           RowBox[{"x", ",",
-            RowBox[{"BesselK", "[",
-             RowBox[{"n", ",", "x"}], "]"}]}], "}"}], ",",
-          "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
         RowBox[{"{",
          RowBox[{"x", ",",
-          RowBox[{"10", "^",
-           RowBox[{"Subdivide", "[",
+          RowBox[{"Sequence", "@@",
+           RowBox[{"BesselK", "[",
             RowBox[{
-             RowBox[{"-", "20"}], ",", "20", ",", "1000"}], "]"}]}]}],
-         "}"}]}], "\[IndentingNewLine]", "]"}], "//.",
-      RowBox[{"{", "\[IndentingNewLine]",
-       RowBox[{
-        RowBox[{"x_", "\[RuleDelayed]",
-         RowBox[{"0", "/;",
+             RowBox[{"Range", "[",
+              RowBox[{"0", ",", "9"}], "]"}], ",", "x"}], "]"}]}]}], "}"}],
+        ",", "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",",
+        RowBox[{"10", "^",
+         RowBox[{"Subdivide", "[",
           RowBox[{
-           RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}],
-        ",", "\[IndentingNewLine]",
-        RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
-       "}"}]}]}], "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", ",",
-   "\[IndentingNewLine]",
-   RowBox[{"{",
-    RowBox[{"n", ",",
-     RowBox[{"Range", "[",
-      RowBox[{"0", ",", "9"}], "]"}]}], "}"}]}], "\[IndentingNewLine]",
-  "]"}]], "Input",
- InitializationCell->True]
-}]],
+           RowBox[{"-", "10"}], ",", "10", ",", "1000"}], "]"}]}]}], "}"}]}],
+     "\[IndentingNewLine]", "]"}], "//.",
+    RowBox[{"{", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{"x_", "\[RuleDelayed]",
+       RowBox[{"0", "/;",
+        RowBox[{
+         RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
+     "}"}]}], ",", "\[IndentingNewLine]",
+   RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
+    RowBox[{"{",
+     RowBox[{
+     "\"\<x\>\"", ",", "\"\<K0\>\"", ",", "\"\<K1\>\"", ",", "\"\<K2\>\"",
+      ",", "\"\<K3\>\"", ",", "\"\<K4\>\"", ",", "\"\<K5\>\"", ",",
+      "\"\<K6\>\"", ",", "\"\<K7\>\"", ",", "\"\<K8\>\"", ",", "\"\<K9\>\""}],
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True],
 
 Cell[BoxData[
  RowBox[{"Export", "[", "\[IndentingNewLine]",
   RowBox[{
   "\"\<../tests/data/bessel/k1_on_k2.csv\>\"", ",", "\[IndentingNewLine]",
    RowBox[{
-    RowBox[{"Table", "[", "\[IndentingNewLine]",
+    RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
      RowBox[{
       RowBox[{"N", "[",
        RowBox[{
@@ -117,7 +128,7 @@ Cell[BoxData[
         RowBox[{"10", "^",
          RowBox[{"Subdivide", "[",
           RowBox[{
-           RowBox[{"-", "20"}], ",", "20", ",", "1000"}], "]"}]}]}], "}"}]}],
+           RowBox[{"-", "10"}], ",", "10", ",", "1000"}], "]"}]}]}], "}"}]}],
      "\[IndentingNewLine]", "]"}], "//.",
     RowBox[{"{", "\[IndentingNewLine]",
      RowBox[{
@@ -127,7 +138,11 @@ Cell[BoxData[
          RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
       "\[IndentingNewLine]",
       RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
-     "}"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
+     "}"}]}], ",", "\[IndentingNewLine]",
+   RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
+    RowBox[{"{",
+     RowBox[{"\"\<x\>\"", ",", "\"\<K1/K2\>\""}], "}"}]}]}],
+  "\[IndentingNewLine]", "]"}]], "Input",
  InitializationCell->True]
 }]]
 }]],
@@ -145,53 +160,53 @@ Cell[BoxData[
  InitializationCell->True],
 
 Cell[BoxData[
- RowBox[{"Do", "[", "\[IndentingNewLine]",
+ RowBox[{"Export", "[", "\[IndentingNewLine]",
   RowBox[{
-   RowBox[{"Export", "[", "\[IndentingNewLine]",
-    RowBox[{
-     RowBox[{"\"\<../tests/data/polylog/li\>\"", "<>",
-      RowBox[{"ToString", "[", "n", "]"}], "<>", "\"\<.csv\>\""}], ",",
-     "\[IndentingNewLine]",
+  "\"\<../tests/data/polylog/li.csv\>\"", ",", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
      RowBox[{
-      RowBox[{"Table", "[", "\[IndentingNewLine]",
+      RowBox[{"N", "[",
        RowBox[{
-        RowBox[{"N", "[",
-         RowBox[{
-          RowBox[{"{",
-           RowBox[{"x", ",",
-            RowBox[{"PolyLog", "[",
-             RowBox[{"n", ",", "x"}], "]"}]}], "}"}], ",",
-          "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
         RowBox[{"{",
          RowBox[{"x", ",",
-          RowBox[{"Join", "[",
-           RowBox[{
-            RowBox[{"-",
-             RowBox[{"10", "^",
-              RowBox[{"Subdivide", "[",
-               RowBox[{"10", ",",
-                RowBox[{"-", "10"}], ",", "500"}], "]"}]}]}], ",",
-            RowBox[{"1", "-",
-             RowBox[{"10", "^",
-              RowBox[{"Subdivide", "[",
-               RowBox[{"0", ",",
-                RowBox[{"-", "5"}], ",", "500"}], "]"}]}]}]}], "]"}]}],
-         "}"}]}], "\[IndentingNewLine]", "]"}], "//.",
-      RowBox[{"{", "\[IndentingNewLine]",
-       RowBox[{
-        RowBox[{"x_", "\[RuleDelayed]",
-         RowBox[{"0", "/;",
-          RowBox[{
-           RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}],
-        ",", "\[IndentingNewLine]",
-        RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
-       "}"}]}]}], "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", ",",
-   "\[IndentingNewLine]",
-   RowBox[{"{",
-    RowBox[{"n", ",",
-     RowBox[{"Range", "[",
-      RowBox[{"0", ",", "9"}], "]"}]}], "}"}]}], "\[IndentingNewLine]",
-  "]"}]], "Input",
+          RowBox[{"Sequence", "@@",
+           RowBox[{"PolyLog", "[",
+            RowBox[{
+             RowBox[{"Range", "[",
+              RowBox[{"0", ",", "9"}], "]"}], ",", "x"}], "]"}]}]}], "}"}],
+        ",", "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",",
+        RowBox[{"Join", "[",
+         RowBox[{
+          RowBox[{"-",
+           RowBox[{"10", "^",
+            RowBox[{"Subdivide", "[",
+             RowBox[{"10", ",",
+              RowBox[{"-", "10"}], ",", "500"}], "]"}]}]}], ",",
+          RowBox[{"1", "-",
+           RowBox[{"10", "^",
+            RowBox[{"Subdivide", "[",
+             RowBox[{"0", ",",
+              RowBox[{"-", "5"}], ",", "500"}], "]"}]}]}]}], "]"}]}], "}"}]}],
+      "\[IndentingNewLine]", "]"}], "//.",
+    RowBox[{"{", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{"x_", "\[RuleDelayed]",
+       RowBox[{"0", "/;",
+        RowBox[{
+         RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
+     "}"}]}], ",", "\[IndentingNewLine]",
+   RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
+    RowBox[{"{",
+     RowBox[{
+     "\"\<x\>\"", ",", "\"\<li0\>\"", ",", "\"\<li1\>\"", ",", "\"\<li2\>\"",
+      ",", "\"\<li3\>\"", ",", "\"\<li4\>\"", ",", "\"\<li5\>\"", ",",
+      "\"\<li6\>\"", ",", "\"\<li7\>\"", ",", "\"\<li8\>\"", ",",
+      "\"\<li9\>\""}], "}"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
  InitializationCell->True]
 }]],
 
@@ -203,6 +218,42 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"Normalization", "[", "\[Beta]_", "]"}], "=",
+   RowBox[{
+    FractionBox["1",
+     RowBox[{"2",
+      SuperscriptBox["\[Pi]", "2"]}]],
+    RowBox[{"Integrate", "[",
+     RowBox[{
+      FractionBox[
+       SuperscriptBox["u", "2"],
+       RowBox[{
+        SuperscriptBox["E",
+         RowBox[{"u", " ", "\[Beta]"}]], "-", "1"}]], ",",
+      RowBox[{"{",
+       RowBox[{"u", ",", "0", ",", "\[Infinity]"}], "}"}]}], "]"}]}]}],
+  ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"FermiDirac", "[",
+    RowBox[{"0", ",", "\[Beta]_"}], "]"}], "=",
+   RowBox[{
+    FractionBox["1",
+     RowBox[{"2",
+      SuperscriptBox["\[Pi]", "2"]}]],
+    RowBox[{"Integrate", "[",
+     RowBox[{
+      FractionBox[
+       SuperscriptBox["u", "2"],
+       RowBox[{
+        SuperscriptBox["E",
+         RowBox[{"u", " ", "\[Beta]"}]], "+", "1"}]], ",",
+      RowBox[{"{",
+       RowBox[{"u", ",", "0", ",", "\[Infinity]"}], "}"}]}], "]"}]}]}],
+  ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"BoseEinstein", "[",
+    RowBox[{"0", ",", "\[Beta]_"}], "]"}], "=",
    RowBox[{
     FractionBox["1",
      RowBox[{"2",
@@ -250,53 +301,6 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]",
  RowBox[{
   RowBox[{
-   RowBox[{
-    RowBox[{"FermiDirac", "'"}], "[",
-    RowBox[{"m_", ",",
-     RowBox[{"\[Beta]_", "?", "NumericQ"}]}], "]"}], ":=",
-   RowBox[{
-    FractionBox["1",
-     RowBox[{"2",
-      SuperscriptBox["\[Pi]", "2"]}]],
-    RowBox[{"Quiet", "@",
-     RowBox[{"NIntegrate", "[",
-      RowBox[{
-       RowBox[{"-",
-        FractionBox[
-         RowBox[{"u",
-          SqrtBox[
-           RowBox[{
-            SuperscriptBox["u", "2"], "-",
-            SuperscriptBox["m", "2"]}]],
-          SuperscriptBox["E",
-           RowBox[{"\[Beta]", " ", "u"}]]}],
-         SuperscriptBox[
-          RowBox[{"(",
-           RowBox[{
-            SuperscriptBox["E",
-             RowBox[{"u", " ", "\[Beta]"}]], "+", "1"}], ")"}], "2"]]}], ",",
-
-       RowBox[{"{",
-        RowBox[{"u", ",", "m", ",", "\[Infinity]"}], "}"}], ",",
-       "\[IndentingNewLine]",
-       RowBox[{"Method", "\[Rule]",
-        RowBox[{"{",
-         RowBox[{"\"\<DoubleExponential\>\"", ",",
-          RowBox[{"\"\<SymbolicProcessing\>\"", "\[Rule]", "False"}]}],
-         "}"}]}], ",", "\[IndentingNewLine]",
-       RowBox[{"WorkingPrecision", "\[Rule]", "200"}]}], "]"}]}]}]}],
-  ";"}], "\[IndentingNewLine]",
- RowBox[{
-  RowBox[{
-   RowBox[{"FermiDiracNormalized", "[",
-    RowBox[{"m_", ",", "\[Beta]_"}], "]"}], ":=",
-   FractionBox[
-    RowBox[{"FermiDirac", "[",
-     RowBox[{"m", ",", "\[Beta]"}], "]"}],
-    RowBox[{"Normalization", "[", "\[Beta]", "]"}]]}],
-  ";"}], "\[IndentingNewLine]",
- RowBox[{
-  RowBox[{
    RowBox[{"BoseEinstein", "[",
     RowBox[{"m_", ",",
      RowBox[{"\[Beta]_", "?", "NumericQ"}]}], "]"}], ":=",
@@ -325,162 +329,13 @@ Cell[BoxData[{
           RowBox[{"\"\<SymbolicProcessing\>\"", "\[Rule]", "False"}]}],
          "}"}]}], ",", "\[IndentingNewLine]",
        RowBox[{"WorkingPrecision", "\[Rule]", "200"}]}], "]"}]}]}]}],
-  ";"}], "\[IndentingNewLine]",
- RowBox[{
-  RowBox[{
-   RowBox[{
-    RowBox[{"BoseEinstein", "'"}], "[",
-    RowBox[{"m_", ",",
-     RowBox[{"\[Beta]_", "?", "NumericQ"}]}], "]"}], ":=",
-   RowBox[{
-    FractionBox["1",
-     RowBox[{"2",
-      SuperscriptBox["\[Pi]", "2"]}]],
-    RowBox[{"Quiet", "@",
-     RowBox[{"NIntegrate", "[",
-      RowBox[{
-       RowBox[{"-",
-        FractionBox[
-         RowBox[{"u",
-          SqrtBox[
-           RowBox[{
-            SuperscriptBox["u", "2"], "-",
-            SuperscriptBox["m", "2"]}]],
-          SuperscriptBox["E",
-           RowBox[{"\[Beta]", " ", "u"}]]}],
-         SuperscriptBox[
-          RowBox[{"(",
-           RowBox[{
-            SuperscriptBox["E",
-             RowBox[{"u", " ", "\[Beta]"}]], "-", "1"}], ")"}], "2"]]}], ",",
-
-       RowBox[{"{",
-        RowBox[{"u", ",", "m", ",", "\[Infinity]"}], "}"}], ",",
-       "\[IndentingNewLine]",
-       RowBox[{"Method", "\[Rule]",
-        RowBox[{"{",
-         RowBox[{"\"\<DoubleExponential\>\"", ",",
-          RowBox[{"\"\<SymbolicProcessing\>\"", "\[Rule]", "False"}]}],
-         "}"}]}], ",", "\[IndentingNewLine]",
-       RowBox[{"WorkingPrecision", "\[Rule]", "200"}]}], "]"}]}]}]}],
-  ";"}], "\[IndentingNewLine]",
- RowBox[{
-  RowBox[{
-   RowBox[{"BoseEinsteinNormalized", "[",
-    RowBox[{"m_", ",", "\[Beta]_"}], "]"}], ":=",
-   FractionBox[
-    RowBox[{"BoseEinstein", "[",
-     RowBox[{"m", ",", "\[Beta]"}], "]"}],
-    RowBox[{"Normalization", "[", "\[Beta]", "]"}]]}], ";"}]}], "Input",
+  ";"}]}], "Input",
  InitializationCell->True],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"CreateDirectory", "[",
-   RowBox[{"\"\<../tests/data/particle_statistics/\>\"", ",",
-    RowBox[{"CreateIntermediateDirectories", "\[Rule]", "True"}]}], "]"}],
-  ";"}]], "Input",
- InitializationCell->True],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{"Export", "[", "\[IndentingNewLine]",
   RowBox[{
-  "\"\<../tests/data/particle_statistics/bose_einstein.csv\>\"", ",",
-   "\[IndentingNewLine]",
-   RowBox[{
-    RowBox[{"Table", "[", "\[IndentingNewLine]",
-     RowBox[{
-      RowBox[{"N", "[",
-       RowBox[{
-        RowBox[{"{",
-         RowBox[{"m", ",", "\[Beta]", ",",
-          RowBox[{"BoseEinstein", "[",
-           RowBox[{"m", ",", "\[Beta]"}], "]"}], ",",
-          RowBox[{
-           RowBox[{"BoseEinstein", "'"}], "[", "\[Beta]", "]"}]}], "}"}], ",",
-         "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
-      RowBox[{"{",
-       RowBox[{"m", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}],
-      ",",
-      RowBox[{"{",
-       RowBox[{"\[Beta]", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}]}],
-     "\[IndentingNewLine]", "]"}], "//.",
-    RowBox[{"{", "\[IndentingNewLine]",
-     RowBox[{
-      RowBox[{"x_", "\[RuleDelayed]",
-       RowBox[{"0", "/;",
-        RowBox[{
-         RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
-      "\[IndentingNewLine]",
-      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
-     "}"}]}], ",", "\[IndentingNewLine]",
-   RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
-    RowBox[{"{",
-     RowBox[{
-     "\"\<m\>\"", ",", "\"\<beta\>\"", ",", "\"\<n\>\"", ",",
-      "\"\<n_deriv\>\""}], "}"}]}]}], "\[IndentingNewLine]",
-  "]"}], "\[IndentingNewLine]",
- RowBox[{"Export", "[", "\[IndentingNewLine]",
-  RowBox[{
-  "\"\<../tests/data/particle_statistics/bose_einstein_normalized.csv\>\"",
-   ",", "\[IndentingNewLine]",
-   RowBox[{
-    RowBox[{"Table", "[", "\[IndentingNewLine]",
-     RowBox[{
-      RowBox[{"N", "[",
-       RowBox[{
-        RowBox[{"{",
-         RowBox[{"m", ",", "\[Beta]", ",",
-          RowBox[{"BoseEinsteinNormalized", "[", "\[Beta]", "]"}], ",",
-          RowBox[{
-           RowBox[{"BoseEinsteinNormalized", "'"}], "[", "\[Beta]", "]"}]}],
-         "}"}], ",", "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
-      RowBox[{"{",
-       RowBox[{"m", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}],
-      ",",
-      RowBox[{"{",
-       RowBox[{"\[Beta]", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}]}],
-     "\[IndentingNewLine]", "]"}], "//.",
-    RowBox[{"{", "\[IndentingNewLine]",
-     RowBox[{
-      RowBox[{"x_", "\[RuleDelayed]",
-       RowBox[{"0", "/;",
-        RowBox[{
-         RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
-      "\[IndentingNewLine]",
-      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
-     "}"}]}], ",", "\[IndentingNewLine]",
-   RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
-    RowBox[{"{",
-     RowBox[{
-     "\"\<m\>\"", ",", "\"\<beta\>\"", ",", "\"\<n\>\"", ",",
-      "\"\<n_deriv\>\""}], "}"}]}]}], "\[IndentingNewLine]", "]"}]}], "Input",\
-
- InitializationCell->True]
-}]],
-
-Cell[BoxData[{
- RowBox[{"Export", "[", "\[IndentingNewLine]",
-  RowBox[{
-  "\"\<../tests/data/particle_statistics/fermi_dirac.csv\>\"", ",",
+  "\"\<../tests/data/particle_statistics/massless.csv\>\"", ",",
    "\[IndentingNewLine]",
    RowBox[{
     RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
@@ -488,24 +343,18 @@ Cell[BoxData[{
       RowBox[{"N", "[",
        RowBox[{
         RowBox[{"{",
-         RowBox[{"m", ",", "\[Beta]", ",",
-          RowBox[{"FermiDirac", "[", "\[Beta]", "]"}], ",",
-          RowBox[{
-           RowBox[{"FermiDirac", "'"}], "[", "\[Beta]", "]"}]}], "}"}], ",",
+         RowBox[{"\[Beta]", ",",
+          RowBox[{"BoseEinstein", "[",
+           RowBox[{"0", ",", "\[Beta]"}], "]"}], ",",
+          RowBox[{"FermiDirac", "[",
+           RowBox[{"0", ",", "\[Beta]"}], "]"}]}], "}"}], ",",
         "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
       RowBox[{"{",
-       RowBox[{"m", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}],
-      ",",
-      RowBox[{"{",
        RowBox[{"\[Beta]", ",",
         RowBox[{"10", "^",
          RowBox[{"Subdivide", "[",
           RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}]}],
+           RowBox[{"-", "10"}], ",", "10", ",", "1000"}], "]"}]}]}], "}"}]}],
      "\[IndentingNewLine]", "]"}], "//.",
     RowBox[{"{", "\[IndentingNewLine]",
      RowBox[{
@@ -520,37 +369,54 @@ Cell[BoxData[{
     RowBox[{"{",
      RowBox[{
      "\"\<m\>\"", ",", "\"\<beta\>\"", ",", "\"\<n\>\"", ",",
-      "\"\<n_deriv\>\""}], "}"}]}]}], "\[IndentingNewLine]",
-  "]"}], "\[IndentingNewLine]",
+      "\"\<n/n0\>\""}], "}"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
  RowBox[{"Export", "[", "\[IndentingNewLine]",
   RowBox[{
-  "\"\<../tests/data/particle_statistics/fermi_dirac_normalized.csv\>\"", ",",
-    "\[IndentingNewLine]",
+  "\"\<../tests/data/particle_statistics/massive.csv\>\"", ",",
+   "\[IndentingNewLine]",
    RowBox[{
-    RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
+    RowBox[{"Flatten", "[", "\[IndentingNewLine]",
      RowBox[{
-      RowBox[{"N", "[",
+      RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
        RowBox[{
+        RowBox[{"Module", "[",
+         RowBox[{
+          RowBox[{"{",
+           RowBox[{
+            RowBox[{"be", "=",
+             RowBox[{"BoseEinstein", "[",
+              RowBox[{"m", ",", "\[Beta]"}], "]"}]}], ",",
+            RowBox[{"fd", "=",
+             RowBox[{"FermiDirac", "[",
+              RowBox[{"m", ",", "\[Beta]"}], "]"}]}]}], "}"}], ",",
+          "\[IndentingNewLine]",
+          RowBox[{"N", "[",
+           RowBox[{
+            RowBox[{"{",
+             RowBox[{"m", ",", "\[Beta]", ",", "be", ",",
+              FractionBox["be",
+               RowBox[{"Normalization", "[", "\[Beta]", "]"}]], ",", "fd",
+              ",",
+              FractionBox["fd",
+               RowBox[{"Normalization", "[", "\[Beta]", "]"}]]}], "}"}], ",",
+            "$MachinePrecision"}], "]"}]}], "]"}], ",", "\[IndentingNewLine]",
         RowBox[{"{",
-         RowBox[{"m", ",", "\[Beta]", ",",
-          RowBox[{"FermiDiracNormalized", "[", "\[Beta]", "]"}], ",",
-          RowBox[{
-           RowBox[{"FermiDiracNormalized", "'"}], "[", "\[Beta]", "]"}]}],
-         "}"}], ",", "$MachinePrecision"}], "]"}], ",", "\[IndentingNewLine]",
-      RowBox[{"{",
-       RowBox[{"m", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}],
-      ",",
-      RowBox[{"{",
-       RowBox[{"\[Beta]", ",",
-        RowBox[{"10", "^",
-         RowBox[{"Subdivide", "[",
-          RowBox[{
-           RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}]}],
-     "\[IndentingNewLine]", "]"}], "//.",
+         RowBox[{"m", ",",
+          RowBox[{"10", "^",
+           RowBox[{"Subdivide", "[",
+            RowBox[{
+             RowBox[{"-", "10"}], ",", "10", ",", "200"}], "]"}]}]}], "}"}],
+        ",",
+        RowBox[{"{",
+         RowBox[{"\[Beta]", ",",
+          RowBox[{"10", "^",
+           RowBox[{"Subdivide", "[",
+            RowBox[{
+             RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], "}"}]}],
+        "\[IndentingNewLine]", "]"}], ",", "1"}], "]"}], "//.",
     RowBox[{"{", "\[IndentingNewLine]",
      RowBox[{
       RowBox[{"x_", "\[RuleDelayed]",
@@ -564,8 +430,7 @@ Cell[BoxData[{
     RowBox[{"{",
      RowBox[{
      "\"\<m\>\"", ",", "\"\<beta\>\"", ",", "\"\<n\>\"", ",",
-      "\"\<n_deriv\>\""}], "}"}]}]}], "\[IndentingNewLine]", "]"}]}], "Input",\
-
+      "\"\<n/n0\>\""}], "}"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
  InitializationCell->True]
 }]]
 }]

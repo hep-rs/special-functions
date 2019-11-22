@@ -36,32 +36,30 @@ CreateDirectory["../tests/data/bessel/",CreateIntermediateDirectories->True];
 
 
 (* ::Input::Initialization:: *)
-Do[
 Export[
-"../tests/data/bessel/k"<>ToString[n]<>".csv",
-Table[
-N[{x,BesselK[n,x]},$MachinePrecision],
-{x,10^Subdivide[-20,20,1000]}
+"../tests/data/bessel/k.csv",
+ParallelTable[
+N[{x,Sequence@@BesselK[Range[0,9],x]},$MachinePrecision],
+{x,10^Subdivide[-10,10,1000]}
 ]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
-}
-]
-,
-{n,Range[0,9]}
+},
+"TableHeadings"->{"x","K0","K1","K2","K3","K4","K5","K6","K7","K8","K9"}
 ]
 
 
 (* ::Input::Initialization:: *)
 Export[
 "../tests/data/bessel/k1_on_k2.csv",
-Table[
+ParallelTable[
 N[{x,BesselK[1,x]/BesselK[2,x]},$MachinePrecision],
-{x,10^Subdivide[-20,20,1000]}
+{x,10^Subdivide[-10,10,1000]}
 ]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
-}
+},
+"TableHeadings"->{"x","K1/K2"}
 ]
 
 
@@ -70,89 +68,56 @@ CreateDirectory["../tests/data/polylog/",CreateIntermediateDirectories->True];
 
 
 (* ::Input::Initialization:: *)
-Do[
 Export[
-"../tests/data/polylog/li"<>ToString[n]<>".csv",
-Table[
-N[{x,PolyLog[n,x]},$MachinePrecision],
+"../tests/data/polylog/li.csv",
+ParallelTable[
+N[{x,Sequence@@PolyLog[Range[0,9],x]},$MachinePrecision],
 {x,Join[-10^Subdivide[10,-10,500],1-10^Subdivide[0,-5,500]]}
 ]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
-}
-]
-,
-{n,Range[0,9]}
+},
+"TableHeadings"->{"x","li0","li1","li2","li3","li4","li5","li6","li7","li8","li9"}
 ]
 
 
 (* ::Input::Initialization:: *)
 Normalization[\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])-1),{u,0,\[Infinity]}];
+FermiDirac[0,\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])+1),{u,0,\[Infinity]}];
+BoseEinstein[0,\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])-1),{u,0,\[Infinity]}];
 FermiDirac[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])+1),{u,m,\[Infinity]},
 Method->{"DoubleExponential","SymbolicProcessing"->False},
 WorkingPrecision->200];
-FermiDirac'[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[-((u Sqrt[u^2-m^2] E^(\[Beta] u))/(E^(u \[Beta])+1)^2),{u,m,\[Infinity]},
-Method->{"DoubleExponential","SymbolicProcessing"->False},
-WorkingPrecision->200];
-FermiDiracNormalized[m_,\[Beta]_]:=FermiDirac[m,\[Beta]]/Normalization[\[Beta]];
 BoseEinstein[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])-1),{u,m,\[Infinity]},
 Method->{"DoubleExponential","SymbolicProcessing"->False},
 WorkingPrecision->200];
-BoseEinstein'[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[-((u Sqrt[u^2-m^2] E^(\[Beta] u))/(E^(u \[Beta])-1)^2),{u,m,\[Infinity]},
-Method->{"DoubleExponential","SymbolicProcessing"->False},
-WorkingPrecision->200];
-BoseEinsteinNormalized[m_,\[Beta]_]:=BoseEinstein[m,\[Beta]]/Normalization[\[Beta]];
-
-
-(* ::Input::Initialization:: *)
-CreateDirectory["../tests/data/particle_statistics/",CreateIntermediateDirectories->True];
 
 
 (* ::Input::Initialization:: *)
 Export[
-"../tests/data/particle_statistics/bose_einstein.csv",
-Table[
-N[{m,\[Beta],BoseEinstein[m,\[Beta]],BoseEinstein'[\[Beta]]},$MachinePrecision],
-{m,10^Subdivide[-10,10,100]},{\[Beta],10^Subdivide[-10,10,100]}
-]//.{
-x_:>0/;Abs[x]<$MinMachineNumber,
-Indeterminate->NaN
-},
-"TableHeadings"->{"m","beta","n","n_deriv"}
-]
-Export[
-"../tests/data/particle_statistics/bose_einstein_normalized.csv",
-Table[
-N[{m,\[Beta],BoseEinsteinNormalized[\[Beta]],BoseEinsteinNormalized'[\[Beta]]},$MachinePrecision],
-{m,10^Subdivide[-10,10,100]},{\[Beta],10^Subdivide[-10,10,100]}
-]//.{
-x_:>0/;Abs[x]<$MinMachineNumber,
-Indeterminate->NaN
-},
-"TableHeadings"->{"m","beta","n","n_deriv"}
-]
-
-
-(* ::Input::Initialization:: *)
-Export[
-"../tests/data/particle_statistics/fermi_dirac.csv",
+"../tests/data/particle_statistics/massless.csv",
 ParallelTable[
-N[{m,\[Beta],FermiDirac[\[Beta]],FermiDirac'[\[Beta]]},$MachinePrecision],
-{m,10^Subdivide[-10,10,100]},{\[Beta],10^Subdivide[-10,10,100]}
+N[{\[Beta],BoseEinstein[0,\[Beta]],FermiDirac[0,\[Beta]]},$MachinePrecision],
+{\[Beta],10^Subdivide[-10,10,1000]}
 ]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
 },
-"TableHeadings"->{"m","beta","n","n_deriv"}
+"TableHeadings"->{"m","beta","n","n/n0"}
 ]
+
+
+(* ::Input::Initialization:: *)
 Export[
-"../tests/data/particle_statistics/fermi_dirac_normalized.csv",
+"../tests/data/particle_statistics/massive.csv",
+Flatten[
 ParallelTable[
-N[{m,\[Beta],FermiDiracNormalized[\[Beta]],FermiDiracNormalized'[\[Beta]]},$MachinePrecision],
-{m,10^Subdivide[-10,10,100]},{\[Beta],10^Subdivide[-10,10,100]}
-]//.{
+Module[{be=BoseEinstein[m,\[Beta]],fd=FermiDirac[m,\[Beta]]},
+N[{m,\[Beta],be,be/Normalization[\[Beta]],fd,fd/Normalization[\[Beta]]},$MachinePrecision]],
+{m,10^Subdivide[-10,10,200]},{\[Beta],10^Subdivide[-10,10,100]}
+],1]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
 },
-"TableHeadings"->{"m","beta","n","n_deriv"}
+"TableHeadings"->{"m","beta","n","n/n0"}
 ]
