@@ -20,12 +20,12 @@ ChebyshevSplits::usage = "Split a broader interval into sub-intervals and get th
 
 Options[ChebyshevSplits] = Join[
   {
-    "Points" -> 24,
+    "Points" -> 16,
     "RecursionDepth" -> 0,
     PrecisionGoal -> 2 * $MachinePrecision,
     WorkingPrecision -> Automatic,
     AccuracyGoal -> Automatic,
-    MaxRecursion -> 16
+    MaxRecursion -> 12
   },
   Options[NIntegrate]
 ];
@@ -53,11 +53,11 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     ];
 
     wp = OptionValue[WorkingPrecision] /. Automatic -> 4 * OptionValue[PrecisionGoal];
-    ap = OptionValue[AccuracyGoal] /. Automatic -> Min[10^(-2 * OptionValue[PrecisionGoal]), GeometricMean[Abs@{f[a], f[b]}] / 1000];
+    ap = OptionValue[AccuracyGoal] /. Automatic -> Min[10^(- OptionValue[PrecisionGoal]), GeometricMean[Abs@{f[a], f[b]}] / 1000];
 
-    Print[StringTemplate["Finding coefficients for interval [``, ``]"][N[a, 4], N[b, 4]]];
+    Print[StringTemplate["[Depth ``]: Finding coefficients for interval [``, ``]"][OptionValue["RecursionDepth"], N[a, 4], N[b, 4]]];
     steps = Reap[
-      NIntegrate[
+      Quiet@NIntegrate[
         f, {x, a, b},
         Method -> {
           "ClenshawCurtisRule",
@@ -65,6 +65,7 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
                 },
         IntegrationMonitor :> (Sow[Map[{First[#1@"Boundaries"], #1@"GetValues"} &, #1], sowTag] &),
         WorkingPrecision -> wp,
+        MaxRecursion -> 0,
         Evaluate@FilterRules[{opts}, Options[NIntegrate]]
       ],
       sowTag][[2, 1]];
