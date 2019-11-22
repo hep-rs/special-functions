@@ -14,7 +14,7 @@ mod fermi_dirac_normalized;
 /// units of GeV^3.
 pub fn massless_bose_einstein(beta: f64) -> f64 {
     // ζ(3) / π²
-    0.12179382823357308 * beta.powi(-3)
+    0.121_793_828_233_573_08 * beta.powi(-3)
 }
 
 /// Equilibrium number density of massive Bose-Einstein particle.
@@ -50,7 +50,7 @@ approx_fn! {
 /// units of GeV^3.
 pub fn massless_fermi_dirac(beta: f64) -> f64 {
     // 3 ζ(3) / 4 π²
-    0.09134537117517981 * beta.powi(-3)
+    0.091_345_371_175_179_81 * beta.powi(-3)
 }
 
 /// Equilibrium number density of massive Fermi-Dirac particle.
