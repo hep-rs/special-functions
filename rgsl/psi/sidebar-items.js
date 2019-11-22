@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["diagamma",""],["polygamma",""],["trigamma",""]]});

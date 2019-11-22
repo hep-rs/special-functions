@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["MatrixF32",""],["MatrixF64",""],["MatrixView",""]]});

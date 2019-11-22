@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["complete_integrals","The complete Fermi-Dirac integral F_j(x) is given by,"],["incomplete_integrals","The incomplete Fermi-Dirac integral F_j(x,b) is given by,"]]});

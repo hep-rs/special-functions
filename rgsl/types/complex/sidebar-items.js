@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["ComplexF32",""],["ComplexF64",""]]});

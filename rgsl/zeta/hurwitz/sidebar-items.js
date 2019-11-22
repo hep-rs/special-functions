@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["hzeta","This routine computes the Hurwitz zeta function \\zeta(s,q) for s > 1, q > 0."],["hzeta_e","This routine computes the Hurwitz zeta function \\zeta(s,q) for s > 1, q > 0."]]});

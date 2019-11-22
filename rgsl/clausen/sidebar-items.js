@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["clausen","This routine computes the Clausen integral Cl_2(x)."],["clausen_e","This routine computes the Clausen integral Cl_2(x)."]]});

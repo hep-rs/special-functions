@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["eta","This routine computes the eta function \\eta(s) for arbitrary s."],["eta_e","This routine computes the eta function \\eta(s) for arbitrary s."],["eta_int","This routine computes the eta function \\eta(n) for integer n."],["eta_int_e","This routine computes the eta function \\eta(n) for integer n."]]});

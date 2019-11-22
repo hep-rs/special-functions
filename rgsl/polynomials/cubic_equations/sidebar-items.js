@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["poly_complex_solve_cubic","This function finds the complex roots of the cubic equation,"],["poly_solve_cubic","This function finds the real roots of the cubic equation,"]]});

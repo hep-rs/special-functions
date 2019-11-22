@@ -208,77 +208,138 @@
 <span id="208">208</span>
 <span id="209">209</span>
 <span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
 <span class="kw">use</span> <span class="ident">approx_fn</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>::<span class="ident">consts</span>::<span class="ident">PI</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
 
 <span class="kw">mod</span> <span class="ident">bose_einstein</span>;
 <span class="kw">mod</span> <span class="ident">bose_einstein_normalized</span>;
 <span class="kw">mod</span> <span class="ident">fermi_dirac</span>;
 <span class="kw">mod</span> <span class="ident">fermi_dirac_normalized</span>;
 
-<span class="doccomment">/// Approximation of the equilibrium number density of massless Bose-Einstein</span>
-<span class="doccomment">/// particle with specified chemical potential.</span>
+<span class="doccomment">/// Equilibrium number density of a massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `mu` and `beta` must be in units such that `mu * beta` is</span>
-<span class="doccomment">/// unitless, where `mu` is the chemical potential and `beta` is the inverse</span>
-<span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>;
-    (<span class="ident">PI</span> <span class="op">*</span> <span class="ident">PI</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="number">3</span>)).<span class="ident">recip</span>()
-        <span class="op">*</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1.622_619_748_345_855e-16</span> {
-            <span class="number">1.202_056_903_159_594</span>
-        } <span class="kw">else</span> {
-            <span class="ident">_bose_einstein</span>(<span class="ident">x</span>)
-        }
+<span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
+<span class="doccomment">/// units of GeV^3.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">massless_bose_einstein</span>(<span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="comment">// ζ(3) / π²</span>
+    <span class="number">0.121_793_828_233_573_08</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+}
+
+<span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
+<span class="doccomment">/// result is in units of `[m^3]`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_bose_einstein</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class="doccomment">/// Approximation of the equilibrium number density of massive Bose-Einstein</span>
-<span class="doccomment">/// particle normalized to a massless Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle normalized to a</span>
+<span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
 <span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">_bose_einstein_normalized</span>((<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>).<span class="ident">ln</span>())
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">_bose_einstein_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_bose_einstein_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class="doccomment">/// Approximation of the equilibrium number density of massless Fermi-Dirac</span>
-<span class="doccomment">/// particle with specified chemical potential.</span>
+<span class="doccomment">/// Equilibrium number density of a massless Fermi-Dirac particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `mu` and `beta` must be in units such that `mu * beta` is</span>
-<span class="doccomment">/// unitless, where `mu` is the chemical potential and `beta` is the inverse</span>
-<span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">_fermi_dirac</span>(<span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>) <span class="op">/</span> (<span class="ident">PI</span> <span class="op">*</span> <span class="ident">PI</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="number">3</span>))
+<span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
+<span class="doccomment">/// units of GeV^3.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">massless_fermi_dirac</span>(<span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="comment">// 3 ζ(3) / 4 π²</span>
+    <span class="number">0.091_345_371_175_179_81</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+}
+
+<span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
+<span class="doccomment">/// result is in units of `[m^3]`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_fermi_dirac</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class="doccomment">/// Approximation of the equilibrium number density of massive Fermi-Dirac</span>
-<span class="doccomment">/// particle normalized to a massless Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle normalized to a</span>
+<span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
 <span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">_fermi_dirac_normalized</span>((<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>).<span class="ident">ln</span>())
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">_fermi_dirac_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -287,65 +348,57 @@
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">bose_einstein</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/bose_einstein.csv&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="kw">fn</span> <span class="ident">massless</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>;
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
+            <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">be</span>, <span class="ident">fd</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
 
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">_bose_einstein</span>(<span class="ident">x</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">be</span>.<span class="ident">is_nan</span>() {
+                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">massless_bose_einstein</span>(<span class="ident">b</span>);
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">b</span>, <span class="ident">v</span>, <span class="ident">be</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">be</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
+            }
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">fd</span>.<span class="ident">is_nan</span>() {
+                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">massless_fermi_dirac</span>(<span class="ident">b</span>);
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">b</span>, <span class="ident">v</span>, <span class="ident">fd</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">fd</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
             }
         }
+
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/bose_einstein_normalized.csv&quot;</span>)
-                .<span class="ident">unwrap</span>();
+    <span class="kw">fn</span> <span class="ident">massive</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>;
+
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> [
+            <span class="kw">super</span>::<span class="ident">bose_einstein</span>,
+            <span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>,
+            <span class="kw">super</span>::<span class="ident">fermi_dirac</span>,
+            <span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>,
+        ];
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">6</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">beta</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">1</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">2</span>..];
 
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">6.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">170</span>));
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
+
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">m</span>, <span class="ident">beta</span>);
+                    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n[{}]({:e}, {:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">i</span>, <span class="ident">m</span>, <span class="ident">beta</span>, <span class="ident">yi</span>, <span class="ident">nyi</span>);
+                    <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">10.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>));
+                }
             }
         }
-    }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">fermi_dirac</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/fermi_dirac.csv&quot;</span>).<span class="ident">unwrap</span>();
-
-        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
-
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">_fermi_dirac</span>(<span class="ident">x</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
-            }
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/fermi_dirac_normalized.csv&quot;</span>)
-                .<span class="ident">unwrap</span>();
-
-        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">v</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
-
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">n</span>, <span class="ident">v</span>, <span class="number">6.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">170</span>));
-            }
-        }
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
@@ -355,68 +408,117 @@
     <span class="kw">use</span> <span class="ident">test</span>::<span class="ident">Bencher</span>;
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/bose_einstein.csv&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
+    <span class="kw">fn</span> <span class="ident">massless_bose_einstein</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">3</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                <span class="ident">x</span>[<span class="number">0</span>]
+            })
+            .<span class="ident">collect</span>();
 
-        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">bose_einstein</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                    <span class="ident">test</span>::<span class="ident">black_box</span>((<span class="ident">x</span>, <span class="ident">v</span>, <span class="ident">n</span>));
-                }
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">beta</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">massless_bose_einstein</span>(<span class="ident">beta</span>));
             }
         });
+
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/bose_einstein_normalized.csv&quot;</span>)
-                .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
+    <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">6</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
+            })
+            .<span class="ident">collect</span>();
 
-        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                    <span class="ident">test</span>::<span class="ident">black_box</span>((<span class="ident">x</span>, <span class="ident">v</span>, <span class="ident">n</span>));
-                }
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">bose_einstein</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
             }
         });
+
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/fermi_dirac.csv&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
+    <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">6</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
+            })
+            .<span class="ident">collect</span>();
 
-        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">fermi_dirac</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                    <span class="ident">test</span>::<span class="ident">black_box</span>((<span class="ident">x</span>, <span class="ident">v</span>, <span class="ident">n</span>));
-                }
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
             }
         });
+
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
-        <span class="kw">let</span> <span class="ident">rdr</span> <span class="op">=</span>
-            <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/fermi_dirac_normalized.csv&quot;</span>)
-                .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">f64</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rdr</span>.<span class="ident">into_deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">unwrap</span>()).<span class="ident">collect</span>();
+    <span class="kw">fn</span> <span class="ident">massless_fermi_dirac</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">3</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                <span class="ident">x</span>[<span class="number">0</span>]
+            })
+            .<span class="ident">collect</span>();
 
-        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">x</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">v</span>.<span class="ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>(<span class="number">1.0</span>, <span class="ident">x</span>);
-                    <span class="ident">test</span>::<span class="ident">black_box</span>((<span class="ident">x</span>, <span class="ident">v</span>, <span class="ident">n</span>));
-                }
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">beta</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">massless_fermi_dirac</span>(<span class="ident">beta</span>));
             }
         });
+
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[<span class="ident">bench</span>]</span>
+    <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">6</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
+            })
+            .<span class="ident">collect</span>();
+
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">fermi_dirac</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
+            }
+        });
+
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[<span class="ident">bench</span>]</span>
+    <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
+            .<span class="ident">into_deserialize</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">6</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
+            })
+            .<span class="ident">collect</span>();
+
+        <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
+            }
+        });
+
+        <span class="prelude-val">Ok</span>(())
     }
 }
 </pre></div>

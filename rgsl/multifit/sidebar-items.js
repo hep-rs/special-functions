@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["covar","Compute the covariance matrix cov = inv (J^T J) by QRP^T decomposition of J"],["gradient",""],["test_delta",""]]});
