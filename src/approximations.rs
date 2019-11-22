@@ -1,6 +1,6 @@
 //! Approximations
 
-pub mod interpolation;
+pub mod linear;
 
 /// Evaluates an arbitrary single-variable polynomial at a particular point.
 ///
@@ -225,60 +225,65 @@ pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
 ///
 /// ```ignore
 /// approx_fn! {
-///     fn foo(mod = path::to::module, type = approx_type);
-/// }`
+///     fn foo(mod = path::to::module, type = approx_type, outer = fn, inner = fn);
+/// }
+/// ```
 ///
 /// The `approx_type` can be either one of `polynomial`, `polynomial_ratio` or
-/// `chebyshev`.
+/// `chebyshev`.  The `outer` and `inner` are names of functions which apply to
+/// the result and argument before they go in the piecewise approximation.
+/// These *do not* apply to `lower` and `upper`.
 #[macro_export]
 macro_rules! approx_fn {
     (
         $(#[$outer:meta])*
-        fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
+        fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
     ) => {
         approx_fn!{
             $(#[$outer])*
-            () $fn(mod = $mod, type = $t);
+            () $fn(mod = $mod, type = $t, outer = $o, inner = $i);
         }
     };
 
     (
         $(#[$outer:meta])*
-        pub fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
+        pub fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
     ) => {
         approx_fn!{
             $(#[$outer])*
-            (pub) $fn(mod = $mod, type = $t);
+            (pub) $fn(mod = $mod, type = $t, outer = $o, inner = $i);
         }
     };
 
     (
         $(#[$outer:meta])*
-        pub(crate) fn $fn:ident(mod = $mod:ident, type = $t:tt)$(;)?
+        pub(crate) fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
     ) => {
         approx_fn!{
             $(#[$outer])*
-            (pub(crate)) $fn(mod = $mod, type = $t);
+            (pub(crate)) $fn(mod = $mod, type = $t, outer = $o, inner = $i);
         }
     };
 
     // Polynomial approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = polynomial);
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = polynomial, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
         $($vis)* fn $fn(x: f64) -> f64 {
-            if x < *$mod::SPLITS.first().unwrap() {
+            let ix = $i(x);
+
+            if ix < *$mod::SPLITS.first().unwrap() {
                 $mod::lower(x)
-            } else if x > *$mod::SPLITS.last().unwrap() {
+            } else if ix > *$mod::SPLITS.last().unwrap() {
                 $mod::upper(x)
             } else {
-                $crate::approximations::piecewise_polynomial(
-                    x,
+                $o($crate::approximations::piecewise_polynomial(
+                    ix,
                     &$mod::COEFFICIENTS,
                     &$mod::SPLITS,
-                )
+                ))
             }
         }
     };
@@ -286,20 +291,22 @@ macro_rules! approx_fn {
     // Polynomial ratio approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = ratio);
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = ratio, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
         $($vis)* fn $fn(x: f64) -> f64 {
-            if x < *$mod::SPLITS.first().unwrap() {
+            let ix = $i(x);
+
+            if ix < *$mod::SPLITS.first().unwrap() {
                 $mod::lower(x)
-            } else if x > *$mod::SPLITS.last().unwrap() {
+            } else if ix > *$mod::SPLITS.last().unwrap() {
                 $mod::upper(x)
             } else {
-                $crate::approximations::piecewise_polynomial_ratio(
-                    x,
+                $o($crate::approximations::piecewise_polynomial_ratio(
+                    ix,
                     &$mod::COEFFICIENTS,
                     &$mod::SPLITS,
-                )
+                ))
             }
         }
     };
@@ -307,20 +314,22 @@ macro_rules! approx_fn {
     // Chebyshev approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = chebyshev);
+        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = chebyshev, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
         $($vis)* fn $fn(x: f64) -> f64 {
-            if x < *$mod::SPLITS.first().unwrap() {
+            let ix = $i(x);
+
+            if ix < *$mod::SPLITS.first().unwrap() {
                 $mod::lower(x)
-            } else if x > *$mod::SPLITS.last().unwrap() {
+            } else if ix > *$mod::SPLITS.last().unwrap() {
                 $mod::upper(x)
             } else {
-                $crate::approximations::piecewise_chebyshev(
-                    x,
+                $o($crate::approximations::piecewise_chebyshev(
+                    ix,
                     &$mod::COEFFICIENTS,
                     &$mod::SPLITS,
-                )
+                ))
             }
         }
     };
@@ -470,7 +479,6 @@ mod tests {
             }
         }
     }
-
 }
 
 #[cfg(feature = "nightly")]

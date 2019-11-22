@@ -1,4 +1,4 @@
-//! Interpolations
+//! Linear interpolation
 
 /// Perform linear interpolation on data.
 ///
