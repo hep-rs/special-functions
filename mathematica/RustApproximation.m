@@ -140,6 +140,7 @@ RustForm::unimplemented = "Unable to convert `` into Rust form.";
 RustForm[Infinity] = "std::f64::INFINITY";
 RustForm[-Infinity] = "std::f64::NEG_INFINITY";
 RustForm[ComplexInfinity] = "std::f64::INFINITY";
+RustForm[0] := "0.0";
 RustForm[n_?NumericQ] := StringReplace[
   ToString[CForm[N[n, $MachinePrecision]]],
   RegularExpression["(\\d)\\.e"] -> "$1e"];
