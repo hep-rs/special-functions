@@ -51,7 +51,11 @@ Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    1.0 + x.powi(2) * (`a` + `b` * x.ln())
+    if x == 0.0 {
+        1.0
+    } else {
+        1.0 + x.powi(2) * (`a` + `b` * x.ln())
+    }
 }\n\n"][<|
   "a" -> RustForm[a /. fit["BestFitParameters"]],
   "b" -> RustForm[b /. fit["BestFitParameters"]]
