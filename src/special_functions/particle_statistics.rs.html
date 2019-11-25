@@ -259,24 +259,42 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
 <span class="kw">use</span> <span class="ident">approx_fn</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">identity</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
 
-<span class="kw">mod</span> <span class="ident">bose_einstein</span>;
+<span class="kw">mod</span> <span class="ident">bose_einstein_massive</span>;
+<span class="kw">mod</span> <span class="ident">bose_einstein_massless</span>;
 <span class="kw">mod</span> <span class="ident">bose_einstein_normalized</span>;
-<span class="kw">mod</span> <span class="ident">fermi_dirac</span>;
+<span class="kw">mod</span> <span class="ident">fermi_dirac_massive</span>;
+<span class="kw">mod</span> <span class="ident">fermi_dirac_massless</span>;
 <span class="kw">mod</span> <span class="ident">fermi_dirac_normalized</span>;
 
-<span class="doccomment">/// Equilibrium number density of a massless Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of a massless Bose-Einstein particle with</span>
+<span class="doccomment">/// chemical potential \\(\mu \leq 0\\).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
 <span class="doccomment">/// units of GeV^3.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">massless_bose_einstein</span>(<span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="comment">// ζ(3) / π²</span>
-    <span class="number">0.121_793_828_233_573_08</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massless</span>(<span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
+}
+
+<span class="macro">approx_fn</span><span class="macro">!</span> {
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_massless</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_massless</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
 <span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle.</span>
@@ -284,12 +302,12 @@
 <span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
 <span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
 <span class="doccomment">/// result is in units of `[m^3]`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_bose_einstein</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_massive</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_massive</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
 <span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle normalized to a</span>
@@ -306,13 +324,17 @@
     () <span class="kw">fn</span> <span class="ident">_bose_einstein_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class="doccomment">/// Equilibrium number density of a massless Fermi-Dirac particle.</span>
+<span class="doccomment">/// Equilibrium number density of a massless Fermi-Dirac particle with chemical</span>
+<span class="doccomment">/// potential \\(\mu \in \mathbb{R}\\).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
 <span class="doccomment">/// units of GeV^3.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">massless_fermi_dirac</span>(<span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="comment">// 3 ζ(3) / 4 π²</span>
-    <span class="number">0.091_345_371_175_179_81</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massless</span>(<span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
+}
+
+<span class="macro">approx_fn</span><span class="macro">!</span> {
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_massless</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_massless</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
 <span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle.</span>
@@ -320,12 +342,12 @@
 <span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
 <span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
 <span class="doccomment">/// result is in units of `[m^3]`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class="ident">_fermi_dirac</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_massive</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_massive</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
 <span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle normalized to a</span>
@@ -352,17 +374,17 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>;
 
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">be</span>, <span class="ident">fd</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> (<span class="ident">mu</span>, <span class="ident">beta</span>, <span class="ident">be</span>, <span class="ident">fd</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>, <span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
 
             <span class="kw">if</span> <span class="op">!</span><span class="ident">be</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">massless_bose_einstein</span>(<span class="ident">b</span>);
-                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">b</span>, <span class="ident">v</span>, <span class="ident">be</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">be</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
+                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>, <span class="ident">beta</span>);
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}, {:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">mu</span>, <span class="ident">beta</span>, <span class="ident">v</span>, <span class="ident">be</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">be</span>, <span class="ident">v</span>, <span class="number">11.7</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">280</span>));
             }
             <span class="kw">if</span> <span class="op">!</span><span class="ident">fd</span>.<span class="ident">is_nan</span>() {
-                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">massless_fermi_dirac</span>(<span class="ident">b</span>);
-                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">b</span>, <span class="ident">v</span>, <span class="ident">fd</span>);
-                <span class="ident">approx_eq</span>(<span class="ident">fd</span>, <span class="ident">v</span>, <span class="number">12.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">300</span>));
+                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>, <span class="ident">beta</span>);
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;n({:e}, {:e}) = {:e} [{:e}]&quot;</span>, <span class="ident">mu</span>, <span class="ident">beta</span>, <span class="ident">v</span>, <span class="ident">fd</span>);
+                <span class="ident">approx_eq</span>(<span class="ident">fd</span>, <span class="ident">v</span>, <span class="number">11.7</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">280</span>));
             }
         }
 
@@ -374,9 +396,9 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> [
-            <span class="kw">super</span>::<span class="ident">bose_einstein</span>,
+            <span class="kw">super</span>::<span class="ident">bose_einstein_massive</span>,
             <span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>,
-            <span class="kw">super</span>::<span class="ident">fermi_dirac</span>,
+            <span class="kw">super</span>::<span class="ident">fermi_dirac_massive</span>,
             <span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>,
         ];
 
