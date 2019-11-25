@@ -55,15 +55,6 @@ use crate::approximations::polynomial;\n\n"
     |>]
   ];
 
-  (* Find the series approximation for large x *)
-  upper = Normal@Series[f[x], {x, 1, 10}];
-  xUpper = x /. FindRoot[
-    Abs[upper / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
-    {x, 1/2, -Infinity, 1},
-    WorkingPrecision -> 5 $MachinePrecision,
-    MaxIterations -> Infinity
-  ];
-
   (* Write out the approximation valid for large x. *)
   upper = Normal@Series[f[x], {x, 1, 10}];
   xUpper = x /. FindRoot[
