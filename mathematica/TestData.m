@@ -20,7 +20,7 @@
 
 
 (* ::Input::Initialization:: *)
-$MaxExtraPrecision=1000;
+$MaxExtraPrecision=200;
 
 
 (* ::Input::Initialization:: *)
@@ -83,12 +83,13 @@ Indeterminate->NaN
 
 (* ::Input::Initialization:: *)
 Normalization[\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])-1),{u,0,\[Infinity]}];
-FermiDirac[0,\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])+1),{u,0,\[Infinity]}];
-BoseEinstein[0,\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(u \[Beta])-1),{u,0,\[Infinity]}];
-FermiDirac[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])+1),{u,m,\[Infinity]},
+FermiDirac[0,\[Mu]_,\[Beta]_]=1/(2\[Pi]^2) Integrate[u^2/(E^(\[Beta](u-\[Mu]))+1),{u,0,\[Infinity]},Assumptions->\[Beta]>0];
+BoseEinstein[0,\[Mu]_,\[Beta]_]/;\[Mu]<=0=1/(2\[Pi]^2) Integrate[u^2/(E^(\[Beta](u-\[Mu]))-1),{u,0,\[Infinity]},Assumptions->\[Beta]>0];
+BoseEinstein[0,\[Mu]_,\[Beta]_]/;\[Mu]>0=NaN;
+FermiDirac[m_,0,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])+1),{u,m,\[Infinity]},
 Method->{"DoubleExponential","SymbolicProcessing"->False},
 WorkingPrecision->200];
-BoseEinstein[m_,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])-1),{u,m,\[Infinity]},
+BoseEinstein[m_,0,\[Beta]_?NumericQ]:=1/(2\[Pi]^2) Quiet@NIntegrate[(u Sqrt[u^2-m^2])/(E^(u \[Beta])-1),{u,m,\[Infinity]},
 Method->{"DoubleExponential","SymbolicProcessing"->False},
 WorkingPrecision->200];
 
@@ -96,14 +97,16 @@ WorkingPrecision->200];
 (* ::Input::Initialization:: *)
 Export[
 "../tests/data/particle_statistics/massless.csv",
-ParallelTable[
-N[{\[Beta],BoseEinstein[0,\[Beta]],FermiDirac[0,\[Beta]]},$MachinePrecision],
-{\[Beta],10^Subdivide[-10,10,1000]}
-]//.{
+Flatten[ParallelTable[
+N[{\[Mu],\[Beta],BoseEinstein[0,\[Mu],\[Beta]],FermiDirac[0,\[Mu],\[Beta]]}/.{
+Exp[x_]:>0/;x<50Log[$MinMachineNumber],Exp[x_]:>\[Infinity]/;x>50Log[$MaxMachineNumber]
+},$MachinePrecision],
+{\[Mu],Join[-10^Subdivide[-10,10,100],10^Subdivide[-10,10,100]]},{\[Beta],10^Subdivide[-10,10,200]}
+],1]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
 },
-"TableHeadings"->{"m","beta","n","n/n0"}
+"TableHeadings"->{"mu","beta","be","fd"}
 ]
 
 
@@ -119,5 +122,5 @@ N[{m,\[Beta],be,be/Normalization[\[Beta]],fd,fd/Normalization[\[Beta]]},$Machine
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN
 },
-"TableHeadings"->{"m","beta","n","n/n0"}
+"TableHeadings"->{"m","beta","be","be/n0","fd","fd/n0"}
 ]
