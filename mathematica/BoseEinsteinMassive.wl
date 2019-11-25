@@ -32,7 +32,7 @@ WriteString[
 
 (* Find the approximation for small x *)
 data = Table[{x, f[x]}, {x, 10^Subdivide[-30, -20, 20]}];
-fit = NonlinearModelFit[data, 1/x^3 (a + x^2 (b + c Log[x])), {a, b, c}, x];
+fit = NonlinearModelFit[data, 1/x^3 (Zeta[3] / Pi^2 + x^2 (b + c Log[x])), {b, c}, x];
 lower[x_] = fit["BestFit"];
 xLower = x /. FindRoot[
   Abs[lower[x]/f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
@@ -45,9 +45,8 @@ Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    x.powi(-3) * (`a` + x.powi(2) * (`b` + `c` * x.ln()))
+    x.powi(-3) * (0.12179382823357308 + x.powi(2) * (`b` + `c` * x.ln()))
 }\n\n"][<|
-  "a" -> RustForm[a /. fit["BestFitParameters"]],
   "b" -> RustForm[b /. fit["BestFitParameters"]],
   "c" -> RustForm[c /. fit["BestFitParameters"]]
   |>]];
