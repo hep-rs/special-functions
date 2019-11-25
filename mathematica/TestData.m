@@ -20,7 +20,7 @@
 
 
 (* ::Input::Initialization:: *)
-$MaxExtraPrecision=200;
+$MaxExtraPrecision=1000;
 
 
 (* ::Input::Initialization:: *)
@@ -98,13 +98,14 @@ WorkingPrecision->200];
 Export[
 "../tests/data/particle_statistics/massless.csv",
 Flatten[ParallelTable[
-N[{\[Mu],\[Beta],BoseEinstein[0,\[Mu],\[Beta]],FermiDirac[0,\[Mu],\[Beta]]}/.{
+Quiet@N[{\[Mu],\[Beta],BoseEinstein[0,\[Mu],\[Beta]],FermiDirac[0,\[Mu],\[Beta]]}/.{
 Exp[x_]:>0/;x<50Log[$MinMachineNumber],Exp[x_]:>\[Infinity]/;x>50Log[$MaxMachineNumber]
 },$MachinePrecision],
-{\[Mu],Join[-10^Subdivide[-10,10,100],10^Subdivide[-10,10,100]]},{\[Beta],10^Subdivide[-10,10,200]}
+{\[Mu],Join[-10^Subdivide[-10,10,100],{0},10^Subdivide[-10,10,100]]},{\[Beta],10^Subdivide[-10,10,200]}
 ],1]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
-Indeterminate->NaN
+Indeterminate->NaN,
+Infinity->NaN
 },
 "TableHeadings"->{"mu","beta","be","fd"}
 ]
@@ -115,9 +116,9 @@ Export[
 "../tests/data/particle_statistics/massive.csv",
 Flatten[
 ParallelTable[
-Module[{be=BoseEinstein[m,\[Beta]],fd=FermiDirac[m,\[Beta]]},
+Module[{be=BoseEinstein[m,0,\[Beta]],fd=FermiDirac[m,0,\[Beta]]},
 N[{m,\[Beta],be,be/Normalization[\[Beta]],fd,fd/Normalization[\[Beta]]},$MachinePrecision]],
-{m,10^Subdivide[-10,10,200]},{\[Beta],10^Subdivide[-10,10,100]}
+{m,Join[{0},10^Subdivide[-10,10,200]]},{\[Beta],10^Subdivide[-10,10,100]}
 ],1]//.{
 x_:>0/;Abs[x]<$MinMachineNumber,
 Indeterminate->NaN

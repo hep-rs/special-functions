@@ -4,7 +4,7 @@
 Notebook[{
 Cell[BoxData[
  RowBox[{
-  RowBox[{"$MaxExtraPrecision", "=", "200"}], ";"}]], "Input",
+  RowBox[{"$MaxExtraPrecision", "=", "1000"}], ";"}]], "Input",
  InitializationCell->True],
 
 Cell[BoxData[
@@ -22,10 +22,12 @@ Cell[BoxData[{
     RowBox[{"\"\<MathLinkTimeout\>\"", "\[Rule]", "30."}]}], "]"}],
   ";"}], "\[IndentingNewLine]",
  RowBox[{
-  RowBox[{"SetSystemOptions", "[",
-   RowBox[{"\"\<ParallelOptions\>\"", "\[Rule]",
-    RowBox[{"\"\<RelaunchFailedKernels\>\"", "\[Rule]", "True"}]}], "]"}],
-  ";"}]}], "Input"],
+  RowBox[{
+   RowBox[{"SetSystemOptions", "[",
+    RowBox[{"\"\<ParallelOptions\>\"", "\[Rule]",
+     RowBox[{"\"\<RelaunchFailedKernels\>\"", "\[Rule]", "True"}]}], "]"}],
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{"LaunchKernels", "[", "]"}]}], "Input"],
 
 Cell[CellGroupData[{
 
@@ -349,32 +351,32 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"ParallelTable", "[", "\[IndentingNewLine]",
        RowBox[{
-        RowBox[{"N", "[",
-         RowBox[{
+        RowBox[{"Quiet", "@",
+         RowBox[{"N", "[",
           RowBox[{
-           RowBox[{"{",
-            RowBox[{"\[Mu]", ",", "\[Beta]", ",",
-             RowBox[{"BoseEinstein", "[",
-              RowBox[{"0", ",", "\[Mu]", ",", "\[Beta]"}], "]"}], ",",
-             RowBox[{"FermiDirac", "[",
-              RowBox[{"0", ",", "\[Mu]", ",", "\[Beta]"}], "]"}]}], "}"}], "/.",
-           RowBox[{"{", "\[IndentingNewLine]",
-            RowBox[{
+           RowBox[{
+            RowBox[{"{",
+             RowBox[{"\[Mu]", ",", "\[Beta]", ",",
+              RowBox[{"BoseEinstein", "[",
+               RowBox[{"0", ",", "\[Mu]", ",", "\[Beta]"}], "]"}], ",",
+              RowBox[{"FermiDirac", "[",
+               RowBox[{"0", ",", "\[Mu]", ",", "\[Beta]"}], "]"}]}], "}"}], "/.",
+            RowBox[{"{", "\[IndentingNewLine]",
              RowBox[{
-              RowBox[{"Exp", "[", "x_", "]"}], "\[RuleDelayed]",
-              RowBox[{"0", "/;",
-               RowBox[{"x", "<",
-                RowBox[{"50",
-                 RowBox[{"Log", "[", "$MinMachineNumber", "]"}]}]}]}]}], ",",
-
-             RowBox[{
-              RowBox[{"Exp", "[", "x_", "]"}], "\[RuleDelayed]",
-              RowBox[{"\[Infinity]", "/;",
-               RowBox[{"x", ">",
-                RowBox[{"50",
-                 RowBox[{"Log", "[", "$MaxMachineNumber", "]"}]}]}]}]}]}],
-            "\[IndentingNewLine]", "}"}]}], ",", "$MachinePrecision"}], "]"}],
-         ",", "\[IndentingNewLine]",
+              RowBox[{
+               RowBox[{"Exp", "[", "x_", "]"}], "\[RuleDelayed]",
+               RowBox[{"0", "/;",
+                RowBox[{"x", "<",
+                 RowBox[{"50",
+                  RowBox[{"Log", "[", "$MinMachineNumber", "]"}]}]}]}]}], ",",
+              RowBox[{
+               RowBox[{"Exp", "[", "x_", "]"}], "\[RuleDelayed]",
+               RowBox[{"\[Infinity]", "/;",
+                RowBox[{"x", ">",
+                 RowBox[{"50",
+                  RowBox[{"Log", "[", "$MaxMachineNumber", "]"}]}]}]}]}]}],
+             "\[IndentingNewLine]", "}"}]}], ",", "$MachinePrecision"}],
+          "]"}]}], ",", "\[IndentingNewLine]",
         RowBox[{"{",
          RowBox[{"\[Mu]", ",",
           RowBox[{"Join", "[",
@@ -385,6 +387,7 @@ Cell[BoxData[
                RowBox[{
                 RowBox[{"-", "10"}], ",", "10", ",", "100"}], "]"}]}]}], ",",
 
+            RowBox[{"{", "0", "}"}], ",",
             RowBox[{"10", "^",
              RowBox[{"Subdivide", "[",
               RowBox[{
@@ -404,7 +407,8 @@ Cell[BoxData[
         RowBox[{
          RowBox[{"Abs", "[", "x", "]"}], "<", "$MinMachineNumber"}]}]}], ",",
       "\[IndentingNewLine]",
-      RowBox[{"Indeterminate", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
+      RowBox[{"Indeterminate", "\[Rule]", "NaN"}], ",", "\[IndentingNewLine]",
+      RowBox[{"Infinity", "\[Rule]", "NaN"}]}], "\[IndentingNewLine]",
      "}"}]}], ",", "\[IndentingNewLine]",
    RowBox[{"\"\<TableHeadings\>\"", "\[Rule]",
     RowBox[{"{",
@@ -429,10 +433,10 @@ Cell[BoxData[
            RowBox[{
             RowBox[{"be", "=",
              RowBox[{"BoseEinstein", "[",
-              RowBox[{"m", ",", "\[Beta]"}], "]"}]}], ",",
+              RowBox[{"m", ",", "0", ",", "\[Beta]"}], "]"}]}], ",",
             RowBox[{"fd", "=",
              RowBox[{"FermiDirac", "[",
-              RowBox[{"m", ",", "\[Beta]"}], "]"}]}]}], "}"}], ",",
+              RowBox[{"m", ",", "0", ",", "\[Beta]"}], "]"}]}]}], "}"}], ",",
           "\[IndentingNewLine]",
           RowBox[{"N", "[",
            RowBox[{
@@ -446,11 +450,14 @@ Cell[BoxData[
             "$MachinePrecision"}], "]"}]}], "]"}], ",", "\[IndentingNewLine]",
         RowBox[{"{",
          RowBox[{"m", ",",
-          RowBox[{"10", "^",
-           RowBox[{"Subdivide", "[",
-            RowBox[{
-             RowBox[{"-", "10"}], ",", "10", ",", "200"}], "]"}]}]}], "}"}],
-        ",",
+          RowBox[{"Join", "[",
+           RowBox[{
+            RowBox[{"{", "0", "}"}], ",",
+            RowBox[{"10", "^",
+             RowBox[{"Subdivide", "[",
+              RowBox[{
+               RowBox[{"-", "10"}], ",", "10", ",", "200"}], "]"}]}]}],
+           "]"}]}], "}"}], ",",
         RowBox[{"{",
          RowBox[{"\[Beta]", ",",
           RowBox[{"10", "^",
