@@ -270,6 +270,16 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
@@ -303,7 +313,12 @@
 <span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
 <span class="doccomment">/// result is in units of `[m^3]`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+        <span class="comment">// ζ(3) / π² ≅ 0.12179382823357308</span>
+        <span class="number">0.121_793_828_233_573_08</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+    } <span class="kw">else</span> {
+        <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+    }
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
@@ -343,7 +358,12 @@
 <span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
 <span class="doccomment">/// result is in units of `[m^3]`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+        <span class="comment">// 3 ζ(3) / 4 π² ≅ 0.09134537117517981</span>
+        <span class="number">0.091_345_371_175_179_81</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
+    } <span class="kw">else</span> {
+        <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
+    }
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
