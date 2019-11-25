@@ -46,12 +46,15 @@ lower = CoefficientList[lower + x^2 Log[x^2] / (4 Pi^2), x] // FullSimplify;
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    let x2 = x.powi(2);
-    polynomial(
-        x,
-        &`lower`
-    )
-   - x2 * x2.ln() * 0.025330295910584444
+    if x == 0.0 {
+        0.1217938282335731
+    } else {
+        let x2 = x.powi(2);
+        polynomial(
+            x,
+            &`lower`,
+        ) - x2 * x2.ln() * 0.025330295910584444
+    }
 }\n\n"][<|
   "lower" -> RustForm@lower
   |>]];
