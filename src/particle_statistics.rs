@@ -30,7 +30,12 @@ approx_fn! {
 /// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
 /// result is in units of `[m^3]`.
 pub fn bose_einstein_massive(m: f64, beta: f64) -> f64 {
-    m.powi(3) * _bose_einstein_massive(m * beta)
+    if m == 0.0 {
+        // ζ(3) / π² ≅ 0.12179382823357308
+        0.121_793_828_233_573_08 * beta.powi(-3)
+    } else {
+        m.powi(3) * _bose_einstein_massive(m * beta)
+    }
 }
 
 approx_fn! {
@@ -70,7 +75,12 @@ approx_fn! {
 /// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
 /// result is in units of `[m^3]`.
 pub fn fermi_dirac_massive(m: f64, beta: f64) -> f64 {
-    m.powi(3) * _fermi_dirac_massive(m * beta)
+    if m == 0.0 {
+        // 3 ζ(3) / 4 π² ≅ 0.09134537117517981
+        0.091_345_371_175_179_81 * beta.powi(-3)
+    } else {
+        m.powi(3) * _fermi_dirac_massive(m * beta)
+    }
 }
 
 approx_fn! {
