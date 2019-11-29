@@ -4,6 +4,8 @@ use approx_fn;
 use std::convert::identity;
 use std::f64;
 
+pub mod pave;
+
 mod bose_einstein_massive;
 mod bose_einstein_massless;
 mod bose_einstein_normalized;
@@ -171,14 +173,14 @@ mod bench {
         let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massless.csv")?
             .into_deserialize()
             .map(|x| {
-                let x: [f64; 3] = x.unwrap();
-                x[0]
+                let x: [f64; 4] = x.unwrap();
+                (x[0], x[1])
             })
             .collect();
 
         b.iter(|| {
-            for &beta in &data {
-                test::black_box(super::massless_bose_einstein(beta));
+            for &(mu, beta) in &data {
+                test::black_box(super::bose_einstein_massless(mu, beta));
             }
         });
 
@@ -186,7 +188,7 @@ mod bench {
     }
 
     #[bench]
-    fn bose_einstein(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
+    fn bose_einstein_massive(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
         let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
             .into_deserialize()
             .map(|x| {
@@ -197,7 +199,7 @@ mod bench {
 
         b.iter(|| {
             for &(m, beta) in &data {
-                test::black_box(super::bose_einstein(m, beta));
+                test::black_box(super::bose_einstein_massive(m, beta));
             }
         });
 
@@ -224,18 +226,18 @@ mod bench {
     }
 
     #[bench]
-    fn massless_fermi_dirac(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
+    fn fermi_dirac_massless(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
         let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massless.csv")?
             .into_deserialize()
             .map(|x| {
-                let x: [f64; 3] = x.unwrap();
-                x[0]
+                let x: [f64; 4] = x.unwrap();
+                (x[0], x[1])
             })
             .collect();
 
         b.iter(|| {
-            for &beta in &data {
-                test::black_box(super::massless_fermi_dirac(beta));
+            for &(mu, beta) in &data {
+                test::black_box(super::fermi_dirac_massless(mu, beta));
             }
         });
 
@@ -243,7 +245,7 @@ mod bench {
     }
 
     #[bench]
-    fn fermi_dirac(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
+    fn fermi_dirac_massive(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
         let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
             .into_deserialize()
             .map(|x| {
@@ -254,7 +256,7 @@ mod bench {
 
         b.iter(|| {
             for &(m, beta) in &data {
-                test::black_box(super::fermi_dirac(m, beta));
+                test::black_box(super::fermi_dirac_massive(m, beta));
             }
         });
 
