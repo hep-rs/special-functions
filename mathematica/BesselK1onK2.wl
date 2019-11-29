@@ -78,7 +78,7 @@ WriteString[
 
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[f[Exp@x], {x, Log@xLower, Log@xUpper}];
+splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
 ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

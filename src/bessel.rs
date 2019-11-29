@@ -17,57 +17,57 @@ mod k9;
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_0(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k0(mod = k0, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k0(mod = k0, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_1(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k1(mod = k1, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k1(mod = k1, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k2(mod = k2, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k2(mod = k2, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_3(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k3(mod = k3, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k3(mod = k3, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_4(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k4(mod = k4, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k4(mod = k4, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_5(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k5(mod = k5, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k5(mod = k5, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_6(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k6(mod = k6, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k6(mod = k6, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_7(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k7(mod = k7, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k7(mod = k7, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_8(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k8(mod = k8, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k8(mod = k8, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximation of modified Bessel function \\(K_9(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k9(mod = k9, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    (pub) fn k9(mod = k9, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
     #[doc = "Approximatino of the ratio of Bessel function \\(K_1(x) / K_2(x)\\) for all \\(x > 0\\)."]
-    (pub) fn k1_on_k2(mod = k1_on_k2, type = chebyshev, outer = identity, inner = f64::ln);
+    (pub) fn k1_on_k2(mod = k1_on_k2, type = chebyshev, outer = identity, inner = identity);
 }
 
 #[cfg(test)]
