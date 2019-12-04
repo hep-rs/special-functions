@@ -20,8 +20,351 @@ Cell[CellGroupData[{
 Cell[TextData[Cell[BoxData[
  FormBox[
   RowBox[{
+   SubscriptBox["I", "n"], "(", "x", ")"}],
+  TraditionalForm]],ExpressionUUID->"343415f9-c850-459c-8d39-2f139b620a05"]], \
+"Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$Assumptions", "=",
+   RowBox[{"x", ">", "0"}]}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"n", "=", "7"}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=",
+   RowBox[{"BesselI", "[",
+    RowBox[{"n", ",", "x"}], "]"}]}], ";"}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"lower", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["x",
+       RowBox[{"-", "n"}]],
+      RowBox[{"f", "[", "x", "]"}]}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "0", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"xLower", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{
+          SuperscriptBox["x", "n"],
+          RowBox[{"lower", "/",
+           RowBox[{"f", "[", "x", "]"}]}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "2", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", " ", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}], "]"}]}]}],
+  ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{"0", ",",
+      RowBox[{"N", "[",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}], "\n",
+  "\[IndentingNewLine]",
+  RowBox[{"(*",
+   RowBox[{
+   "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
+    "for", " ", "small", " ",
+    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+ RowBox[{"lower", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{"lower", ",",
+    RowBox[{"x", "^", "2"}]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"upper", "=",
+  RowBox[{
+   RowBox[{
+    RowBox[{"Re", "@",
+     RowBox[{"Normal", "@",
+      RowBox[{"Series", "[",
+       RowBox[{
+        RowBox[{"f", "[", "x", "]"}], ",",
+        RowBox[{"{",
+         RowBox[{"x", ",", "Infinity", ",", "10"}], "}"}]}], "]"}]}]}], "//",
+    "FullSimplify"}], "//", "ExpandAll"}]}], "\n",
+ RowBox[{
+  RowBox[{"xUpper", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{"upper", "/",
+          RowBox[{"f", "[", "x", "]"}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "20", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}],
+     "\[IndentingNewLine]", "]"}]}]}], ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Upper approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{
+      RowBox[{"N", "[",
+       RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}], "]"}],
+   ";"}], "\n"}], "\[IndentingNewLine]",
+ RowBox[{"upper", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[",
+      RowBox[{"-", "x"}], "]"}], " ",
+     RowBox[{"Sqrt", "[", "x", "]"}], " ", "upper"}], ",",
+    RowBox[{"1", "/", "x"}]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"splits", "=",
+   RowBox[{"ChebyshevSplits", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",",
+       RowBox[{"Identity", "[", "xLower", "]"}], ",",
+       RowBox[{"Identity", "[", "xUpper", "]"}]}], "}"}]}], "]"}]}],
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[",
+  RowBox[{
+   RowBox[{"{", "\[IndentingNewLine]",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",", "\[IndentingNewLine]",
+     RowBox[{
+      FractionBox[
+       SuperscriptBox["E", "x"],
+       SqrtBox["x"]],
+      RowBox[{"FromDigits", "[",
+       RowBox[{
+        RowBox[{"Reverse", "@", "upper"}], ",",
+        FractionBox["1", "x"]}], "]"}]}]}], "\[IndentingNewLine]", "}"}], ",",
+   RowBox[{"{",
+    RowBox[{"x", ",", "xUpper", ",",
+     RowBox[{"2", "xUpper"}]}], "}"}]}], "]"}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  RowBox[{
+   SubscriptBox["J", "n"], "(", "x", ")"}],
+  TraditionalForm]],ExpressionUUID->"1c6af4e8-40f5-4d24-ba68-b0de3fd53d74"]], \
+"Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$Assumptions", "=",
+   RowBox[{"x", "\[GreaterEqual]", "0"}]}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"n", "=", "4"}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=",
+   RowBox[{"BesselJ", "[",
+    RowBox[{"n", ",", "x"}], "]"}]}], ";"}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"lower", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["x",
+       RowBox[{"-", "n"}]],
+      RowBox[{"f", "[", "x", "]"}]}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "0", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"xLower", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{
+          SuperscriptBox["x", "n"],
+          RowBox[{"lower", "/",
+           RowBox[{"f", "[", "x", "]"}]}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "2", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", " ", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}], "]"}]}]}],
+  ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{"0", ",",
+      RowBox[{"N", "[",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
+  "\[IndentingNewLine]", "\[IndentingNewLine]",
+  RowBox[{"(*",
+   RowBox[{
+   "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
+    "for", " ", "small", " ",
+    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+ RowBox[{"lower", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{"lower", ",",
+    RowBox[{"x", "^", "2"}]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"upper", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "Infinity", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"k", "=", "1"}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"xUpper", "=",
+   RowBox[{"N", "[",
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       RowBox[{"BesselJZero", "[",
+        RowBox[{"n", ",", "k"}], "]"}], "+",
+       RowBox[{"BesselJZero", "[",
+        RowBox[{"n", ",",
+         RowBox[{"k", "+", "1"}]}], "]"}]}], "2"], ",", "100"}], "]"}]}],
+  ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"While", "[", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"Abs", "[",
+         RowBox[{
+          FractionBox["upper",
+           RowBox[{"f", "[", "x", "]"}]], "-", "1"}], "]"}], ">",
+        RowBox[{"SetPrecision", "[",
+         RowBox[{
+          FractionBox["$MachineEpsilon", "100"], ",", "\[Infinity]"}],
+         "]"}]}], "/.",
+       RowBox[{"x", "\[Rule]", "xUpper"}]}], ",", "\[IndentingNewLine]",
+      RowBox[{
+       RowBox[{"k", "++"}], ";", "\[IndentingNewLine]",
+       RowBox[{"xUpper", "=",
+        RowBox[{"N", "[",
+         RowBox[{
+          FractionBox[
+           RowBox[{
+            RowBox[{"BesselJZero", "[",
+             RowBox[{"n", ",", "k"}], "]"}], "+",
+            RowBox[{"BesselJZero", "[",
+             RowBox[{"n", ",",
+              RowBox[{"k", "+", "1"}]}], "]"}]}], "2"], ",", "100"}], "]"}]}],
+        ";"}]}], "\[IndentingNewLine]", "]"}],
+    RowBox[{"Print", "[",
+     RowBox[{
+      RowBox[{
+      "StringTemplate", "[",
+       "\"\<Upper approximation valid from `` to ``.\>\"", "]"}], "[",
+      RowBox[{
+       RowBox[{"N", "[",
+        RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}],
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"upper", "=",
+   RowBox[{"TrigExpand", "[", "upper", "]"}]}],
+  ";"}], "\[IndentingNewLine]",
+ RowBox[{"upperCos", "=",
+  RowBox[{"CoefficientList", "[", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{
+     RowBox[{"Sqrt", "[", "x", "]"}],
+     RowBox[{"Coefficient", "[",
+      RowBox[{"upper", ",",
+       RowBox[{"Cos", "[", "x", "]"}]}], "]"}]}], ",", "\[IndentingNewLine]",
+
+    FractionBox["1", "x"]}], "]"}]}], "\[IndentingNewLine]",
+ RowBox[{"upperSin", "=",
+  RowBox[{"CoefficientList", "[", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{
+     RowBox[{"Sqrt", "[", "x", "]"}], " ",
+     RowBox[{"Coefficient", "[",
+      RowBox[{"upper", ",",
+       RowBox[{"Sin", "[", "x", "]"}]}], "]"}]}], ",", "\[IndentingNewLine]",
+
+    FractionBox["1", "x"]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"splits", "=",
+   RowBox[{"ChebyshevSplits", "[",
+    RowBox[{
+     RowBox[{"Identity", "@",
+      RowBox[{"f", "[", "x", "]"}]}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",",
+       RowBox[{"Identity", "[", "xLower", "]"}], ",",
+       RowBox[{"Identity", "[", "xUpper", "]"}]}], "}"}]}], "]"}]}],
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[",
+  RowBox[{
+   RowBox[{"f", "[",
+    RowBox[{"Exp", "@", "x"}], "]"}], ",",
+   RowBox[{"{",
+    RowBox[{"x", ",", "xLower", ",", "xUpper"}], "}"}], ",",
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  RowBox[{
    SubscriptBox["K", "n"], "(", "x", ")"}],
-  TraditionalForm]],ExpressionUUID->"a5cbb71f-e98a-4063-89a3-66938055a859"]], \
+  TraditionalForm]],ExpressionUUID->"e7580b00-1056-400e-a432-00bca498e8c7"]], \
 "Subsection"],
 
 Cell[BoxData[{
@@ -74,34 +417,31 @@ Cell[BoxData[{
       "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
      RowBox[{"0", ",",
       RowBox[{"N", "[",
-       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
-  "\[IndentingNewLine]", "\n",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}], "\n",
+  "\[IndentingNewLine]",
   RowBox[{"(*",
    RowBox[{
    "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
     "for", " ", "small", " ",
     RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
  RowBox[{
-  RowBox[{
-   RowBox[{"{",
-    RowBox[{"lowerPoly", ",", "lowerLn"}], "}"}], "=",
-   RowBox[{"CoefficientList", "[",
-    RowBox[{"lower", ",",
-     RowBox[{"Log", "[", "x", "]"}]}], "]"}]}], ";"}], "\n",
- RowBox[{"lowerPoly", "=",
+  RowBox[{"{",
+   RowBox[{"lowerPoly", ",", "lowerLn"}], "}"}], "=",
   RowBox[{"CoefficientList", "[",
-   RowBox[{
+   RowBox[{"lower", ",",
+    RowBox[{"Log", "[", "x", "]"}]}], "]"}]}], "\n",
+ RowBox[{
+  RowBox[{"(*",
+   RowBox[{"lowerPoly", "=",
     RowBox[{
-     RowBox[{"x", "^", "n"}], " ", "lowerPoly"}], ",",
-    RowBox[{"x", "^", "2"}]}], "]"}]}], "\n",
- RowBox[{"lowerLn", "=",
-  RowBox[{"CoefficientList", "[",
-   RowBox[{
-    RowBox[{
-     RowBox[{"x", "^",
-      RowBox[{"(",
-       RowBox[{"-", "n"}], ")"}]}], " ", "lowerLn"}], ",",
-    RowBox[{"x", "^", "2"}]}], "]"}]}]}], "Input"],
+     RowBox[{
+      RowBox[{"CoefficientList", "[", " ",
+       RowBox[{"lowerPoly", ",",
+        SuperscriptBox["x",
+         RowBox[{"-", "2"}]]}], "]"}], "\n", "lowerLn"}], "=",
+     RowBox[{"CoefficientList", "[",
+      RowBox[{"lowerLn", ",",
+       RowBox[{"x", "^", "2"}]}], "]"}]}]}], "*)"}]}]}], "Input"],
 
 Cell[BoxData[{
  RowBox[{"upper", "=",
@@ -141,7 +481,7 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"N", "[",
        RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}], "]"}],
-   ";"}], "\n"}], "\[IndentingNewLine]",
+   ";"}], "\[IndentingNewLine]"}], "\n",
  RowBox[{"upper", "=",
   RowBox[{"CoefficientList", "[",
    RowBox[{
@@ -155,13 +495,12 @@ Cell[BoxData[
   RowBox[{"splits", "=",
    RowBox[{"ChebyshevSplits", "[",
     RowBox[{
-     RowBox[{"Log", "@",
-      RowBox[{"f", "[", "x", "]"}]}], ",",
+     RowBox[{"f", "[", "x", "]"}], ",",
      RowBox[{"{",
       RowBox[{"x", ",",
-       RowBox[{"Log", "[", "xLower", "]"}], ",",
-       RowBox[{"Log", "[", "xUpper", "]"}]}], "}"}]}], "]"}]}],
-  ";"}]], "Input"],
+       RowBox[{"Identity", "[", "xLower", "]"}], ",",
+       RowBox[{"Identity", "[", "xUpper", "]"}]}], "}"}], ",",
+     RowBox[{"MaxRecursion", "\[Rule]", "16"}]}], "]"}]}], ";"}]], "Input"],
 
 Cell[BoxData[
  RowBox[{"Plot", "[",
@@ -240,13 +579,13 @@ Cell[BoxData[{
       "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
      RowBox[{"0", ",",
       RowBox[{"N", "[",
-       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}], "\n",
-  "\[IndentingNewLine]",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
+  "\[IndentingNewLine]", "\[IndentingNewLine]",
   RowBox[{"(*",
    RowBox[{
    "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
     "for", " ", "small", " ",
-    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+    RowBox[{"x", "."}]}], "*)"}]}], "\n",
  RowBox[{
   RowBox[{
    RowBox[{"{",
@@ -315,12 +654,12 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"N", "[",
        RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}], "]"}],
-   ";"}], "\n", "\[IndentingNewLine]",
+   ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]",
   RowBox[{"(*",
    RowBox[{
    "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
     "for", " ", "large", " ",
-    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+    RowBox[{"x", "."}]}], "*)"}]}], "\n",
  RowBox[{"upper", "=",
   RowBox[{"CoefficientList", "[",
    RowBox[{"upper", ",",
@@ -349,7 +688,355 @@ Cell[BoxData[
      RowBox[{"Log", "@", "xLower"}], ",",
      RowBox[{"Log", "@", "xUpper"}]}], "}"}], ",",
    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  RowBox[{
+   SubscriptBox["Y", "n"], "(", "x", ")"}],
+  TraditionalForm]],ExpressionUUID->"241d4c45-4b52-4e7b-846d-1646b32644ae"]], \
+"Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$Assumptions", "=",
+   RowBox[{"x", ">", "0"}]}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"n", "=", "1"}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=",
+   RowBox[{"BesselY", "[",
+    RowBox[{"n", ",", "x"}], "]"}]}], ";"}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"lower", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "0", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"xLower", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{"lower", "/",
+          RowBox[{"f", "[", "x", "]"}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "2", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", " ", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}], "]"}]}]}],
+  ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{"0", ",",
+      RowBox[{"N", "[",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
+  "\[IndentingNewLine]", "\n",
+  RowBox[{"(*",
+   RowBox[{
+   "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
+    "for", " ", "small", " ",
+    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"{",
+    RowBox[{"lowerPoly", ",", "lowerLn"}], "}"}], "=",
+   RowBox[{"CoefficientList", "[",
+    RowBox[{"lower", ",",
+     RowBox[{"Log", "[", "x", "]"}]}], "]"}]}], ";"}], "\n",
+ RowBox[{"lowerPoly", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{
+    RowBox[{
+     RowBox[{"x", "^", "n"}], " ", "lowerPoly"}], ",",
+    RowBox[{"x", "^", "2"}]}], "]"}]}], "\n",
+ RowBox[{"lowerLn", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{
+    RowBox[{
+     RowBox[{"x", "^",
+      RowBox[{"(",
+       RowBox[{"-", "n"}], ")"}]}], " ", "lowerLn"}], ",",
+    RowBox[{"x", "^", "2"}]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"upper", "=",
+   RowBox[{
+    RowBox[{"Normal", "@",
+     RowBox[{"Series", "[",
+      RowBox[{
+       RowBox[{"f", "[", "x", "]"}], ",",
+       RowBox[{"{",
+        RowBox[{"x", ",", "Infinity", ",", "10"}], "}"}]}], "]"}]}], "//",
+    "ExpToTrig"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"k", "=", "1"}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"Echo", "[",
+   RowBox[{
+    RowBox[{"Dynamic", "[", "k", "]"}], ",", "\"\<k = \>\""}], "]"}],
+  ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{"xUpper", "=",
+   RowBox[{"N", "[",
+    RowBox[{
+     RowBox[{
+      FractionBox["1", "2"],
+      RowBox[{"(",
+       RowBox[{
+        RowBox[{"BesselYZero", "[",
+         RowBox[{"n", ",", "k"}], "]"}], "+",
+        RowBox[{"BesselYZero", "[",
+         RowBox[{"n", ",",
+          RowBox[{"k", "+", "1"}]}], "]"}]}], ")"}]}], ",", "100"}], "]"}]}],
+  ";"}], "\n",
+ RowBox[{"While", "[", "\[IndentingNewLine]",
+  RowBox[{
+   RowBox[{
+    RowBox[{"(",
+     RowBox[{
+      RowBox[{"Abs", "[",
+       RowBox[{
+        FractionBox["upper",
+         RowBox[{"f", "[", "x", "]"}]], "-", "1"}], "]"}], ">",
+      RowBox[{"SetPrecision", "[",
+       RowBox[{
+        FractionBox["$MachineEpsilon", "100"], ",", "\[Infinity]"}], "]"}]}],
+     ")"}], "/.",
+    RowBox[{"x", "\[Rule]", "xUpper"}]}], ",", "\[IndentingNewLine]",
+   RowBox[{
+    RowBox[{"k", "++"}], ";", "\[IndentingNewLine]",
+    RowBox[{"xUpper", "=",
+     RowBox[{"N", "[",
+      RowBox[{
+       RowBox[{
+        FractionBox["1", "2"],
+        RowBox[{"(",
+         RowBox[{
+          RowBox[{"BesselYZero", "[",
+           RowBox[{"n", ",", "k"}], "]"}], "+",
+          RowBox[{"BesselYZero", "[",
+           RowBox[{"n", ",",
+            RowBox[{"k", "+", "1"}]}], "]"}]}], ")"}]}], ",", "100"}],
+      "]"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Upper approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{
+      RowBox[{"N", "[",
+       RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}], "]"}],
+   ";"}], "\n"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"upper", "=",
+    RowBox[{"CoefficientList", "[",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Sqrt", "[", "x", "]"}], " ", "upper"}], ",",
+      RowBox[{"1", "/", "x"}]}], "]"}]}], ";"}], "\n",
+  RowBox[{"(*",
+   RowBox[{
+    RowBox[{"For", " ", "some", " ", "reason"}], ",",
+    RowBox[{"these", " ", "should", " ", "be", " ", "cos",
+     RowBox[{"(", "x", ")"}], " ", "and", " ", "sin",
+     RowBox[{"(", "x", ")"}]}]}], "*)"}]}], "\[IndentingNewLine]",
+ RowBox[{"upperCos", "=",
+  RowBox[{"Coefficient", "[",
+   RowBox[{"upper", ",",
+    RowBox[{"Cos", "[", "x", "]"}]}], "]"}]}], "\n",
+ RowBox[{"upperSin", "=",
+  RowBox[{"Coefficient", "[",
+   RowBox[{"upper", ",",
+    RowBox[{"Sin", "[", "x", "]"}]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"splits", "=",
+   RowBox[{"ChebyshevSplits", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "xLower", ",", "xUpper"}], "}"}]}], "]"}]}],
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[",
+  RowBox[{
+   RowBox[{"Log", "@",
+    RowBox[{"f", "[",
+     RowBox[{"Exp", "@", "x"}], "]"}]}], ",",
+   RowBox[{"{",
+    RowBox[{"x", ",",
+     RowBox[{"Log", "@", "xLower"}], ",",
+     RowBox[{"Log", "@", "xUpper"}]}], "}"}], ",",
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"]
 }]]
+}]],
+
+Cell[CellGroupData[{
+
+Cell["Other", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  RowBox[{"HarmonicNumber", "(", "x", ")"}],
+  TraditionalForm]],ExpressionUUID->"473d1321-df6f-4992-9911-dfd6480b5398"]], \
+"Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$Assumptions", "=",
+   RowBox[{"x", ">", "0"}]}], ";"}], "\[IndentingNewLine]",
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "x_", "]"}], ":=",
+   RowBox[{"HarmonicNumber", "[", "x", "]"}]}], ";"}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"lower", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "0", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"xLower", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{"lower", "/",
+          RowBox[{"f", "[", "x", "]"}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "2", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", " ", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}], "]"}]}]}],
+  ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{"0", ",",
+      RowBox[{"N", "[",
+       RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
+  "\[IndentingNewLine]", "\n",
+  RowBox[{"(*",
+   RowBox[{
+   "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
+    "for", " ", "small", " ",
+    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
+ RowBox[{"lower", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{"lower", ",", "x"}], "]"}]}]}], "Input"],
+
+Cell[BoxData[{
+ RowBox[{"upper", "=",
+  RowBox[{"Normal", "@",
+   RowBox[{"Series", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "Infinity", ",", "10"}], "}"}]}], "]"}]}]}], "\n",
+ RowBox[{
+  RowBox[{"xUpper", "=",
+   RowBox[{"x", "/.",
+    RowBox[{"FindRoot", "[", "\[IndentingNewLine]",
+     RowBox[{
+      RowBox[{
+       RowBox[{"Abs", "[",
+        RowBox[{
+         RowBox[{"upper", "/",
+          RowBox[{"f", "[", "x", "]"}]}], "-", "1"}], "]"}], "-",
+       RowBox[{"SetPrecision", "[",
+        RowBox[{"$MachineEpsilon", ",", "Infinity"}], "]"}]}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"{",
+       RowBox[{"x", ",", "2", ",", "0", ",", "Infinity"}], "}"}], ",",
+      "\[IndentingNewLine]",
+      RowBox[{"WorkingPrecision", "\[Rule]",
+       RowBox[{"4", "$MachinePrecision"}]}], ",", "\[IndentingNewLine]",
+      RowBox[{"MaxIterations", "\[Rule]", "Infinity"}]}],
+     "\[IndentingNewLine]", "]"}]}]}], ";"}], "\n",
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[",
+    RowBox[{
+     RowBox[{
+     "StringTemplate", "[",
+      "\"\<Upper approximation valid from `` to ``.\>\"", "]"}], "[",
+     RowBox[{
+      RowBox[{"N", "[",
+       RowBox[{"xUpper", ",", "4"}], "]"}], ",", "Infinity"}], "]"}], "]"}],
+   ";"}], "\[IndentingNewLine]"}], "\n",
+ RowBox[{"upper", "=",
+  RowBox[{"CoefficientList", "[",
+   RowBox[{
+    RowBox[{"upper", "-",
+     RowBox[{"Log", "[", "x", "]"}]}], ",",
+    FractionBox["1", "x"]}], "]"}]}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"splits", "=",
+   RowBox[{"ChebyshevSplits", "[",
+    RowBox[{
+     RowBox[{"f", "[", "x", "]"}], ",",
+     RowBox[{"{",
+      RowBox[{"x", ",", "xLower", ",", "xUpper"}], "}"}]}], "]"}]}],
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"LogLogPlot", "[",
+  RowBox[{
+   RowBox[{"Abs", "[",
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       RowBox[{"ChebyshevEval", "[", "splits", "]"}], "[", "x", "]"}],
+      RowBox[{"f", "[", "x", "]"}]], "-", "1"}], "]"}], ",",
+   RowBox[{"{",
+    RowBox[{"x", ",", "xLower", ",", "xUpper"}], "}"}], ",",
+   RowBox[{"WorkingPrecision", "\[Rule]", "50"}]}], "]"}]], "Input"]
 }]],
 
 Cell[CellGroupData[{
@@ -358,8 +1045,8 @@ Cell[TextData[Cell[BoxData[
  FormBox[
   RowBox[{
    SubscriptBox["Li", "n"], "(", "x", ")"}],
-  TraditionalForm]],ExpressionUUID->"8eead08b-9e38-4a5d-9629-14e4c3cb6cc7"]], \
-"Section"],
+  TraditionalForm]],ExpressionUUID->"69fe7eb8-71a6-417c-b118-550478702dc7"]], \
+"Subsection"],
 
 Cell[BoxData[{
  RowBox[{
@@ -416,12 +1103,12 @@ Cell[BoxData[{
       RowBox[{"-", "Infinity"}], ",",
       RowBox[{"N", "[",
        RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
-  "\[IndentingNewLine]", "\[IndentingNewLine]",
+  "\[IndentingNewLine]", "\n",
   RowBox[{"(*",
    RowBox[{
    "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
     "for", " ", "small", " ",
-    RowBox[{"x", "."}]}], "*)"}]}], "\n",
+    RowBox[{"x", "."}]}], "*)"}]}], "\[IndentingNewLine]",
  RowBox[{
   RowBox[{"lower", "=",
    RowBox[{"CoefficientList", "[",
@@ -501,7 +1188,7 @@ Cell[BoxData[{
     RowBox[{"upperLn", "/.",
      RowBox[{"x", "\[Rule]",
       RowBox[{"x", "+", "1"}]}]}], ",", "x"}], "]"}]}]}], "Input",ExpressionUU\
-ID->"a3a66cd7-7628-490d-876a-e4e971a75448"],
+ID->"1787aee1-bfb3-4480-a87a-40b8367c28ba"],
 
 Cell[BoxData[
  RowBox[{
@@ -521,6 +1208,7 @@ Cell[BoxData[
    RowBox[{"{",
     RowBox[{"x", ",", "xLower", ",", "xUpper"}], "}"}], ",",
    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"]
+}]]
 }]],
 
 Cell[CellGroupData[{
@@ -539,7 +1227,7 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"$Assumptions", "=",
-    RowBox[{"x", ">", "0"}]}], ";"}], "\[IndentingNewLine]"}], "\n",
+    RowBox[{"x", ">", "0"}]}], ";"}], "\n"}], "\[IndentingNewLine]",
  RowBox[{
   RowBox[{
    RowBox[{"ps", "[",
@@ -564,8 +1252,6 @@ Cell[BoxData[{
     RowBox[{"(",
      RowBox[{"2", " ",
       RowBox[{"Pi", "^", "2"}]}], ")"}]}]}], ";"}]}], "Input"],
-
-Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{
@@ -607,8 +1293,8 @@ Cell[BoxData[
        "\"\<Lower approximation valid from `` to ``.\>\"", "]"}], "[",
       RowBox[{"0", ",",
        RowBox[{"N", "[",
-        RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}], "\n",
-   "\[IndentingNewLine]",
+        RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
+   "\[IndentingNewLine]", "\n",
    RowBox[{"(*",
     RowBox[{
     "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
@@ -627,10 +1313,7 @@ Cell[BoxData[
           RowBox[{"(",
            RowBox[{"4", " ",
             RowBox[{"Pi", "^", "2"}]}], ")"}]}]}]}], ",", "x"}], "]"}], "//",
-     "FullSimplify"}]}]}]}]], "Input"]
-}]],
-
-Cell[CellGroupData[{
+     "FullSimplify"}]}]}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -673,18 +1356,17 @@ Cell[BoxData[
         "\"\<Upper approximation valid from `` to ``.\>\"", "]"}], "[",
        RowBox[{"N", "[",
         RowBox[{"xUpper", ",", "4"}], "]"}], "]"}], ",", "\[Infinity]"}],
-     "]"}], ";"}], "\n", "\[IndentingNewLine]",
+     "]"}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]",
    RowBox[{"(*",
     RowBox[{
     "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
      "for", " ", "large", " ",
-     RowBox[{"x", "."}]}], "*)"}], "\[IndentingNewLine]",
+     RowBox[{"x", "."}]}], "*)"}], "\n",
    RowBox[{"upper", "=",
     RowBox[{"CoefficientList", "[",
      RowBox[{"upper", ",",
       RowBox[{"Exp", "[",
-       RowBox[{"-", "x"}], "]"}]}], "]"}]}]}]}]], "Input"]
-}]],
+       RowBox[{"-", "x"}], "]"}]}], "]"}]}]}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -714,7 +1396,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"$Assumptions", "=",
     RowBox[{"x", "\[Element]", "Reals"}]}], ";"}],
-  "\[IndentingNewLine]"}], "\n",
+  "\n"}], "\[IndentingNewLine]",
  RowBox[{
   RowBox[{
    RowBox[{"ps", "[",
@@ -739,8 +1421,6 @@ Cell[BoxData[{
     RowBox[{"(",
      RowBox[{"2", " ",
       RowBox[{"Pi", "^", "2"}]}], ")"}]}]}], ";"}]}], "Input"],
-
-Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{
@@ -786,8 +1466,8 @@ Cell[BoxData[
       RowBox[{
        RowBox[{"-", "Infinity"}], ",",
        RowBox[{"N", "[",
-        RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}],
-   "\[IndentingNewLine]", "\n",
+        RowBox[{"xLower", ",", "4"}], "]"}]}], "]"}], "]"}], ";"}], "\n",
+   "\[IndentingNewLine]",
    RowBox[{"(*",
     RowBox[{
     "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
@@ -796,10 +1476,7 @@ Cell[BoxData[
    RowBox[{"lower", "=",
     RowBox[{"CoefficientList", "[",
      RowBox[{"lower", ",",
-      RowBox[{"Exp", "[", "x", "]"}]}], "]"}]}]}]}]], "Input"]
-}]],
-
-Cell[CellGroupData[{
+      RowBox[{"Exp", "[", "x", "]"}]}], "]"}]}]}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -843,7 +1520,7 @@ Cell[BoxData[
       RowBox[{
        RowBox[{"N", "[",
         RowBox[{"xUpper", ",", "4"}], "]"}], ",", "0"}], "]"}], "]"}], ";"}],
-   "\[IndentingNewLine]", "\n",
+   "\n", "\[IndentingNewLine]",
    RowBox[{"(*",
     RowBox[{
     "Write", " ", "out", " ", "the", " ", "approximation", " ", "valid", " ",
@@ -862,8 +1539,7 @@ Cell[BoxData[
    RowBox[{"upperPoly", "=",
     RowBox[{
      RowBox[{"{", "0", "}"}], "~", "Join", "~",
-     RowBox[{"Rest", "@", "upper"}]}]}]}]}]], "Input"]
-}]],
+     RowBox[{"Rest", "@", "upper"}]}]}]}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -882,8 +1558,8 @@ Cell[BoxData[
    "\n",
    RowBox[{
     RowBox[{"ChebyshevSplitsRustForm", "[",
-     RowBox[{"splits", ",", "output"}], "]"}], ";"}], "\[IndentingNewLine]",
-   "\n",
+     RowBox[{"splits", ",", "output"}], "]"}], ";"}], "\n",
+   "\[IndentingNewLine]",
    RowBox[{
     RowBox[{"Close", "[", "output", "]"}], ";"}]}]}]], "Input"]
 }]]
