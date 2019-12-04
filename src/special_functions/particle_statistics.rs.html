@@ -280,12 +280,16 @@
 <span id="280">280</span>
 <span id="281">281</span>
 <span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
 <span class="kw">use</span> <span class="ident">approx_fn</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">identity</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pave</span>;
 
 <span class="kw">mod</span> <span class="ident">bose_einstein_massive</span>;
 <span class="kw">mod</span> <span class="ident">bose_einstein_massless</span>;
@@ -454,14 +458,14 @@
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>
             .<span class="ident">into_deserialize</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">3</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
-                <span class="ident">x</span>[<span class="number">0</span>]
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">4</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
             })
             .<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">beta</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">massless_bose_einstein</span>(<span class="ident">beta</span>));
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">mu</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>, <span class="ident">beta</span>));
             }
         });
 
@@ -469,7 +473,7 @@
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">bose_einstein</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
             .<span class="ident">into_deserialize</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
@@ -480,7 +484,7 @@
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">bose_einstein</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
             }
         });
 
@@ -507,18 +511,18 @@
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">massless_fermi_dirac</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fermi_dirac_massless</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massless.csv&quot;</span>)<span class="question-mark">?</span>
             .<span class="ident">into_deserialize</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">3</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
-                <span class="ident">x</span>[<span class="number">0</span>]
+                <span class="kw">let</span> <span class="ident">x</span>: [<span class="ident">f64</span>; <span class="number">4</span>] <span class="op">=</span> <span class="ident">x</span>.<span class="ident">unwrap</span>();
+                (<span class="ident">x</span>[<span class="number">0</span>], <span class="ident">x</span>[<span class="number">1</span>])
             })
             .<span class="ident">collect</span>();
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">beta</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">massless_fermi_dirac</span>(<span class="ident">beta</span>));
+            <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">mu</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>, <span class="ident">beta</span>));
             }
         });
 
@@ -526,7 +530,7 @@
     }
 
     <span class="attribute">#[<span class="ident">bench</span>]</span>
-    <span class="kw">fn</span> <span class="ident">fermi_dirac</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_path</span>(<span class="string">&quot;tests/data/particle_statistics/massive.csv&quot;</span>)<span class="question-mark">?</span>
             .<span class="ident">into_deserialize</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
@@ -537,7 +541,7 @@
 
         <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">m</span>, <span class="ident">beta</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">data</span> {
-                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">fermi_dirac</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
+                <span class="ident">test</span>::<span class="ident">black_box</span>(<span class="kw">super</span>::<span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>, <span class="ident">beta</span>));
             }
         });
 
