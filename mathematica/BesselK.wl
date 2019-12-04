@@ -2,7 +2,7 @@
 
 << RustApproximation`;
 
-$Assumptions = x >= 0;
+$Assumptions = x > 0;
 
 nRange = ToExpression /@ Rest @ $ScriptCommandLine;
 If[nRange === {},
