@@ -3,27 +3,87 @@ name: Rust
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  check:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         toolchain: [stable, beta, nightly]
-        os: [ubuntu-latest]
-
+        include:
+          - toolchain: stable
+            features: ""
+          - toolchain: beta
+            features: ""
+          - toolchain: nightly
+            features: "nightly"
     steps:
-    - uses: actions/checkout@v1
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: ${{ matrix.toolchain }}
-        override: true
-        components: rustfmt, clippy
-    - name: Cargo check
-      uses: actions-rs/cargo@v1
-      with:
-        command: check
-    - name: Cargo test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: --all-features
+      - uses: actions/checkout@v1
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          override: true
+          components: rustfmt, clippy
+      - name: format
+        # switch to `action-rs/rustfmt-check` once that is available
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: >-
+            --
+            --check
+      - name: clippy
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: clippy-${{ matrix.toolchain }}
+          args: >-
+            --features "${{ matrix.features }}"
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain: [stable, beta, nightly]
+        include:
+          - toolchain: stable
+            features: ""
+          - toolchain: beta
+            features: ""
+          - toolchain: nightly
+            features: "nightly"
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          override: true
+      - name: test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: >-
+            --features "${{ matrix.features }}"
+
+  # waiting on actions-rs/tarpaulin
+  # coverage:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       toolchain: [stable, beta, nightly]
+  #       include:
+  #         - toolchain: stable
+  #           features: ""
+  #         - toolchain: beta
+  #           features: ""
+  #         - toolchain: nightly
+  #           features: "nightly"
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Install rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: ${{ matrix.toolchain }}
+  #         override: true
+  #     - name: test
+  #       uses: actions-rs/tarpaulin@v1
