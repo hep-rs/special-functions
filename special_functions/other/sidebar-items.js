@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["harmonic_number","Approximation of the Harmonic number extended to all number (x > 0)."]]});
+initSidebarItems({"fn":[["harmonic_number","Approximation of the Harmonic number extended to all number \\(x > 0\\)."]],"mod":[["polylog","Polylogarithms functions"]]});
