@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn li() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/polylog/li.csv")?;
+        let mut rdr = csv::Reader::from_path("tests/data/other/polylog.csv")?;
         let f = &[
             super::li0,
             super::li1,
@@ -117,7 +117,7 @@ mod benches {
 
     #[bench]
     fn li0(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/polylog/li.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/other/polylog.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 11] = x.unwrap();
@@ -136,7 +136,7 @@ mod benches {
 
     #[bench]
     fn li9(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/polylog/li.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/other/polylog.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 11] = x.unwrap();

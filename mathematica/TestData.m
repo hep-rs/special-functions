@@ -69,7 +69,7 @@ CreateDirectory["../tests/data/polylog/",CreateIntermediateDirectories->True];
 
 (* ::Input::Initialization:: *)
 Export[
-"../tests/data/polylog/li.csv",
+"../tests/data/other/polylog.csv",
 ParallelTable[
 N[{x,Sequence@@PolyLog[Range[0,9],x]},$MachinePrecision],
 {x,Join[-10^Subdivide[10,-10,500],1-10^Subdivide[0,-5,500]]}

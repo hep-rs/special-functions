@@ -1,19 +1,21 @@
-//! Other function approximations
+//! Miscellaneous functions
 
 use approx_fn;
 use std::convert::identity;
 
+pub mod polylog;
+
 mod harmonic_number;
 
 approx_fn! {
-    #[doc = "Approximation of the Harmonic number extended to all number \\(x > 0\\).
+    #[doc = r#"Approximation of the Harmonic number extended to all number \\(x > 0\\).
 
 The \\(n\\)th harmonic number is defined as
 
 \\begin{equation}
     H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
 \\end{equation}
-"]
+"#]
     (pub) fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = identity);
 }
 
