@@ -1,4 +1,4 @@
-use criterion::{black_box, AxisScale, Criterion, PlotConfiguration};
+use criterion::{black_box, AxisScale, BenchmarkId, Criterion, PlotConfiguration};
 use rand::prelude::*;
 use std::f64;
 
@@ -10,7 +10,7 @@ pub fn polynomial(c: &mut Criterion) {
     for &i in &[
         0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
     ] {
-        group.bench_function(format!("{}", i), |b| {
+        group.bench_function(BenchmarkId::from_parameter(i), |b| {
             let mut rng = StdRng::seed_from_u64(0x1234_abcd);
             let c: Vec<f64> = (0..i).map(|_| rng.gen()).collect();
 
@@ -29,7 +29,7 @@ pub fn polynomial_ratio(c: &mut Criterion) {
     for &i in &[
         0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
     ] {
-        group.bench_function(format!("{}", i), |b| {
+        group.bench_function(BenchmarkId::from_parameter(i), |b| {
             let mut rng = StdRng::seed_from_u64(0x1234_abcd);
             let ca: Vec<f64> = (0..i).map(|_| rng.gen()).collect();
             let cb: Vec<f64> = (0..i).map(|_| rng.gen()).collect();
@@ -49,7 +49,7 @@ pub fn chebyshev(c: &mut Criterion) {
     for &i in &[
         0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
     ] {
-        group.bench_function(format!("{}", i), |b| {
+        group.bench_function(BenchmarkId::from_parameter(i), |b| {
             let mut rng = StdRng::seed_from_u64(0x1234_abcd);
             let c: Vec<f64> = (0..i).map(|_| rng.gen()).collect();
 
