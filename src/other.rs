@@ -1,6 +1,6 @@
 //! Miscellaneous functions
 
-use approx_fn;
+
 use std::convert::identity;
 
 pub mod polylog;

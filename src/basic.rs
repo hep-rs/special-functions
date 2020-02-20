@@ -47,7 +47,7 @@ mod bench {
     #[bench]
     fn log2(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .map(|x| 2f64.powf(x))
             .take(DATA_SIZE)
             .collect();
@@ -62,7 +62,7 @@ mod bench {
     #[bench]
     fn log10(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .map(|x| 10f64.powf(x))
             .take(DATA_SIZE)
             .collect();
@@ -77,7 +77,7 @@ mod bench {
     #[bench]
     fn ln(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .map(|x| x.exp())
             .take(DATA_SIZE)
             .collect();
@@ -92,7 +92,7 @@ mod bench {
     #[bench]
     fn ln_1p(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .map(|x| x.exp() - 1.0)
             .take(DATA_SIZE)
             .collect();
@@ -107,7 +107,7 @@ mod bench {
     #[bench]
     fn sin(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 
@@ -121,7 +121,7 @@ mod bench {
     #[bench]
     fn cos(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 
@@ -135,7 +135,7 @@ mod bench {
     #[bench]
     fn sin_cos(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 
@@ -149,7 +149,7 @@ mod bench {
     #[bench]
     fn exp(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 
@@ -163,7 +163,7 @@ mod bench {
     #[bench]
     fn pow10(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 
@@ -177,7 +177,7 @@ mod bench {
     #[bench]
     fn pow2(b: &mut Bencher) {
         let data: Vec<f64> = Uniform::new(-1000.0f64, 1000.0)
-            .sample_iter(StdRng::seed_from_u64(0x1234abcd))
+            .sample_iter(StdRng::seed_from_u64(0x1234_abcd))
             .take(DATA_SIZE)
             .collect();
 

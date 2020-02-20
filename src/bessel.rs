@@ -1,6 +1,6 @@
 //! Bessel functions
 
-use approx_fn;
+
 use std::convert::identity;
 
 mod i0;

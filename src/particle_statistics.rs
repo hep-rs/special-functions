@@ -1,6 +1,6 @@
 //! Particle statistics
 
-use approx_fn;
+
 use std::convert::identity;
 use std::f64;
 

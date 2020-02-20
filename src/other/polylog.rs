@@ -1,6 +1,6 @@
 //! Polylogarithms functions
 
-use approx_fn;
+
 use std::convert::identity;
 
 mod li2;

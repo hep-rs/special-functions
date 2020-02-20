@@ -47,6 +47,7 @@ mod tests {
 
     pub(crate) const DATA: [(f64, f64); 4] = [(0.0, 0.0), (1.0, 1.0), (10.0, 0.0), (20.0, 1.0)];
 
+    #[allow(clippy::float_cmp)]
     #[test]
     fn linear() {
         for i in 0..1_001 {
