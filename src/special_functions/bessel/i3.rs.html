@@ -1,4 +1,80 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/bessel/i3.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>i3.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0">
+<meta charset="utf-8">
+<meta name="viewport" content=
+"width=device-width, initial-scale=1.0">
+<meta name="generator" content="rustdoc">
+<meta name="description" content=
+"Source to the Rust file `src/bessel/i3.rs`.">
+<meta name="keywords" content="rust, rustlang, rust-lang">
+<title>i3.rs.html -- source</title>
+<link rel="stylesheet" type="text/css" href=
+"../../../normalize.css">
+<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
+id="mainThemeStyle">
+<link rel="stylesheet" type="text/css" href="../../../dark.css">
+<link rel="stylesheet" type="text/css" href="../../../light.css"
+id="themeStyle">
+<script src="../../../storage.js"></script><noscript>
+<link rel="stylesheet" href="../../../noscript.css"></noscript>
+<link rel="shortcut icon" href="../../../favicon.ico">
+<style type="text/css">
+#crate-search{background-image:url("../../../down-arrow.svg");}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      macros: {
+        dd: "{\\mathop{}\\!\\mathrm{d}}",
+        textsc: ["\\mathrm{\\scriptsize #1}", 1],
+        vt: ["\\boldsymbol{#1}", 1],
+        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
+        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
+        defeq: "\\mathrel{\\vcenter:}=",
+        abs: ["\\lvert #1 \\rvert", 1],
+        angles: ["\\langle #1 \\rangle", 1]
+      }
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+></script>
+</head>
+<body class="rustdoc source">
+<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
+<nav class="sidebar">
+<div class="sidebar-menu">☰</div>
+<a href='../../../special_functions/index.html'>
+<div class='logo-container'><img src='../../../rust-logo.png' alt=
+'logo'></div>
+</a></nav>
+<div class="theme-picker"><button id="theme-picker" aria-label=
+"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
+"Pick another theme!"></button>
+<div id="theme-choices"></div>
+</div>
+<script src="../../../theme.js"></script>
+<nav class="sub">
+<form class="search-form">
+<div class="search-container">
+<div><select id="crate-search">
+<option value="All crates">All crates</option>
+</select><input class="search-input" name="search" disabled
+autocomplete="off" spellcheck="false" placeholder=
+"Click or press ‘S’ to search, ‘?’ for more options…" type=
+"search"></div>
+<a id="settings-menu" href="../../../settings.html"><img src=
+"../../../wheel.svg" width="18" alt="Change settings"></a></div>
+</form>
+</nav>
+<section id="main" class="content">
+<pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -622,18 +698,33 @@
 <span id="622">622</span>
 <span id="623">623</span>
 <span id="624">624</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">all</span>)]</span>
+</pre>
+<div class="example-wrap">
+<pre class="rust">
+<span class="attribute">#![<span class=
+"ident">allow</span>(<span class=
+"ident">clippy</span>::<span class="ident">all</span>)]</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">approximations</span>::<span class="ident">polynomial</span>;
+<span class="kw">use</span> <span class=
+"kw">crate</span>::<span class=
+"ident">approximations</span>::<span class=
+"ident">polynomial</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">lower</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">let</span> <span class=
+"ident">x2</span> <span class="op">=</span> <span class=
+"ident">x</span>.<span class="ident">powi</span>(<span class=
+"number">2</span>);
 
-    <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">3</span>)
-        <span class="op">*</span> <span class="ident">polynomial</span>(
+    <span class="ident">x</span>.<span class=
+"ident">powi</span>(<span class="number">3</span>)
+        <span class="op">*</span> <span class=
+"ident">polynomial</span>(
             <span class="ident">x2</span>,
-            <span class="kw-2">&amp;</span>[
+            <span class="kw-2">&</span>[
                 <span class="number">0.02083333333333333</span>,
                 <span class="number">0.001302083333333333</span>,
                 <span class="number">0.00003255208333333333</span>,
@@ -644,27 +735,46 @@
         )
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upper</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">x</span>.<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">polynomial</span>(
-            <span class="ident">x</span>.<span class="ident">recip</span>(),
-            <span class="kw-2">&amp;</span>[
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">upper</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">x</span>.<span class=
+"ident">exp</span>() <span class="op">/</span> <span class=
+"ident">x</span>.<span class="ident">sqrt</span>()
+        <span class="op">*</span> <span class=
+"ident">polynomial</span>(
+            <span class="ident">x</span>.<span class=
+"ident">recip</span>(),
+            <span class="kw-2">&</span>[
                 <span class="number">0.3989422804014327</span>,
-                <span class="op">-</span><span class="number">1.745372476756268</span>,
+                <span class="op">-</span><span class=
+"number">1.745372476756268</span>,
                 <span class="number">2.945316054526202</span>,
-                <span class="op">-</span><span class="number">1.349936524991176</span>,
-                <span class="op">-</span><span class="number">0.5484117132776653</span>,
-                <span class="op">-</span><span class="number">0.6169631774373734</span>,
-                <span class="op">-</span><span class="number">1.092538960045349</span>,
-                <span class="op">-</span><span class="number">2.594780030107703</span>,
-                <span class="op">-</span><span class="number">7.662709776411811</span>,
-                <span class="op">-</span><span class="number">26.92591074211373</span>,
+                <span class="op">-</span><span class=
+"number">1.349936524991176</span>,
+                <span class="op">-</span><span class=
+"number">0.5484117132776653</span>,
+                <span class="op">-</span><span class=
+"number">0.6169631774373734</span>,
+                <span class="op">-</span><span class=
+"number">1.092538960045349</span>,
+                <span class="op">-</span><span class=
+"number">2.594780030107703</span>,
+                <span class="op">-</span><span class=
+"number">7.662709776411811</span>,
+                <span class="op">-</span><span class=
+"number">26.92591074211373</span>,
             ],
         )
 }
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="kw-2">&amp;</span>[<span class="ident">f64</span>]; <span class="number">17</span>] <span class="op">=</span> [
-    <span class="kw-2">&amp;</span>[
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class=
+"ident">COEFFICIENTS</span>: [<span class=
+"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
+"number">17</span>] <span class="op">=</span> [
+    <span class="kw-2">&</span>[
         <span class="number">0.1458192778219265</span>,
         <span class="number">0.2070601147236091</span>,
         <span class="number">0.07621815175239642</span>,
@@ -697,7 +807,7 @@
         <span class="number">1.797180911404193e-40</span>,
         <span class="number">2.675749392823739e-42</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.442565078754826</span>,
         <span class="number">2.581650034834698</span>,
         <span class="number">0.6903615737538031</span>,
@@ -730,7 +840,7 @@
         <span class="number">1.264884645462204e-39</span>,
         <span class="number">2.109644355195853e-41</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">123.8966981059504</span>,
         <span class="number">176.4147881037604</span>,
         <span class="number">77.83411302456288</span>,
@@ -763,7 +873,7 @@
         <span class="number">1.413859071171949e-29</span>,
         <span class="number">4.721313539129298e-31</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">7172.524941006974</span>,
         <span class="number">10047.65289876848</span>,
         <span class="number">4367.660246508762</span>,
@@ -796,7 +906,7 @@
         <span class="number">7.854715887299216e-28</span>,
         <span class="number">2.624864930867957e-29</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">396067.3696786522</span>,
         <span class="number">553152.3106200829</span>,
         <span class="number">239766.0417843921</span>,
@@ -829,7 +939,7 @@
         <span class="number">4.375854591254314e-26</span>,
         <span class="number">1.463257321957763e-27</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.169633802133209e7</span>,
         <span class="number">3.028873548687197e7</span>,
         <span class="number">1.312619619377195e7</span>,
@@ -862,7 +972,7 @@
         <span class="number">2.443800319874006e-24</span>,
         <span class="number">8.176606636640369e-26</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.189546863833169e9</span>,
         <span class="number">1.661035613840997e9</span>,
         <span class="number">7.202014870226453e8</span>,
@@ -895,7 +1005,7 @@
         <span class="number">1.367791607536812e-22</span>,
         <span class="number">4.578775613048869e-24</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.542388728618025e10</span>,
         <span class="number">9.13917151512215e10</span>,
         <span class="number">3.96524123115031e10</span>,
@@ -928,7 +1038,7 @@
         <span class="number">7.670481161551794e-21</span>,
         <span class="number">2.568918602769901e-22</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.611054170353034e12</span>,
         <span class="number">5.046441678775479e12</span>,
         <span class="number">2.190963940749353e12</span>,
@@ -961,7 +1071,7 @@
         <span class="number">4.309084056595864e-19</span>,
         <span class="number">1.443745223765757e-20</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.999925131567344e14</span>,
         <span class="number">2.795981203057951e14</span>,
         <span class="number">1.21464488081491e14</span>,
@@ -994,7 +1104,7 @@
         <span class="number">2.424545723470034e-17</span>,
         <span class="number">8.126362082610058e-19</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.111078016159367e16</span>,
         <span class="number">1.553881115642938e16</span>,
         <span class="number">6.754153558651812e15</span>,
@@ -1027,7 +1137,7 @@
         <span class="number">1.366131536544125e-15</span>,
         <span class="number">4.580397798041629e-17</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.189907959876583e17</span>,
         <span class="number">8.659512769105993e17</span>,
         <span class="number">3.765809756543748e17</span>,
@@ -1060,7 +1170,7 @@
         <span class="number">7.707504007181385e-14</span>,
         <span class="number">2.584973009522682e-15</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.456997815439456e19</span>,
         <span class="number">4.83759088188613e19</span>,
         <span class="number">2.104660822499541e19</span>,
@@ -1093,7 +1203,7 @@
         <span class="number">4.35355307171374e-12</span>,
         <span class="number">1.460515043954544e-13</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.934952600854079e21</span>,
         <span class="number">2.708368090210034e21</span>,
         <span class="number">1.178766954873818e21</span>,
@@ -1126,7 +1236,7 @@
         <span class="number">2.461720471098504e-10</span>,
         <span class="number">8.260582177163946e-12</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.085160819178778e23</span>,
         <span class="number">1.519242605679536e23</span>,
         <span class="number">6.614494973577772e22</span>,
@@ -1159,7 +1269,7 @@
         <span class="number">1.393348331972239e-8</span>,
         <span class="number">4.676622860753611e-10</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.096500829671807e24</span>,
         <span class="number">8.536881936294667e24</span>,
         <span class="number">3.717941983096623e24</span>,
@@ -1192,7 +1302,7 @@
         <span class="number">7.893552639811061e-7</span>,
         <span class="number">2.649951452594974e-8</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.430460024673549e26</span>,
         <span class="number">4.804497104111421e26</span>,
         <span class="number">2.093011634744859e26</span>,
@@ -1227,7 +1337,10 @@
     ],
 ];
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SPLITS</span>: [<span class="ident">f64</span>; <span class="number">18</span>] <span class="op">=</span> [
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
+"ident">f64</span>; <span class="number">18</span>] <span class=
+"op">=</span> [
     <span class="number">0.4300701973710523</span>,
     <span class="number">2.459032569794304</span>,
     <span class="number">4.487994942217555</span>,
@@ -1248,4 +1361,16 @@
     <span class="number">65.3568661149151</span>,
 ];
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}", textsc: ["\\mathrm{\\scriptsize #1}", 1], vt: ["\\boldsymbol{#1}", 1], pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2], ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2], defeq: "\\mathrel{\\vcenter:}=", abs: ["\\lvert #1 \\rvert", 1], angles: ["\\langle #1 \\rangle", 1]}}});</script></body></html>
+</section>
+<section id="search" class="content hidden"></section>
+<section class="footer"></section>
+<script>
+window.rootPath = "../../../";window.currentCrate = "special_functions";
+</script>
+<script src="../../../aliases.js"></script>
+<script src="../../../main.js"></script>
+<script src="../../../source-script.js"></script>
+<script src="../../../source-files.js"></script>
+<script defer src="../../../search-index.js"></script>
+</body>
+</html>

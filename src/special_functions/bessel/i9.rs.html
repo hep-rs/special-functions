@@ -1,4 +1,80 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/bessel/i9.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>i9.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0">
+<meta charset="utf-8">
+<meta name="viewport" content=
+"width=device-width, initial-scale=1.0">
+<meta name="generator" content="rustdoc">
+<meta name="description" content=
+"Source to the Rust file `src/bessel/i9.rs`.">
+<meta name="keywords" content="rust, rustlang, rust-lang">
+<title>i9.rs.html -- source</title>
+<link rel="stylesheet" type="text/css" href=
+"../../../normalize.css">
+<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
+id="mainThemeStyle">
+<link rel="stylesheet" type="text/css" href="../../../dark.css">
+<link rel="stylesheet" type="text/css" href="../../../light.css"
+id="themeStyle">
+<script src="../../../storage.js"></script><noscript>
+<link rel="stylesheet" href="../../../noscript.css"></noscript>
+<link rel="shortcut icon" href="../../../favicon.ico">
+<style type="text/css">
+#crate-search{background-image:url("../../../down-arrow.svg");}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      macros: {
+        dd: "{\\mathop{}\\!\\mathrm{d}}",
+        textsc: ["\\mathrm{\\scriptsize #1}", 1],
+        vt: ["\\boldsymbol{#1}", 1],
+        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
+        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
+        defeq: "\\mathrel{\\vcenter:}=",
+        abs: ["\\lvert #1 \\rvert", 1],
+        angles: ["\\langle #1 \\rangle", 1]
+      }
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+></script>
+</head>
+<body class="rustdoc source">
+<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
+<nav class="sidebar">
+<div class="sidebar-menu">☰</div>
+<a href='../../../special_functions/index.html'>
+<div class='logo-container'><img src='../../../rust-logo.png' alt=
+'logo'></div>
+</a></nav>
+<div class="theme-picker"><button id="theme-picker" aria-label=
+"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
+"Pick another theme!"></button>
+<div id="theme-choices"></div>
+</div>
+<script src="../../../theme.js"></script>
+<nav class="sub">
+<form class="search-form">
+<div class="search-container">
+<div><select id="crate-search">
+<option value="All crates">All crates</option>
+</select><input class="search-input" name="search" disabled
+autocomplete="off" spellcheck="false" placeholder=
+"Click or press ‘S’ to search, ‘?’ for more options…" type=
+"search"></div>
+<a id="settings-menu" href="../../../settings.html"><img src=
+"../../../wheel.svg" width="18" alt="Change settings"></a></div>
+</form>
+</nav>
+<section id="main" class="content">
+<pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -2254,18 +2330,33 @@
 <span id="2254">2254</span>
 <span id="2255">2255</span>
 <span id="2256">2256</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">all</span>)]</span>
+</pre>
+<div class="example-wrap">
+<pre class="rust">
+<span class="attribute">#![<span class=
+"ident">allow</span>(<span class=
+"ident">clippy</span>::<span class="ident">all</span>)]</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">approximations</span>::<span class="ident">polynomial</span>;
+<span class="kw">use</span> <span class=
+"kw">crate</span>::<span class=
+"ident">approximations</span>::<span class=
+"ident">polynomial</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">lower</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">let</span> <span class=
+"ident">x2</span> <span class="op">=</span> <span class=
+"ident">x</span>.<span class="ident">powi</span>(<span class=
+"number">2</span>);
 
-    <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">9</span>)
-        <span class="op">*</span> <span class="ident">polynomial</span>(
+    <span class="ident">x</span>.<span class=
+"ident">powi</span>(<span class="number">9</span>)
+        <span class="op">*</span> <span class=
+"ident">polynomial</span>(
             <span class="ident">x2</span>,
-            <span class="kw-2">&amp;</span>[
+            <span class="kw-2">&</span>[
                 <span class="number">5.382288910934744e-9</span>,
                 <span class="number">1.345572227733686e-10</span>,
                 <span class="number">1.529059349697371e-12</span>,
@@ -2276,27 +2367,43 @@
         )
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upper</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">x</span>.<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">polynomial</span>(
-            <span class="ident">x</span>.<span class="ident">recip</span>(),
-            <span class="kw-2">&amp;</span>[
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">upper</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">x</span>.<span class=
+"ident">exp</span>() <span class="op">/</span> <span class=
+"ident">x</span>.<span class="ident">sqrt</span>()
+        <span class="op">*</span> <span class=
+"ident">polynomial</span>(
+            <span class="ident">x</span>.<span class=
+"ident">recip</span>(),
+            <span class="kw-2">&</span>[
                 <span class="number">0.3989422804014327</span>,
-                <span class="op">-</span><span class="number">16.10729457120784</span>,
+                <span class="op">-</span><span class=
+"number">16.10729457120784</span>,
                 <span class="number">317.1123618706544</span>,
-                <span class="op">-</span><span class="number">3950.691508305237</span>,
+                <span class="op">-</span><span class=
+"number">3950.691508305237</span>,
                 <span class="number">33951.25514949813</span>,
-                <span class="op">-</span><span class="number">206253.8750332011</span>,
+                <span class="op">-</span><span class=
+"number">206253.8750332011</span>,
                 <span class="number">872282.0131612464</span>,
-                <span class="op">-</span><span class="number">2.414352000714164e6</span>,
+                <span class="op">-</span><span class=
+"number">2.414352000714164e6</span>,
                 <span class="number">3.734700751104723e6</span>,
-                <span class="op">-</span><span class="number">1.815479531787018e6</span>,
+                <span class="op">-</span><span class=
+"number">1.815479531787018e6</span>,
             ],
         )
 }
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="kw-2">&amp;</span>[<span class="ident">f64</span>]; <span class="number">65</span>] <span class="op">=</span> [
-    <span class="kw-2">&amp;</span>[
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class=
+"ident">COEFFICIENTS</span>: [<span class=
+"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
+"number">65</span>] <span class="op">=</span> [
+    <span class="kw-2">&</span>[
         <span class="number">3.615397490073553e-7</span>,
         <span class="number">6.139667627284659e-7</span>,
         <span class="number">3.770426228026907e-7</span>,
@@ -2329,7 +2436,7 @@
         <span class="number">4.496443442858469e-47</span>,
         <span class="number">4.131278375830067e-49</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.00005837148872913777</span>,
         <span class="number">0.00008508990394498146</span>,
         <span class="number">0.00003703567995243129</span>,
@@ -2362,7 +2469,7 @@
         <span class="number">1.523833450184182e-46</span>,
         <span class="number">1.617064963094033e-48</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.01815463536365205</span>,
         <span class="number">0.02829647159670491</span>,
         <span class="number">0.01423930290279119</span>,
@@ -2395,7 +2502,7 @@
         <span class="number">5.664251173268715e-37</span>,
         <span class="number">1.211371605138729e-38</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.293667396122156</span>,
         <span class="number">1.798171881996949</span>,
         <span class="number">0.7429935823222561</span>,
@@ -2428,7 +2535,7 @@
         <span class="number">7.359314947831374e-36</span>,
         <span class="number">1.568677436430901e-37</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">43.63062753200832</span>,
         <span class="number">55.76124598179729</span>,
         <span class="number">20.5257286194452</span>,
@@ -2461,7 +2568,7 @@
         <span class="number">9.48516541150603e-35</span>,
         <span class="number">2.016091236994558e-36</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1014.933695803994</span>,
         <span class="number">1226.72565676919</span>,
         <span class="number">421.5053167922024</span>,
@@ -2494,7 +2601,7 @@
         <span class="number">1.214557226207167e-33</span>,
         <span class="number">2.575651313656263e-35</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">19200.4309532351</span>,
         <span class="number">22372.21056141343</span>,
         <span class="number">7363.842317278244</span>,
@@ -2527,7 +2634,7 @@
         <span class="number">1.546999508091268e-32</span>,
         <span class="number">3.274492618930744e-34</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">320694.9877857729</span>,
         <span class="number">364626.6004263298</span>,
         <span class="number">116693.7662224468</span>,
@@ -2560,7 +2667,7 @@
         <span class="number">1.961885128673917e-31</span>,
         <span class="number">4.146230942230594e-33</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.94568665949368e6</span>,
         <span class="number">5.529299928637008e6</span>,
         <span class="number">1.736056266935373e6</span>,
@@ -2593,7 +2700,7 @@
         <span class="number">2.47908389903698e-30</span>,
         <span class="number">5.232498409092206e-32</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">7.228768954276723e7</span>,
         <span class="number">7.986199159097211e7</span>,
         <span class="number">2.473868356686647e7</span>,
@@ -2626,7 +2733,7 @@
         <span class="number">3.123199814994753e-29</span>,
         <span class="number">6.584840830086628e-31</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.01767359963429e9</span>,
         <span class="number">1.114642404468344e9</span>,
         <span class="number">3.419146243161017e8</span>,
@@ -2659,7 +2766,7 @@
         <span class="number">3.924691349144726e-28</span>,
         <span class="number">8.267063361936567e-30</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.39438444868293e10</span>,
         <span class="number">1.517489435640105e10</span>,
         <span class="number">4.62103524767049e9</span>,
@@ -2692,7 +2799,7 @@
         <span class="number">4.921256361336309e-27</span>,
         <span class="number">1.035813010183809e-28</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.8725014308827e11</span>,
         <span class="number">2.027937795111786e11</span>,
         <span class="number">6.14125836244882e10</span>,
@@ -2725,7 +2832,7 @@
         <span class="number">6.159543975072502e-26</span>,
         <span class="number">1.295574814086854e-27</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.476461860273319e12</span>,
         <span class="number">2.671987774361971e12</span>,
         <span class="number">8.056914064071184e11</span>,
@@ -2758,7 +2865,7 @@
         <span class="number">7.697270469654284e-25</span>,
         <span class="number">1.618079737655395e-26</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.23675876603824e13</span>,
         <span class="number">3.482046944072117e13</span>,
         <span class="number">1.046399407217989e13</span>,
@@ -2791,7 +2898,7 @@
         <span class="number">9.60583440120724e-24</span>,
         <span class="number">2.018280540513497e-25</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.191333413266165e14</span>,
         <span class="number">4.498411751083253e14</span>,
         <span class="number">1.34817761052336e14</span>,
@@ -2824,7 +2931,7 @@
         <span class="number">1.197354860681667e-22</span>,
         <span class="number">2.514671379020195e-24</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">5.387311708546152e15</span>,
         <span class="number">5.771112434151221e15</span>,
         <span class="number">1.725828598669597e15</span>,
@@ -2857,7 +2964,7 @@
         <span class="number">1.490963447378236e-21</span>,
         <span class="number">3.130124004815901e-23</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.883161586092604e16</span>,
         <span class="number">7.362203277734387e16</span>,
         <span class="number">2.197707248357147e16</span>,
@@ -2890,7 +2997,7 @@
         <span class="number">1.854915811712046e-20</span>,
         <span class="number">3.892921141209438e-22</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">8.751367682480939e17</span>,
         <span class="number">9.34860059497291e17</span>,
         <span class="number">2.786559826662611e17</span>,
@@ -2923,7 +3030,7 @@
         <span class="number">2.305913044335358e-19</span>,
         <span class="number">4.838033505895254e-21</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.108174318765931e19</span>,
         <span class="number">1.18255957710485e19</span>,
         <span class="number">3.520562382922129e18</span>,
@@ -2956,7 +3063,7 @@
         <span class="number">2.864604539101632e-18</span>,
         <span class="number">6.008697899572131e-20</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.398552767030594e20</span>,
         <span class="number">1.491120128780436e20</span>,
         <span class="number">4.434605137650401e19</span>,
@@ -2989,7 +3096,7 @@
         <span class="number">3.556519528077261e-17</span>,
         <span class="number">7.458367312387514e-19</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.760045520554843e21</span>,
         <span class="number">1.875152527099896e21</span>,
         <span class="number">5.571880669302345e20</span>,
@@ -3022,7 +3129,7 @@
         <span class="number">4.413218208810754e-16</span>,
         <span class="number">9.25312072245201e-18</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.209702089132895e22</span>,
         <span class="number">2.352741645930964e22</span>,
         <span class="number">6.985847384836858e21</span>,
@@ -3055,7 +3162,7 @@
         <span class="number">5.473714216260606e-15</span>,
         <span class="number">1.147464092525028e-16</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.768622780746696e23</span>,
         <span class="number">2.946267868695343e23</span>,
         <span class="number">8.742656649343497e22</span>,
@@ -3088,7 +3195,7 @@
         <span class="number">6.786232390102343e-14</span>,
         <span class="number">1.422389426940431e-15</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.462916308608961e24</span>,
         <span class="number">3.683422458072634e24</span>,
         <span class="number">1.092415280505601e24</span>,
@@ -3121,7 +3228,7 @@
         <span class="number">8.410380862574246e-13</span>,
         <span class="number">1.762567773210332e-14</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.324883402606832e25</span>,
         <span class="number">4.598462537836086e25</span>,
         <span class="number">1.363158106997127e25</span>,
@@ -3154,7 +3261,7 @@
         <span class="number">1.041983512101468e-11</span>,
         <span class="number">2.183423776697353e-13</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">5.394479680075012e26</span>,
         <span class="number">5.733762150307395e26</span>,
         <span class="number">1.699017013003512e26</span>,
@@ -3187,7 +3294,7 @@
         <span class="number">1.290565472133727e-10</span>,
         <span class="number">2.704021355381522e-12</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.721123584916479e27</span>,
         <span class="number">7.141729162483414e27</span>,
         <span class="number">2.115479555775871e27</span>,
@@ -3220,7 +3327,7 @@
         <span class="number">1.598038178034778e-9</span>,
         <span class="number">3.347921684346024e-11</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">8.365930715218836e28</span>,
         <span class="number">8.887174238777994e28</span>,
         <span class="number">2.631697877235305e28</span>,
@@ -3253,7 +3360,7 @@
         <span class="number">1.978310553714853e-8</span>,
         <span class="number">4.144243420422211e-10</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.040447502522099e30</span>,
         <span class="number">1.10502384180531e30</span>,
         <span class="number">3.271353628671792e29</span>,
@@ -3286,7 +3393,7 @@
         <span class="number">2.448572073046385e-7</span>,
         <span class="number">5.128972845446831e-9</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.293020106965788e31</span>,
         <span class="number">1.373001094097991e31</span>,
         <span class="number">4.063726816456273e30</span>,
@@ -3319,7 +3426,7 @@
         <span class="number">3.030066124698743e-6</span>,
         <span class="number">6.346582850699304e-8</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.605864072222273e32</span>,
         <span class="number">1.704900000001305e32</span>,
         <span class="number">5.045016627281591e31</span>,
@@ -3352,7 +3459,7 @@
         <span class="number">0.00003749045687542999</span>,
         <span class="number">7.852033582108369e-7</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.993262396136957e33</span>,
         <span class="number">2.115865742393357e33</span>,
         <span class="number">6.259973618340738e32</span>,
@@ -3385,7 +3492,7 @@
         <span class="number">0.0004637954304284835</span>,
         <span class="number">9.71324474197937e-6</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.472871800262577e34</span>,
         <span class="number">2.62462056867568e34</span>,
         <span class="number">7.763916655021928e33</span>,
@@ -3418,7 +3525,7 @@
         <span class="number">0.005736885481147008</span>,
         <span class="number">0.0001201415077243331</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.066518427743045e35</span>,
         <span class="number">3.254307417844338e35</span>,
         <span class="number">9.62522527594521e34</span>,
@@ -3451,7 +3558,7 @@
         <span class="number">0.07095386174630338</span>,
         <span class="number">0.001485847638545873</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.80118109990394e36</span>,
         <span class="number">4.033532402687938e36</span>,
         <span class="number">1.192841954088538e36</span>,
@@ -3484,7 +3591,7 @@
         <span class="number">0.8774685517673708</span>,
         <span class="number">0.0183744023375173</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.710206338733905e37</span>,
         <span class="number">4.997653017328352e37</span>,
         <span class="number">1.477796583341105e37</span>,
@@ -3517,7 +3624,7 @@
         <span class="number">10.85044908543549</span>,
         <span class="number">0.227203314355754</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">5.834809784235097e38</span>,
         <span class="number">6.190369990131572e38</span>,
         <span class="number">1.830297973607189e38</span>,
@@ -3550,7 +3657,7 @@
         <span class="number">134.1618266899567</span>,
         <span class="number">2.809201431438449</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">7.225931515253162e39</span>,
         <span class="number">7.665694357840462e39</span>,
         <span class="number">2.266303744151726e39</span>,
@@ -3583,7 +3690,7 @@
         <span class="number">1658.743878114641</span>,
         <span class="number">34.73135577719325</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">8.946528699788098e40</span>,
         <span class="number">9.49037821351615e40</span>,
         <span class="number">2.805535702482658e40</span>,
@@ -3616,7 +3723,7 @@
         <span class="number">20507.0152820088</span>,
         <span class="number">429.3729820750817</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.107440867275682e42</span>,
         <span class="number">1.174691843857949e42</span>,
         <span class="number">3.472367252628678e41</span>,
@@ -3649,7 +3756,7 @@
         <span class="number">253513.8021533876</span>,
         <span class="number">5307.927215487657</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.3705729851781e43</span>,
         <span class="number">1.453726850742609e43</span>,
         <span class="number">4.296919995580157e42</span>,
@@ -3682,7 +3789,7 @@
         <span class="number">3.133861220662919e6</span>,
         <span class="number">65613.81989744081</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.69593279500762e44</span>,
         <span class="number">1.798742531309374e44</span>,
         <span class="number">5.316418846148426e43</span>,
@@ -3715,7 +3822,7 @@
         <span class="number">3.873821408596041e7</span>,
         <span class="number">811051.4081134518</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.09820620838215e45</span>,
         <span class="number">2.225309733988354e45</span>,
         <span class="number">6.576866624753806e44</span>,
@@ -3748,7 +3855,7 @@
         <span class="number">4.788324184620039e8</span>,
         <span class="number">1.002504841899534e7</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.59554212731374e46</span>,
         <span class="number">2.752670917831375e46</span>,
         <span class="number">8.135113462384942e45</span>,
@@ -3781,7 +3888,7 @@
         <span class="number">5.918529544401442e9</span>,
         <span class="number">1.239115337391737e8</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.210368856993109e47</span>,
         <span class="number">3.404605753311621e47</span>,
         <span class="number">1.00614141303946e47</span>,
@@ -3814,7 +3921,7 @@
         <span class="number">7.315304701231604e10</span>,
         <span class="number">1.531531982020582e9</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.970403017002806e48</span>,
         <span class="number">4.210500822818351e48</span>,
         <span class="number">1.24425883752489e48</span>,
@@ -3847,7 +3954,7 @@
         <span class="number">9.04151416084037e11</span>,
         <span class="number">1.892915566441713e10</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.90989635430505e49</span>,
         <span class="number">5.206671561614607e49</span>,
         <span class="number">1.538592649248392e49</span>,
@@ -3880,7 +3987,7 @@
         <span class="number">1.117485028810371e13</span>,
         <span class="number">2.339531199562331e11</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.071176575029624e50</span>,
         <span class="number">6.43799593994417e50</span>,
         <span class="number">1.902401593866879e50</span>,
@@ -3913,7 +4020,7 @@
         <span class="number">1.381133199161673e14</span>,
         <span class="number">2.891480807679941e12</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">7.506551555089211e51</span>,
         <span class="number">7.959933428855878e51</span>,
         <span class="number">2.352070626925094e51</span>,
@@ -3946,7 +4053,7 @@
         <span class="number">1.706962930375829e15</span>,
         <span class="number">3.573608552984275e13</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">9.28066265941634e52</span>,
         <span class="number">9.84102014967376e52</span>,
         <span class="number">2.907848097571195e52</span>,
@@ -3979,7 +4086,7 @@
         <span class="number">2.109640891256456e16</span>,
         <span class="number">4.416620012339125e14</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.147339313478434e54</span>,
         <span class="number">1.216595256311887e54</span>,
         <span class="number">3.594756819186322e53</span>,
@@ -4012,7 +4119,7 @@
         <span class="number">2.607294179296224e17</span>,
         <span class="number">5.458465608229053e15</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.418346255496106e55</span>,
         <span class="number">1.503939857724908e55</span>,
         <span class="number">4.443720060777826e54</span>,
@@ -4045,7 +4152,7 @@
         <span class="number">3.222327107301245e18</span>,
         <span class="number">6.746050716489957e16</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.753286921843034e56</span>,
         <span class="number">1.859070774089958e56</span>,
         <span class="number">5.49295318086327e55</span>,
@@ -4078,7 +4185,7 @@
         <span class="number">3.982430873333204e19</span>,
         <span class="number">8.337349629692785e17</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.167238062410091e57</span>,
         <span class="number">2.297973272149847e57</span>,
         <span class="number">6.789683601884736e56</span>,
@@ -4111,7 +4218,7 @@
         <span class="number">4.921831686233904e20</span>,
         <span class="number">1.030401879830792e19</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">2.678831940535309e58</span>,
         <span class="number">2.840402437331051e58</span>,
         <span class="number">8.392276628789429e57</span>,
@@ -4144,7 +4251,7 @@
         <span class="number">6.082833691839381e21</span>,
         <span class="number">1.27346273295237e20</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">3.311095052162096e59</span>,
         <span class="number">3.510772464742987e59</span>,
         <span class="number">1.037286291903287e59</span>,
@@ -4177,7 +4284,7 @@
         <span class="number">7.517726365732936e22</span>,
         <span class="number">1.573865061670563e21</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">4.092484772830995e60</span>,
         <span class="number">4.339255817647033e60</span>,
         <span class="number">1.282058603979281e60</span>,
@@ -4210,7 +4317,7 @@
         <span class="number">9.29114250993801e23</span>,
         <span class="number">1.945140746351835e22</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">5.058170663312074e61</span>,
         <span class="number">5.363141804495958e61</span>,
         <span class="number">1.584561652407949e61</span>,
@@ -4243,7 +4350,7 @@
         <span class="number">1.148297335895814e25</span>,
         <span class="number">2.404016371715833e23</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">6.251618203443588e62</span>,
         <span class="number">6.628515830938925e62</span>,
         <span class="number">1.958411342498843e62</span>,
@@ -4276,7 +4383,7 @@
         <span class="number">1.419197248722157e26</span>,
         <span class="number">2.971167816614927e24</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">7.726546371433209e63</span>,
         <span class="number">8.192335055021685e63</span>,
         <span class="number">2.420435712993809e63</span>,
@@ -4309,7 +4416,7 @@
         <span class="number">1.754021135583437e27</span>,
         <span class="number">3.672153167821445e25</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">9.54934735942262e64</span>,
         <span class="number">1.012499406639462e65</span>,
         <span class="number">2.991433006759806e64</span>,
@@ -4342,7 +4449,7 @@
         <span class="number">2.167858785223316e28</span>,
         <span class="number">4.538566120697877e26</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.180207757839131e66</span>,
         <span class="number">1.251349633266177e66</span>,
         <span class="number">3.697108730997647e65</span>,
@@ -4375,7 +4482,7 @@
         <span class="number">2.679363680658276e29</span>,
         <span class="number">5.609462003642648e27</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.458615489986013e67</span>,
         <span class="number">1.546537450846889e67</span>,
         <span class="number">4.569233989710735e66</span>,
@@ -4408,7 +4515,7 @@
         <span class="number">3.311595037155067e30</span>,
         <span class="number">6.933120897833374e28</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">1.802692897496075e68</span>,
         <span class="number">1.911353652267818e68</span>,
         <span class="number">5.647077364786181e67</span>,
@@ -4443,7 +4550,10 @@
     ],
 ];
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SPLITS</span>: [<span class="ident">f64</span>; <span class="number">66</span>] <span class="op">=</span> [
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
+"ident">f64</span>; <span class="number">66</span>] <span class=
+"op">=</span> [
     <span class="number">0.6044680708286007</span>,
     <span class="number">1.86359547297004</span>,
     <span class="number">3.122722875111479</span>,
@@ -4512,4 +4622,16 @@
     <span class="number">161.7727755449328</span>,
 ];
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}", textsc: ["\\mathrm{\\scriptsize #1}", 1], vt: ["\\boldsymbol{#1}", 1], pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2], ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2], defeq: "\\mathrel{\\vcenter:}=", abs: ["\\lvert #1 \\rvert", 1], angles: ["\\langle #1 \\rangle", 1]}}});</script></body></html>
+</section>
+<section id="search" class="content hidden"></section>
+<section class="footer"></section>
+<script>
+window.rootPath = "../../../";window.currentCrate = "special_functions";
+</script>
+<script src="../../../aliases.js"></script>
+<script src="../../../main.js"></script>
+<script src="../../../source-script.js"></script>
+<script src="../../../source-files.js"></script>
+<script defer src="../../../search-index.js"></script>
+</body>
+</html>

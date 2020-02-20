@@ -1,4 +1,80 @@
-<!DOCTYPE html><html lang="en"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'<head>l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N9HX7G4');</script><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/particle_statistics/bose_einstein_massless.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bose_einstein_massless.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0">
+<meta charset="utf-8">
+<meta name="viewport" content=
+"width=device-width, initial-scale=1.0">
+<meta name="generator" content="rustdoc">
+<meta name="description" content=
+"Source to the Rust file `src/particle_statistics/bose_einstein_massless.rs`.">
+<meta name="keywords" content="rust, rustlang, rust-lang">
+<title>bose_einstein_massless.rs.html -- source</title>
+<link rel="stylesheet" type="text/css" href=
+"../../../normalize.css">
+<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
+id="mainThemeStyle">
+<link rel="stylesheet" type="text/css" href="../../../dark.css">
+<link rel="stylesheet" type="text/css" href="../../../light.css"
+id="themeStyle">
+<script src="../../../storage.js"></script><noscript>
+<link rel="stylesheet" href="../../../noscript.css"></noscript>
+<link rel="shortcut icon" href="../../../favicon.ico">
+<style type="text/css">
+#crate-search{background-image:url("../../../down-arrow.svg");}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      macros: {
+        dd: "{\\mathop{}\\!\\mathrm{d}}",
+        textsc: ["\\mathrm{\\scriptsize #1}", 1],
+        vt: ["\\boldsymbol{#1}", 1],
+        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
+        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
+        defeq: "\\mathrel{\\vcenter:}=",
+        abs: ["\\lvert #1 \\rvert", 1],
+        angles: ["\\langle #1 \\rangle", 1]
+      }
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+></script>
+</head>
+<body class="rustdoc source">
+<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
+<nav class="sidebar">
+<div class="sidebar-menu">☰</div>
+<a href='../../../special_functions/index.html'>
+<div class='logo-container'><img src='../../../rust-logo.png' alt=
+'logo'></div>
+</a></nav>
+<div class="theme-picker"><button id="theme-picker" aria-label=
+"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
+"Pick another theme!"></button>
+<div id="theme-choices"></div>
+</div>
+<script src="../../../theme.js"></script>
+<nav class="sub">
+<form class="search-form">
+<div class="search-container">
+<div><select id="crate-search">
+<option value="All crates">All crates</option>
+</select><input class="search-input" name="search" disabled
+autocomplete="off" spellcheck="false" placeholder=
+"Click or press ‘S’ to search, ‘?’ for more options…" type=
+"search"></div>
+<a id="settings-menu" href="../../../settings.html"><img src=
+"../../../wheel.svg" width="18" alt="Change settings"></a></div>
+</form>
+</nav>
+<section id="main" class="content">
+<pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -256,39 +332,64 @@
 <span id="256">256</span>
 <span id="257">257</span>
 <span id="258">258</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">all</span>)]</span>
+</pre>
+<div class="example-wrap">
+<pre class="rust">
+<span class="attribute">#![<span class=
+"ident">allow</span>(<span class=
+"ident">clippy</span>::<span class="ident">all</span>)]</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">approximations</span>::<span class="ident">polynomial</span>;
+<span class="kw">use</span> <span class=
+"kw">crate</span>::<span class=
+"ident">approximations</span>::<span class=
+"ident">polynomial</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">lower</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class=
+"ident">x</span> <span class="op">=</span><span class=
+"op">=</span> <span class="number">0.0</span> {
         <span class="number">0.1217938282335731</span>
     } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
+        <span class="kw">let</span> <span class=
+"ident">x2</span> <span class="op">=</span> <span class=
+"ident">x</span>.<span class="ident">powi</span>(<span class=
+"number">2</span>);
         <span class="ident">polynomial</span>(
             <span class="ident">x</span>,
-            <span class="kw-2">&amp;</span>[
+            <span class="kw-2">&</span>[
                 <span class="number">0.1217938282335731</span>,
-                <span class="op">-</span><span class="number">0.1666666666666667</span>,
+                <span class="op">-</span><span class=
+"number">0.1666666666666667</span>,
                 <span class="number">0.07599088773175333</span>,
                 <span class="number">0.008443431970194814</span>,
-                <span class="op">-</span><span class="number">0.0003518096654247839</span>,
+                <span class="op">-</span><span class=
+"number">0.0003518096654247839</span>,
                 <span class="number">0.0</span>,
                 <span class="number">1.17269888474928e-6</span>,
                 <span class="number">0.0</span>,
-                <span class="op">-</span><span class="number">9.97192929208571e-9</span>,
+                <span class="op">-</span><span class=
+"number">9.97192929208571e-9</span>,
                 <span class="number">0.0</span>,
                 <span class="number">1.163391750743333e-10</span>,
             ],
-        ) <span class="op">-</span> <span class="ident">x2</span> <span class="op">*</span> <span class="ident">x2</span>.<span class="ident">ln</span>() <span class="op">*</span> <span class="number">0.025330295910584444</span>
+        ) <span class="op">-</span> <span class=
+"ident">x2</span> <span class="op">*</span> <span class=
+"ident">x2</span>.<span class="ident">ln</span>() <span class=
+"op">*</span> <span class="number">0.025330295910584444</span>
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upper</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">upper</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
     <span class="ident">polynomial</span>(
-        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>(),
-        <span class="kw-2">&amp;</span>[
+        (<span class="op">-</span><span class=
+"ident">x</span>).<span class="ident">exp</span>(),
+        <span class="kw-2">&</span>[
             <span class="number">0.0</span>,
             <span class="number">0.1013211836423378</span>,
             <span class="number">0.01266514795529222</span>,
@@ -305,208 +406,305 @@
     )
 }
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="kw-2">&amp;</span>[<span class="ident">f64</span>]; <span class="number">6</span>] <span class="op">=</span> [
-    <span class="kw-2">&amp;</span>[
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class=
+"ident">COEFFICIENTS</span>: [<span class=
+"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
+"number">6</span>] <span class="op">=</span> [
+    <span class="kw-2">&</span>[
         <span class="number">0.07090222570422638</span>,
-        <span class="op">-</span><span class="number">0.005499097445452208</span>,
+        <span class="op">-</span><span class=
+"number">0.005499097445452208</span>,
         <span class="number">0.0001228837995339282</span>,
-        <span class="op">-</span><span class="number">2.454739496999227e-6</span>,
+        <span class="op">-</span><span class=
+"number">2.454739496999227e-6</span>,
         <span class="number">5.845655244597392e-8</span>,
-        <span class="op">-</span><span class="number">1.822685235350112e-9</span>,
+        <span class="op">-</span><span class=
+"number">1.822685235350112e-9</span>,
         <span class="number">6.988977052102584e-11</span>,
-        <span class="op">-</span><span class="number">3.062502725641196e-12</span>,
+        <span class="op">-</span><span class=
+"number">3.062502725641196e-12</span>,
         <span class="number">1.468051313864864e-13</span>,
-        <span class="op">-</span><span class="number">7.50720509895072e-15</span>,
+        <span class="op">-</span><span class=
+"number">7.50720509895072e-15</span>,
         <span class="number">4.031211927380999e-16</span>,
-        <span class="op">-</span><span class="number">2.249135250266502e-17</span>,
+        <span class="op">-</span><span class=
+"number">2.249135250266502e-17</span>,
         <span class="number">1.294128587027425e-18</span>,
-        <span class="op">-</span><span class="number">7.637457092360266e-20</span>,
+        <span class="op">-</span><span class=
+"number">7.637457092360266e-20</span>,
         <span class="number">4.604043594124468e-21</span>,
-        <span class="op">-</span><span class="number">2.825950707624294e-22</span>,
+        <span class="op">-</span><span class=
+"number">2.825950707624294e-22</span>,
         <span class="number">1.761694813595603e-23</span>,
-        <span class="op">-</span><span class="number">1.113163124055558e-24</span>,
+        <span class="op">-</span><span class=
+"number">1.113163124055558e-24</span>,
         <span class="number">7.117572325843747e-26</span>,
-        <span class="op">-</span><span class="number">4.598933213918917e-27</span>,
+        <span class="op">-</span><span class=
+"number">4.598933213918917e-27</span>,
         <span class="number">2.999429957996696e-28</span>,
-        <span class="op">-</span><span class="number">1.972686030323446e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.972686030323446e-29</span>,
         <span class="number">1.307247516635681e-30</span>,
-        <span class="op">-</span><span class="number">8.722308858007134e-32</span>,
+        <span class="op">-</span><span class=
+"number">8.722308858007134e-32</span>,
         <span class="number">5.856163925310658e-33</span>,
-        <span class="op">-</span><span class="number">3.954317941317629e-34</span>,
+        <span class="op">-</span><span class=
+"number">3.954317941317629e-34</span>,
         <span class="number">2.684129833367878e-35</span>,
-        <span class="op">-</span><span class="number">1.830754283642905e-36</span>,
+        <span class="op">-</span><span class=
+"number">1.830754283642905e-36</span>,
         <span class="number">1.254302694088312e-37</span>,
-        <span class="op">-</span><span class="number">8.670081520153876e-39</span>,
+        <span class="op">-</span><span class=
+"number">8.670081520153876e-39</span>,
         <span class="number">5.959019282696713e-40</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.06080352118689404</span>,
-        <span class="op">-</span><span class="number">0.004620247253926069</span>,
+        <span class="op">-</span><span class=
+"number">0.004620247253926069</span>,
         <span class="number">0.0000980690114740007</span>,
-        <span class="op">-</span><span class="number">1.741919145098989e-6</span>,
+        <span class="op">-</span><span class=
+"number">1.741919145098989e-6</span>,
         <span class="number">3.380784263411676e-8</span>,
-        <span class="op">-</span><span class="number">8.156091442493813e-10</span>,
+        <span class="op">-</span><span class=
+"number">8.156091442493813e-10</span>,
         <span class="number">2.39223516438768e-11</span>,
-        <span class="op">-</span><span class="number">8.01349392309833e-13</span>,
+        <span class="op">-</span><span class=
+"number">8.01349392309833e-13</span>,
         <span class="number">2.936670479448903e-14</span>,
-        <span class="op">-</span><span class="number">1.148011062508438e-15</span>,
+        <span class="op">-</span><span class=
+"number">1.148011062508438e-15</span>,
         <span class="number">4.71241943045537e-17</span>,
-        <span class="op">-</span><span class="number">2.009808299615926e-18</span>,
+        <span class="op">-</span><span class=
+"number">2.009808299615926e-18</span>,
         <span class="number">8.83974564973494e-20</span>,
-        <span class="op">-</span><span class="number">3.987755439576101e-21</span>,
+        <span class="op">-</span><span class=
+"number">3.987755439576101e-21</span>,
         <span class="number">1.837519042659713e-22</span>,
-        <span class="op">-</span><span class="number">8.621163228049854e-24</span>,
+        <span class="op">-</span><span class=
+"number">8.621163228049854e-24</span>,
         <span class="number">4.108068490431174e-25</span>,
-        <span class="op">-</span><span class="number">1.984124408050706e-26</span>,
+        <span class="op">-</span><span class=
+"number">1.984124408050706e-26</span>,
         <span class="number">9.69712190969286e-28</span>,
-        <span class="op">-</span><span class="number">4.78924514208436e-29</span>,
+        <span class="op">-</span><span class=
+"number">4.78924514208436e-29</span>,
         <span class="number">2.387514821214438e-30</span>,
-        <span class="op">-</span><span class="number">1.200221260834032e-31</span>,
+        <span class="op">-</span><span class=
+"number">1.200221260834032e-31</span>,
         <span class="number">6.079333335516566e-33</span>,
-        <span class="op">-</span><span class="number">3.100439906028298e-34</span>,
+        <span class="op">-</span><span class=
+"number">3.100439906028298e-34</span>,
         <span class="number">1.591101465351475e-35</span>,
-        <span class="op">-</span><span class="number">8.211986090571964e-37</span>,
+        <span class="op">-</span><span class=
+"number">8.211986090571964e-37</span>,
         <span class="number">4.260606003528588e-38</span>,
-        <span class="op">-</span><span class="number">2.221204060106523e-39</span>,
+        <span class="op">-</span><span class=
+"number">2.221204060106523e-39</span>,
         <span class="number">1.163172798832042e-40</span>,
-        <span class="op">-</span><span class="number">6.133382779379285e-42</span>,
+        <span class="op">-</span><span class=
+"number">6.133382779379285e-42</span>,
         <span class="number">3.228506608716317e-43</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.04874566950355413</span>,
-        <span class="op">-</span><span class="number">0.007233143562204598</span>,
+        <span class="op">-</span><span class=
+"number">0.007233143562204598</span>,
         <span class="number">0.0002912998938425218</span>,
-        <span class="op">-</span><span class="number">9.21890567423206e-6</span>,
+        <span class="op">-</span><span class=
+"number">9.21890567423206e-6</span>,
         <span class="number">2.910180418146227e-7</span>,
-        <span class="op">-</span><span class="number">1.066725845550282e-8</span>,
+        <span class="op">-</span><span class=
+"number">1.066725845550282e-8</span>,
         <span class="number">4.655912863405255e-10</span>,
-        <span class="op">-</span><span class="number">2.317233986004633e-11</span>,
+        <span class="op">-</span><span class=
+"number">2.317233986004633e-11</span>,
         <span class="number">1.262130440290617e-12</span>,
-        <span class="op">-</span><span class="number">7.334049081057533e-14</span>,
+        <span class="op">-</span><span class=
+"number">7.334049081057533e-14</span>,
         <span class="number">4.475185646810579e-15</span>,
-        <span class="op">-</span><span class="number">2.837313649916279e-16</span>,
+        <span class="op">-</span><span class=
+"number">2.837313649916279e-16</span>,
         <span class="number">1.855200412148006e-17</span>,
-        <span class="op">-</span><span class="number">1.244193570726405e-18</span>,
+        <span class="op">-</span><span class=
+"number">1.244193570726405e-18</span>,
         <span class="number">8.523298024228407e-20</span>,
-        <span class="op">-</span><span class="number">5.945174364511887e-21</span>,
+        <span class="op">-</span><span class=
+"number">5.945174364511887e-21</span>,
         <span class="number">4.211770250982688e-22</span>,
-        <span class="op">-</span><span class="number">3.024326238723789e-23</span>,
+        <span class="op">-</span><span class=
+"number">3.024326238723789e-23</span>,
         <span class="number">2.197551695694731e-24</span>,
-        <span class="op">-</span><span class="number">1.613626514280745e-25</span>,
+        <span class="op">-</span><span class=
+"number">1.613626514280745e-25</span>,
         <span class="number">1.195981561913018e-26</span>,
-        <span class="op">-</span><span class="number">8.938909668967908e-28</span>,
+        <span class="op">-</span><span class=
+"number">8.938909668967908e-28</span>,
         <span class="number">6.731720510298663e-29</span>,
-        <span class="op">-</span><span class="number">5.104369779622468e-30</span>,
+        <span class="op">-</span><span class=
+"number">5.104369779622468e-30</span>,
         <span class="number">3.894636818744615e-31</span>,
-        <span class="op">-</span><span class="number">2.988608162075775e-32</span>,
+        <span class="op">-</span><span class=
+"number">2.988608162075775e-32</span>,
         <span class="number">2.305393588620216e-33</span>,
-        <span class="op">-</span><span class="number">1.786966061471513e-34</span>,
+        <span class="op">-</span><span class=
+"number">1.786966061471513e-34</span>,
         <span class="number">1.39136229393996e-35</span>,
-        <span class="op">-</span><span class="number">1.094466428453236e-36</span>,
+        <span class="op">-</span><span class=
+"number">1.094466428453236e-36</span>,
         <span class="number">8.536840872146987e-38</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.03191448524180705</span>,
-        <span class="op">-</span><span class="number">0.00914847837909553</span>,
+        <span class="op">-</span><span class=
+"number">0.00914847837909553</span>,
         <span class="number">0.0006915610928377078</span>,
-        <span class="op">-</span><span class="number">0.00003836017623825755</span>,
+        <span class="op">-</span><span class=
+"number">0.00003836017623825755</span>,
         <span class="number">1.898922899666351e-6</span>,
-        <span class="op">-</span><span class="number">9.78153168092642e-8</span>,
+        <span class="op">-</span><span class=
+"number">9.78153168092642e-8</span>,
         <span class="number">5.692117024165172e-9</span>,
-        <span class="op">-</span><span class="number">3.74372344011536e-10</span>,
+        <span class="op">-</span><span class=
+"number">3.74372344011536e-10</span>,
         <span class="number">2.697170809907869e-11</span>,
-        <span class="op">-</span><span class="number">2.074130304285321e-12</span>,
+        <span class="op">-</span><span class=
+"number">2.074130304285321e-12</span>,
         <span class="number">1.675025455820988e-13</span>,
-        <span class="op">-</span><span class="number">1.405569011412137e-14</span>,
+        <span class="op">-</span><span class=
+"number">1.405569011412137e-14</span>,
         <span class="number">1.216430544715191e-15</span>,
-        <span class="op">-</span><span class="number">1.079817010464247e-16</span>,
+        <span class="op">-</span><span class=
+"number">1.079817010464247e-16</span>,
         <span class="number">9.79144388823611e-18</span>,
-        <span class="op">-</span><span class="number">9.04043919253334e-19</span>,
+        <span class="op">-</span><span class=
+"number">9.04043919253334e-19</span>,
         <span class="number">8.477794839303246e-20</span>,
-        <span class="op">-</span><span class="number">8.058354307900433e-21</span>,
+        <span class="op">-</span><span class=
+"number">8.058354307900433e-21</span>,
         <span class="number">7.751067704922872e-22</span>,
-        <span class="op">-</span><span class="number">7.534155799887855e-23</span>,
+        <span class="op">-</span><span class=
+"number">7.534155799887855e-23</span>,
         <span class="number">7.392120000478854e-24</span>,
-        <span class="op">-</span><span class="number">7.313837497893506e-25</span>,
+        <span class="op">-</span><span class=
+"number">7.313837497893506e-25</span>,
         <span class="number">7.291316092402849e-26</span>,
-        <span class="op">-</span><span class="number">7.318862203160976e-27</span>,
+        <span class="op">-</span><span class=
+"number">7.318862203160976e-27</span>,
         <span class="number">7.392514753719846e-28</span>,
-        <span class="op">-</span><span class="number">7.509654439537376e-29</span>,
+        <span class="op">-</span><span class=
+"number">7.509654439537376e-29</span>,
         <span class="number">7.668731503125106e-30</span>,
-        <span class="op">-</span><span class="number">7.869084634334646e-31</span>,
+        <span class="op">-</span><span class=
+"number">7.869084634334646e-31</span>,
         <span class="number">8.111710655023786e-32</span>,
-        <span class="op">-</span><span class="number">8.485456014013319e-33</span>,
+        <span class="op">-</span><span class=
+"number">8.485456014013319e-33</span>,
         <span class="number">8.721666592684164e-34</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.01798149393793368</span>,
-        <span class="op">-</span><span class="number">0.005053915998718853</span>,
+        <span class="op">-</span><span class=
+"number">0.005053915998718853</span>,
         <span class="number">0.0003661948816200597</span>,
-        <span class="op">-</span><span class="number">0.00001859965297454334</span>,
+        <span class="op">-</span><span class=
+"number">0.00001859965297454334</span>,
         <span class="number">7.779413042618431e-7</span>,
-        <span class="op">-</span><span class="number">3.051141347467333e-8</span>,
+        <span class="op">-</span><span class=
+"number">3.051141347467333e-8</span>,
         <span class="number">1.24691337686549e-9</span>,
-        <span class="op">-</span><span class="number">5.591711637904858e-11</span>,
+        <span class="op">-</span><span class=
+"number">5.591711637904858e-11</span>,
         <span class="number">2.742957688043751e-12</span>,
-        <span class="op">-</span><span class="number">1.439106367596789e-13</span>,
+        <span class="op">-</span><span class=
+"number">1.439106367596789e-13</span>,
         <span class="number">7.931723293888518e-15</span>,
-        <span class="op">-</span><span class="number">4.541640790453957e-16</span>,
+        <span class="op">-</span><span class=
+"number">4.541640790453957e-16</span>,
         <span class="number">2.681760569926918e-17</span>,
-        <span class="op">-</span><span class="number">1.62419526439307e-18</span>,
+        <span class="op">-</span><span class=
+"number">1.62419526439307e-18</span>,
         <span class="number">1.004796247114907e-19</span>,
-        <span class="op">-</span><span class="number">6.329260249539503e-21</span>,
+        <span class="op">-</span><span class=
+"number">6.329260249539503e-21</span>,
         <span class="number">4.049199301292844e-22</span>,
-        <span class="op">-</span><span class="number">2.625715720701404e-23</span>,
+        <span class="op">-</span><span class=
+"number">2.625715720701404e-23</span>,
         <span class="number">1.722945279767653e-24</span>,
-        <span class="op">-</span><span class="number">1.142477468786029e-25</span>,
+        <span class="op">-</span><span class=
+"number">1.142477468786029e-25</span>,
         <span class="number">7.646812093314336e-27</span>,
-        <span class="op">-</span><span class="number">5.161203619220596e-28</span>,
+        <span class="op">-</span><span class=
+"number">5.161203619220596e-28</span>,
         <span class="number">3.509961357906981e-29</span>,
-        <span class="op">-</span><span class="number">2.403408497322724e-30</span>,
+        <span class="op">-</span><span class=
+"number">2.403408497322724e-30</span>,
         <span class="number">1.656002916303214e-31</span>,
-        <span class="op">-</span><span class="number">1.147549172886465e-32</span>,
+        <span class="op">-</span><span class=
+"number">1.147549172886465e-32</span>,
         <span class="number">7.993834986001815e-34</span>,
-        <span class="op">-</span><span class="number">5.59543366515793e-35</span>,
+        <span class="op">-</span><span class=
+"number">5.59543366515793e-35</span>,
         <span class="number">3.934225286278603e-36</span>,
-        <span class="op">-</span><span class="number">2.791522591021289e-37</span>,
+        <span class="op">-</span><span class=
+"number">2.791522591021289e-37</span>,
         <span class="number">1.968497971710645e-38</span>,
     ],
-    <span class="kw-2">&amp;</span>[
+    <span class="kw-2">&</span>[
         <span class="number">0.01022060441827181</span>,
-        <span class="op">-</span><span class="number">0.002843434953893188</span>,
+        <span class="op">-</span><span class=
+"number">0.002843434953893188</span>,
         <span class="number">0.0002016846544150293</span>,
-        <span class="op">-</span><span class="number">9.80777562148239e-6</span>,
+        <span class="op">-</span><span class=
+"number">9.80777562148239e-6</span>,
         <span class="number">3.768300202477932e-7</span>,
-        <span class="op">-</span><span class="number">1.272753801856787e-8</span>,
+        <span class="op">-</span><span class=
+"number">1.272753801856787e-8</span>,
         <span class="number">4.167539113409512e-10</span>,
-        <span class="op">-</span><span class="number">1.428862776687959e-11</span>,
+        <span class="op">-</span><span class=
+"number">1.428862776687959e-11</span>,
         <span class="number">5.296416758859313e-13</span>,
-        <span class="op">-</span><span class="number">2.106335987845087e-14</span>,
+        <span class="op">-</span><span class=
+"number">2.106335987845087e-14</span>,
         <span class="number">8.821200768643846e-16</span>,
-        <span class="op">-</span><span class="number">3.838451008216966e-17</span>,
+        <span class="op">-</span><span class=
+"number">3.838451008216966e-17</span>,
         <span class="number">1.721924007819791e-18</span>,
-        <span class="op">-</span><span class="number">7.922072670083027e-20</span>,
+        <span class="op">-</span><span class=
+"number">7.922072670083027e-20</span>,
         <span class="number">3.722947646499642e-21</span>,
-        <span class="op">-</span><span class="number">1.781444952880951e-22</span>,
+        <span class="op">-</span><span class=
+"number">1.781444952880951e-22</span>,
         <span class="number">8.657577718720081e-24</span>,
-        <span class="op">-</span><span class="number">4.26460991511165e-25</span>,
+        <span class="op">-</span><span class=
+"number">4.26460991511165e-25</span>,
         <span class="number">2.125714143501562e-26</span>,
-        <span class="op">-</span><span class="number">1.070732039121151e-27</span>,
+        <span class="op">-</span><span class=
+"number">1.070732039121151e-27</span>,
         <span class="number">5.443918989944502e-29</span>,
-        <span class="op">-</span><span class="number">2.79112202242093e-30</span>,
+        <span class="op">-</span><span class=
+"number">2.79112202242093e-30</span>,
         <span class="number">1.441867856499869e-31</span>,
-        <span class="op">-</span><span class="number">7.499716998102667e-33</span>,
+        <span class="op">-</span><span class=
+"number">7.499716998102667e-33</span>,
         <span class="number">3.925288119357288e-34</span>,
-        <span class="op">-</span><span class="number">2.066207922406273e-35</span>,
+        <span class="op">-</span><span class=
+"number">2.066207922406273e-35</span>,
         <span class="number">1.093325271990758e-36</span>,
-        <span class="op">-</span><span class="number">5.813246021781208e-38</span>,
+        <span class="op">-</span><span class=
+"number">5.813246021781208e-38</span>,
         <span class="number">3.104752771046445e-39</span>,
-        <span class="op">-</span><span class="number">1.669873284447371e-40</span>,
+        <span class="op">-</span><span class=
+"number">1.669873284447371e-40</span>,
         <span class="number">8.963730746318332e-42</span>,
     ],
 ];
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SPLITS</span>: [<span class="ident">f64</span>; <span class="number">7</span>] <span class="op">=</span> [
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
+"ident">f64</span>; <span class="number">7</span>] <span class=
+"op">=</span> [
     <span class="number">0.3850679021450391</span>,
     <span class="number">0.5237259150690253</span>,
     <span class="number">0.6623839279930115</span>,
@@ -516,4 +714,16 @@
     <span class="number">2.603596108928818</span>,
 ];
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>MathJax.Hub.Config({TeX: {Macros: {dd: "{\\mathop{}\\!\\mathrm{d}}", textsc: ["\\mathrm{\\scriptsize #1}", 1], vt: ["\\boldsymbol{#1}", 1], pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2], ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2], defeq: "\\mathrel{\\vcenter:}=", abs: ["\\lvert #1 \\rvert", 1], angles: ["\\langle #1 \\rangle", 1]}}});</script></body></html>
+</section>
+<section id="search" class="content hidden"></section>
+<section class="footer"></section>
+<script>
+window.rootPath = "../../../";window.currentCrate = "special_functions";
+</script>
+<script src="../../../aliases.js"></script>
+<script src="../../../main.js"></script>
+<script src="../../../source-script.js"></script>
+<script src="../../../source-files.js"></script>
+<script defer src="../../../search-index.js"></script>
+</body>
+</html>
