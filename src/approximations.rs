@@ -360,7 +360,10 @@ mod tests {
             3 => 0.909_728 * x.powi(2) + 0.632_915 * x - 0.069_933_1,
             4 => 0.890_992 * x.powi(3) + 0.909_728 * x.powi(2) + 0.632_915 * x - 0.069_933_1,
             5 => {
-                0.119_426 * x.powi(4) + 0.890_992 * x.powi(3) + 0.909_728 * x.powi(2) + 0.632_915 * x
+                0.119_426 * x.powi(4)
+                    + 0.890_992 * x.powi(3)
+                    + 0.909_728 * x.powi(2)
+                    + 0.632_915 * x
                     - 0.069_933_1
             }
             6 => {
@@ -486,75 +489,5 @@ mod tests {
                 );
             }
         }
-    }
-}
-
-#[cfg(feature = "nightly")]
-#[cfg(test)]
-mod benches {
-    use std::f64::consts::PI;
-    use test::{black_box, Bencher};
-
-    #[bench]
-    fn poly_1(b: &mut Bencher) {
-        let c: Vec<_> = (0..1).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::polynomial(PI, &c));
-        })
-    }
-
-    #[bench]
-    fn poly_10(b: &mut Bencher) {
-        let c: Vec<_> = (0..10).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::polynomial(PI, &c));
-        })
-    }
-
-    #[bench]
-    fn poly_100(b: &mut Bencher) {
-        let c: Vec<_> = (0..100).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::polynomial(PI, &c));
-        })
-    }
-    #[bench]
-    fn poly_1000(b: &mut Bencher) {
-        let c: Vec<_> = (0..1000).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::polynomial(PI, &c));
-        })
-    }
-
-    #[bench]
-    fn chebyshev_1(b: &mut Bencher) {
-        let c: Vec<_> = (0..1).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
-        })
-    }
-
-    #[bench]
-    fn chebyshev_10(b: &mut Bencher) {
-        let c: Vec<_> = (0..10).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
-        })
-    }
-
-    #[bench]
-    fn chebyshev_100(b: &mut Bencher) {
-        let c: Vec<_> = (0..100).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
-        })
-    }
-
-    #[bench]
-    fn chebyshev_1000(b: &mut Bencher) {
-        let c: Vec<_> = (0..1000).map(|i| i as f64).collect();
-        b.iter(|| {
-            black_box(super::chebyshev(PI, &c, -1.0, 1.0));
-        })
     }
 }

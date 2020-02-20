@@ -1,6 +1,5 @@
 //! Particle statistics
 
-
 use std::convert::identity;
 use std::f64;
 

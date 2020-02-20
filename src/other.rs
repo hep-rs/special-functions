@@ -1,6 +1,5 @@
 //! Miscellaneous functions
 
-
 use std::convert::identity;
 
 pub mod polylog;

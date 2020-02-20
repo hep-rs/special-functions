@@ -1,6 +1,5 @@
 //! Polylogarithms functions
 
-
 use std::convert::identity;
 
 mod li2;
