@@ -1,0 +1,40 @@
+name: Rust Doc
+
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "**/*.rs"
+      - "Cargo.toml"
+      - ".ci/mathjax.html"
+      - ".ci/rust-doc.sh"
+      - ".github/workflows/rust-doc.yml"
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - name: Build docs
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+      - name: Checkout gh-pages
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Fix docs
+        run: ./.ci/rust-doc.sh
+      - name: Push to gh-pages
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          directory: gh-pages
