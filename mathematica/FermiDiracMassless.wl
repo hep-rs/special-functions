@@ -19,7 +19,7 @@ f[x_] = Integrate[
 Print["Approximating Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_statistics/fermi_dirac_massless.rs"
+  "../src/particle_physics/fermi_dirac_massless.rs"
   }]];
 
 WriteString[

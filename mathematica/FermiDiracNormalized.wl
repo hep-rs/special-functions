@@ -29,7 +29,7 @@ f[x_] := numerator[x] / denominator[x];
 Print["Approximating normalized Fermi-Dirac statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_statistics/fermi_dirac_normalized.rs"
+  "../src/particle_physics/fermi_dirac_normalized.rs"
   }]];
 
 WriteString[

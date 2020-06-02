@@ -109,7 +109,7 @@ mod tests {
 
     #[test]
     fn massless() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/particle_statistics/massless.csv")?;
+        let mut rdr = csv::Reader::from_path("tests/data/particle_physics/massless.csv")?;
 
         for result in rdr.deserialize() {
             let (mu, beta, be, fd): (f64, f64, f64, f64) = result?;
@@ -131,7 +131,7 @@ mod tests {
 
     #[test]
     fn massive() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?;
+        let mut rdr = csv::Reader::from_path("tests/data/particle_physics/massive.csv")?;
 
         let f = [
             super::bose_einstein_massive,
@@ -169,7 +169,7 @@ mod bench {
 
     #[bench]
     fn massless_bose_einstein(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massless.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massless.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 4] = x.unwrap();
@@ -188,7 +188,7 @@ mod bench {
 
     #[bench]
     fn bose_einstein_massive(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massive.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 6] = x.unwrap();
@@ -207,7 +207,7 @@ mod bench {
 
     #[bench]
     fn bose_einstein_normalized(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massive.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 6] = x.unwrap();
@@ -226,7 +226,7 @@ mod bench {
 
     #[bench]
     fn fermi_dirac_massless(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massless.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massless.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 4] = x.unwrap();
@@ -245,7 +245,7 @@ mod bench {
 
     #[bench]
     fn fermi_dirac_massive(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massive.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 6] = x.unwrap();
@@ -264,7 +264,7 @@ mod bench {
 
     #[bench]
     fn fermi_dirac_normalized(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_statistics/massive.csv")?
+        let data: Vec<_> = csv::Reader::from_path("tests/data/particle_physics/massive.csv")?
             .into_deserialize()
             .map(|x| {
                 let x: [f64; 6] = x.unwrap();

@@ -28,5 +28,5 @@ pub mod approximations;
 pub mod basic;
 pub mod bessel;
 pub mod other;
-pub mod particle_statistics;
+pub mod particle_physics;
 mod utilities;

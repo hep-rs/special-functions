@@ -22,7 +22,7 @@ f[x_] = Integrate[
 Print["Approximating Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_statistics/bose_einstein_massless.rs"
+  "../src/particle_physics/bose_einstein_massless.rs"
   }]];
 
 WriteString[
