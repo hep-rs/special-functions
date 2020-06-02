@@ -4,6 +4,7 @@ use std::convert::identity;
 
 pub mod polylog;
 
+mod gamma;
 mod harmonic_number;
 
 approx_fn! {
@@ -16,6 +17,11 @@ The \\(n\\)th harmonic number is defined as
 \\end{equation}
 "#]
     (pub) fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = identity);
+}
+
+approx_fn! {
+    #[doc = r#"Approximatino of the gamma function for \\(x > 0\\)."#]
+    (pub) fn gamma(mod = gamma, type = chebyshev, outer = identity, inner = identity);
 }
 
 #[cfg(test)]
@@ -34,6 +40,24 @@ mod tests {
             if !y.is_nan() {
                 let ny = f(x);
                 println!("H({:e}) = {:e} [{:e}]", x, y, ny);
+                approx_eq(ny, y, 10.0, 10f64.powi(-200));
+            }
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn gamma() -> Result<(), Box<dyn std::error::Error>> {
+        let mut rdr = csv::Reader::from_path("tests/data/other/gamma.csv")?;
+        let f = super::gamma;
+
+        for result in rdr.deserialize() {
+            let (x, y): (f64, f64) = result?;
+
+            if !y.is_nan() {
+                let ny = f(x);
+                println!("Γ({:e}) = {:e} [{:e}]", x, y, ny);
                 approx_eq(ny, y, 10.0, 10f64.powi(-200));
             }
         }
@@ -60,6 +84,25 @@ mod bench {
         b.iter(|| {
             for &x in &data {
                 test::black_box(super::harmonic_number(x));
+            }
+        });
+
+        Ok(())
+    }
+
+    #[bench]
+    fn gamma(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
+        let data: Vec<_> = csv::Reader::from_path("tests/data/other/gamma.csv")?
+            .into_deserialize()
+            .map(|x| {
+                let x: [f64; 2] = x.unwrap();
+                x[0]
+            })
+            .collect();
+
+        b.iter(|| {
+            for &x in &data {
+                test::black_box(super::gamma(x));
             }
         });
 
