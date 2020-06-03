@@ -8,7 +8,7 @@ use crate::{
 /// \\begin{equation}
 ///   \boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}(s_1, s_{12}, s_2; m0, m1, m_2)
 /// \\end{equation}
-#[allow(unused_variables, clippy::too_many_arguments)]
+#[allow(clippy::too_many_arguments, non_snake_case)]
 pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64, m2: f64) -> f64 {
     debug_assert!(
         m0 >= 0.0 && m1 >= 0.0 && m1 >= 0.0,
@@ -36,11 +36,10 @@ pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64,
 
     let f = [s1 - m1_2 + m0_2, s2 - m2_2 + m0_2];
     let Z = [[s1, s12], [s12, s2]];
-    let det_Z = Z[1][1] * Z[2][2] - Z[1][2] * Z[2][1];
-    let s12 = s1 + s2 - 2.0 * s12;
+    let det_Z = Z[0][0] * Z[1][1] - Z[0][1] * Z[1][0];
     let coZ = [[s2, -s12], [-s12, s1]];
-    let det_coZ = coZ[1][1] * coZ[2][2] - coZ[1][2] * coZ[2][1];
-    let X0 = [s2 * f[1] - s12 * f[2], -s12 * f[1] + s1 * f[2]];
+    // let det_coZ = coZ[0][0] * coZ[1][1] - coZ[0][1] * coZ[1][0];
+    // let X0 = [s2 * f[0] - s12 * f[1], -s12 * f[0] + s1 * f[1]];
 
     // If Gramian matrix is non-singular
     if det_Z > 1e-50 {
@@ -50,7 +49,7 @@ pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64,
                     + 2.0 * m0_2 * c(r - 1, 1, 0, s1, s12, s2, m0, m1, m2)
                     + f[1] * c(r - 1, 0, 2, s1, s12, s2, m0, m1, m2)
             }
-            (r, 0, n2) => {
+            (_r, 0, _n2) => {
                 // Covered by the ordering of n1 and n2
                 unreachable!()
             }
@@ -58,7 +57,7 @@ pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64,
                 1.0 / (2.0 * det_Z)
                     * (0..=1)
                         .map(|k| {
-                            let k_bar = 3 - k;
+                            // let k_bar = 3 - k;
                             let nk = if k == 0 { n1 } else { n2 };
                             (0..=1)
                                 .map(|j| {
