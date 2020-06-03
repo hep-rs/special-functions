@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0">
+<meta charset="utf-8">
+<meta name="viewport" content=
+"width=device-width, initial-scale=1.0">
+<meta name="generator" content="rustdoc">
+<meta name="description" content=
+"Source to the Rust file `src/particle_physics/statistics/fermi_dirac_normalized.rs`.">
+<meta name="keywords" content="rust, rustlang, rust-lang">
+<title>fermi_dirac_normalized.rs.html -- source</title>
+<link rel="stylesheet" type="text/css" href=
+"../../../../normalize.css">
+<link rel="stylesheet" type="text/css" href=
+"../../../../rustdoc.css" id="mainThemeStyle">
+<link rel="stylesheet" type="text/css" href="../../../../dark.css">
+<link rel="stylesheet" type="text/css" href="../../../../light.css"
+id="themeStyle">
+<script src="../../../../storage.js"></script><noscript>
+<link rel="stylesheet" href="../../../../noscript.css"></noscript>
+<link rel="shortcut icon" href="../../../../favicon.ico">
+<style type="text/css">
+#crate-search{background-image:url("../../../../down-arrow.svg");}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      macros: {
+        dd: "{\\mathop{}\\!\\mathrm{d}}",
+        textsc: ["\\mathrm{\\scriptsize #1}", 1],
+        vt: ["\\boldsymbol{#1}", 1],
+        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
+        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
+        defeq: "\\mathrel{\\vcenter:}=",
+        abs: ["\\lvert #1 \\rvert", 1],
+        angles: ["\\langle #1 \\rangle", 1]
+      }
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+></script>
+</head>
+<body class="rustdoc source">
+<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
+<nav class="sidebar">
+<div class="sidebar-menu">☰</div>
+<a href='../../../../special_functions/index.html'>
+<div class='logo-container'><img src='../../../../rust-logo.png'
+alt='logo'></div>
+</a></nav>
+<div class="theme-picker"><button id="theme-picker" aria-label=
+"Pick another theme!"><img src="../../../../brush.svg" width="18"
+alt="Pick another theme!"></button>
+<div id="theme-choices"></div>
+</div>
+<script src="../../../../theme.js"></script>
+<nav class="sub">
+<form class="search-form">
+<div class="search-container">
+<div><select id="crate-search">
+<option value="All crates">All crates</option>
+</select><input class="search-input" name="search" disabled
+autocomplete="off" spellcheck="false" placeholder=
+"Click or press ‘S’ to search, ‘?’ for more options…" type=
+"search"></div>
+<a id="settings-menu" href="../../../../settings.html"><img src=
+"../../../../wheel.svg" width="18" alt="Change settings"></a></div>
+</form>
+</nav>
+<section id="main" class="content">
+<pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+</pre>
+<div class="example-wrap">
+<pre class="rust">
+<span class="attribute">#![<span class=
+"ident">allow</span>(<span class=
+"ident">clippy</span>::<span class="ident">all</span>)]</span>
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">lower</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="number">0.75</span> <span class=
+"op">-</span> <span class=
+"number">0.1441585624478373</span> <span class=
+"op">*</span> <span class="ident">x</span>.<span class=
+"ident">powi</span>(<span class="number">2</span>) <span class=
+"op">+</span> <span class=
+"number">0.6220046255340152</span> <span class=
+"op">*</span> <span class="ident">x</span>.<span class=
+"ident">powi</span>(<span class="number">4</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class=
+"ident">upper</span>(<span class="ident">x</span>: <span class=
+"ident">f64</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
+    <span class="number">0.41595368629035373</span> <span class=
+"op">*</span> <span class="kw">crate</span>::<span class=
+"ident">bessel</span>::<span class="ident">k2</span>(<span class=
+"ident">x</span>) <span class="op">*</span> <span class=
+"ident">x</span>.<span class="ident">powi</span>(<span class=
+"number">2</span>)
+}
+
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class=
+"ident">COEFFICIENTS</span>: [<span class=
+"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
+"number">15</span>] <span class="op">=</span> [
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.2876825032435244</span>,
+        <span class="op">-</span><span class=
+"number">7.048182019191448e-7</span>,
+        <span class="op">-</span><span class=
+"number">4.08858705808081e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.795746957307451e-7</span>,
+        <span class="op">-</span><span class=
+"number">6.282021755754395e-8</span>,
+        <span class="op">-</span><span class=
+"number">1.816914622655766e-8</span>,
+        <span class="op">-</span><span class=
+"number">4.466922030558057e-9</span>,
+        <span class="op">-</span><span class=
+"number">9.53482880352936e-10</span>,
+        <span class="op">-</span><span class=
+"number">1.796505711026717e-10</span>,
+        <span class="op">-</span><span class=
+"number">3.027534877660343e-11</span>,
+        <span class="op">-</span><span class=
+"number">4.612737798585407e-12</span>,
+        <span class="op">-</span><span class=
+"number">6.410440868026588e-13</span>,
+        <span class="op">-</span><span class=
+"number">8.186277297113136e-14</span>,
+        <span class="op">-</span><span class=
+"number">9.66575956955986e-15</span>,
+        <span class="op">-</span><span class=
+"number">1.060594099359551e-15</span>,
+        <span class="op">-</span><span class=
+"number">1.085855796657377e-16</span>,
+        <span class="op">-</span><span class=
+"number">1.040176578860932e-17</span>,
+        <span class="op">-</span><span class=
+"number">9.33258999425892e-19</span>,
+        <span class="op">-</span><span class=
+"number">7.828613662092852e-20</span>,
+        <span class="op">-</span><span class=
+"number">6.097169424064085e-21</span>,
+        <span class="op">-</span><span class=
+"number">4.330441493352889e-22</span>,
+        <span class="op">-</span><span class=
+"number">2.677791421402726e-23</span>,
+        <span class="op">-</span><span class=
+"number">1.237326802966944e-24</span>,
+        <span class="op">-</span><span class=
+"number">6.16813780426914e-27</span>,
+        <span class="number">8.298066318706759e-27</span>,
+        <span class="number">1.439272257602351e-27</span>,
+        <span class="number">1.782507411422841e-28</span>,
+        <span class="number">1.88556403356203e-29</span>,
+        <span class="number">1.784098557270449e-30</span>,
+        <span class="number">1.530231055113717e-31</span>,
+        <span class="number">1.154375902133019e-32</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.2876967092563747</span>,
+        <span class="op">-</span><span class=
+"number">0.00001785280060357589</span>,
+        <span class="op">-</span><span class=
+"number">6.337976886501643e-6</span>,
+        <span class="op">-</span><span class=
+"number">1.567504447458054e-6</span>,
+        <span class="op">-</span><span class=
+"number">2.961892926514389e-7</span>,
+        <span class="op">-</span><span class=
+"number">4.519613193781647e-8</span>,
+        <span class="op">-</span><span class=
+"number">5.777423996800078e-9</span>,
+        <span class="op">-</span><span class=
+"number">6.349039074719769e-10</span>,
+        <span class="op">-</span><span class=
+"number">6.11338318768091e-11</span>,
+        <span class="op">-</span><span class=
+"number">5.231573291754749e-12</span>,
+        <span class="op">-</span><span class=
+"number">4.020697748982964e-13</span>,
+        <span class="op">-</span><span class=
+"number">2.794532049304552e-14</span>,
+        <span class="op">-</span><span class=
+"number">1.761604052626639e-15</span>,
+        <span class="op">-</span><span class=
+"number">1.004017564118878e-16</span>,
+        <span class="op">-</span><span class=
+"number">5.100379766525413e-18</span>,
+        <span class="op">-</span><span class=
+"number">2.216904583155867e-19</span>,
+        <span class="op">-</span><span class=
+"number">7.214699500482338e-21</span>,
+        <span class="op">-</span><span class=
+"number">5.572770786918274e-23</span>,
+        <span class="number">1.702944589885072e-23</span>,
+        <span class="number">1.952275236788137e-24</span>,
+        <span class="number">1.485334609484757e-25</span>,
+        <span class="number">9.12756248746526e-27</span>,
+        <span class="number">4.641063411744285e-28</span>,
+        <span class="number">1.825461257694873e-29</span>,
+        <span class="number">3.682813901799474e-31</span>,
+        <span class="op">-</span><span class=
+"number">2.147275364354008e-32</span>,
+        <span class="op">-</span><span class=
+"number">3.356930835277092e-33</span>,
+        <span class="op">-</span><span class=
+"number">2.67636210333704e-34</span>,
+        <span class="op">-</span><span class=
+"number">1.583191110241954e-35</span>,
+        <span class="op">-</span><span class=
+"number">6.970248607115283e-37</span>,
+        <span class="op">-</span><span class=
+"number">1.645621345591931e-38</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.288011131004555</span>,
+        <span class="op">-</span><span class=
+"number">0.0004012341045558571</span>,
+        <span class="op">-</span><span class=
+"number">0.0001423383221739575</span>,
+        <span class="op">-</span><span class=
+"number">0.00003515420039879476</span>,
+        <span class="op">-</span><span class=
+"number">6.625862309842795e-6</span>,
+        <span class="op">-</span><span class=
+"number">1.006470425203143e-6</span>,
+        <span class="op">-</span><span class=
+"number">1.276118724952668e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.382015199646707e-8</span>,
+        <span class="op">-</span><span class=
+"number">1.296237607966908e-9</span>,
+        <span class="op">-</span><span class=
+"number">1.057859096317214e-10</span>,
+        <span class="op">-</span><span class=
+"number">7.449288447426075e-12</span>,
+        <span class="op">-</span><span class=
+"number">4.371274508771691e-13</span>,
+        <span class="op">-</span><span class=
+"number">1.897941219076937e-14</span>,
+        <span class="op">-</span><span class=
+"number">2.593651891153579e-16</span>,
+        <span class="number">5.827030319434628e-17</span>,
+        <span class="number">8.233233935640423e-18</span>,
+        <span class="number">7.059852354682267e-19</span>,
+        <span class="number">4.459477077194623e-20</span>,
+        <span class="number">1.912968135874926e-21</span>,
+        <span class="number">1.59736410121772e-23</span>,
+        <span class="op">-</span><span class=
+"number">6.589462271665792e-24</span>,
+        <span class="op">-</span><span class=
+"number">7.609018327935906e-25</span>,
+        <span class="op">-</span><span class=
+"number">4.883870220861864e-26</span>,
+        <span class="op">-</span><span class=
+"number">1.412042479022718e-27</span>,
+        <span class="number">1.018405898580854e-28</span>,
+        <span class="number">1.869371854451198e-29</span>,
+        <span class="number">1.459951932801934e-30</span>,
+        <span class="number">4.601841745057339e-32</span>,
+        <span class="op">-</span><span class=
+"number">5.096207002960447e-33</span>,
+        <span class="op">-</span><span class=
+"number">1.093973295620779e-33</span>,
+        <span class="op">-</span><span class=
+"number">1.183310719204892e-34</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.2899841193294594</span>,
+        <span class="op">-</span><span class=
+"number">0.001664625908017378</span>,
+        <span class="op">-</span><span class=
+"number">0.0003145693931526081</span>,
+        <span class="op">-</span><span class=
+"number">0.00003996055879493547</span>,
+        <span class="op">-</span><span class=
+"number">3.800149475823301e-6</span>,
+        <span class="op">-</span><span class=
+"number">2.863674826718144e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.7628317531459e-8</span>,
+        <span class="op">-</span><span class=
+"number">8.955923091702942e-10</span>,
+        <span class="op">-</span><span class=
+"number">3.69903207138184e-11</span>,
+        <span class="op">-</span><span class=
+"number">1.15587493520924e-12</span>,
+        <span class="op">-</span><span class=
+"number">1.922411594641216e-14</span>,
+        <span class="number">5.895401847040942e-16</span>,
+        <span class="number">7.049966096469834e-17</span>,
+        <span class="number">3.669906104748873e-18</span>,
+        <span class="number">1.256373187641776e-19</span>,
+        <span class="number">2.404338937481661e-21</span>,
+        <span class="op">-</span><span class=
+"number">2.658338253050937e-23</span>,
+        <span class="op">-</span><span class=
+"number">4.215631627306362e-24</span>,
+        <span class="op">-</span><span class=
+"number">1.746785620365757e-25</span>,
+        <span class="op">-</span><span class=
+"number">4.279695826802496e-27</span>,
+        <span class="op">-</span><span class=
+"number">1.59468112762492e-28</span>,
+        <span class="op">-</span><span class=
+"number">1.900115918693983e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.878471014910168e-30</span>,
+        <span class="op">-</span><span class=
+"number">1.272623572352267e-31</span>,
+        <span class="op">-</span><span class=
+"number">5.985260977749593e-33</span>,
+        <span class="op">-</span><span class=
+"number">1.600287352217806e-34</span>,
+        <span class="number">2.806371059170738e-36</span>,
+        <span class="number">6.681803470817845e-37</span>,
+        <span class="number">4.922422317841761e-38</span>,
+        <span class="number">2.468022702507428e-39</span>,
+        <span class="number">8.796305722414256e-41</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.2984917419519689</span>,
+        <span class="op">-</span><span class=
+"number">0.00777147563681719</span>,
+        <span class="op">-</span><span class=
+"number">0.001452607082320972</span>,
+        <span class="op">-</span><span class=
+"number">0.000181025953848036</span>,
+        <span class="op">-</span><span class=
+"number">0.00001665466412714502</span>,
+        <span class="op">-</span><span class=
+"number">1.185013347355589e-6</span>,
+        <span class="op">-</span><span class=
+"number">6.58497795351417e-8</span>,
+        <span class="op">-</span><span class=
+"number">2.746388537128637e-9</span>,
+        <span class="op">-</span><span class=
+"number">7.02656901113244e-11</span>,
+        <span class="number">5.703862730378463e-13</span>,
+        <span class="number">1.854773125072599e-13</span>,
+        <span class="number">1.18425706918108e-14</span>,
+        <span class="number">4.514467288609698e-16</span>,
+        <span class="number">8.145074018943723e-18</span>,
+        <span class="op">-</span><span class=
+"number">3.045452373486232e-19</span>,
+        <span class="op">-</span><span class=
+"number">4.080635770783179e-20</span>,
+        <span class="op">-</span><span class=
+"number">3.009962410969443e-21</span>,
+        <span class="op">-</span><span class=
+"number">2.037190837429127e-22</span>,
+        <span class="op">-</span><span class=
+"number">1.275194809054796e-23</span>,
+        <span class="op">-</span><span class=
+"number">6.318528000800273e-25</span>,
+        <span class="op">-</span><span class=
+"number">1.561631838882799e-26</span>,
+        <span class="number">1.004990044878865e-27</span>,
+        <span class="number">1.696291183228995e-28</span>,
+        <span class="number">1.34572881606655e-29</span>,
+        <span class="number">7.193576315511298e-31</span>,
+        <span class="number">2.310177476875715e-32</span>,
+        <span class="op">-</span><span class=
+"number">2.142223732084519e-34</span>,
+        <span class="op">-</span><span class=
+"number">9.80166876485748e-35</span>,
+        <span class="op">-</span><span class=
+"number">8.827771912864335e-36</span>,
+        <span class="op">-</span><span class=
+"number">5.443634511086552e-37</span>,
+        <span class="op">-</span><span class=
+"number">2.475687251663432e-38</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.3373594038233502</span>,
+        <span class="op">-</span><span class=
+"number">0.03511605060551783</span>,
+        <span class="op">-</span><span class=
+"number">0.006364456089562026</span>,
+        <span class="op">-</span><span class=
+"number">0.0007526928658398117</span>,
+        <span class="op">-</span><span class=
+"number">0.00006333102946603058</span>,
+        <span class="op">-</span><span class=
+"number">3.839525856349039e-6</span>,
+        <span class="op">-</span><span class=
+"number">1.53096766655983e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.832198052914822e-9</span>,
+        <span class="number">2.642636700981747e-10</span>,
+        <span class="number">2.353029581015388e-11</span>,
+        <span class="number">8.968295081429748e-13</span>,
+        <span class="op">-</span><span class=
+"number">1.192454544366105e-14</span>,
+        <span class="op">-</span><span class=
+"number">4.81853577994581e-15</span>,
+        <span class="op">-</span><span class=
+"number">4.499893166981388e-16</span>,
+        <span class="op">-</span><span class=
+"number">2.692413920405913e-17</span>,
+        <span class="op">-</span><span class=
+"number">7.798495796592082e-19</span>,
+        <span class="number">5.612833758156011e-20</span>,
+        <span class="number">1.096195605814535e-20</span>,
+        <span class="number">9.4867022517424e-22</span>,
+        <span class="number">4.6339651623998e-23</span>,
+        <span class="op">-</span><span class=
+"number">7.845809657136005e-26</span>,
+        <span class="op">-</span><span class=
+"number">2.662542380890339e-25</span>,
+        <span class="op">-</span><span class=
+"number">2.940526684891487e-26</span>,
+        <span class="op">-</span><span class=
+"number">1.832483923544774e-27</span>,
+        <span class="op">-</span><span class=
+"number">4.422108926010238e-29</span>,
+        <span class="number">5.132684009569628e-30</span>,
+        <span class="number">8.292569584879006e-31</span>,
+        <span class="number">6.596653716146272e-32</span>,
+        <span class="number">2.888123819041555e-33</span>,
+        <span class="op">-</span><span class=
+"number">4.458601610226167e-35</span>,
+        <span class="op">-</span><span class=
+"number">2.140636879086679e-35</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.5039213327283299</span>,
+        <span class="op">-</span><span class=
+"number">0.1464973115844244</span>,
+        <span class="op">-</span><span class=
+"number">0.02463873781668362</span>,
+        <span class="op">-</span><span class=
+"number">0.00256883036760435</span>,
+        <span class="op">-</span><span class=
+"number">0.000172339641418532</span>,
+        <span class="op">-</span><span class=
+"number">6.312239155328129e-6</span>,
+        <span class="number">4.437121823851752e-8</span>,
+        <span class="number">1.723111564687417e-8</span>,
+        <span class="number">1.593948330176392e-10</span>,
+        <span class="op">-</span><span class=
+"number">1.289616804782773e-10</span>,
+        <span class="op">-</span><span class=
+"number">1.351754791302355e-11</span>,
+        <span class="op">-</span><span class=
+"number">3.651389864567111e-13</span>,
+        <span class="number">6.708653224878432e-14</span>,
+        <span class="number">9.80321418866865e-15</span>,
+        <span class="number">4.732311273940132e-16</span>,
+        <span class="op">-</span><span class=
+"number">3.204378071430194e-17</span>,
+        <span class="op">-</span><span class=
+"number">7.352797582810842e-18</span>,
+        <span class="op">-</span><span class=
+"number">4.978514323764869e-19</span>,
+        <span class="number">1.101309332871148e-20</span>,
+        <span class="number">5.473543109517221e-21</span>,
+        <span class="number">4.801291847043028e-22</span>,
+        <span class="number">2.540242807669449e-24</span>,
+        <span class="op">-</span><span class=
+"number">3.984626816465883e-24</span>,
+        <span class="op">-</span><span class=
+"number">4.461253141307206e-25</span>,
+        <span class="op">-</span><span class=
+"number">1.180300953481982e-26</span>,
+        <span class="number">2.765601649147776e-27</span>,
+        <span class="number">4.038036539086775e-28</span>,
+        <span class="number">1.819562764802593e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.739220594434131e-30</span>,
+        <span class="op">-</span><span class=
+"number">3.545435449246629e-31</span>,
+        <span class="op">-</span><span class=
+"number">2.240098205104578e-32</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">0.8519191292761026</span>,
+        <span class="op">-</span><span class=
+"number">0.1879776042860951</span>,
+        <span class="op">-</span><span class=
+"number">0.01448834031932437</span>,
+        <span class="op">-</span><span class=
+"number">0.0006405848325927775</span>,
+        <span class="op">-</span><span class=
+"number">0.0000156456770081355</span>,
+        <span class="op">-</span><span class=
+"number">1.230970975362372e-7</span>,
+        <span class="op">-</span><span class=
+"number">5.984480365033498e-11</span>,
+        <span class="op">-</span><span class=
+"number">3.781224694723397e-10</span>,
+        <span class="op">-</span><span class=
+"number">2.010079098305091e-11</span>,
+        <span class="number">2.382187139046066e-13</span>,
+        <span class="number">5.795184404580456e-14</span>,
+        <span class="number">1.277562348530994e-15</span>,
+        <span class="op">-</span><span class=
+"number">1.096965912630461e-16</span>,
+        <span class="op">-</span><span class=
+"number">7.0578054079575e-18</span>,
+        <span class="number">6.071422773658602e-20</span>,
+        <span class="number">2.120432213804991e-20</span>,
+        <span class="number">5.215474314856852e-22</span>,
+        <span class="op">-</span><span class=
+"number">4.272837323242714e-23</span>,
+        <span class="op">-</span><span class=
+"number">2.876472131906645e-24</span>,
+        <span class="number">3.015020126705327e-26</span>,
+        <span class="number">9.4376292441436e-27</span>,
+        <span class="number">2.227651286148255e-28</span>,
+        <span class="op">-</span><span class=
+"number">2.08146945667672e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.368497972279483e-30</span>,
+        <span class="number">1.697996377352379e-32</span>,
+        <span class="number">4.739169430224639e-33</span>,
+        <span class="number">1.085587727396398e-34</span>,
+        <span class="op">-</span><span class=
+"number">1.087088684046071e-35</span>,
+        <span class="op">-</span><span class=
+"number">7.04351305796695e-37</span>,
+        <span class="number">9.73062907277081e-39</span>,
+        <span class="number">2.519367792206798e-39</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">1.371264475843509</span>,
+        <span class="op">-</span><span class=
+"number">0.3390979636963437</span>,
+        <span class="op">-</span><span class=
+"number">0.02377127144635266</span>,
+        <span class="op">-</span><span class=
+"number">0.000915331627138386</span>,
+        <span class="op">-</span><span class=
+"number">0.00001926124770489779</span>,
+        <span class="op">-</span><span class=
+"number">2.999569731274588e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.51689432837168e-8</span>,
+        <span class="op">-</span><span class=
+"number">4.581919663564213e-10</span>,
+        <span class="number">2.332519495107341e-11</span>,
+        <span class="number">1.407196564017703e-12</span>,
+        <span class="op">-</span><span class=
+"number">5.156401137408755e-14</span>,
+        <span class="op">-</span><span class=
+"number">4.738233504993381e-15</span>,
+        <span class="number">8.093061475113093e-17</span>,
+        <span class="number">1.390058905340049e-17</span>,
+        <span class="op">-</span><span class=
+"number">9.70427468409252e-20</span>,
+        <span class="op">-</span><span class=
+"number">4.008079944245507e-20</span>,
+        <span class="number">5.324371359192274e-23</span>,
+        <span class="number">1.239193853731624e-22</span>,
+        <span class="number">5.948304780133072e-25</span>,
+        <span class="op">-</span><span class=
+"number">4.016643144561433e-25</span>,
+        <span class="op">-</span><span class=
+"number">5.327876888998538e-27</span>,
+        <span class="number">1.281692791724378e-27</span>,
+        <span class="number">2.958909202031085e-29</span>,
+        <span class="op">-</span><span class=
+"number">3.947797657465802e-30</span>,
+        <span class="op">-</span><span class=
+"number">1.332438182245519e-31</span>,
+        <span class="number">1.189762398732573e-32</span>,
+        <span class="number">5.45092216517272e-34</span>,
+        <span class="op">-</span><span class=
+"number">3.534421596974366e-35</span>,
+        <span class="op">-</span><span class=
+"number">2.14113014382382e-36</span>,
+        <span class="number">1.017229933805336e-37</span>,
+        <span class="number">8.20324083578535e-39</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">2.278501504770076</span>,
+        <span class="op">-</span><span class=
+"number">0.5790415790976057</span>,
+        <span class="op">-</span><span class=
+"number">0.0368737385884601</span>,
+        <span class="op">-</span><span class=
+"number">0.00129373386745961</span>,
+        <span class="op">-</span><span class=
+"number">0.00002938276543277588</span>,
+        <span class="op">-</span><span class=
+"number">7.085969021462464e-7</span>,
+        <span class="op">-</span><span class=
+"number">1.442767656302825e-8</span>,
+        <span class="number">4.436688076544341e-10</span>,
+        <span class="number">1.092862359180928e-11</span>,
+        <span class="op">-</span><span class=
+"number">1.977318341846434e-12</span>,
+        <span class="op">-</span><span class=
+"number">3.478212264680575e-14</span>,
+        <span class="number">5.29489042015279e-15</span>,
+        <span class="number">7.163314434433209e-17</span>,
+        <span class="op">-</span><span class=
+"number">1.169494409304908e-17</span>,
+        <span class="number">2.043200255521581e-20</span>,
+        <span class="number">2.198733155201697e-20</span>,
+        <span class="op">-</span><span class=
+"number">1.07345730563277e-21</span>,
+        <span class="op">-</span><span class=
+"number">4.144610561136468e-23</span>,
+        <span class="number">5.979785705347797e-24</span>,
+        <span class="number">9.07163737471981e-26</span>,
+        <span class="op">-</span><span class=
+"number">2.201083199958606e-26</span>,
+        <span class="op">-</span><span class=
+"number">1.379585826237817e-28</span>,
+        <span class="number">6.374408119655942e-29</span>,
+        <span class="op">-</span><span class=
+"number">5.145083137038654e-31</span>,
+        <span class="op">-</span><span class=
+"number">1.585389092894873e-31</span>,
+        <span class="number">5.904559360264636e-33</span>,
+        <span class="number">3.595551950750627e-34</span>,
+        <span class="op">-</span><span class=
+"number">3.179633901483635e-35</span>,
+        <span class="op">-</span><span class=
+"number">7.103600599549657e-37</span>,
+        <span class="number">1.267310220095264e-37</span>,
+        <span class="number">6.362898276874595e-40</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">3.787152180938235</span>,
+        <span class="op">-</span><span class=
+"number">0.945301233674805</span>,
+        <span class="op">-</span><span class=
+"number">0.05573651257318324</span>,
+        <span class="op">-</span><span class=
+"number">0.001891959292934123</span>,
+        <span class="op">-</span><span class=
+"number">0.00004608456168144367</span>,
+        <span class="op">-</span><span class=
+"number">9.30438963527578e-7</span>,
+        <span class="op">-</span><span class=
+"number">7.138427198803578e-9</span>,
+        <span class="op">-</span><span class=
+"number">1.782367330324324e-10</span>,
+        <span class="op">-</span><span class=
+"number">3.409351680634462e-11</span>,
+        <span class="number">4.426263351938885e-13</span>,
+        <span class="number">9.968426520962e-14</span>,
+        <span class="op">-</span><span class=
+"number">1.874841616907696e-15</span>,
+        <span class="op">-</span><span class=
+"number">2.555501091172135e-16</span>,
+        <span class="number">2.044862843582552e-18</span>,
+        <span class="number">5.027540212332243e-19</span>,
+        <span class="number">1.542595703477737e-20</span>,
+        <span class="op">-</span><span class=
+"number">4.434821348268936e-22</span>,
+        <span class="op">-</span><span class=
+"number">1.108798346502625e-22</span>,
+        <span class="op">-</span><span class=
+"number">2.127454312932365e-24</span>,
+        <span class="number">4.158045014154053e-25</span>,
+        <span class="number">1.499847800079863e-26</span>,
+        <span class="op">-</span><span class=
+"number">9.81252526962966e-28</span>,
+        <span class="op">-</span><span class=
+"number">5.784228242624675e-29</span>,
+        <span class="number">8.134055527353132e-31</span>,
+        <span class="number">1.622733697275749e-31</span>,
+        <span class="number">5.395741932929784e-33</span>,
+        <span class="op">-</span><span class=
+"number">3.24848829589347e-34</span>,
+        <span class="op">-</span><span class=
+"number">3.487699053589093e-35</span>,
+        <span class="number">2.626686576009731e-37</span>,
+        <span class="number">1.263557017052026e-37</span>,
+        <span class="number">1.585076330306252e-39</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">6.205369547447793</span>,
+        <span class="op">-</span><span class=
+"number">1.496033220730775</span>,
+        <span class="op">-</span><span class=
+"number">0.08351750520475856</span>,
+        <span class="op">-</span><span class=
+"number">0.002791001900889192</span>,
+        <span class="op">-</span><span class=
+"number">0.00006730811120459564</span>,
+        <span class="op">-</span><span class=
+"number">1.250035873382614e-6</span>,
+        <span class="op">-</span><span class=
+"number">2.131545818282404e-8</span>,
+        <span class="op">-</span><span class=
+"number">5.716106678091691e-10</span>,
+        <span class="number">1.080444222509154e-11</span>,
+        <span class="number">6.751219190491534e-13</span>,
+        <span class="op">-</span><span class=
+"number">8.359168821177502e-14</span>,
+        <span class="op">-</span><span class=
+"number">1.023691048995308e-15</span>,
+        <span class="number">3.241991512015798e-16</span>,
+        <span class="number">1.621008302432205e-18</span>,
+        <span class="op">-</span><span class=
+"number">1.133398335966069e-18</span>,
+        <span class="op">-</span><span class=
+"number">1.249647327962875e-20</span>,
+        <span class="number">3.943169232382089e-21</span>,
+        <span class="number">9.22996312479994e-23</span>,
+        <span class="op">-</span><span class=
+"number">1.340997135592521e-23</span>,
+        <span class="op">-</span><span class=
+"number">4.938981740989033e-25</span>,
+        <span class="number">4.186444825152192e-26</span>,
+        <span class="number">2.147590863114465e-27</span>,
+        <span class="op">-</span><span class=
+"number">1.144215033230896e-28</span>,
+        <span class="op">-</span><span class=
+"number">8.068479547682629e-30</span>,
+        <span class="number">2.696030823835927e-31</span>,
+        <span class="number">2.692419556805952e-32</span>,
+        <span class="op">-</span><span class=
+"number">5.783933001892372e-34</span>,
+        <span class="op">-</span><span class=
+"number">8.178931554944643e-35</span>,
+        <span class="number">1.427827833027748e-36</span>,
+        <span class="number">2.375359341848927e-37</span>,
+        <span class="op">-</span><span class=
+"number">5.248898624020414e-39</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">9.98593810642611</span>,
+        <span class="op">-</span><span class=
+"number">2.31855362531986</span>,
+        <span class="op">-</span><span class=
+"number">0.1243991503709493</span>,
+        <span class="op">-</span><span class=
+"number">0.004100397228161503</span>,
+        <span class="op">-</span><span class=
+"number">0.0000985015543551406</span>,
+        <span class="op">-</span><span class=
+"number">1.912940523660777e-6</span>,
+        <span class="op">-</span><span class=
+"number">3.278752590507159e-8</span>,
+        <span class="op">-</span><span class=
+"number">3.474053800760674e-10</span>,
+        <span class="op">-</span><span class=
+"number">4.602412022994138e-12</span>,
+        <span class="op">-</span><span class=
+"number">5.949768057405413e-13</span>,
+        <span class="number">3.248402039365854e-14</span>,
+        <span class="number">9.04002132133134e-16</span>,
+        <span class="op">-</span><span class=
+"number">2.056300608212933e-16</span>,
+        <span class="number">3.604662704408082e-18</span>,
+        <span class="number">8.243187546484379e-19</span>,
+        <span class="op">-</span><span class=
+"number">3.667384432677828e-20</span>,
+        <span class="op">-</span><span class=
+"number">2.810061773806194e-21</span>,
+        <span class="number">1.986773080821741e-22</span>,
+        <span class="number">9.001586047802177e-24</span>,
+        <span class="op">-</span><span class=
+"number">8.748740275093391e-25</span>,
+        <span class="op">-</span><span class=
+"number">2.840519186961089e-26</span>,
+        <span class="number">3.375980306486678e-27</span>,
+        <span class="number">9.21409829914214e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.15298600030599e-29</span>,
+        <span class="op">-</span><span class=
+"number">3.178648227944787e-31</span>,
+        <span class="number">3.410297633063013e-32</span>,
+        <span class="number">1.157604317683979e-33</span>,
+        <span class="op">-</span><span class=
+"number">8.075450870617852e-35</span>,
+        <span class="op">-</span><span class=
+"number">4.248424076105624e-36</span>,
+        <span class="number">1.066993036845695e-37</span>,
+        <span class="number">1.49354920352649e-38</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">15.79506876705246</span>,
+        <span class="op">-</span><span class=
+"number">3.54056201197536</span>,
+        <span class="op">-</span><span class=
+"number">0.1844712365334338</span>,
+        <span class="op">-</span><span class=
+"number">0.006029021359090311</span>,
+        <span class="op">-</span><span class=
+"number">0.0001455557055998811</span>,
+        <span class="op">-</span><span class=
+"number">2.844535057103164e-6</span>,
+        <span class="op">-</span><span class=
+"number">4.617508272633223e-8</span>,
+        <span class="op">-</span><span class=
+"number">6.261614957552498e-10</span>,
+        <span class="op">-</span><span class=
+"number">9.12231115417388e-12</span>,
+        <span class="number">2.207754744280809e-14</span>,
+        <span class="op">-</span><span class=
+"number">5.215117240306766e-15</span>,
+        <span class="op">-</span><span class=
+"number">2.26124933482068e-16</span>,
+        <span class="number">4.854301729764904e-17</span>,
+        <span class="op">-</span><span class=
+"number">2.742489159010036e-18</span>,
+        <span class="op">-</span><span class=
+"number">7.928997676572021e-20</span>,
+        <span class="number">2.030889061639949e-20</span>,
+        <span class="op">-</span><span class=
+"number">7.26873410921454e-22</span>,
+        <span class="op">-</span><span class=
+"number">6.881866222788877e-23</span>,
+        <span class="number">6.669842390422406e-24</span>,
+        <span class="number">7.703471894161977e-26</span>,
+        <span class="op">-</span><span class=
+"number">3.410073450468872e-26</span>,
+        <span class="number">6.516791943464167e-28</span>,
+        <span class="number">1.355580616343458e-28</span>,
+        <span class="op">-</span><span class=
+"number">5.780980346509555e-30</span>,
+        <span class="op">-</span><span class=
+"number">4.684854176994948e-31</span>,
+        <span class="number">3.100034601506501e-32</span>,
+        <span class="number">1.524449102002576e-33</span>,
+        <span class="op">-</span><span class=
+"number">1.376391875824569e-34</span>,
+        <span class="op">-</span><span class=
+"number">5.034162979995781e-36</span>,
+        <span class="number">5.531608000464842e-37</span>,
+        <span class="number">1.773758296605908e-38</span>,
+    ],
+    <span class="kw-2">&</span>[
+        <span class="op">-</span><span class=
+"number">24.61212828776792</span>,
+        <span class="op">-</span><span class=
+"number">5.350062987708649</span>,
+        <span class="op">-</span><span class=
+"number">0.2728830027122798</span>,
+        <span class="op">-</span><span class=
+"number">0.00887981028718274</span>,
+        <span class="op">-</span><span class=
+"number">0.0002151212935880703</span>,
+        <span class="op">-</span><span class=
+"number">4.196832129277183e-6</span>,
+        <span class="op">-</span><span class=
+"number">6.79572489008593e-8</span>,
+        <span class="op">-</span><span class=
+"number">9.43149914119222e-10</span>,
+        <span class="op">-</span><span class=
+"number">1.154199053155294e-11</span>,
+        <span class="op">-</span><span class=
+"number">1.21756754820108e-13</span>,
+        <span class="op">-</span><span class=
+"number">1.472795981411951e-15</span>,
+        <span class="number">2.29310247006494e-17</span>,
+        <span class="op">-</span><span class=
+"number">3.552858135932911e-18</span>,
+        <span class="number">2.542099405304522e-19</span>,
+        <span class="op">-</span><span class=
+"number">8.622194642292521e-21</span>,
+        <span class="op">-</span><span class=
+"number">7.470815172942865e-22</span>,
+        <span class="number">1.399591702738314e-22</span>,
+        <span class="op">-</span><span class=
+"number">9.0819452366437e-24</span>,
+        <span class="op">-</span><span class=
+"number">5.733948667305263e-26</span>,
+        <span class="number">6.036967189399657e-26</span>,
+        <span class="op">-</span><span class=
+"number">4.252410309672604e-27</span>,
+        <span class="op">-</span><span class=
+"number">5.282527142334573e-29</span>,
+        <span class="number">2.732684073559352e-29</span>,
+        <span class="op">-</span><span class=
+"number">1.309653404332131e-30</span>,
+        <span class="op">-</span><span class=
+"number">7.621021962758483e-32</span>,
+        <span class="number">1.060557325293118e-32</span>,
+        <span class="op">-</span><span class=
+"number">8.699452225344353e-35</span>,
+        <span class="op">-</span><span class=
+"number">4.959567340517442e-35</span>,
+        <span class="number">2.292842149284469e-36</span>,
+        <span class="number">1.599318337763932e-37</span>,
+        <span class="op">-</span><span class=
+"number">1.583907666848017e-38</span>,
+    ],
+];
+
+<span class="kw">pub</span> <span class=
+"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
+"ident">f64</span>; <span class="number">16</span>] <span class=
+"op">=</span> [
+    <span class="op">-</span><span class=
+"number">8.900003194573971</span>,
+    <span class="op">-</span><span class=
+"number">5.786324737388024</span>,
+    <span class="op">-</span><span class=
+"number">4.229485508795051</span>,
+    <span class="op">-</span><span class=
+"number">2.672646280202077</span>,
+    <span class="op">-</span><span class=
+"number">1.894226665905591</span>,
+    <span class="op">-</span><span class=
+"number">1.115807051609104</span>,
+    <span class="op">-</span><span class=
+"number">0.3373874373126173</span>,
+    <span class="number">0.4410321769838694</span>,
+    <span class="number">0.8302419841321127</span>,
+    <span class="number">1.219451791280356</span>,
+    <span class="number">1.608661598428599</span>,
+    <span class="number">1.997871405576843</span>,
+    <span class="number">2.387081212725086</span>,
+    <span class="number">2.776291019873329</span>,
+    <span class="number">3.165500827021573</span>,
+    <span class="number">3.554710634169816</span>,
+];
+</pre></div>
+</section>
+<section id="search" class="content hidden"></section>
+<section class="footer"></section>
+<script>
+window.rootPath = "../../../../";window.currentCrate = "special_functions";
+</script>
+<script src="../../../../main.js"></script>
+<script src="../../../../source-script.js"></script>
+<script src="../../../../source-files.js"></script>
+<script defer src="../../../../search-index.js"></script>
+</body>
+</html>
