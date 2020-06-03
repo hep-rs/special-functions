@@ -96,7 +96,7 @@ WorkingPrecision->200];
 
 (* ::Input::Initialization:: *)
 Export[
-"../tests/data/particle_physics/massless.csv",
+"../tests/data/particle_physics/statistics/massless.csv",
 Flatten[ParallelTable[
 Quiet@N[{\[Mu],\[Beta],BoseEinstein[0,\[Mu],\[Beta]],FermiDirac[0,\[Mu],\[Beta]]}/.{
 Exp[x_]:>0/;x<50Log[$MinMachineNumber],Exp[x_]:>\[Infinity]/;x>50Log[$MaxMachineNumber]
@@ -113,7 +113,7 @@ Infinity->NaN
 
 (* ::Input::Initialization:: *)
 Export[
-"../tests/data/particle_physics/massive.csv",
+"../tests/data/particle_physics/statistics/massive.csv",
 Flatten[
 ParallelTable[
 Module[{be=BoseEinstein[m,0,\[Beta]],fd=FermiDirac[m,0,\[Beta]]},
