@@ -223,7 +223,6 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="147">147</span>
 <span id="148">148</span>
 <span id="149">149</span>
-<span id="150">150</span>
 </pre>
 <div class="example-wrap">
 <pre class="rust">
@@ -245,9 +244,7 @@ autocomplete="off" spellcheck="false" placeholder=
 <span class="doccomment">/// \\end{equation}</span>
 <span class="attribute">#[<span class=
 "ident">allow</span>(<span class=
-"ident">unused_variables</span>, <span class=
-"ident">clippy</span>::<span class=
-"ident">too_many_arguments</span>)]</span>
+"ident">clippy</span>::<span class="ident">too_many_arguments</span>, <span class="ident">non_snake_case</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class=
 "ident">c</span>(<span class="ident">r</span>: <span class=
 "ident">i32</span>, <span class="ident">n1</span>: <span class=
@@ -350,47 +347,23 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">s12</span>, <span class="ident">s2</span>]];
     <span class="kw">let</span> <span class=
 "ident">det_Z</span> <span class="op">=</span> <span class=
+"ident">Z</span>[<span class="number">0</span>][<span class=
+"number">0</span>] <span class="op">*</span> <span class=
 "ident">Z</span>[<span class="number">1</span>][<span class=
+"number">1</span>] <span class="op">-</span> <span class=
+"ident">Z</span>[<span class="number">0</span>][<span class=
 "number">1</span>] <span class="op">*</span> <span class=
-"ident">Z</span>[<span class="number">2</span>][<span class=
-"number">2</span>] <span class="op">-</span> <span class=
 "ident">Z</span>[<span class="number">1</span>][<span class=
-"number">2</span>] <span class="op">*</span> <span class=
-"ident">Z</span>[<span class="number">2</span>][<span class=
-"number">1</span>];
-    <span class="kw">let</span> <span class=
-"ident">s12</span> <span class="op">=</span> <span class=
-"ident">s1</span> <span class="op">+</span> <span class=
-"ident">s2</span> <span class="op">-</span> <span class=
-"number">2.0</span> <span class="op">*</span> <span class=
-"ident">s12</span>;
+"number">0</span>];
     <span class="kw">let</span> <span class=
 "ident">coZ</span> <span class="op">=</span> [[<span class=
 "ident">s2</span>, <span class="op">-</span><span class=
 "ident">s12</span>], [<span class="op">-</span><span class=
 "ident">s12</span>, <span class="ident">s1</span>]];
-    <span class="kw">let</span> <span class=
-"ident">det_coZ</span> <span class="op">=</span> <span class=
-"ident">coZ</span>[<span class="number">1</span>][<span class=
-"number">1</span>] <span class="op">*</span> <span class=
-"ident">coZ</span>[<span class="number">2</span>][<span class=
-"number">2</span>] <span class="op">-</span> <span class=
-"ident">coZ</span>[<span class="number">1</span>][<span class=
-"number">2</span>] <span class="op">*</span> <span class=
-"ident">coZ</span>[<span class="number">2</span>][<span class=
-"number">1</span>];
-    <span class="kw">let</span> <span class=
-"ident">X0</span> <span class="op">=</span> [<span class=
-"ident">s2</span> <span class="op">*</span> <span class=
-"ident">f</span>[<span class="number">1</span>] <span class=
-"op">-</span> <span class="ident">s12</span> <span class=
-"op">*</span> <span class="ident">f</span>[<span class=
-"number">2</span>], <span class="op">-</span><span class=
-"ident">s12</span> <span class="op">*</span> <span class=
-"ident">f</span>[<span class="number">1</span>] <span class=
-"op">+</span> <span class="ident">s1</span> <span class=
-"op">*</span> <span class="ident">f</span>[<span class=
-"number">2</span>]];
+    <span class=
+"comment">// let det_coZ = coZ[0][0] * coZ[1][1] - coZ[0][1] * coZ[1][0];</span>
+    <span class=
+"comment">// let X0 = [s2 * f[0] - s12 * f[1], -s12 * f[0] + s1 * f[1]];</span>
 
     <span class=
 "comment">// If Gramian matrix is non-singular</span>
@@ -431,8 +404,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">m0</span>, <span class="ident">m1</span>, <span class=
 "ident">m2</span>)
             }
-            (<span class="ident">r</span>, <span class=
-"number">0</span>, <span class="ident">n2</span>) <span class=
+            (<span class="ident">_r</span>, <span class=
+"number">0</span>, <span class="ident">_n2</span>) <span class=
 "op">=</span><span class="op">&gt;</span> {
                 <span class=
 "comment">// Covered by the ordering of n1 and n2</span>
@@ -452,9 +425,7 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">map</span>(<span class="op">|</span><span class=
 "ident">k</span><span class="op">|</span> {
                             <span class=
-"kw">let</span> <span class="ident">k_bar</span> <span class=
-"op">=</span> <span class="number">3</span> <span class=
-"op">-</span> <span class="ident">k</span>;
+"comment">// let k_bar = 3 - k;</span>
                             <span class=
 "kw">let</span> <span class="ident">nk</span> <span class=
 "op">=</span> <span class="kw">if</span> <span class=
