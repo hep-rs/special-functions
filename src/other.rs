@@ -24,6 +24,23 @@ approx_fn! {
     (pub) fn gamma(mod = gamma, type = chebyshev, outer = identity, inner = identity);
 }
 
+/// Binomial coefficient
+///
+/// \\begin{equation}
+///   \binom{n}{k}
+/// \\end{equation}
+pub fn binomial(n: i32, k: i32) -> f64 {
+    if k > n || k < 0 {
+        0.0
+    } else if n - k > k {
+        (1..=k).map(|i| (n + 1 - i) as f64 / i as f64).product()
+    } else {
+        (1..=(n - k))
+            .map(|i| (n + 1 - i) as f64 / i as f64)
+            .product()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
