@@ -55,20 +55,20 @@ pub(crate) fn approx_eq(a: f64, b: f64, precision: f64, abs: f64) {
     let b_scaled = b / scale;
 
     let p = -((a_scaled - b_scaled).abs().log10());
-    if p >= precision {
-        log::debug!(
-            "a ({:e}) and b ({:e}) have the necessary precision ({:.3} ≥ {:.3})",
-            a,
-            b,
-            p,
-            precision
-        );
-    } else {
+    if p < precision {
         panic!(
-            "a ({:e}) and b ({:e}) do not have the necessary precision ({:.3} !≥ {:.3})",
+            "a ({:e}) and b ({:e}) do not have the necessary precision ({:.3} ≱ {:.3})",
             a, b, p, precision
         )
     }
+
+    log::debug!(
+        "a ({:e}) and b ({:e}) have the necessary precision ({:.3} ≥ {:.3})",
+        a,
+        b,
+        p,
+        precision
+    );
 }
 
 #[cfg(test)]
