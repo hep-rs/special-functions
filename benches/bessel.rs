@@ -1,8 +1,8 @@
 use criterion::{black_box, Criterion};
 use rand::prelude::*;
+use special_functions::bessel;
 
 pub fn bessel_i(c: &mut Criterion) {
-    use special_functions::bessel;
     let mut group = c.benchmark_group("Bessel I");
 
     let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/i.csv")
@@ -41,7 +41,6 @@ pub fn bessel_i(c: &mut Criterion) {
 }
 
 pub fn bessel_j(c: &mut Criterion) {
-    use special_functions::bessel;
     let mut group = c.benchmark_group("Bessel J");
 
     let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/j.csv")
@@ -80,7 +79,6 @@ pub fn bessel_j(c: &mut Criterion) {
 }
 
 pub fn bessel_k(c: &mut Criterion) {
-    use special_functions::bessel;
     let mut group = c.benchmark_group("Bessel K");
 
     let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/k.csv")
@@ -121,7 +119,6 @@ pub fn bessel_k(c: &mut Criterion) {
 }
 
 pub fn bessel_y(c: &mut Criterion) {
-    use special_functions::bessel;
     let mut group = c.benchmark_group("Bessel Y");
 
     let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/y.csv")

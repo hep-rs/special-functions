@@ -17,5 +17,7 @@ criterion_group!(
     bessel::bessel_y,
     other::gamma,
     other::harmonic_number,
+    other::binomial,
+    other::polylog,
 );
 criterion_main!(benches);
