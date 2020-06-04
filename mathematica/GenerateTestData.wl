@@ -1,5 +1,7 @@
 #!/usr/bin/env wolframscript
 
+SetOptions[$Output, FormatType -> OutputForm]
+
 $Sections = {"basic", "bessel", "other", "particle_physics/statistics"};
 
 sections = ToLowerCase @ Rest @ $ScriptCommandLine;
@@ -215,30 +217,32 @@ If[MemberQ[sections, "particle_physics/statistics"],
 
   Normalization[beta_] = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[u beta] - 1),
-    {u, 0, \[Infinity]}
+    {u, 0, \[Infinity]},
+    Assumptions -> beta > 0
   ];
 
   (* Massless case can be done analytically *)
-  FermiDirac[0, mu_, beta_] = 1/(2 Pi^2) Integrate[
+  FermiDirac[0 | 0., mu_, beta_] /; Abs[mu * beta] < 10^8 = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[beta (u - mu)] + 1),
     {u, 0, \[Infinity]},
     Assumptions -> beta > 0
   ];
-  BoseEinstein[0, mu_, beta_] /; mu <= 0 = 1/(2 Pi^2) Integrate[
+  FermiDirac[0 | 0., mu_, beta_] = "NaN";
+  BoseEinstein[0 | 0., mu_, beta_] /; (mu <= 0 && Abs[mu * beta] < 10^8) = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[beta (u - mu)] - 1),
     {u, 0, \[Infinity]},
     Assumptions -> beta > 0 && mu < 0
   ];
-  BoseEinstein[0, mu_, beta_] /; mu > 0 = NaN;
+  BoseEinstein[0, mu_, beta_] = "NaN";
 
   (* Massive case must be done numerically *)
-  FermiDirac[m_, 0, beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
+  FermiDirac[m_, 0 | 0., beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
     u Sqrt[u^2 - m^2] / (Exp[u beta] + 1),
     {u, m, \[Infinity]},
     Method -> {"DoubleExponential", "SymbolicProcessing" -> False},
     WorkingPrecision -> $MaxExtraPrecision
   ];
-  BoseEinstein[m_, 0, beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
+  BoseEinstein[m_, 0 | 0., beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
     u Sqrt[u^2 - m^2] / (Exp[u beta] - 1),
     {u, m, \[Infinity]},
     Method -> {"DoubleExponential", "SymbolicProcessing" -> False},
@@ -255,23 +259,25 @@ If[MemberQ[sections, "particle_physics/statistics"],
   GenerateCSV[
     FileNameJoin[{dir, "massless.csv"}],
     {"m", "mu", "beta", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
-    Function[{m, mu, beta}, {
+    Function[{m, mu, beta}, Block[{
+        be = BoseEinstein[m, mu, beta],
+        fd = FermiDirac[m, mu, beta]
+      },
+      {
       m, mu, beta,
-      BoseEinstein[m, mu, beta],
-      BoseEinstein[m, mu, beta] / Normalization[beta],
-      FermiDirac[m, mu, beta]
-      FermiDirac[m, mu, beta] / Normalization[beta]
-      }],
+      be, If[be =!= "NaN", be / Normalization[beta], "NaN"],
+      fd, If[fd =!= "NaN", fd / Normalization[beta], "NaN"]
+      }]],
     Flatten[
       Table[{0, mu, beta},
       {mu, Join[
-        -10^Subdivide[-10, 10, 1000],
-        10^Subdivide[-10, 10, 1000],
-        Subdivide[-10, 10, 1000]
+        -10^Subdivide[-10, 10, 200],
+        10^Subdivide[-10, 10, 200],
+        Subdivide[-10, 10, 200]
       ]},
       {beta, Join[
-        10^Subdivide[-10, 10, 1000],
-        Subdivide[0, 10, 1000]
+        10^Subdivide[-10, 10, 200],
+        Rest@Subdivide[0, 10, 200]
       ]}],
       {{1, 2}}
     ]
@@ -280,22 +286,24 @@ If[MemberQ[sections, "particle_physics/statistics"],
   GenerateCSV[
     FileNameJoin[{dir, "massive.csv"}],
     {"m", "mu", "beta", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
-    Function[{m, mu, beta}, {
+    Function[{m, mu, beta}, Block[{
+        be = BoseEinstein[m, mu, beta],
+        fd = FermiDirac[m, mu, beta]
+      },
+      {
       m, mu, beta,
-      BoseEinstein[m, mu, beta],
-      BoseEinstein[m, mu, beta] / Normalization[beta],
-      FermiDirac[m, mu, beta]
-      FermiDirac[m, mu, beta] / Normalization[beta]
-      }],
+      be, If[be =!= "NaN", be / Normalization[beta], "NaN"],
+      fd, If[fd =!= "NaN", fd / Normalization[beta], "NaN"]
+      }]],
     Flatten[
       Table[{m, 0, beta},
       {m, Join[
-        10^Subdivide[-10, 10, 1000],
-        Subdivide[0, 10, 1000]
+        10^Subdivide[-10, 10, 200],
+        Subdivide[0, 10, 200]
       ]},
       {beta, Join[
-        10^Subdivide[-10, 10, 1000],
-        Subdivide[0, 10, 1000]
+        10^Subdivide[-10, 10, 200],
+        Rest@Subdivide[0, 10, 200]
       ]}],
       {{1, 2}}
     ]
