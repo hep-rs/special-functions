@@ -47,86 +47,244 @@ mod y7;
 mod y8;
 mod y9;
 
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_0(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i0(mod = i0, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of modified Bessel function \\(I_0(x)\\) for all real \\(x\\).
+pub fn i0(x: f64) -> f64 {
+    if x < 0.0 {
+        _i0(-x)
+    } else {
+        _i0(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_1(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i1(mod = i1, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_2(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i2(mod = i2, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_3(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i3(mod = i3, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_4(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i4(mod = i4, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_5(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i5(mod = i5, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_6(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i6(mod = i6, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_7(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i7(mod = i7, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_8(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i8(mod = i8, type = chebyshev, outer = identity, inner = identity);
-}
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(I_9(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn i9(mod = i9, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i0(mod = i0, type = chebyshev, outer = identity, inner = identity);
 }
 
-approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_0(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j0(mod = j0, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of modified Bessel function \\(I_1(x)\\) for all real \\(x\\).
+pub fn i1(x: f64) -> f64 {
+    if x < 0.0 {
+        -_i1(-x)
+    } else {
+        _i1(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_1(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j1(mod = j1, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i1(mod = i1, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_2(x)\\) for all real \\(x\\).
+pub fn i2(x: f64) -> f64 {
+    if x < 0.0 {
+        _i2(-x)
+    } else {
+        _i2(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_2(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j2(mod = j2, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i2(mod = i2, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_3(x)\\) for all real \\(x\\).
+pub fn i3(x: f64) -> f64 {
+    if x < 0.0 {
+        -_i3(-x)
+    } else {
+        _i3(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_3(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j3(mod = j3, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i3(mod = i3, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_4(x)\\) for all real \\(x\\).
+pub fn i4(x: f64) -> f64 {
+    if x < 0.0 {
+        _i4(-x)
+    } else {
+        _i4(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_4(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j4(mod = j4, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i4(mod = i4, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_5(x)\\) for all real \\(x\\).
+pub fn i5(x: f64) -> f64 {
+    if x < 0.0 {
+        -_i5(-x)
+    } else {
+        _i5(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_5(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j5(mod = j5, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i5(mod = i5, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_6(x)\\) for all real \\(x\\).
+pub fn i6(x: f64) -> f64 {
+    if x < 0.0 {
+        _i6(-x)
+    } else {
+        _i6(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_6(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j6(mod = j6, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i6(mod = i6, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_7(x)\\) for all real \\(x\\).
+pub fn i7(x: f64) -> f64 {
+    if x < 0.0 {
+        -_i7(-x)
+    } else {
+        _i7(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_7(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j7(mod = j7, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i7(mod = i7, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_8(x)\\) for all real \\(x\\).
+pub fn i8(x: f64) -> f64 {
+    if x < 0.0 {
+        _i8(-x)
+    } else {
+        _i8(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_8(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j8(mod = j8, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i8(mod = i8, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(I_9(x)\\) for all real \\(x\\).
+pub fn i9(x: f64) -> f64 {
+    if x < 0.0 {
+        -_i9(-x)
+    } else {
+        _i9(x)
+    }
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(J_9(x)\\) for all \\(x > 0\\)."#]
-    (pub) fn j9(mod = j9, type = chebyshev, outer = identity, inner = identity);
+    (pub) fn _i9(mod = i9, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_0(x)\\) for all \\(x\\).
+pub fn j0(x: f64) -> f64 {
+    if x < 0.0 {
+        _j0(-x)
+    } else {
+        _j0(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j0(mod = j0, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_1(x)\\) for all \\(x\\).
+pub fn j1(x: f64) -> f64 {
+    if x < 0.0 {
+        -_j1(-x)
+    } else {
+        _j1(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j1(mod = j1, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_2(x)\\) for all \\(x\\).
+pub fn j2(x: f64) -> f64 {
+    if x < 0.0 {
+        _j2(-x)
+    } else {
+        _j2(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j2(mod = j2, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_3(x)\\) for all \\(x\\).
+pub fn j3(x: f64) -> f64 {
+    if x < 0.0 {
+        -_j3(-x)
+    } else {
+        _j3(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j3(mod = j3, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_4(x)\\) for all \\(x\\).
+pub fn j4(x: f64) -> f64 {
+    if x < 0.0 {
+        _j4(-x)
+    } else {
+        _j4(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j4(mod = j4, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_5(x)\\) for all \\(x\\).
+pub fn j5(x: f64) -> f64 {
+    if x < 0.0 {
+        -_j5(-x)
+    } else {
+        _j5(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j5(mod = j5, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_6(x)\\) for all \\(x\\).
+pub fn j6(x: f64) -> f64 {
+    if x < 0.0 {
+        _j6(-x)
+    } else {
+        _j6(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j6(mod = j6, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_7(x)\\) for all \\(x\\).
+pub fn j7(x: f64) -> f64 {
+    if x < 0.0 {
+        -_j7(-x)
+    } else {
+        _j7(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j7(mod = j7, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_8(x)\\) for all \\(x\\).
+pub fn j8(x: f64) -> f64 {
+    if x < 0.0 {
+        _j8(-x)
+    } else {
+        _j8(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j8(mod = j8, type = chebyshev, outer = identity, inner = identity);
+}
+
+/// Approximation of modified Bessel function \\(J_9(x)\\) for all \\(x\\).
+pub fn j9(x: f64) -> f64 {
+    if x < 0.0 {
+        -_j9(-x)
+    } else {
+        _j9(x)
+    }
+}
+approx_fn! {
+    (pub) fn _j9(mod = j9, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
@@ -247,8 +405,8 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    println!("I{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
-                    approx_eq(nyi, yi, 10.0, 10f64.powi(-200));
+                    // println!("I{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
                 }
             }
         }
@@ -283,13 +441,12 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    println!("J{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
-                    if x < 1e2 {
-                        approx_eq(nyi, yi, 10.0, 10f64.powi(-200));
+                    // println!("J{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
+                    if x.abs() < 1e6 {
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
                     } else {
-                        // The error for large x is rather large.  Probably due
-                        // to error in calculating sin/cos?
-                        approx_eq(nyi, yi, 3.5, 10f64.powi(-200));
+                        // The error for large x is large due to cos/sin
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200));
                     }
                 }
             }
@@ -325,8 +482,8 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    println!("K{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
-                    approx_eq(nyi, yi, 10.0, 10f64.powi(-200));
+                    // println!("K{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
                 }
             }
         }
@@ -361,13 +518,12 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    println!("Y{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
+                    // println!("Y{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
                     if x < 1e2 {
-                        approx_eq(nyi, yi, 10.0, 10f64.powi(-200));
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
                     } else {
-                        // The error for large x is rather large.  Probably due
-                        // to error in calculating sin/cos?
-                        approx_eq(nyi, yi, 3.5, 10f64.powi(-200));
+                        // The error for large x is large due to cos/sin
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200));
                     }
                 }
             }
@@ -384,9 +540,9 @@ mod tests {
             let (x, y): (f64, f64) = result?;
 
             if !y.is_nan() {
-                println!("x0 = {:e}", x);
                 let ny = super::k1_on_k2(x);
-                approx_eq(ny, y, 10.0, 0.0);
+                // println!("K₁ / K₂({:e}) = {:e} [{:e}]", x, y, ny);
+                approx_eq(ny, y, 8.0, 0.0);
             }
         }
 
