@@ -94,12 +94,10 @@ mod tests {
                 if !yi.is_nan() {
                     let nyi = fi(x);
                     println!("Li{}({:e}) = {:e} [{:e}]", i, x, yi, nyi);
-                    if i == 0 {
-                        // Although the `i = 0` case is explicit, there's some
-                        // error regardless.
-                        approx_eq(nyi, yi, 9.3, 0.0);
+                    if (i == 0 || i == 1) && (1.0 - x).abs() < 1e-7 {
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-15));
                     } else {
-                        approx_eq(nyi, yi, 11.0, 10f64.powi(-15));
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-15));
                     }
                 }
             }

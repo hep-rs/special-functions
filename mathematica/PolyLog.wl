@@ -14,7 +14,7 @@ Do[
   f[x_] := PolyLog[n, x];
   output = OpenWrite[FileNameJoin[{
     Directory[],
-    "../src/polylog/li" <> ToString[n] <> ".rs"
+    "../src/other/polylog/li" <> ToString[n] <> ".rs"
     }]];
 
   WriteString[
@@ -71,6 +71,10 @@ use crate::approximations::polynomial;\n\n"
   WriteString[
     output,
     StringTemplate["pub fn upper(x: f64) -> f64 {
+    if x == 1.0 {
+      return `limit`
+    }
+
     let xm1 = x - 1.0;
     let ln = (-xm1).ln();
     polynomial(
@@ -82,6 +86,7 @@ use crate::approximations::polynomial;\n\n"
         &`upperLn`,
       )
 }\n\n"][<|
+  "limit" -> RustForm@f[1],
   "upperPoly" -> RustForm@upperPoly,
   "upperLn" -> RustForm@upperLn
   |>]

@@ -32,6 +32,10 @@ pub fn lower(x: f64) -> f64 {
 }
 
 pub fn upper(x: f64) -> f64 {
+    if x == 1.0 {
+        return 1.03692775514337;
+    }
+
     let xm1 = x - 1.0;
     let ln = (-xm1).ln();
     polynomial(
