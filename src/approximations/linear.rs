@@ -53,19 +53,19 @@ mod tests {
         for i in 0..1_001 {
             let x = i as f64 / 1_000.0;
             let y = i as f64 / 1_000.0;
-            approx_eq(super::linear(&DATA, x), y, 10.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
         }
 
         for i in 1_000..10_001 {
             let x = i as f64 / 1_000.0;
             let y = (10_000 - i) as f64 / 9_000.0;
-            approx_eq(super::linear(&DATA, x), y, 10.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
         }
 
         for i in 10_000..20_001 {
             let x = i as f64 / 1_000.0;
             let y = (i - 10_000) as f64 / 10_000.0;
-            approx_eq(super::linear(&DATA, x), y, 10.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
         }
 
         assert_eq!(super::linear(&DATA, f64::NEG_INFINITY), 0.0);
@@ -96,7 +96,7 @@ mod benches {
                     for i in 0..100_001 {
                         let x = i as f64 / 100_000.0;
                         let y = i as f64 / 100_000.0;
-                        approx_eq(super::linear(&data, x), y, 10.0, 0.0);
+                        approx_eq(super::linear(&data, x), y, 8.0, 0.0);
                     }
                 });
             }

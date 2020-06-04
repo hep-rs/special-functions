@@ -79,57 +79,57 @@ mod tests {
     #[test]
     #[should_panic]
     fn a_nan() {
-        approx_eq(f64::NAN, 0.0, 10.0, 0.0);
+        approx_eq(f64::NAN, 0.0, 8.0, 0.0);
     }
 
     #[test]
     #[should_panic]
     fn b_nan() {
-        approx_eq(1.0, f64::NAN, 10.0, 0.0);
+        approx_eq(1.0, f64::NAN, 8.0, 0.0);
     }
 
     #[test]
     #[should_panic]
     fn a_b_nan() {
-        approx_eq(f64::NAN, f64::NAN, 10.0, 0.0);
+        approx_eq(f64::NAN, f64::NAN, 8.0, 0.0);
     }
 
     #[test]
     #[should_panic]
     fn a_infinite() {
-        approx_eq(f64::INFINITY, 0.0, 10.0, 0.0);
+        approx_eq(f64::INFINITY, 0.0, 8.0, 0.0);
     }
 
     #[test]
     #[should_panic]
     fn b_infinite() {
-        approx_eq(0.0, f64::INFINITY, 10.0, 0.0);
+        approx_eq(0.0, f64::INFINITY, 8.0, 0.0);
     }
 
     #[test]
     fn a_b_infinite() {
-        approx_eq(f64::INFINITY, f64::INFINITY, 10.0, 0.0);
-        approx_eq(f64::NEG_INFINITY, f64::NEG_INFINITY, 10.0, 0.0);
+        approx_eq(f64::INFINITY, f64::INFINITY, 8.0, 0.0);
+        approx_eq(f64::NEG_INFINITY, f64::NEG_INFINITY, 8.0, 0.0);
     }
 
     #[test]
     #[should_panic]
     fn a_b_diff_infinite() {
-        approx_eq(f64::INFINITY, f64::NEG_INFINITY, 10.0, 0.0);
+        approx_eq(f64::INFINITY, f64::NEG_INFINITY, 8.0, 0.0);
     }
 
     #[test]
     fn absolute_error() {
-        approx_eq(1e-20, 2e-20, 10.0, 1e-10);
-        approx_eq(-1e-20, 2e-20, 10.0, 1e-10);
-        approx_eq(1e-20, -2e-20, 10.0, 1e-10);
-        approx_eq(-1e-20, -2e-20, 10.0, 1e-10);
+        approx_eq(1e-20, 2e-20, 8.0, 1e-10);
+        approx_eq(-1e-20, 2e-20, 8.0, 1e-10);
+        approx_eq(1e-20, -2e-20, 8.0, 1e-10);
+        approx_eq(-1e-20, -2e-20, 8.0, 1e-10);
     }
 
     #[test]
     #[should_panic]
     fn absolute_error_panic() {
-        approx_eq(1e-20, 2e-20, 10.0, 1e-30);
+        approx_eq(1e-20, 2e-20, 8.0, 1e-30);
     }
 
     #[test]

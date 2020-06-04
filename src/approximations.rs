@@ -425,7 +425,7 @@ mod tests {
         for n in 0..=COEFFICIENTS.len() {
             for x in -100..=100 {
                 let x = x as f64;
-                approx_eq(super::polynomial(x, &COEFFICIENTS[..n]), f(n, x), 10.0, 0.0);
+                approx_eq(super::polynomial(x, &COEFFICIENTS[..n]), f(n, x), 8.0, 0.0);
             }
         }
     }
@@ -439,7 +439,7 @@ mod tests {
                     approx_eq(
                         super::polynomial_ratio(x, (&COEFFICIENTS[..n], &COEFFICIENTS[..m])),
                         f(n, x) / f(m, x),
-                        10.0,
+                        8.0,
                         0.0,
                     );
                 }
@@ -484,7 +484,7 @@ mod tests {
                 approx_eq(
                     super::chebyshev(x, &c, -1.0, 1.0),
                     f_chebyshev(n, x),
-                    10.0,
+                    8.0,
                     0.0,
                 );
             }

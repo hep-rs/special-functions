@@ -56,8 +56,8 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(x);
-                println!("H({:e}) = {:e} [{:e}]", x, y, ny);
-                approx_eq(ny, y, 10.0, 10f64.powi(-200));
+                // println!("H({:e}) = {:e} [{:e}]", x, y, ny);
+                approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
         }
 
@@ -74,54 +74,30 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(x);
-                println!("Γ({:e}) = {:e} [{:e}]", x, y, ny);
-                approx_eq(ny, y, 10.0, 10f64.powi(-200));
+                // println!("Γ({:e}) = {:e} [{:e}]", x, y, ny);
+                approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
         }
 
         Ok(())
     }
-}
 
-#[cfg(feature = "nightly")]
-#[cfg(test)]
-mod bench {
-    use test::Bencher;
+    #[test]
+    fn binomial() -> Result<(), Box<dyn std::error::Error>> {
+        let mut rdr = csv::Reader::from_path("tests/data/other/binomial.csv")?;
+        let f = super::binomial;
 
-    #[bench]
-    fn harmonic_number(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/other/harmonic_number.csv")?
-            .into_deserialize()
-            .map(|x| {
-                let x: [f64; 2] = x.unwrap();
-                x[0]
-            })
-            .collect();
+        for result in rdr.deserialize() {
+            let (n, k, y): (f64, f64, f64) = result?;
+            let n = n as i32;
+            let k = k as i32;
 
-        b.iter(|| {
-            for &x in &data {
-                test::black_box(super::harmonic_number(x));
+            if !y.is_nan() {
+                let ny = f(n, k);
+                // println!("Binom({}, {}) = {:e} [{:e}]", n, k, y, ny);
+                approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
-        });
-
-        Ok(())
-    }
-
-    #[bench]
-    fn gamma(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/other/gamma.csv")?
-            .into_deserialize()
-            .map(|x| {
-                let x: [f64; 2] = x.unwrap();
-                x[0]
-            })
-            .collect();
-
-        b.iter(|| {
-            for &x in &data {
-                test::black_box(super::gamma(x));
-            }
-        });
+        }
 
         Ok(())
     }
