@@ -32,12 +32,12 @@ approx_fn! {
 pub fn binomial(n: i32, k: i32) -> f64 {
     if k > n || k < 0 {
         0.0
-    } else if n - k > k {
-        (1..=k).map(|i| (n + 1 - i) as f64 / i as f64).product()
-    } else {
+    } else if (n - k) < k {
         (1..=(n - k))
             .map(|i| (n + 1 - i) as f64 / i as f64)
             .product()
+    } else {
+        (1..=k).map(|i| (n + 1 - i) as f64 / i as f64).product()
     }
 }
 
