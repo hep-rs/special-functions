@@ -45,7 +45,7 @@ GenerateCSV[
   f_Function,
   xValues_List
 ] := Block[{shortName = StringReplace[csv, $DataDir <> "/" -> ""]},
-  Echo["Generating <> " <> shortName <> "."];
+  Echo["Generating " <> shortName <> "."];
   Export[
     csv,
     If[Head[First[xValues]] === List,
@@ -58,15 +58,18 @@ GenerateCSV[
         {x, SetPrecision[xValues, $Precision]}
       ]
     ] //. {
-      _Complex -> NaN,
-      Indeterminate -> NaN,
-      ComplexInfinity -> Nan,
+      _Complex -> "NaN",
+      Indeterminate -> "NaN",
+      ComplexInfinity -> "NaN",
+      -Infinity -> "-inf",
+      Infinity -> "inf",
       x_ :> 0         /; Abs[x] < $MinMachineNumber,
       x_ :> Infinity  /; x > $MaxMachineNumber,
       x_ :> -Infinity /; x < -$MaxMachineNumber
     },
     "CSV",
-    "TableHeadings" -> {headings}
+    "TableHeadings" -> {headings},
+    "TextDelimiters" -> ""
   ];
 
   Echo["Generated " <> shortName <> "."];
