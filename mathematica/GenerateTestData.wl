@@ -18,6 +18,7 @@ Block[{unknown = Complement[sections, $Sections]},
 ];
 
 LaunchKernels[];
+$KernelIDs = ParallelEvaluate[$KernelID];
 
 (*****************************************************************************)
 (* Definitions *)
@@ -45,36 +46,80 @@ GenerateCSV[
   csv_String,
   {headings__String},
   f_Function,
-  xValues_List
-] := Block[{shortName = StringReplace[csv, $DataDir <> "/" -> ""]},
+  xInput_List
+] := Block[{
+    shortName = StringReplace[csv, $DataDir <> "/" -> ""],
+    xValues = xInput
+  },
   Echo["Generating " <> shortName <> "."];
-  Export[
-    csv,
-    If[Head[First[xValues]] === List,
-      ParallelTable[
-        N[f@@x, $Precision],
-        {x, SetPrecision[xValues, $Precision]}
-      ],
-      ParallelTable[
-        N[f[x], $Precision],
-        {x, SetPrecision[xValues, $Precision]}
-      ]
-    ] //. {
-      _Complex -> "NaN",
-      Indeterminate -> "NaN",
-      ComplexInfinity -> "NaN",
-      -Infinity -> "-inf",
-      Infinity -> "inf",
-      x_ :> 0         /; Abs[x] < $MinMachineNumber,
-      x_ :> Infinity  /; x > $MaxMachineNumber,
-      x_ :> -Infinity /; x < -$MaxMachineNumber
-    },
-    "CSV",
-    "TableHeadings" -> {headings},
-    "TextDelimiters" -> ""
+
+  (* Makes sure the arguments are a list of lists *)
+  If[Head[First[xValues]] =!= List,
+    xValues = {#} & /@ xValues;
   ];
 
+  (* Open a CSV file for each kernel *)
+  ParallelEvaluate[$csv = OpenWrite[csv <> "." <> ToString[$KernelID]]];
+
+  ParallelDo[
+    WriteString[$csv,
+      StringRiffle[
+        If[Head[#] === String, #, ToString[#, CForm]] & /@ (
+          N[f @@ SetPrecision[x, $Precision], $Precision] //. {
+            _Complex -> "NaN",
+            Indeterminate -> "NaN",
+            ComplexInfinity -> "NaN",
+            -Infinity -> "-inf",
+            Infinity -> "inf",
+            x_ :> 0         /; Abs[x] < $MinMachineNumber,
+            x_ :> Infinity  /; x > $MaxMachineNumber,
+            x_ :> -Infinity /; x < -$MaxMachineNumber
+          }
+        ),
+        ","
+      ] <> "\n"
+    ];
+    ,
+    {x, xValues}
+  ];
+
+  ParallelEvaluate[Close@$csv];
+
+  (* Write the CSV headers *)
+  $csv = OpenWrite[csv];
+  WriteString[$csv, StringRiffle[{headings}, ","] <> "\n"];
+  Close@$csv;
+
+
+  (* Concatenate each sub-file *)
+  Run[StringJoin[
+    "cat ",
+    StringRiffle[csv <> "." <> ToString[#] & /@ $KernelIDs, " "],
+    " | sort -n -t, >> ",
+    csv
+  ]];
+  DeleteFile[csv <> "." <> ToString[#] & /@ $KernelIDs];
+
   Echo["Generated " <> shortName <> "."];
+];
+
+(*****************************************************************************)
+(* Test *)
+(*****************************************************************************)
+
+If[MemberQ[sections, "test"],
+  dir = CreateDataDir["tmp-DELETE-ME"];
+
+  GenerateCSV[
+    FileNameJoin[{dir, "poly.csv"}],
+    {"x", "x^3 - 2x^2 + x - 1"},
+    {#, #^3 - 2 #^2 + # - 1} &,
+    Join[
+      -10^Subdivide[-10, 10, 10],
+      10^Subdivide[-10, 10, 10],
+      Subdivide[-10, 10, 10]
+    ]
+  ];
 ];
 
 (*****************************************************************************)
