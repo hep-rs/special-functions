@@ -1,6 +1,6 @@
 //! Passarino-Veltman functions.
 //!
-//! Placeholder for future implementation.
+//! Absorptive part of Passarino-Veltman functions.
 
 mod a;
 mod b;

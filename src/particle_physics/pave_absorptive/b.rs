@@ -4,68 +4,101 @@ use crate::{
 };
 use std::f64::consts::PI;
 
-/// Evaluate the Passarino-Veltman coefficient function:
+/// Internal parameters shared across the evaluation of the B coefficient
+/// function.
+struct Parameters {
+    s: f64,
+    s_2: f64,
+    m0: f64,
+    m0_2: f64,
+    m1: f64,
+    m1_2: f64,
+    lambda: f64,
+    lambda_sqrt: f64,
+    f: f64,
+}
+
+impl Parameters {
+    fn new(s: f64, m0: f64, m1: f64) -> Self {
+        let m0_2 = m0.powi(2);
+        let m1_2 = m1.powi(2);
+        Self {
+            s,
+            s_2: s.powi(2),
+            m0,
+            m1,
+            m0_2,
+            m1_2,
+            lambda: kallen_lambda(s, m0_2, m1_2),
+            lambda_sqrt: kallen_lambda_sqrt(s, m0_2, m1_2),
+            f: s - m1_2 + m0_2,
+        }
+    }
+}
+
+/// Absorptive part of the Passarino-Veltman coefficient function:
 ///
 /// \\begin{equation}
 ///   \boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}(s; m0, m1)
 /// \\end{equation}
 pub fn b(r: i32, n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
+    debug_assert!(r >= -1, "r cannot be smaller than -1");
+    debug_assert!(n1 >= 0, "n1 must be non-negative");
     debug_assert!(m0 >= 0.0 && m1 >= 0.0, "masses must be non-negative.");
 
-    // Result is vanishing in limit that all dimensionful arguments vanish
+    // Result is vanishing if kinematically forbidden.
     if s <= (m0 + m1).powi(2) {
         return 0.0;
     }
 
+    let params = Parameters::new(s, m0, m1);
+    b_internal(r, n1, &params)
+}
+
+/// Internal implementation of the coefficient function which uses precomputed
+/// internal variables shared across recursive calls.
+///
+/// In particular, we can assume:
+///
+/// - r and n1 are valid
+/// - s > 0
+///
+fn b_internal(r: i32, n1: i32, param: &Parameters) -> f64 {
     match (r, n1) {
-        (0, 0) => scalar(s, m0, m1),
-        (0, n1) => b1(n1, s, m0, m1),
+        (0, 0) => scalar(&param),
+        (0, n1) => {
+            neg_power(n1) / (n1 + 1) as f64
+                * (0..=(n1 / 2))
+                    .map(|k| {
+                        binomial(n1 + 1, 2 * k + 1)
+                            * (param.f / (2.0 * param.s)).powi(n1 - 2 * k)
+                            * (param.lambda / (4.0 * param.s_2)).powi(k)
+                            * disc(param)
+                    })
+                    .sum::<f64>()
+        }
         (r, n1) => {
             -(2.0 * (n1 + 1) as f64).recip()
-                * ((s - m1.powi(2) + m0.powi(2)) * b(r - 1, n1 + 1, s, m0, m1)
-                    + 2.0 * s * b(r - 1, n1 + 2, s, m0, m1))
+                * (param.f * b_internal(r - 1, n1 + 1, param)
+                    + 2.0 * param.s * b_internal(r - 1, n1 + 2, param))
         }
     }
 }
 
-/// Evaluate the scalar Passarino-Veltmann coefficient function:
+/// Absorptive part of the scalar Passarino-Veltmann coefficient function:
 ///
 /// \\begin{equation}
 ///   \boldsymbol{B}_{0}(s; m0, m1)
 /// \\end{equation}
-fn scalar(s: f64, m0: f64, m1: f64) -> f64 {
-    disc(s, m0, m1)
-}
-
-/// Evaluate the Passarino-Veltman coefficient functions:
 ///
-/// \\begin{equation}
-///   \boldsymbol{B}_{\underbrace{1\dots1}_{n_1}}(s; m0, m1)
-/// \\end{equation}
-fn b1(n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
-    match n1 {
-        0 => scalar(s, m0, m1),
-        n => {
-            let m0_2 = m0.powi(2);
-            let m1_2 = m1.powi(2);
-            let lambda = kallen_lambda(s, m0_2, m1_2);
-            let f = s + m0_2 - m1_2;
-
-            neg_power(n) / (n as f64 + 1.0)
-                * (0..n / 2)
-                    .map(|k| {
-                        binomial(n + 1, 2 * k + 1)
-                            * (f / (2.0 * s)).powi(n - 2 * k)
-                            * (lambda / (4.0 * s.powi(2))).powi(k)
-                            * disc(s, m0, m1)
-                    })
-                    .sum::<f64>()
-        }
-    }
+/// This is an internal implementation which **does not** check
+fn scalar(param: &Parameters) -> f64 {
+    disc(param)
 }
 
-fn disc(s: f64, m0: f64, m1: f64) -> f64 {
-    PI * kallen_lambda_sqrt(s, m0.powi(2), m1.powi(2)) / s
+/// Part of the B coefficient function which contains the discontinuity.
+fn disc(param: &Parameters) -> f64 {
+    PI * kallen_lambda_sqrt(param.s, param.m0_2, param.m1_2) / param.s
 }
 
 fn neg_power(n: i32) -> f64 {
