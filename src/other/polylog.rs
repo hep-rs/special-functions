@@ -64,11 +64,13 @@ approx_fn! {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::f64;
+    use std::{f64, fs::File, io};
 
     #[test]
     fn li() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/other/polylog.csv")?;
+        let mut f = File::open("tests/data/other/polylog.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+
         let f = &[
             super::li0,
             super::li1,
@@ -102,50 +104,6 @@ mod tests {
                 }
             }
         }
-
-        Ok(())
-    }
-}
-
-#[cfg(feature = "nightly")]
-#[cfg(test)]
-mod benches {
-    use test::Bencher;
-
-    #[bench]
-    fn li0(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/other/polylog.csv")?
-            .into_deserialize()
-            .map(|x| {
-                let x: [f64; 11] = x.unwrap();
-                x[0]
-            })
-            .collect();
-
-        b.iter(|| {
-            for &x in &data {
-                test::black_box(super::li0(x));
-            }
-        });
-
-        Ok(())
-    }
-
-    #[bench]
-    fn li9(b: &mut Bencher) -> Result<(), Box<dyn std::error::Error>> {
-        let data: Vec<_> = csv::Reader::from_path("tests/data/other/polylog.csv")?
-            .into_deserialize()
-            .map(|x| {
-                let x: [f64; 11] = x.unwrap();
-                x[0]
-            })
-            .collect();
-
-        b.iter(|| {
-            for &x in &data {
-                test::black_box(super::li9(x));
-            }
-        });
 
         Ok(())
     }

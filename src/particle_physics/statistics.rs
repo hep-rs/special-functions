@@ -1,6 +1,5 @@
 /// Particle Statistics
-use std::convert::identity;
-use std::f64;
+use std::{convert::identity, f64};
 
 mod bose_einstein_massive;
 mod bose_einstein_massless;
@@ -102,12 +101,12 @@ approx_fn! {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::f64;
+    use std::{f64, fs::File, io};
 
     #[test]
     fn massless() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr =
-            csv::Reader::from_path("tests/data/particle_physics/statistics/massless.csv")?;
+        let mut f = File::open("tests/data/particle_physics/statistics/massless.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
 
         let f = [super::bose_einstein_massless, super::fermi_dirac_massless];
 
@@ -134,7 +133,8 @@ mod tests {
 
     #[test]
     fn massive() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/particle_physics/statistics/massive.csv")?;
+        let mut f = File::open("tests/data/particle_physics/statistics/massive.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
 
         let f = [
             super::bose_einstein_massive,

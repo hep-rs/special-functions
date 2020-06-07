@@ -3,12 +3,13 @@
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::f64;
+    use std::{f64, fs::File};
 
     #[test]
     #[ignore]
     fn trig() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/basic/trig.csv")?;
+        let mut f = File::open("tests/data/basic/trig.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
         let f = &[f64::sin, f64::cos, f64::tan];
 
         for result in rdr.deserialize() {

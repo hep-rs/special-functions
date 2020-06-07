@@ -44,11 +44,12 @@ pub fn binomial(n: i32, k: i32) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::f64;
+    use std::{f64, fs::File};
 
     #[test]
     fn harmonic_number() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/other/harmonic_number.csv")?;
+        let mut f = File::open("tests/data/other/harmonic_number.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
         let f = super::harmonic_number;
 
         for result in rdr.deserialize() {
@@ -66,7 +67,8 @@ mod tests {
 
     #[test]
     fn gamma() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/other/gamma.csv")?;
+        let mut f = File::open("tests/data/other/gamma.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
         let f = super::gamma;
 
         for result in rdr.deserialize() {
@@ -84,7 +86,8 @@ mod tests {
 
     #[test]
     fn binomial() -> Result<(), Box<dyn std::error::Error>> {
-        let mut rdr = csv::Reader::from_path("tests/data/other/binomial.csv")?;
+        let mut f = File::open("tests/data/other/binomial.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
         let f = super::binomial;
 
         for result in rdr.deserialize() {
