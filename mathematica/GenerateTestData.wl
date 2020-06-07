@@ -2,7 +2,14 @@
 
 SetOptions[$Output, FormatType -> OutputForm]
 
-$Sections = {"basic", "bessel", "other", "particle_physics/statistics"};
+$Sections = {
+  "test",
+  "basic",
+  "bessel",
+  "other",
+  "particle_physics/statistics",
+  "particle_physics/pave_absorptive"
+};
 
 sections = ToLowerCase @ Rest @ $ScriptCommandLine;
 If[sections === {},
@@ -101,6 +108,50 @@ GenerateCSV[
   DeleteFile[csv <> "." <> ToString[#] & /@ $KernelIDs];
 
   Echo["Generated " <> shortName <> "."];
+];
+
+Attributes[ReservoirSample] = {HoldRest};
+ReservoirSample[n_, arg_, iter__] := Block[{
+    sample = {}, p = 0
+  },
+
+  Do[
+    p += 1;
+    If[Length[sample] < n,
+
+      (* Fill the reservoir to begin with *)
+      AppendTo[sample, arg]
+      ,
+
+      (* Otherwise we add the next argument with decreasing probability *)
+      If[RandomInteger[{1, p}] <= n,
+        sample[[RandomInteger[{1, n}]]] = arg;
+      ];
+    ];
+    ,
+    iter
+  ];
+
+  sample
+];
+
+Attributes[RandomAccessSample] = {HoldRest};
+RandomAccessSample[n_, arg_, iter__] := Block[{
+    iterArgs, iterLists
+  },
+  (* Separate the variables we're iterating over from the corresponding lists,
+     and convert range specifications into lists for later. *)
+
+  iterArgs = First /@ {iter};
+  iterLists = Table[
+    If[Head[i[[2]]] === List, i[[2]], Range @@ i[[2 ;;]]],
+    {i, {iter}}
+  ];
+
+  Table[
+    arg /. Thread[iterArgs -> RandomChoice /@ iterLists],
+    n
+  ]
 ];
 
 (*****************************************************************************)
@@ -360,4 +411,168 @@ If[MemberQ[sections, "particle_physics/statistics"],
     On[Power::indet];
     On[Power::infy];
   ]
+];
+
+(*****************************************************************************)
+(* Passarino Velmtna *)
+(*****************************************************************************)
+
+Needs["X`"];
+ParallelNeeds["X`"];
+
+If[MemberQ[sections, "particle_physics/pave_absorptive"],
+  dir = CreateDataDir["particle_physics", "pave_absorptive"];
+
+  RealSample[n_] := Join[-10^Subdivide[-10, 10, n], 10^Subdivide[-10, 10, n], Subdivide[-10, 10, n]];
+  PositiveSample[n_] := Join[10^Subdivide[-10, 10, n], Subdivide[0, 10, n]];
+
+  discPVA[r_, m0_] = 0;
+
+  Echo["Defining discPVB"];
+  Do[
+    With[{r = r, n1 = n1},
+      discPVB[r, n1, s_, m0_, m1_] = If[s > 0,
+        Evaluate@LoopRefine[
+          PVB[r, n1, s, m0, m1] / (2 I),
+          Part -> Discontinuity[s]
+        ],
+        0
+      ]
+    ]
+    ,
+    {r, Range[0, 5]},
+    {n1, Range[0, 5]}
+  ];
+
+  Echo["Defining discPVC"];
+  Do[
+    With[{r = r, n1 = n1, n2 = n2},
+      discPVC[r, n1, n2, s1_, s12_, s2_, m0_, m1_, m2_] = Sum[
+        If[s > 0,
+          Evaluate@LoopRefine[
+            PVC[r, n1, n2, s1, s12, s2, m0, m1, m2] / (2 I),
+            Part -> Discontinuity[s]
+          ],
+          0
+        ],
+        {s, {s1, s12, s2}}
+      ]
+    ]
+    ,
+    {r, Range[0, 2]},
+    {n1, Range[0, 2]},
+    {n2, Range[0, 2]}
+  ];
+
+  Echo["Defining discPVD"];
+  Do[
+    If[r + n1 + n2 + n3 > 1, Continue[]];
+    With[{r = r, n1 = n1, n2 = n2, n3 = n3},
+      discPVD[r, n1, n2, n3, s1_, s2_, s3_, s4_, s12_, s23_, m0_, m1_, m2_, m3_] = Sum[
+        If[s > 0,
+          Evaluate@LoopRefine[
+            PVD[r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3] / (2 I),
+            Part -> Discontinuity[s]
+          ],
+          0
+        ],
+        {s, {s1, s2, s3, s4, s12, s23}}
+      ]
+    ]
+    ,
+    {r, Range[0, 1]},
+    {n1, Range[0, 1]},
+    {n2, Range[0, 1]},
+    {n3, Range[0, 1]}
+  ];
+
+  GenerateCSV[
+    FileNameJoin[{dir, "a.csv"}],
+    {"r", "m0", "a"},
+    Function[{r, m0}, {
+        r, m0,
+        discPVA[r, m0]
+      }],
+    Flatten[
+      Table[{r, m0},
+      {r, Range[0, 10]},
+      {m0, PositiveSample[200]}],
+      {{1, 2}}
+    ]
+  ];
+
+  $n = 100;
+  GenerateCSV[
+    FileNameJoin[{dir, "b.csv"}],
+    {"r", "n1", "s", "m0", "m1", "b"},
+    Function[{r, n1, s, m0, m1}, {
+        r, n1, s, m0, m1,
+        discPVB[Round@r, Round@n1, s, m0, m1]
+      }],
+    SeedRandom[123454321];
+    RandomAccessSample[10^6,
+      {r, n1, s, m0, m1},
+      {r, Range[0, 5]},
+      {n1, Range[0, 5]},
+      {s, RealSample[$n]},
+      {m0, PositiveSample[$n]},
+      {m1, PositiveSample[$n]}
+    ]
+  ];
+
+  $n = 100;
+  GenerateCSV[
+    FileNameJoin[{dir, "c.csv"}],
+    {"r", "n1", "n2", "s1", "s12", "s2", "m0", "m1", "m2", "c"},
+    Function[{r, n1, n2, s1, s12, s2, m0, m1, m2}, {
+        r, n1, n2, s1, s12, s2, m0, m1, m2,
+        f[Round@r, Round@n1, Round@n2, s1, s12, s2, m0, m1, m2]
+      }],
+    SeedRandom[123454321];
+    RandomAccessSample[10^6,
+      {r, n1, n2, s1, s12, s2, m0, m1, m2},
+      {r, Range[0, 2]},
+      {n1, Range[0, 2]},
+      {n2, Range[0, 2]},
+      {s1, RealSample[$n]},
+      {s12, RealSample[$n]},
+      {s2, RealSample[$n]},
+      {m0, PositiveSample[$n]},
+      {m1, PositiveSample[$n]},
+      {m2, PositiveSample[$n]}
+    ]
+  ];
+
+  $n = 100;
+  GenerateCSV[
+    FileNameJoin[{dir, "d.csv"}],
+    {"r", "n1", "n2", "n3", "s1", "s2", "s3", "s4", "s12", "s23", "m0", "m1", "m2", "m3", "d"},
+    Function[{r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}, {
+        r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3,
+        f[Round@r, Round@n1, Round@n2, Round@n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]
+      }
+    ]
+    ,
+    SeedRandom[123454321];
+    RandomAccessSample[10^6,
+      If[r + n1 + n2 + n3 > 1,
+        Nothing,
+        {r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}
+      ],
+      {r, Range[0, 1]},
+      {n1, Range[0, 1]},
+      {n2, Range[0, 1]},
+      {n3, Range[0, 1]},
+      {s1, RealSample[$n]},
+      {s2, RealSample[$n]},
+      {s3, RealSample[$n]},
+      {s4, RealSample[$n]},
+      {s12, RealSample[$n]},
+      {s23, RealSample[$n]},
+      {m0, PositiveSample[$n]},
+      {m1, PositiveSample[$n]},
+      {m2, PositiveSample[$n]},
+      {m3, PositiveSample[$n]}
+    ]
+  ];
 ];
