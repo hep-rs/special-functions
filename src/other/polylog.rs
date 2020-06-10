@@ -64,7 +64,7 @@ approx_fn! {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::{f64, fs::File, io};
+    use std::{f64, fs::File};
 
     #[test]
     fn li() -> Result<(), Box<dyn std::error::Error>> {
