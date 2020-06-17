@@ -9,12 +9,9 @@ use std::f64::consts::PI;
 struct Parameters {
     s: f64,
     s_2: f64,
-    m0: f64,
     m0_2: f64,
-    m1: f64,
     m1_2: f64,
     lambda: f64,
-    lambda_sqrt: f64,
     f: f64,
 }
 
@@ -25,12 +22,9 @@ impl Parameters {
         Self {
             s,
             s_2: s.powi(2),
-            m0,
-            m1,
             m0_2,
             m1_2,
             lambda: kallen_lambda(s, m0_2, m1_2),
-            lambda_sqrt: kallen_lambda_sqrt(s, m0_2, m1_2),
             f: s - m1_2 + m0_2,
         }
     }
@@ -106,5 +100,45 @@ fn neg_power(n: i32) -> f64 {
         1.0
     } else {
         -1.0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::utilities::test::*;
+    use std::{f64, fs::File};
+
+    #[test]
+    fn b() -> Result<(), Box<dyn std::error::Error>> {
+        let mut f = File::open("tests/data/particle_physics/pave_absorptive/b.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let f = super::b;
+
+        for result in rdr.deserialize() {
+            let (r, n1, s, m0, m1, y): (f64, f64, f64, f64, f64, f64) = result?;
+            let r = r as i32;
+            let n1 = n1 as i32;
+
+            if !y.is_nan() {
+                let ny = f(r, n1, s, m0, m1);
+                // println!(
+                //     "B({}, {}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
+                //     r, n1, s, m0, m1, ny, y
+                // );
+                match (r, n1) {
+                    (0, n1) if n1 < 5 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
+                    (0, 5) => approx_eq(ny, y, 7.0, 10f64.powi(-200)),
+                    (1, n1) if n1 < 4 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
+                    (1, 4) => approx_eq(ny, y, 6.0, 10f64.powi(-200)),
+                    (1, 5) => approx_eq(ny, y, 5.0, 10f64.powi(-200)),
+                    (2, _) => approx_eq(ny, y, 4.0, 10f64.powi(-200)),
+                    (3, 0) | (3, 1) => approx_eq(ny, y, 2.0, 10f64.powi(-200)),
+                    (3, _) | (4, _) | (5, _) => continue,
+                    _ => unreachable!(),
+                }
+            }
+        }
+
+        Ok(())
     }
 }

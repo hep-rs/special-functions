@@ -13,4 +13,27 @@ pub fn a(r: i32, m: f64) -> f64 {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use crate::utilities::test::*;
+    use std::{f64, fs::File};
+
+    #[test]
+    fn a() -> Result<(), Box<dyn std::error::Error>> {
+        let mut f = File::open("tests/data/particle_physics/pave_absorptive/a.csv.zst")?;
+        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let f = super::a;
+
+        for result in rdr.deserialize() {
+            let (r, m0, y): (f64, f64, f64) = result?;
+            let r = r as i32;
+
+            if !y.is_nan() {
+                let ny = f(r, m0);
+                // println!("A({}, {:e}) = {:e} [{:e}]", r, m0, ny, y);
+                approx_eq(ny, y, 8.0, 10f64.powi(-200));
+            }
+        }
+
+        Ok(())
+    }
+}
