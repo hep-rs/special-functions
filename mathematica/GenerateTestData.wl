@@ -395,67 +395,104 @@ ParallelNeeds["X`"];
 If[MemberQ[sections, "particle_physics/pave_absorptive"],
   dir = CreateDataDir["particle_physics", "pave_absorptive"];
 
-  RealSample[n_] := Join[-10^Subdivide[-10, 10, n], 10^Subdivide[-10, 10, n], Subdivide[-10, 10, n]];
-  PositiveSample[n_] := Join[10^Subdivide[-10, 10, n], Subdivide[0, 10, n]];
-
-  discPVA[r_, m0_] = 0;
+  ParallelEvaluate[
+    Off[Divide::infy];
+    Off[Infinity::indet];
+    Off[N::meprec];
+    Off[Power::infy];
+  ];
 
   Echo["Defining discPVB"];
-  Do[
-    With[{r = r, n1 = n1},
-      discPVB[r, n1, s_, m0_, m1_] = If[s > 0,
-        Evaluate@LoopRefine[
-          PVB[r, n1, s, m0, m1] / (2 I),
-          Part -> Discontinuity[s]
-        ],
-        0
-      ]
-    ]
+  $f = FileNameJoin[{$TemporaryDirectory, "discPVB.mx"}];
+  If[FileExistsQ[$f],
+    Get[$f]
     ,
-    {r, Range[0, 5]},
-    {n1, Range[0, 5]}
+    Do[
+      With[{r = r, n1 = n1},
+        discPVB[r, n1, s1_, m0_, m1_] = Sum[
+          Simplify@Expand@LoopRefine[
+            PVB[r, n1, s1, m0, m1]/(2 I),
+            Part -> Discontinuity[s]],
+          {s, {s1}}]
+      ],
+      {r, 0, 5},
+      {n1, 0, 5}
+    ];
+    DumpSave[$f, discPVB]
   ];
 
   Echo["Defining discPVC"];
-  Do[
-    With[{r = r, n1 = n1, n2 = n2},
-      discPVC[r, n1, n2, s1_, s12_, s2_, m0_, m1_, m2_] = Sum[
-        If[s > 0,
-          Evaluate@LoopRefine[
-            PVC[r, n1, n2, s1, s12, s2, m0, m1, m2] / (2 I),
-            Part -> Discontinuity[s]
-          ],
-          0
-        ],
-        {s, {s1, s12, s2}}
-      ]
-    ]
+  $f = FileNameJoin[{$TemporaryDirectory, "discPVC.mx"}];
+  If[FileExistsQ[$f],
+    Get[$f]
     ,
-    {r, Range[0, 2]},
-    {n1, Range[0, 2]},
-    {n2, Range[0, 2]}
+    Do[
+      Echo[
+        StringTemplate["-> Refining discPVC[`r`, `n1`, `n2`, ...]"][<|
+          "r" -> r,
+          "n1" -> n1,
+          "n2" -> n2
+        |>]
+      ];
+
+      With[{r = r, n1 = n1, n2 = n2},
+        discPVC[r, n1, n2, s1_, s12_, s2_, m0_, m1_, m2_] = Sum[
+          Simplify@Expand@LoopRefine[
+            PVC[r, n1, n2, s1, s12, s2, m0, m1, m2]/(2 I),
+            Part -> Discontinuity[s]],
+          {s, {s1, s12, s2}}]
+      ],
+      {r, 0, 2},
+      {n1, 0, 2},
+      {n2, 0, 2}
+    ];
+    DumpSave[$f, discPVC]
   ];
 
   Echo["Defining discPVD"];
-  Do[
-    If[r + n1 + n2 + n3 > 1, Continue[]];
-    With[{r = r, n1 = n1, n2 = n2, n3 = n3},
-      discPVD[r, n1, n2, n3, s1_, s2_, s3_, s4_, s12_, s23_, m0_, m1_, m2_, m3_] = Sum[
-        If[s > 0,
-          Evaluate@LoopRefine[
-            PVD[r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3] / (2 I),
-            Part -> Discontinuity[s]
-          ],
-          0
-        ],
-        {s, {s1, s2, s3, s4, s12, s23}}
-      ]
-    ]
+  $f = FileNameJoin[{$TemporaryDirectory, "discPVD.mx"}];
+  If[FileExistsQ[$f],
+    Get[$f]
     ,
-    {r, Range[0, 1]},
-    {n1, Range[0, 1]},
-    {n2, Range[0, 1]},
-    {n3, Range[0, 1]}
+    Do[
+      If[r + n1 + n2 + n3 > 1, Continue[]];
+
+      Echo[
+        StringTemplate["-> Refining discPVD[`r`, `n1`, `n2`, `n3`, ...]"][<|
+          "r" -> r,
+          "n1" -> n1,
+          "n2" -> n2,
+          "n3" -> n3
+        |>]
+      ];
+
+      With[{r = r, n1 = n1, n2 = n2, n3 = n3},
+        discPVD[r, n1, n2, n3, s1_, s2_, s3_, s4_, s12_, s23_, m0_, m1_, m2_, m3_] = Sum[
+          Simplify@Expand@LoopRefine[
+            PVD[r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]/(2 I),
+            Part -> Discontinuity[s]],
+          {s, {s1, s2, s3, s4, s12, s23}}]
+      ],
+      {r, 0, 1},
+      {n1, 0, 1},
+      {n2, 0, 1},
+      {n3, 0, 1}
+    ];
+    DumpSave[$f, discPVD]
+  ];
+
+  GenerateCSV[
+    FileNameJoin[{dir, "log_diff.csv"}],
+    {"a", "b", "log_diff"},
+    Function[{a, b}, {
+        a, b, Log[(a + b) / (a - b)]
+      }],
+    Flatten[
+      Table[{a, b},
+      {a, RealSample[200]},
+      {b, RealSample[200]}],
+      {{1, 2}}
+    ]
   ];
 
   GenerateCSV[
@@ -484,8 +521,8 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     SeedRandom[123454321];
     RandomAccessSample[10^6,
       {r, n1, s, m0, m1},
-      {r, Range[0, 5]},
-      {n1, Range[0, 5]},
+      {r, 0, 5},
+      {n1, 0, 5},
       {s, RealSample[$n]},
       {m0, PositiveSample[$n]},
       {m1, PositiveSample[$n]}
@@ -498,14 +535,14 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "n1", "n2", "s1", "s12", "s2", "m0", "m1", "m2", "c"},
     Function[{r, n1, n2, s1, s12, s2, m0, m1, m2}, {
         r, n1, n2, s1, s12, s2, m0, m1, m2,
-        f[Round@r, Round@n1, Round@n2, s1, s12, s2, m0, m1, m2]
+        discPVC[Round@r, Round@n1, Round@n2, s1, s12, s2, m0, m1, m2]
       }],
     SeedRandom[123454321];
     RandomAccessSample[10^6,
       {r, n1, n2, s1, s12, s2, m0, m1, m2},
-      {r, Range[0, 2]},
-      {n1, Range[0, 2]},
-      {n2, Range[0, 2]},
+      {r, 0, 2},
+      {n1, 0, 2},
+      {n2, 0, 2},
       {s1, RealSample[$n]},
       {s12, RealSample[$n]},
       {s2, RealSample[$n]},
@@ -521,7 +558,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "n1", "n2", "n3", "s1", "s2", "s3", "s4", "s12", "s23", "m0", "m1", "m2", "m3", "d"},
     Function[{r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}, {
         r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3,
-        f[Round@r, Round@n1, Round@n2, Round@n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]
+        discPVD[Round@r, Round@n1, Round@n2, Round@n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]
       }
     ]
     ,
@@ -531,10 +568,10 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
         Nothing,
         {r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}
       ],
-      {r, Range[0, 1]},
-      {n1, Range[0, 1]},
-      {n2, Range[0, 1]},
-      {n3, Range[0, 1]},
+      {r, 0, 1},
+      {n1, 0, 1},
+      {n2, 0, 1},
+      {n3, 0, 1},
       {s1, RealSample[$n]},
       {s2, RealSample[$n]},
       {s3, RealSample[$n]},
@@ -546,5 +583,12 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
       {m2, PositiveSample[$n]},
       {m3, PositiveSample[$n]}
     ]
+  ];
+
+  ParallelEvaluate[
+    On[Divide::infy];
+    On[Infinity::indet];
+    On[N::meprec];
+    On[Power::infy];
   ];
 ];
