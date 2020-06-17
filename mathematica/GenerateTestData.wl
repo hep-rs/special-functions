@@ -37,7 +37,7 @@ $KernelIDs = ParallelEvaluate[$KernelID];
 (*****************************************************************************)
 
 $Precision = 20;
-$MaxExtraPrecision = 2 $Precision;
+$MaxExtraPrecision = 4 $Precision;
 $DataDir = ExpandFileName@FileNameJoin[{DirectoryName[$InputFileName], "..", "tests", "data"}];
 Echo[$DataDir, "Base output directory: "];
 
