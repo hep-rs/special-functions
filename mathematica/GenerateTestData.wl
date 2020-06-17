@@ -273,10 +273,7 @@ If[MemberQ[sections, "other"],
     FileNameJoin[{dir, "harmonic_number.csv"}],
     {"x", "H"},
     {#, HarmonicNumber[#]} &,
-    Join[
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[0, 10, 1000]
-    ]
+    Range[10^4]
   ];
 
   GenerateCSV[
