@@ -3,6 +3,7 @@
 SetOptions[$Output, FormatType -> OutputForm]
 
 $Sections = {
+  "all",
   "test",
   "basic",
   "bessel",
@@ -22,6 +23,10 @@ Block[{unknown = Complement[sections, $Sections]},
     Echo["Valid sections: " <> StringRiffle[$Sections, ", "]];
     Exit[];
   ];
+];
+
+If[MemberQ[sections, "all"],
+  sections = $Sections
 ];
 
 LaunchKernels[];
