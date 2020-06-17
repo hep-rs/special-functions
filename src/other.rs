@@ -57,7 +57,7 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(x);
-                // println!("H({:e}) = {:e} [{:e}]", x, y, ny);
+                // println!("H({:e}) = {:e} [{:e}]", x, ny, y);
                 approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
         }
@@ -76,7 +76,7 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(x);
-                // println!("Γ({:e}) = {:e} [{:e}]", x, y, ny);
+                // println!("Γ({:e}) = {:e} [{:e}]", x, ny, y);
                 approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
         }
@@ -97,7 +97,7 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(n, k);
-                // println!("Binom({}, {}) = {:e} [{:e}]", n, k, y, ny);
+                // println!("Binom({}, {}) = {:e} [{:e}]", n, k, ny, y);
                 approx_eq(ny, y, 8.0, 10f64.powi(-200));
             }
         }

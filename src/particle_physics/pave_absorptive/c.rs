@@ -126,10 +126,10 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(r, n1, n2, s1, s12, s2, m0, m1, m2);
-                println!(
-                    "C({}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
-                    r, n1, n2, s1, s12, s2, m0, m1, m2, ny, y
-                );
+                // println!(
+                //     "C({}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
+                //     r, n1, n2, s1, s12, s2, m0, m1, m2, ny, y
+                // );
                 approx_eq(ny, y, 4.0, 10f64.powi(-200))
             }
         }
