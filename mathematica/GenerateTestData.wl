@@ -162,6 +162,10 @@ RandomAccessSample[n_, arg_, iter__] := Block[{
   ]
 ];
 
+(* Cover a broad range of positive / negative numbers *)
+RealSample[n_] := Join[-10^Subdivide[-10, 10, n], 10^Subdivide[-10, 10, n], Subdivide[-10, 10, n]];
+PositiveSample[n_] := Join[10^Subdivide[-10, 10, n], Subdivide[0, 10, n]];
+
 (*****************************************************************************)
 (* Test *)
 (*****************************************************************************)
@@ -193,11 +197,7 @@ If[MemberQ[sections, "basic"],
     FileNameJoin[{dir, "trig.csv"}],
     {"x", "sin", "cos"},
     {#, Sin[#], Cos[#], Tan[#]} &,
-    Join[
-      -10^Subdivide[-10, 10, 1000],
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[-10, 10, 1000]
-    ]
+    RealSample[1000]
   ];
 ];
 
@@ -214,51 +214,34 @@ If[MemberQ[sections, "bessel"],
     FileNameJoin[{dir, "i.csv"}],
     {"x", Sequence@@("I" <> ToString[#] & /@ Range[0, nMax])},
     {#, Sequence@@BesselI[Range[0, nMax], #]} &,
-    Join[
-      -10^Subdivide[-10, 10, 1000],
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[-10, 10, 1000]
-    ]
+    RealSample[1000]
   ];
 
   GenerateCSV[
     FileNameJoin[{dir, "j.csv"}],
     {"x", Sequence@@("J" <> ToString[#] & /@ Range[0, nMax])},
     {#, Sequence@@BesselJ[Range[0, nMax], #]} &,
-    Join[
-      -10^Subdivide[-10, 10, 1000],
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[-10, 10, 1000]
-    ]
+    RealSample[1000]
   ];
 
   GenerateCSV[
     FileNameJoin[{dir, "k.csv"}],
     {"x", Sequence@@("K" <> ToString[#] & /@ Range[0, nMax])},
     {#, Sequence@@BesselK[Range[0, nMax], #]} &,
-    Join[
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[0, 10, 1000]
-    ]
+    PositiveSample[1000]
   ];
   GenerateCSV[
     FileNameJoin[{dir, "k1_on_k2.csv"}],
     {"x", "K1/K2"},
     {#, BesselK[1, #] / BesselK[2, #]} &,
-    Join[
-      10^Subdivide[-10, 10, 1000],
-      Rest@Subdivide[0, 10, 1000]
-    ]
+    PositiveSample[1000]
   ];
 
   GenerateCSV[
     FileNameJoin[{dir, "y.csv"}],
     {"x", Sequence@@("Y" <> ToString[#] & /@ Range[0, nMax])},
     {#, Sequence@@BesselY[Range[0, nMax], #]} &,
-    Join[
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[0, 10, 1000]
-    ]
+    PositiveSample[1000]
   ];
 ];
 
@@ -280,10 +263,7 @@ If[MemberQ[sections, "other"],
     FileNameJoin[{dir, "gamma.csv"}],
     {"x", "Gamma"},
     {#, Gamma[#]} &,
-    Join[
-      10^Subdivide[-10, 10, 1000],
-      Subdivide[0, 10, 1000]
-    ]
+    Setprecision[PositiveSample[1000], 2 $Precision]
   ];
 
   nMax = 9;
@@ -371,15 +351,8 @@ If[MemberQ[sections, "particle_physics/statistics"],
       }]],
     Flatten[
       Table[{0, mu, beta},
-      {mu, Join[
-        -10^Subdivide[-10, 10, 200],
-        10^Subdivide[-10, 10, 200],
-        Subdivide[-10, 10, 200]
-      ]},
-      {beta, Join[
-        10^Subdivide[-10, 10, 200],
-        Rest@Subdivide[0, 10, 200]
-      ]}],
+      {mu, RealSample[200]},
+      {beta, PositiveSample[200]}],
       {{1, 2}}
     ]
   ];
@@ -398,14 +371,8 @@ If[MemberQ[sections, "particle_physics/statistics"],
       }]],
     Flatten[
       Table[{m, 0, beta},
-      {m, Join[
-        10^Subdivide[-10, 10, 200],
-        Subdivide[0, 10, 200]
-      ]},
-      {beta, Join[
-        10^Subdivide[-10, 10, 200],
-        Rest@Subdivide[0, 10, 200]
-      ]}],
+      {m, PositiveSample[200]},
+      {beta, RealSample[200]}],
       {{1, 2}}
     ]
   ];
