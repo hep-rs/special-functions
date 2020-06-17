@@ -77,14 +77,14 @@ GenerateCSV[
     WriteString[$csv,
       StringRiffle[
         If[Head[#] === String, #, ToString[#, CForm]] & /@ (
-          N[f @@ SetPrecision[x, $Precision], $Precision] //. {
+          N[f @@ x, $Precision] //. {
             _Complex -> "NaN",
             Indeterminate -> "NaN",
             ComplexInfinity -> "NaN",
             -Infinity -> "-inf",
             Infinity -> "inf",
             x_ :> 0         /; Abs[x] < $MinMachineNumber,
-            x_ :> Infinity  /; x > $MaxMachineNumber,
+            x_ :>  Infinity /; x > $MaxMachineNumber,
             x_ :> -Infinity /; x < -$MaxMachineNumber
           }
         ),
@@ -111,6 +111,9 @@ GenerateCSV[
     csv
   ]];
   DeleteFile[csv <> "." <> ToString[#] & /@ $KernelIDs];
+
+  (* Compress using zstd *)
+  Run["zstd --ultra -22 --rm -f " <> csv];
 
   Echo["Generated " <> shortName <> "."];
 ];
