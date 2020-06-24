@@ -18,7 +18,8 @@ pub use d::d;
 ///   \log\left( \frac{a + b}{a - b} \right)
 /// \\end{equation}
 ///
-/// in a way that is numerically stable when \\(b \ll a\\).
+/// in a way that is numerically stable when \\(b \ll a\\).  Furthermore, for
+/// \\(b > a\\), this function returns the real part of the logarithm.
 fn log_diff(a: f64, b: f64) -> f64 {
     let x = b / a;
 
@@ -41,7 +42,7 @@ fn log_diff(a: f64, b: f64) -> f64 {
             ],
         )
     } else {
-        ((a + b) / (a - b)).ln()
+        ((a + b) / (a - b)).abs().ln()
     }
 }
 
