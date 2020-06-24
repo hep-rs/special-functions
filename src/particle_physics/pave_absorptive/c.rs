@@ -3,8 +3,7 @@ mod explicit;
 use crate::particle_physics::kallen_lambda_sqrt;
 use std::f64;
 
-/// Internal parameters shared across the evaluation of the C coefficient
-/// function.
+/// Internal parameters shared within the evaluation of the C function.
 pub(crate) struct Parameters {
     s1: f64,
     s12: f64,
@@ -22,6 +21,8 @@ pub(crate) struct Parameters {
 }
 
 impl Parameters {
+    /// Create a new instance of internal parameters.  The arguments are defined
+    /// in the same way as the coefficient function.
     fn new(s1: f64, s12: f64, s2: f64, m0: f64, m1: f64, m2: f64) -> Self {
         let m0_2 = m0.powi(2);
         let m1_2 = m1.powi(2);
@@ -43,12 +44,20 @@ impl Parameters {
         }
     }
 }
-
-/// Absrptive part of the Passarin-Veltman coefficient function
+/// Absorptive part of the Passarin-Veltman coefficient function
+/// \\(\boldsymbol{C}\\).
 ///
 /// \\begin{equation}
 ///   \boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}(s_1, s_{12}, s_2; m0, m1, m_2)
 /// \\end{equation}
+///
+/// This is implemented using explicit expressions exported from the Mathematica
+/// package [Package-X](https://packagex.hepforge.org/)
+/// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been
+/// implemented for all combinations of `r`, `n1` and `n2` in `[0, 1, 2]`.
+///
+/// Note that higher order functions will generally be less accurate as the code
+/// does not check for numerical stability.
 #[allow(clippy::too_many_arguments)]
 pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64, m2: f64) -> f64 {
     debug_assert!(n1 >= 0 && n2 >= 0, "n1 and n2 must be non-negative.");
@@ -71,6 +80,12 @@ pub fn c(r: i32, n1: i32, n2: i32, s1: f64, s12: f64, s2: f64, m0: f64, m1: f64,
     }
 }
 
+/// Internal implementation of the coefficient function which uses precomputed
+/// internal variables shared across recursive calls.
+///
+/// All checks for the validity of input parameters should be already done.
+/// Furthermore, re-ordering of the arguments such that n1 >= n2 should have
+/// already been done.
 fn c_internal(r: i32, n1: i32, n2: i32, param: &Parameters) -> f64 {
     match (r, n1, n2) {
         (0, 0, 0) => explicit::c000(param),

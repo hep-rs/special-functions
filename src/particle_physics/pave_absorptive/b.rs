@@ -4,8 +4,7 @@ use crate::{
 };
 use std::f64::consts::PI;
 
-/// Internal parameters shared across the evaluation of the B coefficient
-/// function.
+/// Internal parameters shared within the evaluation of the B function.
 struct Parameters {
     s: f64,
     s_2: f64,
@@ -16,6 +15,8 @@ struct Parameters {
 }
 
 impl Parameters {
+    /// Create a new instance of internal parameters.  The arguments are defined
+    /// in the same way as the coefficient function.
     fn new(s: f64, m0: f64, m1: f64) -> Self {
         let m0_2 = m0.powi(2);
         let m1_2 = m1.powi(2);
@@ -30,11 +31,16 @@ impl Parameters {
     }
 }
 
-/// Absorptive part of the Passarino-Veltman coefficient function:
+/// Absorptive part of the Passarin-Veltman coefficient function
+/// \\(\boldsymbol{B}\\).
 ///
 /// \\begin{equation}
 ///   \boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}(s; m0, m1)
 /// \\end{equation}
+///
+/// This is implemented using the general recursion relation and thus in
+/// principal works for all values of `r` and `n1`; however, higher order values
+/// are prone to numerical instabilities.
 pub fn b(r: i32, n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
     debug_assert!(r >= -1, "r cannot be smaller than -1");
     debug_assert!(n1 >= 0, "n1 must be non-negative");
@@ -52,11 +58,7 @@ pub fn b(r: i32, n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
 /// Internal implementation of the coefficient function which uses precomputed
 /// internal variables shared across recursive calls.
 ///
-/// In particular, we can assume:
-///
-/// - r and n1 are valid
-/// - s > 0
-///
+/// All checks for the validity of input parameters should be already done.
 fn b_internal(r: i32, n1: i32, param: &Parameters) -> f64 {
     match (r, n1) {
         (0, 0) => scalar(&param),
@@ -79,13 +81,11 @@ fn b_internal(r: i32, n1: i32, param: &Parameters) -> f64 {
     }
 }
 
-/// Absorptive part of the scalar Passarino-Veltmann coefficient function:
+/// Scalar Passarino-Veltmann coefficient function:
 ///
 /// \\begin{equation}
 ///   \boldsymbol{B}_{0}(s; m0, m1)
 /// \\end{equation}
-///
-/// This is an internal implementation which **does not** check
 fn scalar(param: &Parameters) -> f64 {
     disc(param)
 }
@@ -95,6 +95,7 @@ fn disc(param: &Parameters) -> f64 {
     PI * kallen_lambda_sqrt(param.s, param.m0_2, param.m1_2) / param.s
 }
 
+/// Function for `(-1)^n`.
 fn neg_power(n: i32) -> f64 {
     if n % 2 == 0 {
         1.0

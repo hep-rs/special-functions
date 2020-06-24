@@ -3,8 +3,7 @@ mod explicit;
 use crate::particle_physics::kallen_lambda_sqrt;
 use std::f64;
 
-/// Internal parameters shared across the evaluation of the D coefficient
-/// function.
+/// Internal parameters shared within the evaluation of the D function.
 pub(crate) struct Parameters {
     s1: f64,
     s2: f64,
@@ -33,6 +32,8 @@ pub(crate) struct Parameters {
 }
 
 impl Parameters {
+    /// Create a new instance of internal parameters.  The arguments are defined
+    /// in the same way as the coefficient function.
     fn new(
         s1: f64,
         s2: f64,
@@ -78,11 +79,21 @@ impl Parameters {
     }
 }
 
-/// Evaluate the Passarin-Veltman coefficient function
+/// Absorptive part of the Passarin-Veltman coefficient function
+/// \\(\boldsymbol{C}\\).
 ///
 /// \\begin{equation}
 ///   \boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}(s_1, s_2, s_3, s_4; s_{12}, s_{23}; m0, m1, m_2, m4)
 /// \\end{equation}
+///
+/// This is implemented using explicit expressions exported from the Mathematica
+/// package [Package-X](https://packagex.hepforge.org/)
+/// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been
+/// implemented for the scalar loop function, and where one of `r`, `n1`, `n2`
+/// or `n3` is `1`.
+///
+/// Note that higher order functions will generally be less accurate as the code
+/// does not check for numerical stability.
 #[allow(clippy::too_many_arguments)]
 pub fn d(
     r: i32,
@@ -120,7 +131,14 @@ pub fn d(
     }
 
     let param = Parameters::new(s1, s2, s3, s4, s12, s23, m0, m1, m2, m3);
+    d_internal(r, n1, n2, n3, &param)
+}
 
+/// Internal implementation of the coefficient function which uses precomputed
+/// internal variables shared across recursive calls.
+///
+/// All checks for the validity of input parameters should be already done.
+fn d_internal(r: i32, n1: i32, n2: i32, n3: i32, param: &Parameters) -> f64 {
     match (r, n1, n2, n3) {
         (0, 0, 0, 0) => explicit::d0000(&param),
         (0, 0, 0, 1) => explicit::d0001(&param),
