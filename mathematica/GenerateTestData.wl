@@ -402,6 +402,15 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     Off[Power::infy];
   ];
 
+  Echo["Defining discPVA"];
+  $f = FileNameJoin[{$TemporaryDirectory, "discPVA.mx"}];
+  If[FileExistsQ[$f],
+    Get[$f]
+    ,
+    discPVA[r_, m0_] = 0;
+    DumpSave[$f, discPVA]
+  ];
+
   Echo["Defining discPVB"];
   $f = FileNameJoin[{$TemporaryDirectory, "discPVB.mx"}];
   If[FileExistsQ[$f],
