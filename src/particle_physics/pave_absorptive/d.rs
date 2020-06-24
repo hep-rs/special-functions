@@ -34,6 +34,7 @@ pub(crate) struct Parameters {
 impl Parameters {
     /// Create a new instance of internal parameters.  The arguments are defined
     /// in the same way as the coefficient function.
+    #[allow(clippy::too_many_arguments)]
     fn new(
         s1: f64,
         s2: f64,
@@ -161,6 +162,7 @@ mod tests {
         let f = super::d;
 
         for result in rdr.deserialize() {
+            #[allow(clippy::type_complexity)]
             let (r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3, y): (
                 f64,
                 f64,

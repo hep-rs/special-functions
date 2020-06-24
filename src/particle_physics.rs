@@ -48,6 +48,7 @@ pub fn kallen_lambda(a: f64, b: f64, c: f64) -> f64 {
 /// even if `kallen_lambda` is negative.  It is up to the user to determine
 /// whether this is valid or not.
 #[must_use]
+#[allow(clippy::many_single_char_names)]
 pub fn kallen_lambda_sqrt(a: f64, b: f64, c: f64) -> f64 {
     let (max, x) = if a > b { (a, b) } else { (b, a) };
     let (max, y) = if max > c { (max, c) } else { (c, max) };

@@ -41,14 +41,14 @@ fn log_diff(a: f64, b: f64) -> f64 {
     let x = b / a;
 
     match x.abs() {
-        y if y == 1.0 => x.signum() * f64::INFINITY,
+        y if (y - 1.0).abs() < f64::EPSILON => x.signum() * f64::INFINITY,
         y if y < 0.2 => {
             x * crate::approximations::polynomial(
                 x.powi(2),
                 &[
-                    2.000000000000000,
+                    2.0,
                     0.6666666666666667,
-                    0.4000000000000000,
+                    0.4,
                     0.2857142857142857,
                     0.2222222222222222,
                     0.1818181818181818,
@@ -64,9 +64,9 @@ fn log_diff(a: f64, b: f64) -> f64 {
             xr * crate::approximations::polynomial(
                 xr.powi(2),
                 &[
-                    2.000000000000000,
+                    2.0,
                     0.6666666666666667,
-                    0.4000000000000000,
+                    0.4,
                     0.2857142857142857,
                     0.2222222222222222,
                     0.1818181818181818,

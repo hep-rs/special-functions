@@ -83,6 +83,7 @@ RustForm[Sqrt[Kallen\[Lambda][m2^2, m3^2, s3]]]  = "param.lambda_m23_sqrt";
 RustForm[Infinity] = "std::f64::INFINITY";
 RustForm[-Infinity] = "std::f64::NEG_INFINITY";
 RustForm[ComplexInfinity] = "std::f64::INFINITY";
+RustForm[Pi] = "std::f64::PI";
 RustForm[0] := "0.0";
 
 RustForm[n_?NumericQ] := StringReplace[
@@ -225,7 +226,8 @@ Do[
 
   WriteString[$f,
     StringTemplate[
-"pub(crate) fn c`r``n1``n2`(param: &Parameters) -> f64 {
+"#[rustfmt::skip]
+pub(crate) fn c`r``n1``n2`(param: &Parameters) -> f64 {
     `disc`
 }"][<|
         "r" -> r,
@@ -316,7 +318,8 @@ Do[
 
   WriteString[$f,
     StringTemplate[
-"pub(crate) fn d`r``n1``n2``n3`(param: &Parameters) -> f64 {
+"#[rustfmt::skip]
+pub(crate) fn d`r``n1``n2``n3`(param: &Parameters) -> f64 {
     `disc`
 }"][<|
         "r" -> r,
