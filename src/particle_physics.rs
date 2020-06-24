@@ -49,8 +49,99 @@ pub fn kallen_lambda(a: f64, b: f64, c: f64) -> f64 {
 /// whether this is valid or not.
 #[must_use]
 pub fn kallen_lambda_sqrt(a: f64, b: f64, c: f64) -> f64 {
-    let max = if a > b { a } else { b };
-    let max = if max > c { max } else { c };
+    let (max, x) = if a > b { (a, b) } else { (b, a) };
+    let (max, y) = if max > c { (max, c) } else { (c, max) };
+    let (x, y) = if x > y {
+        (x / max, y / max)
+    } else {
+        (y / max, x / max)
+    };
 
-    max * kallen_lambda(a / max, b / max, c / max).abs().sqrt()
+    max * (x.powi(2) - 2.0 * x * (y + 1.0) + (y - 1.0).powi(2))
+        .abs()
+        .sqrt()
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::utilities::test::*;
+
+    #[allow(clippy::float_cmp)]
+    #[test]
+    fn kallen_lambda() {
+        let (mut a, b, c) = (1.0, 2.0, 3.0);
+        assert_eq!(super::kallen_lambda(a, b, c), -8.0);
+
+        assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(a, c, b));
+        assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(b, a, c));
+        assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(b, c, a));
+        assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(c, a, b));
+        assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(c, b, a));
+
+        a = 10.0;
+        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1.0, 12.0, 0.0);
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(a, c, b),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(b, a, c),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(b, c, a),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(c, a, b),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(c, b, a),
+            12.0,
+            0.0,
+        );
+
+        a = 1e16;
+        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1e16, 12.0, 0.0);
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(a, c, b),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(b, a, c),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(b, c, a),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(c, a, b),
+            12.0,
+            0.0,
+        );
+        approx_eq(
+            super::kallen_lambda_sqrt(a, b, c),
+            super::kallen_lambda_sqrt(c, b, a),
+            12.0,
+            0.0,
+        );
+    }
 }
