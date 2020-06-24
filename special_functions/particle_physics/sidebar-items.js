@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["kallen_lambda","Kallen lambda function:"],["kallen_lambda_sqrt","Square root of the Kallen lambda function:"]],"mod":[["pave_absorptive","Passarino-Veltman functions."],["statistics",""]]});
+initSidebarItems({"fn":[["kallen_lambda","Kallen lambda function:"],["kallen_lambda_sqrt","Square root of the Kallen lambda function:"]],"mod":[["pave_absorptive","Passarino-Veltman coefficient functions."],["statistics",""]]});

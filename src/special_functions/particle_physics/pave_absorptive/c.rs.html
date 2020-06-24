@@ -214,6 +214,21 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="138">138</span>
 <span id="139">139</span>
 <span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
 </pre>
 <div class="example-wrap">
 <pre class="rust">
@@ -227,8 +242,7 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">std</span>::<span class="ident">f64</span>;
 
 <span class=
-"doccomment">/// Internal parameters shared across the evaluation of the C coefficient</span>
-<span class="doccomment">/// function.</span>
+"doccomment">/// Internal parameters shared within the evaluation of the C function.</span>
 <span class="kw">pub</span>(<span class=
 "kw">crate</span>) <span class="kw">struct</span> <span class=
 "ident">Parameters</span> {
@@ -256,6 +270,10 @@ autocomplete="off" spellcheck="false" placeholder=
 
 <span class="kw">impl</span> <span class=
 "ident">Parameters</span> {
+    <span class=
+"doccomment">/// Create a new instance of internal parameters.  The arguments are defined</span>
+    <span class=
+"doccomment">/// in the same way as the coefficient function.</span>
     <span class="kw">fn</span> <span class=
 "ident">new</span>(<span class="ident">s1</span>: <span class=
 "ident">f64</span>, <span class="ident">s12</span>: <span class=
@@ -298,14 +316,28 @@ autocomplete="off" spellcheck="false" placeholder=
         }
     }
 }
-
 <span class=
-"doccomment">/// Absrptive part of the Passarin-Veltman coefficient function</span>
+"doccomment">/// Absorptive part of the Passarin-Veltman coefficient function</span>
+<span class="doccomment">/// \\(\boldsymbol{C}\\).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// \\begin{equation}</span>
 <span class=
 "doccomment">///   \boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}(s_1, s_{12}, s_2; m0, m1, m_2)</span>
 <span class="doccomment">/// \\end{equation}</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// This is implemented using explicit expressions exported from the Mathematica</span>
+<span class=
+"doccomment">/// package [Package-X](https://packagex.hepforge.org/)</span>
+<span class=
+"doccomment">/// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been</span>
+<span class=
+"doccomment">/// implemented for all combinations of `r`, `n1` and `n2` in `[0, 1, 2]`.</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// Note that higher order functions will generally be less accurate as the code</span>
+<span class=
+"doccomment">/// does not check for numerical stability.</span>
 <span class="attribute">#[<span class=
 "ident">allow</span>(<span class=
 "ident">clippy</span>::<span class="ident">too_many_arguments</span>)]</span>
@@ -392,6 +424,16 @@ autocomplete="off" spellcheck="false" placeholder=
     }
 }
 
+<span class=
+"doccomment">/// Internal implementation of the coefficient function which uses precomputed</span>
+<span class=
+"doccomment">/// internal variables shared across recursive calls.</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// All checks for the validity of input parameters should be already done.</span>
+<span class=
+"doccomment">/// Furthermore, re-ordering of the arguments such that n1 &gt;= n2 should have</span>
+<span class="doccomment">/// already been done.</span>
 <span class="kw">fn</span> <span class=
 "ident">c_internal</span>(<span class=
 "ident">r</span>: <span class="ident">i32</span>, <span class=

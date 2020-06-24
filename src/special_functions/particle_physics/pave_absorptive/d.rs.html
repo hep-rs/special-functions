@@ -254,6 +254,24 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="178">178</span>
 <span id="179">179</span>
 <span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
 </pre>
 <div class="example-wrap">
 <pre class="rust">
@@ -267,8 +285,7 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">std</span>::<span class="ident">f64</span>;
 
 <span class=
-"doccomment">/// Internal parameters shared across the evaluation of the D coefficient</span>
-<span class="doccomment">/// function.</span>
+"doccomment">/// Internal parameters shared within the evaluation of the D function.</span>
 <span class="kw">pub</span>(<span class=
 "kw">crate</span>) <span class="kw">struct</span> <span class=
 "ident">Parameters</span> {
@@ -314,6 +331,10 @@ autocomplete="off" spellcheck="false" placeholder=
 
 <span class="kw">impl</span> <span class=
 "ident">Parameters</span> {
+    <span class=
+"doccomment">/// Create a new instance of internal parameters.  The arguments are defined</span>
+    <span class=
+"doccomment">/// in the same way as the coefficient function.</span>
     <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">s1</span>: <span class=
 "ident">f64</span>,
@@ -393,12 +414,28 @@ autocomplete="off" spellcheck="false" placeholder=
 }
 
 <span class=
-"doccomment">/// Evaluate the Passarin-Veltman coefficient function</span>
+"doccomment">/// Absorptive part of the Passarin-Veltman coefficient function</span>
+<span class="doccomment">/// \\(\boldsymbol{C}\\).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// \\begin{equation}</span>
 <span class=
 "doccomment">///   \boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}(s_1, s_2, s_3, s_4; s_{12}, s_{23}; m0, m1, m_2, m4)</span>
 <span class="doccomment">/// \\end{equation}</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// This is implemented using explicit expressions exported from the Mathematica</span>
+<span class=
+"doccomment">/// package [Package-X](https://packagex.hepforge.org/)</span>
+<span class=
+"doccomment">/// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been</span>
+<span class=
+"doccomment">/// implemented for the scalar loop function, and where one of `r`, `n1`, `n2`</span>
+<span class="doccomment">/// or `n3` is `1`.</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// Note that higher order functions will generally be less accurate as the code</span>
+<span class=
+"doccomment">/// does not check for numerical stability.</span>
 <span class="attribute">#[<span class=
 "ident">allow</span>(<span class=
 "ident">clippy</span>::<span class="ident">too_many_arguments</span>)]</span>
@@ -500,7 +537,28 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">s23</span>, <span class="ident">m0</span>, <span class=
 "ident">m1</span>, <span class="ident">m2</span>, <span class=
 "ident">m3</span>);
+    <span class="ident">d_internal</span>(<span class=
+"ident">r</span>, <span class="ident">n1</span>, <span class=
+"ident">n2</span>, <span class="ident">n3</span>, <span class=
+"kw-2">&</span><span class="ident">param</span>)
+}
 
+<span class=
+"doccomment">/// Internal implementation of the coefficient function which uses precomputed</span>
+<span class=
+"doccomment">/// internal variables shared across recursive calls.</span>
+<span class="doccomment">///</span>
+<span class=
+"doccomment">/// All checks for the validity of input parameters should be already done.</span>
+<span class="kw">fn</span> <span class=
+"ident">d_internal</span>(<span class=
+"ident">r</span>: <span class="ident">i32</span>, <span class=
+"ident">n1</span>: <span class="ident">i32</span>, <span class=
+"ident">n2</span>: <span class="ident">i32</span>, <span class=
+"ident">n3</span>: <span class="ident">i32</span>, <span class=
+"ident">param</span>: <span class="kw-2">&</span><span class=
+"ident">Parameters</span>) <span class="op">-</span><span class=
+"op">&gt;</span> <span class="ident">f64</span> {
     <span class="kw">match</span> (<span class=
 "ident">r</span>, <span class="ident">n1</span>, <span class=
 "ident">n2</span>, <span class="ident">n3</span>) {
