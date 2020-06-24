@@ -352,7 +352,7 @@ If[MemberQ[sections, "particle_physics/statistics"],
     Flatten[
       Table[{0, mu, beta},
       {mu, RealSample[200]},
-      {beta, PositiveSample[200]}],
+      {beta, Select[# > 0&] @ PositiveSample[200]}],
       {{1, 2}}
     ]
   ];
@@ -372,7 +372,7 @@ If[MemberQ[sections, "particle_physics/statistics"],
     Flatten[
       Table[{m, 0, beta},
       {m, PositiveSample[200]},
-      {beta, RealSample[200]}],
+      {beta, Select[# > 0&] @ PositiveSample[200]}],
       {{1, 2}}
     ]
   ];
