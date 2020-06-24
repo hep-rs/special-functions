@@ -485,7 +485,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     FileNameJoin[{dir, "log_diff.csv"}],
     {"a", "b", "log_diff"},
     Function[{a, b}, {
-        a, b, Log[(a + b) / (a - b)]
+        a, b, Log @ Abs[(a + b) / (a - b)]
       }],
     Flatten[
       Table[{a, b},
@@ -500,7 +500,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "m0", "a"},
     Function[{r, m0}, {
         r, m0,
-        discPVA[r, m0]
+        Re @ discPVA[r, m0]
       }],
     Flatten[
       Table[{r, m0},
@@ -516,7 +516,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "n1", "s", "m0", "m1", "b"},
     Function[{r, n1, s, m0, m1}, {
         r, n1, s, m0, m1,
-        discPVB[Round@r, Round@n1, s, m0, m1]
+        Re @ discPVB[Round@r, Round@n1, s, m0, m1]
       }],
     SeedRandom[123454321];
     RandomAccessSample[10^6,
@@ -535,7 +535,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "n1", "n2", "s1", "s12", "s2", "m0", "m1", "m2", "c"},
     Function[{r, n1, n2, s1, s12, s2, m0, m1, m2}, {
         r, n1, n2, s1, s12, s2, m0, m1, m2,
-        discPVC[Round@r, Round@n1, Round@n2, s1, s12, s2, m0, m1, m2]
+        Re @ discPVC[Round@r, Round@n1, Round@n2, s1, s12, s2, m0, m1, m2]
       }],
     SeedRandom[123454321];
     RandomAccessSample[10^6,
@@ -558,7 +558,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     {"r", "n1", "n2", "n3", "s1", "s2", "s3", "s4", "s12", "s23", "m0", "m1", "m2", "m3", "d"},
     Function[{r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}, {
         r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3,
-        discPVD[Round@r, Round@n1, Round@n2, Round@n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]
+        Re @ discPVD[Round@r, Round@n1, Round@n2, Round@n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3]
       }
     ]
     ,
