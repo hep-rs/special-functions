@@ -1,12 +1,13 @@
 use criterion::{black_box, Criterion};
 use rand::prelude::*;
 use special_functions::bessel;
+use std::fs::File;
 
 pub fn bessel_i(c: &mut Criterion) {
     let mut group = c.benchmark_group("Bessel I");
 
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/i.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/bessel/i.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 11] = x.unwrap();
@@ -43,8 +44,8 @@ pub fn bessel_i(c: &mut Criterion) {
 pub fn bessel_j(c: &mut Criterion) {
     let mut group = c.benchmark_group("Bessel J");
 
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/j.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/bessel/j.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 11] = x.unwrap();
@@ -81,8 +82,8 @@ pub fn bessel_j(c: &mut Criterion) {
 pub fn bessel_k(c: &mut Criterion) {
     let mut group = c.benchmark_group("Bessel K");
 
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/k.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/bessel/k.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 11] = x.unwrap();
@@ -121,8 +122,8 @@ pub fn bessel_k(c: &mut Criterion) {
 pub fn bessel_y(c: &mut Criterion) {
     let mut group = c.benchmark_group("Bessel Y");
 
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/bessel/y.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/bessel/y.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 11] = x.unwrap();

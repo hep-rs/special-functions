@@ -1,10 +1,11 @@
 use criterion::{black_box, Criterion};
 use rand::prelude::*;
 use special_functions::other;
+use std::fs::File;
 
 pub fn harmonic_number(c: &mut Criterion) {
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/other/harmonic_number.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/other/harmonic_number.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 2] = x.unwrap();
@@ -23,8 +24,8 @@ pub fn harmonic_number(c: &mut Criterion) {
 }
 
 pub fn gamma(c: &mut Criterion) {
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/other/gamma.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/other/gamma.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 2] = x.unwrap();
@@ -43,8 +44,8 @@ pub fn gamma(c: &mut Criterion) {
 }
 
 pub fn binomial(c: &mut Criterion) {
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/other/binomial.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/other/binomial.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 3] = x.unwrap();
@@ -65,8 +66,8 @@ pub fn binomial(c: &mut Criterion) {
 pub fn polylog(c: &mut Criterion) {
     let mut group = c.benchmark_group("Polylog");
 
-    let mut data: Vec<_> = csv::Reader::from_path("tests/data/other/polylog.csv")
-        .unwrap()
+    let mut f = File::open("tests/data/other/polylog.csv.zst").unwrap();
+    let mut data: Vec<_> = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f).unwrap())
         .into_deserialize()
         .map(|x| {
             let x: [f64; 11] = x.unwrap();
