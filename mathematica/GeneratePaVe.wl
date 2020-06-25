@@ -229,7 +229,8 @@ Do[
 "#[rustfmt::skip]
 pub(crate) fn c`r``n1``n2`(param: &Parameters) -> f64 {
     `disc`
-}"][<|
+}
+"][<|
         "r" -> r,
         "n1" -> n1,
         "n2" -> n2,
@@ -321,7 +322,8 @@ Do[
 "#[rustfmt::skip]
 pub(crate) fn d`r``n1``n2``n3`(param: &Parameters) -> f64 {
     `disc`
-}"][<|
+}
+"][<|
         "r" -> r,
         "n1" -> n1,
         "n2" -> n2,
