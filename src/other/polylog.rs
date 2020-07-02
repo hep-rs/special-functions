@@ -97,9 +97,9 @@ mod tests {
                     let nyi = fi(x);
                     // println!("Li{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
                     if (i == 0 || i == 1) && (1.0 - x).abs() < 1e-7 {
-                        approx_eq(nyi, yi, 4.0, 10f64.powi(-15));
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-15))?;
                     } else {
-                        approx_eq(nyi, yi, 8.0, 10f64.powi(-15));
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-15))?;
                     }
                 }
             }

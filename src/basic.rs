@@ -24,7 +24,7 @@ mod tests {
                 if !yi.is_nan() {
                     let nyi = fi(x);
                     // println!("Trig{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                 }
             }
         }

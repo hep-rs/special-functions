@@ -127,14 +127,14 @@ mod tests {
                 //     r, n1, s, m0, m1, ny, y
                 // );
                 match (r, n1) {
-                    (0, n1) if n1 < 5 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
-                    (0, 5) => approx_eq(ny, y, 7.0, 10f64.powi(-200)),
-                    (1, n1) if n1 < 4 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
-                    (1, 4) => approx_eq(ny, y, 6.0, 10f64.powi(-200)),
-                    (1, 5) => approx_eq(ny, y, 5.0, 10f64.powi(-200)),
-                    (2, _) => approx_eq(ny, y, 4.0, 10f64.powi(-200)),
-                    (3, 0) | (3, 1) => approx_eq(ny, y, 2.0, 10f64.powi(-200)),
-                    (3, _) | (4, _) | (5, _) => continue,
+                    (0, n1) if n1 < 5 => approx_eq(ny, y, 8.0, 10f64.powi(-200))?,
+                    (0, 5) => approx_eq(ny, y, 7.0, 10f64.powi(-200))?,
+                    (1, n1) if n1 < 4 => approx_eq(ny, y, 8.0, 10f64.powi(-200))?,
+                    (1, 4) => approx_eq(ny, y, 6.0, 10f64.powi(-200))?,
+                    (1, 5) => approx_eq(ny, y, 5.0, 10f64.powi(-200))?,
+                    (2, _) => approx_eq(ny, y, 4.0, 10f64.powi(-200))?,
+                    (3, 0) | (3, 1) => approx_eq(ny, y, 2.0, 10f64.powi(-200))?,
+                    (3, _) | (4, _) | (5, _) => (),
                     _ => unreachable!(),
                 }
             }

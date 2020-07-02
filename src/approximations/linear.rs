@@ -43,35 +43,37 @@ pub fn linear(data: &[(f64, f64)], x: f64) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
-    use std::f64;
+    use std::{error, f64};
 
     pub(crate) const DATA: [(f64, f64); 4] = [(0.0, 0.0), (1.0, 1.0), (10.0, 0.0), (20.0, 1.0)];
 
     #[allow(clippy::float_cmp)]
     #[test]
-    fn linear() {
+    fn linear() -> Result<(), Box<dyn error::Error>> {
         for i in 0..1_001 {
             let x = i as f64 / 1_000.0;
             let y = i as f64 / 1_000.0;
-            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0)?;
         }
 
         for i in 1_000..10_001 {
             let x = i as f64 / 1_000.0;
             let y = (10_000 - i) as f64 / 9_000.0;
-            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0)?;
         }
 
         for i in 10_000..20_001 {
             let x = i as f64 / 1_000.0;
             let y = (i - 10_000) as f64 / 10_000.0;
-            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0);
+            approx_eq(super::linear(&DATA, x), y, 8.0, 0.0)?;
         }
 
         assert_eq!(super::linear(&DATA, f64::NEG_INFINITY), 0.0);
         assert_eq!(super::linear(&DATA, -100.0), 0.0);
         assert_eq!(super::linear(&DATA, 100.0), 1.0);
         assert_eq!(super::linear(&DATA, f64::INFINITY), 1.0);
+
+        Ok(())
     }
 }
 

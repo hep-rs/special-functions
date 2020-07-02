@@ -98,7 +98,7 @@ mod tests {
             if !y.is_nan() {
                 let ny = f(a, b);
                 // println!("log_diff({:e}, {:e}) = {:e} [{:e}]", a, b, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))
+                approx_eq(ny, y, 8.0, 10f64.powi(-200))?
             }
         }
 

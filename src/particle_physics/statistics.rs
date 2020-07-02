@@ -123,7 +123,7 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(mu, beta);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                 }
             }
         }
@@ -156,7 +156,7 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(m, beta);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                 }
             }
         }

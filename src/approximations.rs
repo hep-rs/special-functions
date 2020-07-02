@@ -338,6 +338,7 @@ macro_rules! approx_fn {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
+    use std::error;
 
     pub(crate) const COEFFICIENTS: [f64; 10] = [
         -0.069_933_1,
@@ -421,17 +422,19 @@ mod tests {
     }
 
     #[test]
-    fn polynomial() {
+    fn polynomial() -> Result<(), Box<dyn error::Error>> {
         for n in 0..=COEFFICIENTS.len() {
             for x in -100..=100 {
                 let x = x as f64;
-                approx_eq(super::polynomial(x, &COEFFICIENTS[..n]), f(n, x), 8.0, 0.0);
+                approx_eq(super::polynomial(x, &COEFFICIENTS[..n]), f(n, x), 8.0, 0.0)?;
             }
         }
+
+        Ok(())
     }
 
     #[test]
-    fn ratio() {
+    fn ratio() -> Result<(), Box<dyn error::Error>> {
         for n in 0..=COEFFICIENTS.len() {
             for m in 1..=COEFFICIENTS.len() {
                 for x in -100..=100 {
@@ -441,10 +444,12 @@ mod tests {
                         f(n, x) / f(m, x),
                         8.0,
                         0.0,
-                    );
+                    )?;
                 }
             }
         }
+
+        Ok(())
     }
 
     fn f_chebyshev(n: usize, x: f64) -> f64 {
@@ -472,7 +477,7 @@ mod tests {
     }
 
     #[test]
-    fn chebyshev() {
+    fn chebyshev() -> Result<(), Box<dyn error::Error>> {
         for n in 0..=10 {
             let c: Vec<_> = std::iter::repeat(0.0)
                 .take(n)
@@ -486,8 +491,10 @@ mod tests {
                     f_chebyshev(n, x),
                     8.0,
                     0.0,
-                );
+                )?;
             }
         }
+
+        Ok(())
     }
 }

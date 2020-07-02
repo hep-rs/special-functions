@@ -146,7 +146,7 @@ mod tests {
                 //     "C({}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
                 //     r, n1, n2, s1, s12, s2, m0, m1, m2, ny, y
                 // );
-                approx_eq(ny, y, 4.0, 10f64.powi(-200))
+                approx_eq(ny, y, 4.0, 10f64.powi(-200))?
             }
         }
 

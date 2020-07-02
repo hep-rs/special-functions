@@ -407,7 +407,7 @@ mod tests {
                 if !yi.is_nan() {
                     let nyi = fi(x);
                     // println!("I{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                 }
             }
         }
@@ -445,10 +445,10 @@ mod tests {
                     let nyi = fi(x);
                     // println!("J{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
                     if x.abs() < 1e6 {
-                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                     } else {
                         // The error for large x is large due to cos/sin
-                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200));
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200))?;
                     }
                 }
             }
@@ -486,7 +486,7 @@ mod tests {
                 if !yi.is_nan() {
                     let nyi = fi(x);
                     // println!("K{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                 }
             }
         }
@@ -524,10 +524,10 @@ mod tests {
                     let nyi = fi(x);
                     // println!("Y{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
                     if x < 1e2 {
-                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200));
+                        approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
                     } else {
                         // The error for large x is large due to cos/sin
-                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200));
+                        approx_eq(nyi, yi, 4.0, 10f64.powi(-200))?;
                     }
                 }
             }
@@ -547,7 +547,7 @@ mod tests {
             if !y.is_nan() {
                 let ny = super::k1_on_k2(x);
                 // println!("K₁ / K₂({:e}) = {:e} [{:e}]", x, ny, y);
-                approx_eq(ny, y, 8.0, 0.0);
+                approx_eq(ny, y, 8.0, 0.0)?;
             }
         }
 

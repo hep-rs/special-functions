@@ -66,10 +66,11 @@ pub fn kallen_lambda_sqrt(a: f64, b: f64, c: f64) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::utilities::test::*;
+    use std::error;
 
     #[allow(clippy::float_cmp)]
     #[test]
-    fn kallen_lambda() {
+    fn kallen_lambda() -> Result<(), Box<dyn error::Error>> {
         let (mut a, b, c) = (1.0, 2.0, 3.0);
         assert_eq!(super::kallen_lambda(a, b, c), -8.0);
 
@@ -80,69 +81,71 @@ mod tests {
         assert_eq!(super::kallen_lambda(a, b, c), super::kallen_lambda(c, b, a));
 
         a = 10.0;
-        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1.0, 12.0, 0.0);
+        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1.0, 12.0, 0.0)?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(a, c, b),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(b, a, c),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(b, c, a),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(c, a, b),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(c, b, a),
             12.0,
             0.0,
-        );
+        )?;
 
         a = 1e16;
-        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1e16, 12.0, 0.0);
+        approx_eq(super::kallen_lambda_sqrt(a, b, c), 1e16, 12.0, 0.0)?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(a, c, b),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(b, a, c),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(b, c, a),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(c, a, b),
             12.0,
             0.0,
-        );
+        )?;
         approx_eq(
             super::kallen_lambda_sqrt(a, b, c),
             super::kallen_lambda_sqrt(c, b, a),
             12.0,
             0.0,
-        );
+        )?;
+
+        Ok(())
     }
 }
