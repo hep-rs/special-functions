@@ -187,6 +187,8 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="111">111</span>
 <span id="112">112</span>
 <span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
 </pre>
 <div class="example-wrap">
 <pre class="rust">
@@ -301,7 +303,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">utilities</span>::<span class=
 "ident">test</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class=
-"ident">std</span>::<span class="ident">f64</span>;
+"ident">std</span>::{<span class="ident">error</span>, <span class=
+"ident">f64</span>};
 
     <span class="kw">pub</span>(<span class=
 "kw">crate</span>) <span class="kw">const</span> <span class=
@@ -317,7 +320,12 @@ autocomplete="off" spellcheck="false" placeholder=
     <span class="attribute">#[<span class=
 "ident">test</span>]</span>
     <span class="kw">fn</span> <span class=
-"ident">linear</span>() {
+"ident">linear</span>() <span class="op">-</span><span class=
+"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
+"op">&lt;</span>(), <span class="ident">Box</span><span class=
+"op">&lt;</span><span class="kw">dyn</span> <span class=
+"ident">error</span>::<span class="ident">Error</span><span class=
+"op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">for</span> <span class=
 "ident">i</span> <span class="kw">in</span> <span class=
 "number">0</span>..<span class="number">1_001</span> {
@@ -335,7 +343,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "kw">super</span>::<span class="ident">linear</span>(<span class=
 "kw-2">&</span><span class="ident">DATA</span>, <span class=
 "ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>);
+"number">8.0</span>, <span class="number">0.0</span>)<span class=
+"question-mark">?</span>;
         }
 
         <span class="kw">for</span> <span class=
@@ -356,7 +365,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "kw">super</span>::<span class="ident">linear</span>(<span class=
 "kw-2">&</span><span class="ident">DATA</span>, <span class=
 "ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>);
+"number">8.0</span>, <span class="number">0.0</span>)<span class=
+"question-mark">?</span>;
         }
 
         <span class="kw">for</span> <span class=
@@ -377,7 +387,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "kw">super</span>::<span class="ident">linear</span>(<span class=
 "kw-2">&</span><span class="ident">DATA</span>, <span class=
 "ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>);
+"number">8.0</span>, <span class="number">0.0</span>)<span class=
+"question-mark">?</span>;
         }
 
         <span class="macro">assert_eq</span><span class=
@@ -400,6 +411,8 @@ autocomplete="off" spellcheck="false" placeholder=
 "ident">linear</span>(<span class="kw-2">&</span><span class=
 "ident">DATA</span>, <span class="ident">f64</span>::<span class=
 "ident">INFINITY</span>), <span class="number">1.0</span>);
+
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
