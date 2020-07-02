@@ -98,7 +98,7 @@ mod benches {
                     for i in 0..100_001 {
                         let x = i as f64 / 100_000.0;
                         let y = i as f64 / 100_000.0;
-                        approx_eq(super::linear(&data, x), y, 8.0, 0.0);
+                        approx_eq(super::linear(&data, x), y, 8.0, 0.0).unwrap();
                     }
                 });
             }

@@ -1,4 +1,9 @@
-/// Particle Statistics
+//! Particle Statistics
+//!
+//! Compute Bose-Einstein and Fermi-Dirac integrals, in both massive (\\(\mu =
+//! 0\\)) and massless (\\(\mu \in \mathbb{R}\\)) cases as well as normalized to
+//! a single massless bosonic degree of freedom for the massive case.
+
 use std::{convert::identity, f64};
 
 mod bose_einstein_massive;
