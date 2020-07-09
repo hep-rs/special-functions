@@ -1,80 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/other/polylog/li4.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>li4.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href=
-"../../../../normalize.css">
-<link rel="stylesheet" type="text/css" href=
-"../../../../rustdoc.css" id="mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../../../light.css"
-id="themeStyle">
-<script src="../../../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/other/polylog/li4.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>li4.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script src="../../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../../../special_functions/index.html'>
-<div class='logo-container'><img src='../../../../rust-logo.png'
-alt='logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../../../brush.svg" width="18"
-alt="Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../../../settings.html"><img src=
-"../../../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">  1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../../special_functions/index.html'><div class='logo-container'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -623,132 +616,77 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="547">547</span>
 <span id="548">548</span>
 <span id="549">549</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
-<span class="attribute">#![<span class=
-"ident">allow</span>(<span class=
-"ident">clippy</span>::<span class="ident">all</span>)]</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">all</span>)]</span>
 
-<span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">approximations</span>::<span class=
-"ident">polynomial</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">approximations</span>::<span class="ident">polynomial</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">lower</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
     <span class="ident">polynomial</span>(
-        <span class="ident">x</span>.<span class=
-"ident">recip</span>(),
-        <span class="kw-2">&</span>[
-            <span class="op">-</span><span class=
-"number">1.894065658994492</span>,
-            <span class="op">-</span><span class=
-"number">1.</span>,
-            <span class="op">-</span><span class=
-"number">0.0625</span>,
-            <span class="op">-</span><span class=
-"number">0.01234567901234568</span>,
-            <span class="op">-</span><span class=
-"number">0.00390625</span>,
-            <span class="op">-</span><span class=
-"number">0.0016</span>,
-            <span class="op">-</span><span class=
-"number">0.0007716049382716049</span>,
-            <span class="op">-</span><span class=
-"number">0.0004164931278633903</span>,
-            <span class="op">-</span><span class=
-"number">0.000244140625</span>,
-            <span class="op">-</span><span class=
-"number">0.0001524157902758726</span>,
-            <span class="op">-</span><span class=
-"number">0.0001</span>,
+        <span class="ident">x</span>.<span class="ident">recip</span>(),
+        <span class="kw-2">&amp;</span>[
+            <span class="op">-</span><span class="number">1.894065658994492</span>,
+            <span class="op">-</span><span class="number">1.</span>,
+            <span class="op">-</span><span class="number">0.0625</span>,
+            <span class="op">-</span><span class="number">0.01234567901234568</span>,
+            <span class="op">-</span><span class="number">0.00390625</span>,
+            <span class="op">-</span><span class="number">0.0016</span>,
+            <span class="op">-</span><span class="number">0.0007716049382716049</span>,
+            <span class="op">-</span><span class="number">0.0004164931278633903</span>,
+            <span class="op">-</span><span class="number">0.000244140625</span>,
+            <span class="op">-</span><span class="number">0.0001524157902758726</span>,
+            <span class="op">-</span><span class="number">0.0001</span>,
         ],
-    ) <span class="op">+</span> <span class=
-"ident">polynomial</span>(
-        (<span class="op">-</span><span class=
-"ident">x</span>).<span class="ident">ln</span>(),
-        <span class="kw-2">&</span>[<span class=
-"number">0.0</span>, <span class="number">0.0</span>, <span class=
-"op">-</span><span class=
-"number">0.8224670334241132</span>, <span class=
-"number">0.0</span>, <span class="op">-</span><span class=
-"number">0.04166666666666667</span>],
+    ) <span class="op">+</span> <span class="ident">polynomial</span>(
+        (<span class="op">-</span><span class="ident">x</span>).<span class="ident">ln</span>(),
+        <span class="kw-2">&amp;</span>[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="op">-</span><span class="number">0.8224670334241132</span>, <span class="number">0.0</span>, <span class="op">-</span><span class="number">0.04166666666666667</span>],
     )
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">upper</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">=</span><span class=
-"op">=</span> <span class="number">1.0</span> {
-        <span class="kw">return</span> <span class=
-"number">1.082323233711138</span>;
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upper</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">1.0</span> {
+        <span class="kw">return</span> <span class="number">1.082323233711138</span>;
     }
 
-    <span class="kw">let</span> <span class=
-"ident">xm1</span> <span class="op">=</span> <span class=
-"ident">x</span> <span class="op">-</span> <span class=
-"number">1.0</span>;
-    <span class="kw">let</span> <span class=
-"ident">ln</span> <span class="op">=</span> (<span class=
-"op">-</span><span class="ident">xm1</span>).<span class=
-"ident">ln</span>();
+    <span class="kw">let</span> <span class="ident">xm1</span> <span class="op">=</span> <span class="ident">x</span> <span class="op">-</span> <span class="number">1.0</span>;
+    <span class="kw">let</span> <span class="ident">ln</span> <span class="op">=</span> (<span class="op">-</span><span class="ident">xm1</span>).<span class="ident">ln</span>();
     <span class="ident">polynomial</span>(
         <span class="ident">xm1</span>,
-        <span class="kw-2">&</span>[
+        <span class="kw-2">&amp;</span>[
             <span class="number">1.082323233711138</span>,
             <span class="number">1.202056903159594</span>,
             <span class="number">0.2214385818443161</span>,
-            <span class="op">-</span><span class=
-"number">0.1162258434820262</span>,
+            <span class="op">-</span><span class="number">0.1162258434820262</span>,
             <span class="number">0.05758055484887188</span>,
-            <span class="op">-</span><span class=
-"number">0.02900559166595327</span>,
+            <span class="op">-</span><span class="number">0.02900559166595327</span>,
             <span class="number">0.01418764713508712</span>,
-            <span class="op">-</span><span class=
-"number">0.006028318183603879</span>,
+            <span class="op">-</span><span class="number">0.006028318183603879</span>,
             <span class="number">0.001332628810720929</span>,
             <span class="number">0.001448207632398665</span>,
-            <span class="op">-</span><span class=
-"number">0.003117737499542576</span>,
+            <span class="op">-</span><span class="number">0.003117737499542576</span>,
         ],
     ) <span class="op">+</span> <span class="ident">ln</span>
-        <span class="op">*</span> <span class=
-"ident">polynomial</span>(
+        <span class="op">*</span> <span class="ident">polynomial</span>(
             <span class="ident">xm1</span>,
-            <span class="kw-2">&</span>[
+            <span class="kw-2">&amp;</span>[
                 <span class="number">0.0</span>,
                 <span class="number">0.0</span>,
                 <span class="number">0.0</span>,
-                <span class="op">-</span><span class=
-"number">0.1666666666666667</span>,
+                <span class="op">-</span><span class="number">0.1666666666666667</span>,
                 <span class="number">0.25</span>,
-                <span class="op">-</span><span class=
-"number">0.2916666666666667</span>,
+                <span class="op">-</span><span class="number">0.2916666666666667</span>,
                 <span class="number">0.3125</span>,
-                <span class="op">-</span><span class=
-"number">0.3222222222222222</span>,
+                <span class="op">-</span><span class="number">0.3222222222222222</span>,
                 <span class="number">0.3256944444444444</span>,
-                <span class="op">-</span><span class=
-"number">0.3255180776014109</span>,
+                <span class="op">-</span><span class="number">0.3255180776014109</span>,
                 <span class="number">0.3231646825396825</span>,
             ],
         )
 }
 
-<span class="kw">pub</span> <span class=
-"kw">const</span> <span class=
-"ident">COEFFICIENTS</span>: [<span class=
-"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
-"number">14</span>] <span class="op">=</span> [
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">6.071195813576371</span>,
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="kw-2">&amp;</span>[<span class="ident">f64</span>]; <span class="number">14</span>] <span class="op">=</span> [
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">6.071195813576371</span>,
         <span class="number">0.8050497150822387</span>,
         <span class="number">0.00867537141112303</span>,
         <span class="number">0.0002094132014971287</span>,
@@ -780,9 +718,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">4.270666000925262e-37</span>,
         <span class="number">2.718227863718206e-38</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">4.382064720281745</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">4.382064720281745</span>,
         <span class="number">0.8869140630300216</span>,
         <span class="number">0.01209330338963492</span>,
         <span class="number">0.0003847945884473765</span>,
@@ -814,9 +751,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">3.75983695301404e-33</span>,
         <span class="number">3.331983932167513e-34</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">3.001265860175611</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">3.001265860175611</span>,
         <span class="number">0.4854805732664833</span>,
         <span class="number">0.004177090001432451</span>,
         <span class="number">0.00008782594545544365</span>,
@@ -848,9 +784,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">7.699732968435691e-38</span>,
         <span class="number">4.835131083921976e-39</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">1.992929196868225</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">1.992929196868225</span>,
         <span class="number">0.524007628367897</span>,
         <span class="number">0.005565223468250864</span>,
         <span class="number">0.0001517726679922159</span>,
@@ -882,9 +817,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">5.961363289003637e-34</span>,
         <span class="number">5.207522138891716e-35</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">1.184081251009315</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">1.184081251009315</span>,
         <span class="number">0.2809171864294252</span>,
         <span class="number">0.001831754429560943</span>,
         <span class="number">0.00003242495194692033</span>,
@@ -916,9 +850,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">1.061998413931818e-38</span>,
         <span class="number">6.563093110750828e-40</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">0.6061622729971256</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">0.6061622729971256</span>,
         <span class="number">0.2974128259370967</span>,
         <span class="number">0.002326775757053033</span>,
         <span class="number">0.00005241012277050427</span>,
@@ -950,9 +883,8 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">7.043578230955678e-35</span>,
         <span class="number">6.041788131324188e-36</span>,
     ],
-    <span class="kw-2">&</span>[
-        <span class="op">-</span><span class=
-"number">0.1506513449237317</span>,
+    <span class="kw-2">&amp;</span>[
+        <span class="op">-</span><span class="number">0.1506513449237317</span>,
         <span class="number">0.1564354321390055</span>,
         <span class="number">0.0007286024480822763</span>,
         <span class="number">0.00001043039124555722</span>,
@@ -984,7 +916,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">1.047333311002877e-39</span>,
         <span class="number">6.33154432016503e-41</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.1684983791412165</span>,
         <span class="number">0.1628419418367772</span>,
         <span class="number">0.000882200742532749</span>,
@@ -1017,7 +949,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">5.586309271630046e-36</span>,
         <span class="number">4.662481149039182e-37</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.4162654597473871</span>,
         <span class="number">0.08428696064603682</span>,
         <span class="number">0.0002630695452627871</span>,
@@ -1050,7 +982,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">6.306286339697758e-41</span>,
         <span class="number">3.678703285423155e-42</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.5870665880082436</span>,
         <span class="number">0.08654850640637927</span>,
         <span class="number">0.0003043567289043127</span>,
@@ -1083,7 +1015,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">2.365203609414868e-37</span>,
         <span class="number">1.883489699695689e-38</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.7627763709941465</span>,
         <span class="number">0.08921210872301337</span>,
         <span class="number">0.0003655753907907393</span>,
@@ -1116,7 +1048,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">4.594719012191159e-32</span>,
         <span class="number">5.776419844754059e-33</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.8980470269756599</span>,
         <span class="number">0.04579450866129648</span>,
         <span class="number">0.0001094453756774894</span>,
@@ -1149,7 +1081,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">1.906786524061603e-34</span>,
         <span class="number">2.106130586260472e-35</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.967165231304344</span>,
         <span class="number">0.02324349721859447</span>,
         <span class="number">0.00003081003507286026</span>,
@@ -1182,7 +1114,7 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="number">7.941648499022731e-38</span>,
         <span class="number">7.06562678257035e-39</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.013908474163866</span>,
         <span class="number">0.0235024815698447</span>,
         <span class="number">0.00003410143205330296</span>,
@@ -1217,24 +1149,14 @@ autocomplete="off" spellcheck="false" placeholder=
     ],
 ];
 
-<span class="kw">pub</span> <span class=
-"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
-"ident">f64</span>; <span class="number">15</span>] <span class=
-"op">=</span> [
-    <span class="op">-</span><span class=
-"number">9.2338976446268</span>,
-    <span class="op">-</span><span class=
-"number">6.684816721427354</span>,
-    <span class="op">-</span><span class=
-"number">4.135735798227904</span>,
-    <span class="op">-</span><span class=
-"number">2.861195336628179</span>,
-    <span class="op">-</span><span class=
-"number">1.586654875028453</span>,
-    <span class="op">-</span><span class=
-"number">0.949384644228591</span>,
-    <span class="op">-</span><span class=
-"number">0.3121144134287283</span>,
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SPLITS</span>: [<span class="ident">f64</span>; <span class="number">15</span>] <span class="op">=</span> [
+    <span class="op">-</span><span class="number">9.2338976446268</span>,
+    <span class="op">-</span><span class="number">6.684816721427354</span>,
+    <span class="op">-</span><span class="number">4.135735798227904</span>,
+    <span class="op">-</span><span class="number">2.861195336628179</span>,
+    <span class="op">-</span><span class="number">1.586654875028453</span>,
+    <span class="op">-</span><span class="number">0.949384644228591</span>,
+    <span class="op">-</span><span class="number">0.3121144134287283</span>,
     <span class="number">0.006520701971203025</span>,
     <span class="number">0.3251558173711343</span>,
     <span class="number">0.4844733750711</span>,
@@ -1245,15 +1167,4 @@ autocomplete="off" spellcheck="false" placeholder=
     <span class="number">0.962426048170997</span>,
 ];
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../../../main.js"></script>
-<script src="../../../../source-script.js"></script>
-<script src="../../../../source-files.js"></script>
-<script defer src="../../../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../../";window.currentCrate = "special_functions";</script><script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script><script defer src="../../../../search-index.js"></script></body></html>

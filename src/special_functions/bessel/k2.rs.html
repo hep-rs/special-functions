@@ -1,80 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/bessel/k2.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>k2.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href=
-"../../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
-id="mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../../light.css"
-id="themeStyle">
-<script src="../../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/bessel/k2.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>k2.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../../special_functions/index.html'>
-<div class='logo-container'><img src='../../../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../../settings.html"><img src=
-"../../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">   1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1187,37 +1180,20 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="1111">1111</span>
 <span id="1112">1112</span>
 <span id="1113">1113</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
-<span class="attribute">#![<span class=
-"ident">allow</span>(<span class=
-"ident">clippy</span>::<span class="ident">all</span>)]</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">all</span>)]</span>
 
-<span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">approximations</span>::<span class=
-"ident">polynomial</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">approximations</span>::<span class="ident">polynomial</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">lower</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">let</span> <span class=
-"ident">x2</span> <span class="op">=</span> <span class=
-"ident">x</span>.<span class="ident">powi</span>(<span class=
-"number">2</span>);
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lower</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">let</span> <span class="ident">x2</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>);
 
-    <span class="ident">x</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">2</span>)
-        <span class="op">*</span> <span class=
-"ident">polynomial</span>(
+    <span class="ident">x</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">2</span>)
+        <span class="op">*</span> <span class="ident">polynomial</span>(
             <span class="ident">x2</span>,
-            <span class="kw-2">&</span>[
+            <span class="kw-2">&amp;</span>[
                 <span class="number">2.</span>,
-                <span class="op">-</span><span class=
-"number">0.5</span>,
+                <span class="op">-</span><span class="number">0.5</span>,
                 <span class="number">0.1082414394573016</span>,
                 <span class="number">0.01596456439921957</span>,
                 <span class="number">0.0006209629499756117</span>,
@@ -1225,1559 +1201,1066 @@ autocomplete="off" spellcheck="false" placeholder=
                 <span class="number">1.346502336473863e-7</span>,
             ],
         )
-        <span class="op">+</span> <span class=
-"ident">x</span>.<span class="ident">powi</span>(<span class=
-"number">2</span>)
-            <span class="op">*</span> <span class=
-"ident">x</span>.<span class="ident">ln</span>()
-            <span class="op">*</span> <span class=
-"ident">polynomial</span>(
+        <span class="op">+</span> <span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>)
+            <span class="op">*</span> <span class="ident">x</span>.<span class="ident">ln</span>()
+            <span class="op">*</span> <span class="ident">polynomial</span>(
                 <span class="ident">x2</span>,
-                <span class="kw-2">&</span>[
-                    <span class="op">-</span><span class=
-"number">0.125</span>,
-                    <span class="op">-</span><span class=
-"number">0.01041666666666667</span>,
-                    <span class="op">-</span><span class=
-"number">0.0003255208333333333</span>,
-                    <span class="op">-</span><span class=
-"number">5.425347222222222e-6</span>,
-                    <span class="op">-</span><span class=
-"number">5.651403356481481e-8</span>,
+                <span class="kw-2">&amp;</span>[
+                    <span class="op">-</span><span class="number">0.125</span>,
+                    <span class="op">-</span><span class="number">0.01041666666666667</span>,
+                    <span class="op">-</span><span class="number">0.0003255208333333333</span>,
+                    <span class="op">-</span><span class="number">5.425347222222222e-6</span>,
+                    <span class="op">-</span><span class="number">5.651403356481481e-8</span>,
                 ],
             )
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">upper</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    (<span class="op">-</span><span class=
-"ident">x</span>).<span class="ident">exp</span>() <span class=
-"op">/</span> <span class="ident">x</span>.<span class=
-"ident">sqrt</span>()
-        <span class="op">*</span> <span class=
-"ident">polynomial</span>(
-            <span class="ident">x</span>.<span class=
-"ident">recip</span>(),
-            <span class="kw-2">&</span>[
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upper</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    (<span class="op">-</span><span class="ident">x</span>).<span class="ident">exp</span>() <span class="op">/</span> <span class="ident">x</span>.<span class="ident">sqrt</span>()
+        <span class="op">*</span> <span class="ident">polynomial</span>(
+            <span class="ident">x</span>.<span class="ident">recip</span>(),
+            <span class="kw-2">&amp;</span>[
                 <span class="number">1.2533141373155</span>,
                 <span class="number">2.349964007466563</span>,
                 <span class="number">1.028109253266621</span>,
-                <span class="op">-</span><span class=
-"number">0.385540969974983</span>,
+                <span class="op">-</span><span class="number">0.385540969974983</span>,
                 <span class="number">0.3975891252867012</span>,
-                <span class="op">-</span><span class=
-"number">0.6460823285908895</span>,
+                <span class="op">-</span><span class="number">0.6460823285908895</span>,
                 <span class="number">1.413305093792571</span>,
-                <span class="op">-</span><span class=
-"number">3.861351416968988</span>,
+                <span class="op">-</span><span class="number">3.861351416968988</span>,
                 <span class="number">12.60972572103935</span>,
-                <span class="op">-</span><span class=
-"number">47.8118766922742</span>,
+                <span class="op">-</span><span class="number">47.8118766922742</span>,
             ],
         )
 }
 
-<span class="kw">pub</span> <span class=
-"kw">const</span> <span class=
-"ident">COEFFICIENTS</span>: [<span class=
-"kw-2">&</span>[<span class="ident">f64</span>]; <span class=
-"number">31</span>] <span class="op">=</span> [
-    <span class="kw-2">&</span>[
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">COEFFICIENTS</span>: [<span class="kw-2">&amp;</span>[<span class="ident">f64</span>]; <span class="number">31</span>] <span class="op">=</span> [
+    <span class="kw-2">&amp;</span>[
         <span class="number">12.42430000434126</span>,
-        <span class="op">-</span><span class=
-"number">3.778810612640002</span>,
+        <span class="op">-</span><span class="number">3.778810612640002</span>,
         <span class="number">0.4188327378191376</span>,
-        <span class="op">-</span><span class=
-"number">0.04120135138054489</span>,
+        <span class="op">-</span><span class="number">0.04120135138054489</span>,
         <span class="number">0.003801323387381927</span>,
-        <span class="op">-</span><span class=
-"number">0.0003367685970788418</span>,
+        <span class="op">-</span><span class="number">0.0003367685970788418</span>,
         <span class="number">0.00002900981505733615</span>,
-        <span class="op">-</span><span class=
-"number">2.448123160606146e-6</span>,
+        <span class="op">-</span><span class="number">2.448123160606146e-6</span>,
         <span class="number">2.033768308588852e-7</span>,
-        <span class="op">-</span><span class=
-"number">1.668737585896924e-8</span>,
+        <span class="op">-</span><span class="number">1.668737585896924e-8</span>,
         <span class="number">1.355562370862914e-9</span>,
-        <span class="op">-</span><span class=
-"number">1.092079073140492e-10</span>,
+        <span class="op">-</span><span class="number">1.092079073140492e-10</span>,
         <span class="number">8.73710947087727e-12</span>,
-        <span class="op">-</span><span class=
-"number">6.94877766095056e-13</span>,
+        <span class="op">-</span><span class="number">6.94877766095056e-13</span>,
         <span class="number">5.498333620105806e-14</span>,
-        <span class="op">-</span><span class=
-"number">4.331338214642726e-15</span>,
+        <span class="op">-</span><span class="number">4.331338214642726e-15</span>,
         <span class="number">3.398722114973984e-16</span>,
-        <span class="op">-</span><span class=
-"number">2.657699096740661e-17</span>,
+        <span class="op">-</span><span class="number">2.657699096740661e-17</span>,
         <span class="number">2.071834739958486e-18</span>,
-        <span class="op">-</span><span class=
-"number">1.610649731712818e-19</span>,
+        <span class="op">-</span><span class="number">1.610649731712818e-19</span>,
         <span class="number">1.24899642774135e-20</span>,
-        <span class="op">-</span><span class=
-"number">9.66354349542028e-22</span>,
+        <span class="op">-</span><span class="number">9.66354349542028e-22</span>,
         <span class="number">7.461296193782662e-23</span>,
-        <span class="op">-</span><span class=
-"number">5.750044296608358e-24</span>,
+        <span class="op">-</span><span class="number">5.750044296608358e-24</span>,
         <span class="number">4.423582705661149e-25</span>,
-        <span class="op">-</span><span class=
-"number">3.397678604794231e-26</span>,
+        <span class="op">-</span><span class="number">3.397678604794231e-26</span>,
         <span class="number">2.605841879024225e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.995805630646514e-28</span>,
+        <span class="op">-</span><span class="number">1.995805630646514e-28</span>,
         <span class="number">1.526683787297105e-29</span>,
-        <span class="op">-</span><span class=
-"number">1.173150587066875e-30</span>,
+        <span class="op">-</span><span class="number">1.173150587066875e-30</span>,
         <span class="number">8.90126548302019e-32</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">7.150378744489124</span>,
-        <span class="op">-</span><span class=
-"number">1.716897329444595</span>,
+        <span class="op">-</span><span class="number">1.716897329444595</span>,
         <span class="number">0.1473028304287181</span>,
-        <span class="op">-</span><span class=
-"number">0.01117940671123695</span>,
+        <span class="op">-</span><span class="number">0.01117940671123695</span>,
         <span class="number">0.0007955481569586307</span>,
-        <span class="op">-</span><span class=
-"number">0.00005436050690321123</span>,
+        <span class="op">-</span><span class="number">0.00005436050690321123</span>,
         <span class="number">3.611678187683602e-6</span>,
-        <span class="op">-</span><span class=
-"number">2.350720281715916e-7</span>,
+        <span class="op">-</span><span class="number">2.350720281715916e-7</span>,
         <span class="number">1.506142390151604e-8</span>,
-        <span class="op">-</span><span class=
-"number">9.53113132406954e-10</span>,
+        <span class="op">-</span><span class="number">9.53113132406954e-10</span>,
         <span class="number">5.971232916236126e-11</span>,
-        <span class="op">-</span><span class=
-"number">3.710084852194136e-12</span>,
+        <span class="op">-</span><span class="number">3.710084852194136e-12</span>,
         <span class="number">2.289183321820485e-13</span>,
-        <span class="op">-</span><span class=
-"number">1.40411443327909e-14</span>,
+        <span class="op">-</span><span class="number">1.40411443327909e-14</span>,
         <span class="number">8.568505208621626e-16</span>,
-        <span class="op">-</span><span class=
-"number">5.205648281248424e-17</span>,
+        <span class="op">-</span><span class="number">5.205648281248424e-17</span>,
         <span class="number">3.150258463952968e-18</span>,
-        <span class="op">-</span><span class=
-"number">1.899823945881318e-19</span>,
+        <span class="op">-</span><span class="number">1.899823945881318e-19</span>,
         <span class="number">1.142191741182147e-20</span>,
-        <span class="op">-</span><span class=
-"number">6.847953484077032e-22</span>,
+        <span class="op">-</span><span class="number">6.847953484077032e-22</span>,
         <span class="number">4.095398833191189e-23</span>,
-        <span class="op">-</span><span class=
-"number">2.443691075980798e-24</span>,
+        <span class="op">-</span><span class="number">2.443691075980798e-24</span>,
         <span class="number">1.45511965004295e-25</span>,
-        <span class="op">-</span><span class=
-"number">8.648281648181839e-27</span>,
+        <span class="op">-</span><span class="number">8.648281648181839e-27</span>,
         <span class="number">5.131055539470096e-28</span>,
-        <span class="op">-</span><span class=
-"number">3.039404774834536e-29</span>,
+        <span class="op">-</span><span class="number">3.039404774834536e-29</span>,
         <span class="number">1.797743663180475e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.061869504212714e-31</span>,
+        <span class="op">-</span><span class="number">1.061869504212714e-31</span>,
         <span class="number">6.264200544915651e-33</span>,
-        <span class="op">-</span><span class=
-"number">3.703680727715595e-34</span>,
+        <span class="op">-</span><span class="number">3.703680727715595e-34</span>,
         <span class="number">2.172318653744907e-35</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">4.582719735944707</span>,
-        <span class="op">-</span><span class=
-"number">0.918901207568093</span>,
+        <span class="op">-</span><span class="number">0.918901207568093</span>,
         <span class="number">0.06449764517957272</span>,
-        <span class="op">-</span><span class=
-"number">0.003986334048137822</span>,
+        <span class="op">-</span><span class="number">0.003986334048137822</span>,
         <span class="number">0.0002309162044679836</span>,
-        <span class="op">-</span><span class=
-"number">0.0000128446827115471</span>,
+        <span class="op">-</span><span class="number">0.0000128446827115471</span>,
         <span class="number">6.947210382435755e-7</span>,
-        <span class="op">-</span><span class=
-"number">3.680985966766188e-8</span>,
+        <span class="op">-</span><span class="number">3.680985966766188e-8</span>,
         <span class="number">1.919946710650054e-9</span>,
-        <span class="op">-</span><span class=
-"number">9.8906674340123e-11</span>,
+        <span class="op">-</span><span class="number">9.8906674340123e-11</span>,
         <span class="number">5.044307414284098e-12</span>,
-        <span class="op">-</span><span class=
-"number">2.551387784960274e-13</span>,
+        <span class="op">-</span><span class="number">2.551387784960274e-13</span>,
         <span class="number">1.281525544984526e-14</span>,
-        <span class="op">-</span><span class=
-"number">6.398857444441615e-16</span>,
+        <span class="op">-</span><span class="number">6.398857444441615e-16</span>,
         <span class="number">3.178758699010455e-17</span>,
-        <span class="op">-</span><span class=
-"number">1.572096977004477e-18</span>,
+        <span class="op">-</span><span class="number">1.572096977004477e-18</span>,
         <span class="number">7.744658196263278e-20</span>,
-        <span class="op">-</span><span class=
-"number">3.802074306373882e-21</span>,
+        <span class="op">-</span><span class="number">3.802074306373882e-21</span>,
         <span class="number">1.860788913611566e-22</span>,
-        <span class="op">-</span><span class=
-"number">9.08174851643492e-24</span>,
+        <span class="op">-</span><span class="number">9.08174851643492e-24</span>,
         <span class="number">4.421353211626687e-25</span>,
-        <span class="op">-</span><span class=
-"number">2.147610139345007e-26</span>,
+        <span class="op">-</span><span class="number">2.147610139345007e-26</span>,
         <span class="number">1.041016957516397e-27</span>,
-        <span class="op">-</span><span class=
-"number">5.036614629601819e-29</span>,
+        <span class="op">-</span><span class="number">5.036614629601819e-29</span>,
         <span class="number">2.432569600140386e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.172996296005542e-31</span>,
+        <span class="op">-</span><span class="number">1.172996296005542e-31</span>,
         <span class="number">5.647877875270156e-33</span>,
-        <span class="op">-</span><span class=
-"number">2.715676293748766e-34</span>,
+        <span class="op">-</span><span class="number">2.715676293748766e-34</span>,
         <span class="number">1.3041238849973e-35</span>,
-        <span class="op">-</span><span class=
-"number">6.269506073719425e-37</span>,
+        <span class="op">-</span><span class="number">6.269506073719425e-37</span>,
         <span class="number">2.996939068642958e-38</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">3.14376485232022</span>,
-        <span class="op">-</span><span class=
-"number">0.546439396728882</span>,
+        <span class="op">-</span><span class="number">0.546439396728882</span>,
         <span class="number">0.03255910838222354</span>,
-        <span class="op">-</span><span class=
-"number">0.001698188564765573</span>,
+        <span class="op">-</span><span class="number">0.001698188564765573</span>,
         <span class="number">0.00008294822845835585</span>,
-        <span class="op">-</span><span class=
-"number">3.890784650879358e-6</span>,
+        <span class="op">-</span><span class="number">3.890784650879358e-6</span>,
         <span class="number">1.774633445347017e-7</span>,
-        <span class="op">-</span><span class=
-"number">7.929650459707019e-9</span>,
+        <span class="op">-</span><span class="number">7.929650459707019e-9</span>,
         <span class="number">3.487964854667476e-10</span>,
-        <span class="op">-</span><span class=
-"number">1.515309594623309e-11</span>,
+        <span class="op">-</span><span class="number">1.515309594623309e-11</span>,
         <span class="number">6.517328878417038e-13</span>,
-        <span class="op">-</span><span class=
-"number">2.779945828742275e-14</span>,
+        <span class="op">-</span><span class="number">2.779945828742275e-14</span>,
         <span class="number">1.177547439445277e-15</span>,
-        <span class="op">-</span><span class=
-"number">4.958433005670812e-17</span>,
+        <span class="op">-</span><span class="number">4.958433005670812e-17</span>,
         <span class="number">2.077256366754722e-18</span>,
-        <span class="op">-</span><span class=
-"number">8.663673960522808e-20</span>,
+        <span class="op">-</span><span class="number">8.663673960522808e-20</span>,
         <span class="number">3.599274816027706e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.490126470193897e-22</span>,
+        <span class="op">-</span><span class="number">1.490126470193897e-22</span>,
         <span class="number">6.150199995496819e-24</span>,
-        <span class="op">-</span><span class=
-"number">2.531343299268139e-25</span>,
+        <span class="op">-</span><span class="number">2.531343299268139e-25</span>,
         <span class="number">1.039264526661631e-26</span>,
-        <span class="op">-</span><span class=
-"number">4.257116554947774e-28</span>,
+        <span class="op">-</span><span class="number">4.257116554947774e-28</span>,
         <span class="number">1.740231405922656e-29</span>,
-        <span class="op">-</span><span class=
-"number">7.100303885205512e-31</span>,
+        <span class="op">-</span><span class="number">7.100303885205512e-31</span>,
         <span class="number">2.891960970589956e-32</span>,
-        <span class="op">-</span><span class=
-"number">1.176014464629169e-33</span>,
+        <span class="op">-</span><span class="number">1.176014464629169e-33</span>,
         <span class="number">4.775184206500611e-35</span>,
-        <span class="op">-</span><span class=
-"number">1.936295271880477e-36</span>,
+        <span class="op">-</span><span class="number">1.936295271880477e-36</span>,
         <span class="number">7.841515650461005e-38</span>,
-        <span class="op">-</span><span class=
-"number">3.176999962052213e-39</span>,
+        <span class="op">-</span><span class="number">3.176999962052213e-39</span>,
         <span class="number">1.281555713232651e-40</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.983980371713555</span>,
-        <span class="op">-</span><span class=
-"number">0.5820374589670368</span>,
+        <span class="op">-</span><span class="number">0.5820374589670368</span>,
         <span class="number">0.05699671148061629</span>,
-        <span class="op">-</span><span class=
-"number">0.004835969015966678</span>,
+        <span class="op">-</span><span class="number">0.004835969015966678</span>,
         <span class="number">0.0003835446448405708</span>,
-        <span class="op">-</span><span class=
-"number">0.00002921367009914217</span>,
+        <span class="op">-</span><span class="number">0.00002921367009914217</span>,
         <span class="number">2.164090550726971e-6</span>,
-        <span class="op">-</span><span class=
-"number">1.570644948186572e-7</span>,
+        <span class="op">-</span><span class="number">1.570644948186572e-7</span>,
         <span class="number">1.12220329907004e-8</span>,
-        <span class="op">-</span><span class=
-"number">7.919284272137259e-10</span>,
+        <span class="op">-</span><span class="number">7.919284272137259e-10</span>,
         <span class="number">5.532803470001949e-11</span>,
-        <span class="op">-</span><span class=
-"number">3.833601980924058e-12</span>,
+        <span class="op">-</span><span class="number">3.833601980924058e-12</span>,
         <span class="number">2.637831843293803e-13</span>,
-        <span class="op">-</span><span class=
-"number">1.804319178076185e-14</span>,
+        <span class="op">-</span><span class="number">1.804319178076185e-14</span>,
         <span class="number">1.227894243871733e-15</span>,
-        <span class="op">-</span><span class=
-"number">8.319099026892132e-17</span>,
+        <span class="op">-</span><span class="number">8.319099026892132e-17</span>,
         <span class="number">5.614274629682838e-18</span>,
-        <span class="op">-</span><span class=
-"number">3.775784096146834e-19</span>,
+        <span class="op">-</span><span class="number">3.775784096146834e-19</span>,
         <span class="number">2.53150864759289e-20</span>,
-        <span class="op">-</span><span class=
-"number">1.69257543382595e-21</span>,
+        <span class="op">-</span><span class="number">1.69257543382595e-21</span>,
         <span class="number">1.12883497581129e-22</span>,
-        <span class="op">-</span><span class=
-"number">7.511518548490675e-24</span>,
+        <span class="op">-</span><span class="number">7.511518548490675e-24</span>,
         <span class="number">4.988011806613324e-25</span>,
-        <span class="op">-</span><span class=
-"number">3.306024284753191e-26</span>,
+        <span class="op">-</span><span class="number">3.306024284753191e-26</span>,
         <span class="number">2.187411460495594e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.444973741235586e-28</span>,
+        <span class="op">-</span><span class="number">1.444973741235586e-28</span>,
         <span class="number">9.53118519742047e-30</span>,
-        <span class="op">-</span><span class=
-"number">6.278242806013126e-31</span>,
+        <span class="op">-</span><span class="number">6.278242806013126e-31</span>,
         <span class="number">4.130316238683421e-32</span>,
-        <span class="op">-</span><span class=
-"number">2.725593071778875e-33</span>,
+        <span class="op">-</span><span class="number">2.725593071778875e-33</span>,
         <span class="number">1.781288408380569e-34</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.14477319438868</span>,
-        <span class="op">-</span><span class=
-"number">0.2852367639576407</span>,
+        <span class="op">-</span><span class="number">0.2852367639576407</span>,
         <span class="number">0.02279624122100535</span>,
-        <span class="op">-</span><span class=
-"number">0.001549534150647917</span>,
+        <span class="op">-</span><span class="number">0.001549534150647917</span>,
         <span class="number">0.0000979543000564023</span>,
-        <span class="op">-</span><span class=
-"number">5.943382807692047e-6</span>,
+        <span class="op">-</span><span class="number">5.943382807692047e-6</span>,
         <span class="number">3.507825019412086e-7</span>,
-        <span class="op">-</span><span class=
-"number">2.028665353105236e-8</span>,
+        <span class="op">-</span><span class="number">2.028665353105236e-8</span>,
         <span class="number">1.155035320505172e-9</span>,
-        <span class="op">-</span><span class=
-"number">6.49542838507504e-11</span>,
+        <span class="op">-</span><span class="number">6.49542838507504e-11</span>,
         <span class="number">3.616321167492882e-12</span>,
-        <span class="op">-</span><span class=
-"number">1.996773158356165e-13</span>,
+        <span class="op">-</span><span class="number">1.996773158356165e-13</span>,
         <span class="number">1.094884534092547e-14</span>,
-        <span class="op">-</span><span class=
-"number">5.968064236339271e-16</span>,
+        <span class="op">-</span><span class="number">5.968064236339271e-16</span>,
         <span class="number">3.236528217064135e-17</span>,
-        <span class="op">-</span><span class=
-"number">1.747400620261119e-18</span>,
+        <span class="op">-</span><span class="number">1.747400620261119e-18</span>,
         <span class="number">9.39738690360736e-20</span>,
-        <span class="op">-</span><span class=
-"number">5.03636776939516e-21</span>,
+        <span class="op">-</span><span class="number">5.03636776939516e-21</span>,
         <span class="number">2.690829286353649e-22</span>,
-        <span class="op">-</span><span class=
-"number">1.433675547337714e-23</span>,
+        <span class="op">-</span><span class="number">1.433675547337714e-23</span>,
         <span class="number">7.619546511684042e-25</span>,
-        <span class="op">-</span><span class=
-"number">4.04037781307983e-26</span>,
+        <span class="op">-</span><span class="number">4.04037781307983e-26</span>,
         <span class="number">2.138046010437196e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.129251703825441e-28</span>,
+        <span class="op">-</span><span class="number">1.129251703825441e-28</span>,
         <span class="number">5.954018258308778e-30</span>,
-        <span class="op">-</span><span class=
-"number">3.134255812289069e-31</span>,
+        <span class="op">-</span><span class="number">3.134255812289069e-31</span>,
         <span class="number">1.647464473464433e-32</span>,
-        <span class="op">-</span><span class=
-"number">8.647723004976446e-34</span>,
+        <span class="op">-</span><span class="number">8.647723004976446e-34</span>,
         <span class="number">4.533531287551243e-35</span>,
-        <span class="op">-</span><span class=
-"number">2.38031097107055e-36</span>,
+        <span class="op">-</span><span class="number">2.38031097107055e-36</span>,
         <span class="number">1.241597715414149e-37</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.596472744554824</span>,
-        <span class="op">-</span><span class=
-"number">0.2487128718270162</span>,
+        <span class="op">-</span><span class="number">0.2487128718270162</span>,
         <span class="number">0.03193642561933837</span>,
-        <span class="op">-</span><span class=
-"number">0.00338892580886703</span>,
+        <span class="op">-</span><span class="number">0.00338892580886703</span>,
         <span class="number">0.0003305651693698553</span>,
-        <span class="op">-</span><span class=
-"number">0.00003086912691680537</span>,
+        <span class="op">-</span><span class="number">0.00003086912691680537</span>,
         <span class="number">2.804231495841376e-6</span>,
-        <span class="op">-</span><span class=
-"number">2.497018169995344e-7</span>,
+        <span class="op">-</span><span class="number">2.497018169995344e-7</span>,
         <span class="number">2.18943171099274e-8</span>,
-        <span class="op">-</span><span class=
-"number">1.896320121114381e-9</span>,
+        <span class="op">-</span><span class="number">1.896320121114381e-9</span>,
         <span class="number">1.626145828934157e-10</span>,
-        <span class="op">-</span><span class=
-"number">1.382997042594105e-11</span>,
+        <span class="op">-</span><span class="number">1.382997042594105e-11</span>,
         <span class="number">1.168067189106281e-12</span>,
-        <span class="op">-</span><span class=
-"number">9.80719095930408e-14</span>,
+        <span class="op">-</span><span class="number">9.80719095930408e-14</span>,
         <span class="number">8.192293544542103e-15</span>,
-        <span class="op">-</span><span class=
-"number">6.812963263446213e-16</span>,
+        <span class="op">-</span><span class="number">6.812963263446213e-16</span>,
         <span class="number">5.643779676915471e-17</span>,
-        <span class="op">-</span><span class=
-"number">4.659092101533453e-18</span>,
+        <span class="op">-</span><span class="number">4.659092101533453e-18</span>,
         <span class="number">3.834353670817873e-19</span>,
-        <span class="op">-</span><span class=
-"number">3.14687936577238e-20</span>,
+        <span class="op">-</span><span class="number">3.14687936577238e-20</span>,
         <span class="number">2.576216750468166e-21</span>,
-        <span class="op">-</span><span class=
-"number">2.104263126697543e-22</span>,
+        <span class="op">-</span><span class="number">2.104263126697543e-22</span>,
         <span class="number">1.715222778997766e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.395469050046387e-24</span>,
+        <span class="op">-</span><span class="number">1.395469050046387e-24</span>,
         <span class="number">1.133355238226474e-25</span>,
-        <span class="op">-</span><span class=
-"number">9.19003552592231e-27</span>,
+        <span class="op">-</span><span class="number">9.19003552592231e-27</span>,
         <span class="number">7.440909680947305e-28</span>,
-        <span class="op">-</span><span class=
-"number">6.016437429653325e-29</span>,
+        <span class="op">-</span><span class="number">6.016437429653325e-29</span>,
         <span class="number">4.858665522693473e-30</span>,
-        <span class="op">-</span><span class=
-"number">3.944109649270812e-31</span>,
+        <span class="op">-</span><span class="number">3.944109649270812e-31</span>,
         <span class="number">3.157204489386941e-32</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.2683956978322586</span>,
-        <span class="op">-</span><span class=
-"number">0.0970503964593957</span>,
+        <span class="op">-</span><span class="number">0.0970503964593957</span>,
         <span class="number">0.01023878467819162</span>,
-        <span class="op">-</span><span class=
-"number">0.0008556789667139841</span>,
+        <span class="op">-</span><span class="number">0.0008556789667139841</span>,
         <span class="number">0.00006417967922591793</span>,
-        <span class="op">-</span><span class=
-"number">4.567149527652628e-6</span>,
+        <span class="op">-</span><span class="number">4.567149527652628e-6</span>,
         <span class="number">3.155859708343884e-7</span>,
-        <span class="op">-</span><span class=
-"number">2.137957355785328e-8</span>,
+        <span class="op">-</span><span class="number">2.137957355785328e-8</span>,
         <span class="number">1.426768856074523e-9</span>,
-        <span class="op">-</span><span class=
-"number">9.40763009531436e-11</span>,
+        <span class="op">-</span><span class="number">9.40763009531436e-11</span>,
         <span class="number">6.142172004713979e-12</span>,
-        <span class="op">-</span><span class=
-"number">3.97739370309048e-13</span>,
+        <span class="op">-</span><span class="number">3.97739370309048e-13</span>,
         <span class="number">2.557816074864416e-14</span>,
-        <span class="op">-</span><span class=
-"number">1.635213732331118e-15</span>,
+        <span class="op">-</span><span class="number">1.635213732331118e-15</span>,
         <span class="number">1.040077606454363e-16</span>,
-        <span class="op">-</span><span class=
-"number">6.586086952944596e-18</span>,
+        <span class="op">-</span><span class="number">6.586086952944596e-18</span>,
         <span class="number">4.154252625223219e-19</span>,
-        <span class="op">-</span><span class=
-"number">2.611292761678352e-20</span>,
+        <span class="op">-</span><span class="number">2.611292761678352e-20</span>,
         <span class="number">1.63635560636259e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.022578434988803e-22</span>,
+        <span class="op">-</span><span class="number">1.022578434988803e-22</span>,
         <span class="number">6.37425869322604e-24</span>,
-        <span class="op">-</span><span class=
-"number">3.964403130325947e-25</span>,
+        <span class="op">-</span><span class="number">3.964403130325947e-25</span>,
         <span class="number">2.460529166450941e-26</span>,
-        <span class="op">-</span><span class=
-"number">1.524256851743452e-27</span>,
+        <span class="op">-</span><span class="number">1.524256851743452e-27</span>,
         <span class="number">9.42613669611865e-29</span>,
-        <span class="op">-</span><span class=
-"number">5.819884677638313e-30</span>,
+        <span class="op">-</span><span class="number">5.819884677638313e-30</span>,
         <span class="number">3.58800079565102e-31</span>,
-        <span class="op">-</span><span class=
-"number">2.208996006183857e-32</span>,
+        <span class="op">-</span><span class="number">2.208996006183857e-32</span>,
         <span class="number">1.358280457251595e-33</span>,
-        <span class="op">-</span><span class=
-"number">8.373074537696347e-35</span>,
+        <span class="op">-</span><span class="number">8.373074537696347e-35</span>,
         <span class="number">5.117345380628118e-36</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.1326680854002544</span>,
-        <span class="op">-</span><span class=
-"number">0.04375962691386892</span>,
+        <span class="op">-</span><span class="number">0.04375962691386892</span>,
         <span class="number">0.004054802191068867</span>,
-        <span class="op">-</span><span class=
-"number">0.0002869785010426796</span>,
+        <span class="op">-</span><span class="number">0.0002869785010426796</span>,
         <span class="number">0.00001773693957987226</span>,
-        <span class="op">-</span><span class=
-"number">1.024736153271353e-6</span>,
+        <span class="op">-</span><span class="number">1.024736153271353e-6</span>,
         <span class="number">5.717471616444774e-8</span>,
-        <span class="op">-</span><span class=
-"number">3.124504178297037e-9</span>,
+        <span class="op">-</span><span class="number">3.124504178297037e-9</span>,
         <span class="number">1.682548369971663e-10</span>,
-        <span class="op">-</span><span class=
-"number">8.955707456320604e-12</span>,
+        <span class="op">-</span><span class="number">8.955707456320604e-12</span>,
         <span class="number">4.721230377794239e-13</span>,
-        <span class="op">-</span><span class=
-"number">2.468884753587409e-14</span>,
+        <span class="op">-</span><span class="number">2.468884753587409e-14</span>,
         <span class="number">1.282235736163675e-15</span>,
-        <span class="op">-</span><span class=
-"number">6.620384513260134e-17</span>,
+        <span class="op">-</span><span class="number">6.620384513260134e-17</span>,
         <span class="number">3.400884730480411e-18</span>,
-        <span class="op">-</span><span class=
-"number">1.73930299705964e-19</span>,
+        <span class="op">-</span><span class="number">1.73930299705964e-19</span>,
         <span class="number">8.860632881504207e-21</span>,
-        <span class="op">-</span><span class=
-"number">4.498346836769098e-22</span>,
+        <span class="op">-</span><span class="number">4.498346836769098e-22</span>,
         <span class="number">2.276677463767284e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.149072593300845e-24</span>,
+        <span class="op">-</span><span class="number">1.149072593300845e-24</span>,
         <span class="number">5.785060334659437e-26</span>,
-        <span class="op">-</span><span class=
-"number">2.905919678534301e-27</span>,
+        <span class="op">-</span><span class="number">2.905919678534301e-27</span>,
         <span class="number">1.456672857043743e-28</span>,
-        <span class="op">-</span><span class=
-"number">7.288186035637816e-30</span>,
+        <span class="op">-</span><span class="number">7.288186035637816e-30</span>,
         <span class="number">3.64017984406778e-31</span>,
-        <span class="op">-</span><span class=
-"number">1.81522850934992e-32</span>,
+        <span class="op">-</span><span class="number">1.81522850934992e-32</span>,
         <span class="number">9.03851869576418e-34</span>,
-        <span class="op">-</span><span class=
-"number">4.494355547628845e-35</span>,
+        <span class="op">-</span><span class="number">4.494355547628845e-35</span>,
         <span class="number">2.23195888622966e-36</span>,
-        <span class="op">-</span><span class=
-"number">1.109805881928862e-37</span>,
+        <span class="op">-</span><span class="number">1.109805881928862e-37</span>,
         <span class="number">5.485300146882908e-39</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.06929628380892309</span>,
-        <span class="op">-</span><span class=
-"number">0.02145839155279135</span>,
+        <span class="op">-</span><span class="number">0.02145839155279135</span>,
         <span class="number">0.001817712002253274</span>,
-        <span class="op">-</span><span class=
-"number">0.0001142402837904908</span>,
+        <span class="op">-</span><span class="number">0.0001142402837904908</span>,
         <span class="number">6.106683896735559e-6</span>,
-        <span class="op">-</span><span class=
-"number">2.995309812953855e-7</span>,
+        <span class="op">-</span><span class="number">2.995309812953855e-7</span>,
         <span class="number">1.405312797888892e-8</span>,
-        <span class="op">-</span><span class=
-"number">6.436429203000599e-10</span>,
+        <span class="op">-</span><span class="number">6.436429203000599e-10</span>,
         <span class="number">2.903585491071426e-11</span>,
-        <span class="op">-</span><span class=
-"number">1.295177167586032e-12</span>,
+        <span class="op">-</span><span class="number">1.295177167586032e-12</span>,
         <span class="number">5.724180668070574e-14</span>,
-        <span class="op">-</span><span class=
-"number">2.510114261703457e-15</span>,
+        <span class="op">-</span><span class="number">2.510114261703457e-15</span>,
         <span class="number">1.093333289025542e-16</span>,
-        <span class="op">-</span><span class=
-"number">4.734673934107461e-18</span>,
+        <span class="op">-</span><span class="number">4.734673934107461e-18</span>,
         <span class="number">2.040032678592978e-19</span>,
-        <span class="op">-</span><span class=
-"number">8.751206763166492e-21</span>,
+        <span class="op">-</span><span class="number">8.751206763166492e-21</span>,
         <span class="number">3.739472769151632e-22</span>,
-        <span class="op">-</span><span class=
-"number">1.592410019822083e-23</span>,
+        <span class="op">-</span><span class="number">1.592410019822083e-23</span>,
         <span class="number">6.760238312955595e-25</span>,
-        <span class="op">-</span><span class=
-"number">2.861989033858316e-26</span>,
+        <span class="op">-</span><span class="number">2.861989033858316e-26</span>,
         <span class="number">1.208618935790694e-27</span>,
-        <span class="op">-</span><span class=
-"number">5.092450363562545e-29</span>,
+        <span class="op">-</span><span class="number">5.092450363562545e-29</span>,
         <span class="number">2.141250182187263e-30</span>,
-        <span class="op">-</span><span class=
-"number">8.986433598065503e-32</span>,
+        <span class="op">-</span><span class="number">8.986433598065503e-32</span>,
         <span class="number">3.764900867419405e-33</span>,
-        <span class="op">-</span><span class=
-"number">1.574798433730134e-34</span>,
+        <span class="op">-</span><span class="number">1.574798433730134e-34</span>,
         <span class="number">6.577396569209781e-36</span>,
-        <span class="op">-</span><span class=
-"number">2.743388919222759e-37</span>,
+        <span class="op">-</span><span class="number">2.743388919222759e-37</span>,
         <span class="number">1.142794361203195e-38</span>,
-        <span class="op">-</span><span class=
-"number">4.76297749161898e-40</span>,
+        <span class="op">-</span><span class="number">4.76297749161898e-40</span>,
         <span class="number">1.976106127981592e-41</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.02980599775779273</span>,
-        <span class="op">-</span><span class=
-"number">0.01683914195063804</span>,
+        <span class="op">-</span><span class="number">0.01683914195063804</span>,
         <span class="number">0.002586220592587751</span>,
-        <span class="op">-</span><span class=
-"number">0.0002871866057172305</span>,
+        <span class="op">-</span><span class="number">0.0002871866057172305</span>,
         <span class="number">0.00002630792244792757</span>,
-        <span class="op">-</span><span class=
-"number">2.15143263490757e-6</span>,
+        <span class="op">-</span><span class="number">2.15143263490757e-6</span>,
         <span class="number">1.650982801978807e-7</span>,
-        <span class="op">-</span><span class=
-"number">1.224443175687095e-8</span>,
+        <span class="op">-</span><span class="number">1.224443175687095e-8</span>,
         <span class="number">8.912283004280063e-10</span>,
-        <span class="op">-</span><span class=
-"number">6.411175178923061e-11</span>,
+        <span class="op">-</span><span class="number">6.411175178923061e-11</span>,
         <span class="number">4.571820463158925e-12</span>,
-        <span class="op">-</span><span class=
-"number">3.236486710217656e-13</span>,
+        <span class="op">-</span><span class="number">3.236486710217656e-13</span>,
         <span class="number">2.276672853154877e-14</span>,
-        <span class="op">-</span><span class=
-"number">1.592583128836981e-15</span>,
+        <span class="op">-</span><span class="number">1.592583128836981e-15</span>,
         <span class="number">1.108580917437871e-16</span>,
-        <span class="op">-</span><span class=
-"number">7.683294242366176e-18</span>,
+        <span class="op">-</span><span class="number">7.683294242366176e-18</span>,
         <span class="number">5.304661187017406e-19</span>,
-        <span class="op">-</span><span class=
-"number">3.649905123787942e-20</span>,
+        <span class="op">-</span><span class="number">3.649905123787942e-20</span>,
         <span class="number">2.503662421596751e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.712671683596147e-22</span>,
+        <span class="op">-</span><span class="number">1.712671683596147e-22</span>,
         <span class="number">1.168669488134815e-23</span>,
-        <span class="op">-</span><span class=
-"number">7.956609407162353e-25</span>,
+        <span class="op">-</span><span class="number">7.956609407162353e-25</span>,
         <span class="number">5.405920370907702e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.665997693916267e-27</span>,
+        <span class="op">-</span><span class="number">3.665997693916267e-27</span>,
         <span class="number">2.481773772465547e-28</span>,
-        <span class="op">-</span><span class=
-"number">1.6774069249638e-29</span>,
+        <span class="op">-</span><span class="number">1.6774069249638e-29</span>,
         <span class="number">1.132069502168179e-30</span>,
-        <span class="op">-</span><span class=
-"number">7.629792626101042e-32</span>,
+        <span class="op">-</span><span class="number">7.629792626101042e-32</span>,
         <span class="number">5.135795441268441e-33</span>,
-        <span class="op">-</span><span class=
-"number">3.468337793683455e-34</span>,
+        <span class="op">-</span><span class="number">3.468337793683455e-34</span>,
         <span class="number">2.318767589592378e-35</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.00942829058566631</span>,
-        <span class="op">-</span><span class=
-"number">0.005061029143163494</span>,
+        <span class="op">-</span><span class="number">0.005061029143163494</span>,
         <span class="number">0.0007221047892473622</span>,
-        <span class="op">-</span><span class=
-"number">0.00007252189157623017</span>,
+        <span class="op">-</span><span class="number">0.00007252189157623017</span>,
         <span class="number">5.822577303902911e-6</span>,
-        <span class="op">-</span><span class=
-"number">4.038380099490127e-7</span>,
+        <span class="op">-</span><span class="number">4.038380099490127e-7</span>,
         <span class="number">2.552425592799629e-8</span>,
-        <span class="op">-</span><span class=
-"number">1.526066836239515e-9</span>,
+        <span class="op">-</span><span class="number">1.526066836239515e-9</span>,
         <span class="number">8.844256637532655e-11</span>,
-        <span class="op">-</span><span class=
-"number">5.038986207335718e-12</span>,
+        <span class="op">-</span><span class="number">5.038986207335718e-12</span>,
         <span class="number">2.842372642116136e-13</span>,
-        <span class="op">-</span><span class=
-"number">1.59225288842496e-14</span>,
+        <span class="op">-</span><span class="number">1.59225288842496e-14</span>,
         <span class="number">8.869376919624766e-16</span>,
-        <span class="op">-</span><span class=
-"number">4.91589594718516e-17</span>,
+        <span class="op">-</span><span class="number">4.91589594718516e-17</span>,
         <span class="number">2.712334642345298e-18</span>,
-        <span class="op">-</span><span class=
-"number">1.490388232508984e-19</span>,
+        <span class="op">-</span><span class="number">1.490388232508984e-19</span>,
         <span class="number">8.159151517698749e-21</span>,
-        <span class="op">-</span><span class=
-"number">4.451842297642702e-22</span>,
+        <span class="op">-</span><span class="number">4.451842297642702e-22</span>,
         <span class="number">2.421735666934027e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.313808192887015e-24</span>,
+        <span class="op">-</span><span class="number">1.313808192887015e-24</span>,
         <span class="number">7.109938746978116e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.839060810560256e-27</span>,
+        <span class="op">-</span><span class="number">3.839060810560256e-27</span>,
         <span class="number">2.068683186220772e-28</span>,
-        <span class="op">-</span><span class=
-"number">1.112620933586012e-29</span>,
+        <span class="op">-</span><span class="number">1.112620933586012e-29</span>,
         <span class="number">5.973795608847024e-31</span>,
-        <span class="op">-</span><span class=
-"number">3.202296491981202e-32</span>,
+        <span class="op">-</span><span class="number">3.202296491981202e-32</span>,
         <span class="number">1.714085584638005e-33</span>,
-        <span class="op">-</span><span class=
-"number">9.16240448850631e-35</span>,
+        <span class="op">-</span><span class="number">9.16240448850631e-35</span>,
         <span class="number">4.891446299872201e-36</span>,
-        <span class="op">-</span><span class=
-"number">2.615603302936673e-37</span>,
+        <span class="op">-</span><span class="number">2.615603302936673e-37</span>,
         <span class="number">1.389217148982567e-38</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.003143336505921856</span>,
-        <span class="op">-</span><span class=
-"number">0.00163351631217954</span>,
+        <span class="op">-</span><span class="number">0.00163351631217954</span>,
         <span class="number">0.0002227311144278695</span>,
-        <span class="op">-</span><span class=
-"number">0.00002104206902764607</span>,
+        <span class="op">-</span><span class="number">0.00002104206902764607</span>,
         <span class="number">1.558086253703827e-6</span>,
-        <span class="op">-</span><span class=
-"number">9.73719439542989e-8</span>,
+        <span class="op">-</span><span class="number">9.73719439542989e-8</span>,
         <span class="number">5.409529909046329e-9</span>,
-        <span class="op">-</span><span class=
-"number">2.777916923813292e-10</span>,
+        <span class="op">-</span><span class="number">2.777916923813292e-10</span>,
         <span class="number">1.357727778388164e-11</span>,
-        <span class="op">-</span><span class=
-"number">6.446923629720935e-13</span>,
+        <span class="op">-</span><span class="number">6.446923629720935e-13</span>,
         <span class="number">3.012541949488326e-14</span>,
-        <span class="op">-</span><span class=
-"number">1.395090313287159e-15</span>,
+        <span class="op">-</span><span class="number">1.395090313287159e-15</span>,
         <span class="number">6.423631497968996e-17</span>,
-        <span class="op">-</span><span class=
-"number">2.944701109245686e-18</span>,
+        <span class="op">-</span><span class="number">2.944701109245686e-18</span>,
         <span class="number">1.344645333197828e-19</span>,
-        <span class="op">-</span><span class=
-"number">6.117847044556255e-21</span>,
+        <span class="op">-</span><span class="number">6.117847044556255e-21</span>,
         <span class="number">2.774067114626681e-22</span>,
-        <span class="op">-</span><span class=
-"number">1.253922526052847e-23</span>,
+        <span class="op">-</span><span class="number">1.253922526052847e-23</span>,
         <span class="number">5.65158014485825e-25</span>,
-        <span class="op">-</span><span class=
-"number">2.54050940542516e-26</span>,
+        <span class="op">-</span><span class="number">2.54050940542516e-26</span>,
         <span class="number">1.139258016621016e-27</span>,
-        <span class="op">-</span><span class=
-"number">5.097569940164563e-29</span>,
+        <span class="op">-</span><span class="number">5.097569940164563e-29</span>,
         <span class="number">2.276272564752849e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.014557797134374e-31</span>,
+        <span class="op">-</span><span class="number">1.014557797134374e-31</span>,
         <span class="number">4.514238202529896e-33</span>,
-        <span class="op">-</span><span class=
-"number">2.005414308764046e-34</span>,
+        <span class="op">-</span><span class="number">2.005414308764046e-34</span>,
         <span class="number">8.895830200803749e-36</span>,
-        <span class="op">-</span><span class=
-"number">3.940733922909794e-37</span>,
+        <span class="op">-</span><span class="number">3.940733922909794e-37</span>,
         <span class="number">1.743486294341944e-38</span>,
-        <span class="op">-</span><span class=
-"number">7.719465320323752e-40</span>,
+        <span class="op">-</span><span class="number">7.719465320323752e-40</span>,
         <span class="number">3.40085355458639e-41</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.0007766326979495531</span>,
-        <span class="op">-</span><span class=
-"number">0.0007173385637086827</span>,
+        <span class="op">-</span><span class="number">0.0007173385637086827</span>,
         <span class="number">0.0001819927665632553</span>,
-        <span class="op">-</span><span class=
-"number">0.00003207418894398454</span>,
+        <span class="op">-</span><span class="number">0.00003207418894398454</span>,
         <span class="number">4.385752809973047e-6</span>,
-        <span class="op">-</span><span class=
-"number">4.973734004119276e-7</span>,
+        <span class="op">-</span><span class="number">4.973734004119276e-7</span>,
         <span class="number">4.901520430197976e-8</span>,
-        <span class="op">-</span><span class=
-"number">4.351065262251162e-9</span>,
+        <span class="op">-</span><span class="number">4.351065262251162e-9</span>,
         <span class="number">3.582099814795486e-10</span>,
-        <span class="op">-</span><span class=
-"number">2.800794479645358e-11</span>,
+        <span class="op">-</span><span class="number">2.800794479645358e-11</span>,
         <span class="number">2.118888405934736e-12</span>,
-        <span class="op">-</span><span class=
-"number">1.571991432811459e-13</span>,
+        <span class="op">-</span><span class="number">1.571991432811459e-13</span>,
         <span class="number">1.153619092343089e-14</span>,
-        <span class="op">-</span><span class=
-"number">8.414843434520848e-16</span>,
+        <span class="op">-</span><span class="number">8.414843434520848e-16</span>,
         <span class="number">6.115007859823997e-17</span>,
-        <span class="op">-</span><span class=
-"number">4.431001967777534e-18</span>,
+        <span class="op">-</span><span class="number">4.431001967777534e-18</span>,
         <span class="number">3.202426099094589e-19</span>,
-        <span class="op">-</span><span class=
-"number">2.308676913305801e-20</span>,
+        <span class="op">-</span><span class="number">2.308676913305801e-20</span>,
         <span class="number">1.660282182874712e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.191179651579001e-22</span>,
+        <span class="op">-</span><span class="number">1.191179651579001e-22</span>,
         <span class="number">8.527154144059419e-24</span>,
-        <span class="op">-</span><span class=
-"number">6.091496059289104e-25</span>,
+        <span class="op">-</span><span class="number">6.091496059289104e-25</span>,
         <span class="number">4.343096829452611e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.090944580094356e-27</span>,
+        <span class="op">-</span><span class="number">3.090944580094356e-27</span>,
         <span class="number">2.196117977693932e-28</span>,
-        <span class="op">-</span><span class=
-"number">1.557919219594607e-29</span>,
+        <span class="op">-</span><span class="number">1.557919219594607e-29</span>,
         <span class="number">1.103586944928628e-30</span>,
-        <span class="op">-</span><span class=
-"number">7.806993135313392e-32</span>,
+        <span class="op">-</span><span class="number">7.806993135313392e-32</span>,
         <span class="number">5.516028021972263e-33</span>,
-        <span class="op">-</span><span class=
-"number">3.911909747321767e-34</span>,
+        <span class="op">-</span><span class="number">3.911909747321767e-34</span>,
         <span class="number">2.743997389234807e-35</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.0000982162243497311</span>,
-        <span class="op">-</span><span class=
-"number">0.00008883463106346501</span>,
+        <span class="op">-</span><span class="number">0.00008883463106346501</span>,
         <span class="number">0.00002185769113804131</span>,
-        <span class="op">-</span><span class=
-"number">3.700865166997841e-6</span>,
+        <span class="op">-</span><span class="number">3.700865166997841e-6</span>,
         <span class="number">4.80628384502467e-7</span>,
-        <span class="op">-</span><span class=
-"number">5.102624473560679e-8</span>,
+        <span class="op">-</span><span class="number">5.102624473560679e-8</span>,
         <span class="number">4.623431989526706e-9</span>,
-        <span class="op">-</span><span class=
-"number">3.692313371498964e-10</span>,
+        <span class="op">-</span><span class="number">3.692313371498964e-10</span>,
         <span class="number">2.667167127529709e-11</span>,
-        <span class="op">-</span><span class=
-"number">1.781423889123931e-12</span>,
+        <span class="op">-</span><span class="number">1.781423889123931e-12</span>,
         <span class="number">1.121396687708325e-13</span>,
-        <span class="op">-</span><span class=
-"number">6.764263910829944e-15</span>,
+        <span class="op">-</span><span class="number">6.764263910829944e-15</span>,
         <span class="number">3.964160100384916e-16</span>,
-        <span class="op">-</span><span class=
-"number">2.281535554541315e-17</span>,
+        <span class="op">-</span><span class="number">2.281535554541315e-17</span>,
         <span class="number">1.299461297499241e-18</span>,
-        <span class="op">-</span><span class=
-"number">7.359436998021054e-20</span>,
+        <span class="op">-</span><span class="number">7.359436998021054e-20</span>,
         <span class="number">4.155303062371277e-21</span>,
-        <span class="op">-</span><span class=
-"number">2.341761070226942e-22</span>,
+        <span class="op">-</span><span class="number">2.341761070226942e-22</span>,
         <span class="number">1.317728067465759e-23</span>,
-        <span class="op">-</span><span class=
-"number">7.403980009949751e-25</span>,
+        <span class="op">-</span><span class="number">7.403980009949751e-25</span>,
         <span class="number">4.153678722775114e-26</span>,
-        <span class="op">-</span><span class=
-"number">2.326518631458075e-27</span>,
+        <span class="op">-</span><span class="number">2.326518631458075e-27</span>,
         <span class="number">1.301015730750066e-28</span>,
-        <span class="op">-</span><span class=
-"number">7.26397733702155e-30</span>,
+        <span class="op">-</span><span class="number">7.26397733702155e-30</span>,
         <span class="number">4.049556097262962e-31</span>,
-        <span class="op">-</span><span class=
-"number">2.254305257616632e-32</span>,
+        <span class="op">-</span><span class="number">2.254305257616632e-32</span>,
         <span class="number">1.253211196129936e-33</span>,
-        <span class="op">-</span><span class=
-"number">6.9578670254439e-35</span>,
+        <span class="op">-</span><span class="number">6.9578670254439e-35</span>,
         <span class="number">3.858382662608429e-36</span>,
-        <span class="op">-</span><span class=
-"number">2.143665783905706e-37</span>,
+        <span class="op">-</span><span class="number">2.143665783905706e-37</span>,
         <span class="number">1.182481316784908e-38</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">0.00001301324686595637</span>,
-        <span class="op">-</span><span class=
-"number">0.00001162067246376119</span>,
+        <span class="op">-</span><span class="number">0.00001162067246376119</span>,
         <span class="number">2.808313398625441e-6</span>,
-        <span class="op">-</span><span class=
-"number">4.648107452682231e-7</span>,
+        <span class="op">-</span><span class="number">4.648107452682231e-7</span>,
         <span class="number">5.867952753371853e-8</span>,
-        <span class="op">-</span><span class=
-"number">6.013890075039734e-9</span>,
+        <span class="op">-</span><span class="number">6.013890075039734e-9</span>,
         <span class="number">5.214523863238912e-10</span>,
-        <span class="op">-</span><span class=
-"number">3.941781218152886e-11</span>,
+        <span class="op">-</span><span class="number">3.941781218152886e-11</span>,
         <span class="number">2.659264893450827e-12</span>,
-        <span class="op">-</span><span class=
-"number">1.632477556142569e-13</span>,
+        <span class="op">-</span><span class="number">1.632477556142569e-13</span>,
         <span class="number">9.2739188192086e-15</span>,
-        <span class="op">-</span><span class=
-"number">4.949560139973603e-16</span>,
+        <span class="op">-</span><span class="number">4.949560139973603e-16</span>,
         <span class="number">2.516011942679281e-17</span>,
-        <span class="op">-</span><span class=
-"number">1.233273611930908e-18</span>,
+        <span class="op">-</span><span class="number">1.233273611930908e-18</span>,
         <span class="number">5.892051972379451e-20</span>,
-        <span class="op">-</span><span class=
-"number">2.767957738430086e-21</span>,
+        <span class="op">-</span><span class="number">2.767957738430086e-21</span>,
         <span class="number">1.287173573822266e-22</span>,
-        <span class="op">-</span><span class=
-"number">5.952300405489604e-24</span>,
+        <span class="op">-</span><span class="number">5.952300405489604e-24</span>,
         <span class="number">2.744742857289515e-25</span>,
-        <span class="op">-</span><span class=
-"number">1.263867549147569e-26</span>,
+        <span class="op">-</span><span class="number">1.263867549147569e-26</span>,
         <span class="number">5.814680680558704e-28</span>,
-        <span class="op">-</span><span class=
-"number">2.67311592140451e-29</span>,
+        <span class="op">-</span><span class="number">2.67311592140451e-29</span>,
         <span class="number">1.227833696711635e-30</span>,
-        <span class="op">-</span><span class=
-"number">5.634261378443191e-32</span>,
+        <span class="op">-</span><span class="number">5.634261378443191e-32</span>,
         <span class="number">2.582662072335839e-33</span>,
-        <span class="op">-</span><span class=
-"number">1.182517917438874e-34</span>,
+        <span class="op">-</span><span class="number">1.182517917438874e-34</span>,
         <span class="number">5.408176465685874e-36</span>,
-        <span class="op">-</span><span class=
-"number">2.470601770429661e-37</span>,
+        <span class="op">-</span><span class="number">2.470601770429661e-37</span>,
         <span class="number">1.127402244788678e-38</span>,
-        <span class="op">-</span><span class=
-"number">5.149802340521164e-40</span>,
+        <span class="op">-</span><span class="number">5.149802340521164e-40</span>,
         <span class="number">2.340275827089923e-41</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.773863305333175e-6</span>,
-        <span class="op">-</span><span class=
-"number">1.570576111179256e-6</span>,
+        <span class="op">-</span><span class="number">1.570576111179256e-6</span>,
         <span class="number">3.75154073010044e-7</span>,
-        <span class="op">-</span><span class=
-"number">6.120834396901194e-8</span>,
+        <span class="op">-</span><span class="number">6.120834396901194e-8</span>,
         <span class="number">7.593928941792092e-9</span>,
-        <span class="op">-</span><span class=
-"number">7.620292194282272e-10</span>,
+        <span class="op">-</span><span class="number">7.620292194282272e-10</span>,
         <span class="number">6.439809994521101e-11</span>,
-        <span class="op">-</span><span class=
-"number">4.717475978365255e-12</span>,
+        <span class="op">-</span><span class="number">4.717475978365255e-12</span>,
         <span class="number">3.062335561803793e-13</span>,
-        <span class="op">-</span><span class=
-"number">1.793151256412202e-14</span>,
+        <span class="op">-</span><span class="number">1.793151256412202e-14</span>,
         <span class="number">9.61435992403503e-16</span>,
-        <span class="op">-</span><span class=
-"number">4.782985319936175e-17</span>,
+        <span class="op">-</span><span class="number">4.782985319936175e-17</span>,
         <span class="number">2.234432888508389e-18</span>,
-        <span class="op">-</span><span class=
-"number">9.91212871593824e-20</span>,
+        <span class="op">-</span><span class="number">9.91212871593824e-20</span>,
         <span class="number">4.219120198913466e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.739846588689224e-22</span>,
+        <span class="op">-</span><span class="number">1.739846588689224e-22</span>,
         <span class="number">7.010954118243918e-24</span>,
-        <span class="op">-</span><span class=
-"number">2.781053886893161e-25</span>,
+        <span class="op">-</span><span class="number">2.781053886893161e-25</span>,
         <span class="number">1.092306123607909e-26</span>,
-        <span class="op">-</span><span class=
-"number">4.266104866306596e-28</span>,
+        <span class="op">-</span><span class="number">4.266104866306596e-28</span>,
         <span class="number">1.661429722905898e-29</span>,
-        <span class="op">-</span><span class=
-"number">6.462291355746329e-31</span>,
+        <span class="op">-</span><span class="number">6.462291355746329e-31</span>,
         <span class="number">2.51227007954979e-32</span>,
-        <span class="op">-</span><span class=
-"number">9.76374629965232e-34</span>,
+        <span class="op">-</span><span class="number">9.76374629965232e-34</span>,
         <span class="number">3.793305605237386e-35</span>,
-        <span class="op">-</span><span class=
-"number">1.4730228474038e-36</span>,
+        <span class="op">-</span><span class="number">1.4730228474038e-36</span>,
         <span class="number">5.71647250137163e-38</span>,
-        <span class="op">-</span><span class=
-"number">2.216789605194393e-39</span>,
+        <span class="op">-</span><span class="number">2.216789605194393e-39</span>,
         <span class="number">8.589501541471062e-41</span>,
-        <span class="op">-</span><span class=
-"number">3.3303388239393e-42</span>,
+        <span class="op">-</span><span class="number">3.3303388239393e-42</span>,
         <span class="number">1.286287668736039e-43</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">2.464359210311403e-7</span>,
-        <span class="op">-</span><span class=
-"number">2.168737510300182e-7</span>,
+        <span class="op">-</span><span class="number">2.168737510300182e-7</span>,
         <span class="number">5.138492137426482e-8</span>,
-        <span class="op">-</span><span class=
-"number">8.302235487508352e-9</span>,
+        <span class="op">-</span><span class="number">8.302235487508352e-9</span>,
         <span class="number">1.018167365358758e-9</span>,
-        <span class="op">-</span><span class=
-"number">1.007759009257295e-10</span>,
+        <span class="op">-</span><span class="number">1.007759009257295e-10</span>,
         <span class="number">8.378263607768337e-12</span>,
-        <span class="op">-</span><span class=
-"number">6.018552351381191e-13</span>,
+        <span class="op">-</span><span class="number">6.018552351381191e-13</span>,
         <span class="number">3.816091385564958e-14</span>,
-        <span class="op">-</span><span class=
-"number">2.171959576560184e-15</span>,
+        <span class="op">-</span><span class="number">2.171959576560184e-15</span>,
         <span class="number">1.125207789149447e-16</span>,
-        <span class="op">-</span><span class=
-"number">5.369633687797089e-18</span>,
+        <span class="op">-</span><span class="number">5.369633687797089e-18</span>,
         <span class="number">2.385561645134453e-19</span>,
-        <span class="op">-</span><span class=
-"number">9.96287353886146e-21</span>,
+        <span class="op">-</span><span class="number">9.96287353886146e-21</span>,
         <span class="number">3.947090316575217e-22</span>,
-        <span class="op">-</span><span class=
-"number">1.496322472061151e-23</span>,
+        <span class="op">-</span><span class="number">1.496322472061151e-23</span>,
         <span class="number">5.472806962544416e-25</span>,
-        <span class="op">-</span><span class=
-"number">1.946270856488635e-26</span>,
+        <span class="op">-</span><span class="number">1.946270856488635e-26</span>,
         <span class="number">6.777831198318922e-28</span>,
-        <span class="op">-</span><span class=
-"number">2.325816325759023e-29</span>,
+        <span class="op">-</span><span class="number">2.325816325759023e-29</span>,
         <span class="number">7.904723332586969e-31</span>,
-        <span class="op">-</span><span class=
-"number">2.671340279449758e-32</span>,
+        <span class="op">-</span><span class="number">2.671340279449758e-32</span>,
         <span class="number">9.000995941044705e-34</span>,
-        <span class="op">-</span><span class=
-"number">3.029050254947734e-35</span>,
+        <span class="op">-</span><span class="number">3.029050254947734e-35</span>,
         <span class="number">1.018976024909328e-36</span>,
-        <span class="op">-</span><span class=
-"number">3.427788301117112e-38</span>,
+        <span class="op">-</span><span class="number">3.427788301117112e-38</span>,
         <span class="number">1.153108826479741e-39</span>,
-        <span class="op">-</span><span class=
-"number">3.87866466280691e-41</span>,
+        <span class="op">-</span><span class="number">3.87866466280691e-41</span>,
         <span class="number">1.30431054489507e-42</span>,
-        <span class="op">-</span><span class=
-"number">4.389250988554009e-44</span>,
+        <span class="op">-</span><span class="number">4.389250988554009e-44</span>,
         <span class="number">1.47296922849594e-45</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">3.470326599160745e-8</span>,
-        <span class="op">-</span><span class=
-"number">3.040251482861503e-8</span>,
+        <span class="op">-</span><span class="number">3.040251482861503e-8</span>,
         <span class="number">7.160767271364457e-9</span>,
-        <span class="op">-</span><span class=
-"number">1.148856437928065e-9</span>,
+        <span class="op">-</span><span class="number">1.148856437928065e-9</span>,
         <span class="number">1.397435807616091e-10</span>,
-        <span class="op">-</span><span class=
-"number">1.370021576518759e-11</span>,
+        <span class="op">-</span><span class="number">1.370021576518759e-11</span>,
         <span class="number">1.126387188323851e-12</span>,
-        <span class="op">-</span><span class=
-"number">7.986393180213385e-14</span>,
+        <span class="op">-</span><span class="number">7.986393180213385e-14</span>,
         <span class="number">4.986376685599199e-15</span>,
-        <span class="op">-</span><span class=
-"number">2.786675199892949e-16</span>,
+        <span class="op">-</span><span class="number">2.786675199892949e-16</span>,
         <span class="number">1.412616599268238e-17</span>,
-        <span class="op">-</span><span class=
-"number">6.568311485284258e-19</span>,
+        <span class="op">-</span><span class="number">6.568311485284258e-19</span>,
         <span class="number">2.82872201130324e-20</span>,
-        <span class="op">-</span><span class=
-"number">1.138162281238116e-21</span>,
+        <span class="op">-</span><span class="number">1.138162281238116e-21</span>,
         <span class="number">4.312812269428529e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.550672094473815e-24</span>,
+        <span class="op">-</span><span class="number">1.550672094473815e-24</span>,
         <span class="number">5.328515493544346e-26</span>,
-        <span class="op">-</span><span class=
-"number">1.762145631038241e-27</span>,
+        <span class="op">-</span><span class="number">1.762145631038241e-27</span>,
         <span class="number">5.646114758741322e-29</span>,
-        <span class="op">-</span><span class=
-"number">1.76409259243136e-30</span>,
+        <span class="op">-</span><span class="number">1.76409259243136e-30</span>,
         <span class="number">5.406977234357921e-32</span>,
-        <span class="op">-</span><span class=
-"number">1.634455193423533e-33</span>,
+        <span class="op">-</span><span class="number">1.634455193423533e-33</span>,
         <span class="number">4.894947794150432e-35</span>,
-        <span class="op">-</span><span class=
-"number">1.45761802437913e-36</span>,
+        <span class="op">-</span><span class="number">1.45761802437913e-36</span>,
         <span class="number">4.327165789779446e-38</span>,
-        <span class="op">-</span><span class=
-"number">1.282870842830837e-39</span>,
+        <span class="op">-</span><span class="number">1.282870842830837e-39</span>,
         <span class="number">3.802049825107619e-41</span>,
-        <span class="op">-</span><span class=
-"number">1.126964190291283e-42</span>,
+        <span class="op">-</span><span class="number">1.126964190291283e-42</span>,
         <span class="number">3.341272131738496e-44</span>,
-        <span class="op">-</span><span class=
-"number">9.91683911254621e-46</span>,
+        <span class="op">-</span><span class="number">9.91683911254621e-46</span>,
         <span class="number">2.93822908569145e-47</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">4.936640127780491e-9</span>,
-        <span class="op">-</span><span class=
-"number">4.309772297294255e-9</span>,
+        <span class="op">-</span><span class="number">4.309772297294255e-9</span>,
         <span class="number">1.010511176718315e-9</span>,
-        <span class="op">-</span><span class=
-"number">1.612704038793756e-10</span>,
+        <span class="op">-</span><span class="number">1.612704038793756e-10</span>,
         <span class="number">1.949788519987475e-11</span>,
-        <span class="op">-</span><span class=
-"number">1.898296972561845e-12</span>,
+        <span class="op">-</span><span class="number">1.898296972561845e-12</span>,
         <span class="number">1.548299732623373e-13</span>,
-        <span class="op">-</span><span class=
-"number">1.08771384454683e-14</span>,
+        <span class="op">-</span><span class="number">1.08771384454683e-14</span>,
         <span class="number">6.71904553321496e-16</span>,
-        <span class="op">-</span><span class=
-"number">3.708520546792566e-17</span>,
+        <span class="op">-</span><span class="number">3.708520546792566e-17</span>,
         <span class="number">1.852703881293644e-18</span>,
-        <span class="op">-</span><span class=
-"number">8.468102281613795e-20</span>,
+        <span class="op">-</span><span class="number">8.468102281613795e-20</span>,
         <span class="number">3.573752738071557e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.403832632307468e-22</span>,
+        <span class="op">-</span><span class="number">1.403832632307468e-22</span>,
         <span class="number">5.170131555569684e-24</span>,
-        <span class="op">-</span><span class=
-"number">1.797129164795452e-25</span>,
+        <span class="op">-</span><span class="number">1.797129164795452e-25</span>,
         <span class="number">5.933031682822516e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.871599720258476e-28</span>,
+        <span class="op">-</span><span class="number">1.871599720258476e-28</span>,
         <span class="number">5.67463348039132e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.663220289416015e-31</span>,
+        <span class="op">-</span><span class="number">1.663220289416015e-31</span>,
         <span class="number">4.739057360136688e-33</span>,
-        <span class="op">-</span><span class=
-"number">1.319846149880509e-34</span>,
+        <span class="op">-</span><span class="number">1.319846149880509e-34</span>,
         <span class="number">3.611332754853435e-36</span>,
-        <span class="op">-</span><span class=
-"number">9.75320190739974e-38</span>,
+        <span class="op">-</span><span class="number">9.75320190739974e-38</span>,
         <span class="number">2.610457901096067e-39</span>,
-        <span class="op">-</span><span class=
-"number">6.9471922023383e-41</span>,
+        <span class="op">-</span><span class="number">6.9471922023383e-41</span>,
         <span class="number">1.842952654094429e-42</span>,
-        <span class="op">-</span><span class=
-"number">4.881893935226401e-44</span>,
+        <span class="op">-</span><span class="number">4.881893935226401e-44</span>,
         <span class="number">1.292709729463607e-45</span>,
-        <span class="op">-</span><span class=
-"number">3.426108826316739e-47</span>,
+        <span class="op">-</span><span class="number">3.426108826316739e-47</span>,
         <span class="number">9.07117968577421e-49</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">4.697188471549936e-10</span>,
-        <span class="op">-</span><span class=
-"number">6.454402879342307e-10</span>,
+        <span class="op">-</span><span class="number">6.454402879342307e-10</span>,
         <span class="number">2.73089708336228e-10</span>,
-        <span class="op">-</span><span class=
-"number">8.22125003423014e-11</span>,
+        <span class="op">-</span><span class="number">8.22125003423014e-11</span>,
         <span class="number">1.911333601457239e-11</span>,
-        <span class="op">-</span><span class=
-"number">3.613100979999257e-12</span>,
+        <span class="op">-</span><span class="number">3.613100979999257e-12</span>,
         <span class="number">5.75185355456484e-13</span>,
-        <span class="op">-</span><span class=
-"number">7.909156899624471e-14</span>,
+        <span class="op">-</span><span class="number">7.909156899624471e-14</span>,
         <span class="number">9.57572393059301e-15</span>,
-        <span class="op">-</span><span class=
-"number">1.036230650475913e-15</span>,
+        <span class="op">-</span><span class="number">1.036230650475913e-15</span>,
         <span class="number">1.014500472054451e-16</span>,
-        <span class="op">-</span><span class=
-"number">9.07656703169899e-18</span>,
+        <span class="op">-</span><span class="number">9.07656703169899e-18</span>,
         <span class="number">7.484457702718475e-19</span>,
-        <span class="op">-</span><span class=
-"number">5.730146440577915e-20</span>,
+        <span class="op">-</span><span class="number">5.730146440577915e-20</span>,
         <span class="number">4.099773393045779e-21</span>,
-        <span class="op">-</span><span class=
-"number">2.757294031283266e-22</span>,
+        <span class="op">-</span><span class="number">2.757294031283266e-22</span>,
         <span class="number">1.752536758898024e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.058019627913326e-24</span>,
+        <span class="op">-</span><span class="number">1.058019627913326e-24</span>,
         <span class="number">6.095958678665932e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.367647515777833e-27</span>,
+        <span class="op">-</span><span class="number">3.367647515777833e-27</span>,
         <span class="number">1.791951657145566e-28</span>,
-        <span class="op">-</span><span class=
-"number">9.22575742359728e-30</span>,
+        <span class="op">-</span><span class="number">9.22575742359728e-30</span>,
         <span class="number">4.616395848158595e-31</span>,
-        <span class="op">-</span><span class=
-"number">2.255059292737621e-32</span>,
+        <span class="op">-</span><span class="number">2.255059292737621e-32</span>,
         <span class="number">1.080066145506067e-33</span>,
-        <span class="op">-</span><span class=
-"number">5.093063777184791e-35</span>,
+        <span class="op">-</span><span class="number">5.093063777184791e-35</span>,
         <span class="number">2.373603898419911e-36</span>,
-        <span class="op">-</span><span class=
-"number">1.09701836169385e-37</span>,
+        <span class="op">-</span><span class="number">1.09701836169385e-37</span>,
         <span class="number">5.042445302834143e-39</span>,
-        <span class="op">-</span><span class=
-"number">2.315129590889101e-40</span>,
+        <span class="op">-</span><span class="number">2.315129590889101e-40</span>,
         <span class="number">1.05686721881741e-41</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">9.82855081578761e-12</span>,
-        <span class="op">-</span><span class=
-"number">1.347330587058308e-11</span>,
+        <span class="op">-</span><span class="number">1.347330587058308e-11</span>,
         <span class="number">5.677686274012466e-12</span>,
-        <span class="op">-</span><span class=
-"number">1.700746445987314e-12</span>,
+        <span class="op">-</span><span class="number">1.700746445987314e-12</span>,
         <span class="number">3.931320679599918e-13</span>,
-        <span class="op">-</span><span class=
-"number">7.383385423808974e-14</span>,
+        <span class="op">-</span><span class="number">7.383385423808974e-14</span>,
         <span class="number">1.166836119851833e-14</span>,
-        <span class="op">-</span><span class=
-"number">1.59138412354802e-15</span>,
+        <span class="op">-</span><span class="number">1.59138412354802e-15</span>,
         <span class="number">1.909083902479558e-16</span>,
-        <span class="op">-</span><span class=
-"number">2.044657931288733e-17</span>,
+        <span class="op">-</span><span class="number">2.044657931288733e-17</span>,
         <span class="number">1.97857137362936e-18</span>,
-        <span class="op">-</span><span class=
-"number">1.74697388274048e-19</span>,
+        <span class="op">-</span><span class="number">1.74697388274048e-19</span>,
         <span class="number">1.419079816139697e-20</span>,
-        <span class="op">-</span><span class=
-"number">1.06800567776042e-21</span>,
+        <span class="op">-</span><span class="number">1.06800567776042e-21</span>,
         <span class="number">7.492811546238937e-23</span>,
-        <span class="op">-</span><span class=
-"number">4.92680167422692e-24</span>,
+        <span class="op">-</span><span class="number">4.92680167422692e-24</span>,
         <span class="number">3.050937632496912e-25</span>,
-        <span class="op">-</span><span class=
-"number">1.787132333756518e-26</span>,
+        <span class="op">-</span><span class="number">1.787132333756518e-26</span>,
         <span class="number">9.94246711369654e-28</span>,
-        <span class="op">-</span><span class=
-"number">5.273423190517792e-29</span>,
+        <span class="op">-</span><span class="number">5.273423190517792e-29</span>,
         <span class="number">2.676195084878844e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.304008227555e-31</span>,
+        <span class="op">-</span><span class="number">1.304008227555e-31</span>,
         <span class="number">6.121509901303717e-33</span>,
-        <span class="op">-</span><span class=
-"number">2.777900279875998e-34</span>,
+        <span class="op">-</span><span class="number">2.777900279875998e-34</span>,
         <span class="number">1.222696344952134e-35</span>,
-        <span class="op">-</span><span class=
-"number">5.237647300340743e-37</span>,
+        <span class="op">-</span><span class="number">5.237647300340743e-37</span>,
         <span class="number">2.19103780612638e-38</span>,
-        <span class="op">-</span><span class=
-"number">8.981318656035346e-40</span>,
+        <span class="op">-</span><span class="number">8.981318656035346e-40</span>,
         <span class="number">3.619685037858144e-41</span>,
-        <span class="op">-</span><span class=
-"number">1.441192905689632e-42</span>,
+        <span class="op">-</span><span class="number">1.441192905689632e-42</span>,
         <span class="number">5.660232689680779e-44</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">2.091776594774801e-13</span>,
-        <span class="op">-</span><span class=
-"number">2.862619820606809e-13</span>,
+        <span class="op">-</span><span class="number">2.862619820606809e-13</span>,
         <span class="number">1.202900530442739e-13</span>,
-        <span class="op">-</span><span class=
-"number">3.590841595056432e-14</span>,
+        <span class="op">-</span><span class="number">3.590841595056432e-14</span>,
         <span class="number">8.26768316435424e-15</span>,
-        <span class="op">-</span><span class=
-"number">1.545941872534964e-15</span>,
+        <span class="op">-</span><span class="number">1.545941872534964e-15</span>,
         <span class="number">2.431295659995822e-16</span>,
-        <span class="op">-</span><span class=
-"number">3.298190077281856e-17</span>,
+        <span class="op">-</span><span class="number">3.298190077281856e-17</span>,
         <span class="number">3.933310987442021e-18</span>,
-        <span class="op">-</span><span class=
-"number">4.185213387415644e-19</span>,
+        <span class="op">-</span><span class="number">4.185213387415644e-19</span>,
         <span class="number">4.020761407787515e-20</span>,
-        <span class="op">-</span><span class=
-"number">3.521733950155989e-21</span>,
+        <span class="op">-</span><span class="number">3.521733950155989e-21</span>,
         <span class="number">2.835269874573217e-22</span>,
-        <span class="op">-</span><span class=
-"number">2.112628624401297e-23</span>,
+        <span class="op">-</span><span class="number">2.112628624401297e-23</span>,
         <span class="number">1.465651356981517e-24</span>,
-        <span class="op">-</span><span class=
-"number">9.51651920748738e-26</span>,
+        <span class="op">-</span><span class="number">9.51651920748738e-26</span>,
         <span class="number">5.809861227097474e-27</span>,
-        <span class="op">-</span><span class=
-"number">3.348758874282075e-28</span>,
+        <span class="op">-</span><span class="number">3.348758874282075e-28</span>,
         <span class="number">1.829167141106194e-29</span>,
-        <span class="op">-</span><span class=
-"number">9.50076850067834e-31</span>,
+        <span class="op">-</span><span class="number">9.50076850067834e-31</span>,
         <span class="number">4.707336721659167e-32</span>,
-        <span class="op">-</span><span class=
-"number">2.231477689003343e-33</span>,
+        <span class="op">-</span><span class="number">2.231477689003343e-33</span>,
         <span class="number">1.014926577638734e-34</span>,
-        <span class="op">-</span><span class=
-"number">4.440970698471924e-36</span>,
+        <span class="op">-</span><span class="number">4.440970698471924e-36</span>,
         <span class="number">1.874421224650543e-37</span>,
-        <span class="op">-</span><span class=
-"number">7.651207031046463e-39</span>,
+        <span class="op">-</span><span class="number">7.651207031046463e-39</span>,
         <span class="number">3.028229774888215e-40</span>,
-        <span class="op">-</span><span class=
-"number">1.165123451922694e-41</span>,
+        <span class="op">-</span><span class="number">1.165123451922694e-41</span>,
         <span class="number">4.36939352857568e-43</span>,
-        <span class="op">-</span><span class=
-"number">1.603401976900745e-44</span>,
+        <span class="op">-</span><span class="number">1.603401976900745e-44</span>,
         <span class="number">5.751237143123658e-46</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">4.506366817630401e-15</span>,
-        <span class="op">-</span><span class=
-"number">6.159202014947825e-15</span>,
+        <span class="op">-</span><span class="number">6.159202014947825e-15</span>,
         <span class="number">2.582733867832456e-15</span>,
-        <span class="op">-</span><span class=
-"number">7.690346703603573e-16</span>,
+        <span class="op">-</span><span class="number">7.690346703603573e-16</span>,
         <span class="number">1.76559941096779e-16</span>,
-        <span class="op">-</span><span class=
-"number">3.291034376902557e-17</span>,
+        <span class="op">-</span><span class="number">3.291034376902557e-17</span>,
         <span class="number">5.157984622602899e-18</span>,
-        <span class="op">-</span><span class=
-"number">6.970858808478102e-19</span>,
+        <span class="op">-</span><span class="number">6.970858808478102e-19</span>,
         <span class="number">8.279260488586338e-20</span>,
-        <span class="op">-</span><span class=
-"number">8.770279918955291e-21</span>,
+        <span class="op">-</span><span class="number">8.770279918955291e-21</span>,
         <span class="number">8.384730400248756e-22</span>,
-        <span class="op">-</span><span class=
-"number">7.305059762376899e-23</span>,
+        <span class="op">-</span><span class="number">7.305059762376899e-23</span>,
         <span class="number">5.846890842163063e-24</span>,
-        <span class="op">-</span><span class=
-"number">4.328777721018221e-25</span>,
+        <span class="op">-</span><span class="number">4.328777721018221e-25</span>,
         <span class="number">2.981940367718406e-26</span>,
-        <span class="op">-</span><span class=
-"number">1.921090950989058e-27</span>,
+        <span class="op">-</span><span class="number">1.921090950989058e-27</span>,
         <span class="number">1.162696953433546e-28</span>,
-        <span class="op">-</span><span class=
-"number">6.637298468823267e-30</span>,
+        <span class="op">-</span><span class="number">6.637298468823267e-30</span>,
         <span class="number">3.586578200190467e-31</span>,
-        <span class="op">-</span><span class=
-"number">1.840534801100074e-32</span>,
+        <span class="op">-</span><span class="number">1.840534801100074e-32</span>,
         <span class="number">8.996454682449998e-34</span>,
-        <span class="op">-</span><span class=
-"number">4.200013841085586e-35</span>,
+        <span class="op">-</span><span class="number">4.200013841085586e-35</span>,
         <span class="number">1.87753396194804e-36</span>,
-        <span class="op">-</span><span class=
-"number">8.056037134553881e-38</span>,
+        <span class="op">-</span><span class="number">8.056037134553881e-38</span>,
         <span class="number">3.32534936231489e-39</span>,
-        <span class="op">-</span><span class=
-"number">1.323365922389707e-40</span>,
+        <span class="op">-</span><span class="number">1.323365922389707e-40</span>,
         <span class="number">5.08820409108503e-42</span>,
-        <span class="op">-</span><span class=
-"number">1.894029941758866e-43</span>,
+        <span class="op">-</span><span class="number">1.894029941758866e-43</span>,
         <span class="number">6.839646946673152e-45</span>,
-        <span class="op">-</span><span class=
-"number">2.403721445170254e-46</span>,
+        <span class="op">-</span><span class="number">2.403721445170254e-46</span>,
         <span class="number">8.210053537708903e-48</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">9.79732827781472e-17</span>,
-        <span class="op">-</span><span class=
-"number">1.337761967853994e-16</span>,
+        <span class="op">-</span><span class="number">1.337761967853994e-16</span>,
         <span class="number">5.600589528047509e-17</span>,
-        <span class="op">-</span><span class=
-"number">1.664410299168055e-17</span>,
+        <span class="op">-</span><span class="number">1.664410299168055e-17</span>,
         <span class="number">3.812999993972002e-18</span>,
-        <span class="op">-</span><span class=
-"number">7.090535168499079e-19</span>,
+        <span class="op">-</span><span class="number">7.090535168499079e-19</span>,
         <span class="number">1.108440454731053e-19</span>,
-        <span class="op">-</span><span class=
-"number">1.493878484297494e-20</span>,
+        <span class="op">-</span><span class="number">1.493878484297494e-20</span>,
         <span class="number">1.768978167083376e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.867858090687987e-22</span>,
+        <span class="op">-</span><span class="number">1.867858090687987e-22</span>,
         <span class="number">1.77953714788065e-23</span>,
-        <span class="op">-</span><span class=
-"number">1.544564339267782e-24</span>,
+        <span class="op">-</span><span class="number">1.544564339267782e-24</span>,
         <span class="number">1.23121831367346e-25</span>,
-        <span class="op">-</span><span class=
-"number">9.07510276762249e-27</span>,
+        <span class="op">-</span><span class="number">9.07510276762249e-27</span>,
         <span class="number">6.221457686957692e-28</span>,
-        <span class="op">-</span><span class=
-"number">3.9871127480959e-29</span>,
+        <span class="op">-</span><span class="number">3.9871127480959e-29</span>,
         <span class="number">2.399283527198275e-30</span>,
-        <span class="op">-</span><span class=
-"number">1.36103986303944e-31</span>,
+        <span class="op">-</span><span class="number">1.36103986303944e-31</span>,
         <span class="number">7.303869260213568e-33</span>,
-        <span class="op">-</span><span class=
-"number">3.719652702895942e-34</span>,
+        <span class="op">-</span><span class="number">3.719652702895942e-34</span>,
         <span class="number">1.802876031533293e-35</span>,
-        <span class="op">-</span><span class=
-"number">8.338403463937898e-37</span>,
+        <span class="op">-</span><span class="number">8.338403463937898e-37</span>,
         <span class="number">3.688948222498152e-38</span>,
-        <span class="op">-</span><span class=
-"number">1.564579727171944e-39</span>,
+        <span class="op">-</span><span class="number">1.564579727171944e-39</span>,
         <span class="number">6.374957578480049e-41</span>,
-        <span class="op">-</span><span class=
-"number">2.500329229316189e-42</span>,
+        <span class="op">-</span><span class="number">2.500329229316189e-42</span>,
         <span class="number">9.45735466634978e-44</span>,
-        <span class="op">-</span><span class=
-"number">3.455987445077682e-45</span>,
+        <span class="op">-</span><span class="number">3.455987445077682e-45</span>,
         <span class="number">1.222237851557732e-46</span>,
-        <span class="op">-</span><span class=
-"number">4.194865447822119e-48</span>,
+        <span class="op">-</span><span class="number">4.194865447822119e-48</span>,
         <span class="number">1.395005626338925e-49</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">2.145249552602007e-18</span>,
-        <span class="op">-</span><span class=
-"number">2.926905593437439e-18</span>,
+        <span class="op">-</span><span class="number">2.926905593437439e-18</span>,
         <span class="number">1.223795417447657e-18</span>,
-        <span class="op">-</span><span class=
-"number">3.631402022997135e-19</span>,
+        <span class="op">-</span><span class="number">3.631402022997135e-19</span>,
         <span class="number">8.305108227736838e-20</span>,
-        <span class="op">-</span><span class=
-"number">1.541552582132454e-20</span>,
+        <span class="op">-</span><span class="number">1.541552582132454e-20</span>,
         <span class="number">2.405090863273996e-21</span>,
-        <span class="op">-</span><span class=
-"number">3.234537535800746e-22</span>,
+        <span class="op">-</span><span class="number">3.234537535800746e-22</span>,
         <span class="number">3.821485600863294e-23</span>,
-        <span class="op">-</span><span class=
-"number">4.02528958086635e-24</span>,
+        <span class="op">-</span><span class="number">4.02528958086635e-24</span>,
         <span class="number">3.824978382894981e-25</span>,
-        <span class="op">-</span><span class=
-"number">3.310665179592645e-26</span>,
+        <span class="op">-</span><span class="number">3.310665179592645e-26</span>,
         <span class="number">2.631132604639156e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.933125363448762e-28</span>,
+        <span class="op">-</span><span class="number">1.933125363448762e-28</span>,
         <span class="number">1.320668645732658e-29</span>,
-        <span class="op">-</span><span class=
-"number">8.432077744521124e-31</span>,
+        <span class="op">-</span><span class="number">8.432077744521124e-31</span>,
         <span class="number">5.053592648691705e-32</span>,
-        <span class="op">-</span><span class=
-"number">2.854207526645937e-33</span>,
+        <span class="op">-</span><span class="number">2.854207526645937e-33</span>,
         <span class="number">1.524405001396381e-34</span>,
-        <span class="op">-</span><span class=
-"number">7.723244881736079e-36</span>,
+        <span class="op">-</span><span class="number">7.723244881736079e-36</span>,
         <span class="number">3.72227626287203e-37</span>,
-        <span class="op">-</span><span class=
-"number">1.710964137806697e-38</span>,
+        <span class="op">-</span><span class="number">1.710964137806697e-38</span>,
         <span class="number">7.518247486770489e-40</span>,
-        <span class="op">-</span><span class=
-"number">3.165009707557873e-41</span>,
+        <span class="op">-</span><span class="number">3.165009707557873e-41</span>,
         <span class="number">1.279046938752369e-42</span>,
-        <span class="op">-</span><span class=
-"number">4.971210247126155e-44</span>,
+        <span class="op">-</span><span class="number">4.971210247126155e-44</span>,
         <span class="number">1.861498818319911e-45</span>,
-        <span class="op">-</span><span class=
-"number">6.726766869349445e-47</span>,
+        <span class="op">-</span><span class="number">6.726766869349445e-47</span>,
         <span class="number">2.349500391369296e-48</span>,
-        <span class="op">-</span><span class=
-"number">7.951954677853459e-50</span>,
+        <span class="op">-</span><span class="number">7.951954677853459e-50</span>,
         <span class="number">2.603595732348353e-51</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">4.724098334152552e-20</span>,
-        <span class="op">-</span><span class=
-"number">6.441280825680975e-20</span>,
+        <span class="op">-</span><span class="number">6.441280825680975e-20</span>,
         <span class="number">2.690433215250327e-20</span>,
-        <span class="op">-</span><span class=
-"number">7.973591050907271e-21</span>,
+        <span class="op">-</span><span class="number">7.973591050907271e-21</span>,
         <span class="number">1.821101697431047e-21</span>,
-        <span class="op">-</span><span class=
-"number">3.375272007057215e-22</span>,
+        <span class="op">-</span><span class="number">3.375272007057215e-22</span>,
         <span class="number">5.257733248740684e-23</span>,
-        <span class="op">-</span><span class=
-"number">7.059126309845701e-24</span>,
+        <span class="op">-</span><span class="number">7.059126309845701e-24</span>,
         <span class="number">8.325229052511411e-25</span>,
-        <span class="op">-</span><span class=
-"number">8.75260340622554e-26</span>,
+        <span class="op">-</span><span class="number">8.75260340622554e-26</span>,
         <span class="number">8.300283068842322e-27</span>,
-        <span class="op">-</span><span class=
-"number">7.168802998835483e-28</span>,
+        <span class="op">-</span><span class="number">7.168802998835483e-28</span>,
         <span class="number">5.684347901518806e-29</span>,
-        <span class="op">-</span><span class=
-"number">4.166182240592864e-30</span>,
+        <span class="op">-</span><span class="number">4.166182240592864e-30</span>,
         <span class="number">2.838835825881159e-31</span>,
-        <span class="op">-</span><span class=
-"number">1.807466565230453e-32</span>,
+        <span class="op">-</span><span class="number">1.807466565230453e-32</span>,
         <span class="number">1.080037036814363e-33</span>,
-        <span class="op">-</span><span class=
-"number">6.080392400619016e-35</span>,
+        <span class="op">-</span><span class="number">6.080392400619016e-35</span>,
         <span class="number">3.236303662730607e-36</span>,
-        <span class="op">-</span><span class=
-"number">1.633562534439934e-37</span>,
+        <span class="op">-</span><span class="number">1.633562534439934e-37</span>,
         <span class="number">7.841576920621312e-39</span>,
-        <span class="op">-</span><span class=
-"number">3.58882457929495e-40</span>,
+        <span class="op">-</span><span class="number">3.58882457929495e-40</span>,
         <span class="number">1.569589534784121e-41</span>,
-        <span class="op">-</span><span class=
-"number">6.573944600988754e-43</span>,
+        <span class="op">-</span><span class="number">6.573944600988754e-43</span>,
         <span class="number">2.641931286062767e-44</span>,
-        <span class="op">-</span><span class=
-"number">1.020610245458725e-45</span>,
+        <span class="op">-</span><span class="number">1.020610245458725e-45</span>,
         <span class="number">3.79642470022157e-47</span>,
-        <span class="op">-</span><span class=
-"number">1.36192411212769e-48</span>,
+        <span class="op">-</span><span class="number">1.36192411212769e-48</span>,
         <span class="number">4.718902953493708e-50</span>,
-        <span class="op">-</span><span class=
-"number">1.583042993221401e-51</span>,
+        <span class="op">-</span><span class="number">1.583042993221401e-51</span>,
         <span class="number">5.132872664084215e-53</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.045155429916437e-21</span>,
-        <span class="op">-</span><span class=
-"number">1.424306631269432e-21</span>,
+        <span class="op">-</span><span class="number">1.424306631269432e-21</span>,
         <span class="number">5.944031317096118e-22</span>,
-        <span class="op">-</span><span class=
-"number">1.759839498812408e-22</span>,
+        <span class="op">-</span><span class="number">1.759839498812408e-22</span>,
         <span class="number">4.014843963379172e-23</span>,
-        <span class="op">-</span><span class=
-"number">7.432275040512832e-24</span>,
+        <span class="op">-</span><span class="number">7.432275040512832e-24</span>,
         <span class="number">1.156261278961454e-24</span>,
-        <span class="op">-</span><span class=
-"number">1.550312247618753e-25</span>,
+        <span class="op">-</span><span class="number">1.550312247618753e-25</span>,
         <span class="number">1.825747776688471e-26</span>,
-        <span class="op">-</span><span class=
-"number">1.916559231133321e-27</span>,
+        <span class="op">-</span><span class="number">1.916559231133321e-27</span>,
         <span class="number">1.814597359982848e-28</span>,
-        <span class="op">-</span><span class=
-"number">1.564573045992582e-29</span>,
+        <span class="op">-</span><span class="number">1.564573045992582e-29</span>,
         <span class="number">1.238363652696488e-30</span>,
-        <span class="op">-</span><span class=
-"number">9.05893909636263e-32</span>,
+        <span class="op">-</span><span class="number">9.05893909636263e-32</span>,
         <span class="number">6.160277861944001e-33</span>,
-        <span class="op">-</span><span class=
-"number">3.913780248313773e-34</span>,
+        <span class="op">-</span><span class="number">3.913780248313773e-34</span>,
         <span class="number">2.333304494581551e-35</span>,
-        <span class="op">-</span><span class=
-"number">1.310406848847886e-36</span>,
+        <span class="op">-</span><span class="number">1.310406848847886e-36</span>,
         <span class="number">6.956564930324008e-38</span>,
-        <span class="op">-</span><span class=
-"number">3.501668248846981e-39</span>,
+        <span class="op">-</span><span class="number">3.501668248846981e-39</span>,
         <span class="number">1.675913062700094e-40</span>,
-        <span class="op">-</span><span class=
-"number">7.645677858539599e-42</span>,
+        <span class="op">-</span><span class="number">7.645677858539599e-42</span>,
         <span class="number">3.332445032468648e-43</span>,
-        <span class="op">-</span><span class=
-"number">1.390602299603149e-44</span>,
+        <span class="op">-</span><span class="number">1.390602299603149e-44</span>,
         <span class="number">5.566386374274837e-46</span>,
-        <span class="op">-</span><span class=
-"number">2.141154967604719e-47</span>,
+        <span class="op">-</span><span class="number">2.141154967604719e-47</span>,
         <span class="number">7.927667709224863e-49</span>,
-        <span class="op">-</span><span class=
-"number">2.82966354813132e-50</span>,
+        <span class="op">-</span><span class="number">2.82966354813132e-50</span>,
         <span class="number">9.75086686833434e-52</span>,
-        <span class="op">-</span><span class=
-"number">3.25159032032157e-53</span>,
+        <span class="op">-</span><span class="number">3.25159032032157e-53</span>,
         <span class="number">1.047460442016658e-54</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">2.321271263676939e-23</span>,
-        <span class="op">-</span><span class=
-"number">3.161941290808814e-23</span>,
+        <span class="op">-</span><span class="number">3.161941290808814e-23</span>,
         <span class="number">1.318615839111443e-23</span>,
-        <span class="op">-</span><span class=
-"number">3.9006931410522e-24</span>,
+        <span class="op">-</span><span class="number">3.9006931410522e-24</span>,
         <span class="number">8.89063516092596e-25</span>,
-        <span class="op">-</span><span class=
-"number">1.644190548042387e-25</span>,
+        <span class="op">-</span><span class="number">1.644190548042387e-25</span>,
         <span class="number">2.555206862279035e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.422181817023977e-27</span>,
+        <span class="op">-</span><span class="number">3.422181817023977e-27</span>,
         <span class="number">4.025429985058437e-28</span>,
-        <span class="op">-</span><span class=
-"number">4.220405604208508e-29</span>,
+        <span class="op">-</span><span class="number">4.220405604208508e-29</span>,
         <span class="number">3.990655066091819e-30</span>,
-        <span class="op">-</span><span class=
-"number">3.436066831742752e-31</span>,
+        <span class="op">-</span><span class="number">3.436066831742752e-31</span>,
         <span class="number">2.715712146141786e-32</span>,
-        <span class="op">-</span><span class=
-"number">1.983573937722338e-33</span>,
+        <span class="op">-</span><span class="number">1.983573937722338e-33</span>,
         <span class="number">1.346697736875692e-34</span>,
-        <span class="op">-</span><span class=
-"number">8.541330709659267e-36</span>,
+        <span class="op">-</span><span class="number">8.541330709659267e-36</span>,
         <span class="number">5.082966102068235e-37</span>,
-        <span class="op">-</span><span class=
-"number">2.849198171880699e-38</span>,
+        <span class="op">-</span><span class="number">2.849198171880699e-38</span>,
         <span class="number">1.509497077496167e-39</span>,
-        <span class="op">-</span><span class=
-"number">7.581923184936733e-41</span>,
+        <span class="op">-</span><span class="number">7.581923184936733e-41</span>,
         <span class="number">3.620463380213038e-42</span>,
-        <span class="op">-</span><span class=
-"number">1.647680874629967e-43</span>,
+        <span class="op">-</span><span class="number">1.647680874629967e-43</span>,
         <span class="number">7.162998761128943e-45</span>,
-        <span class="op">-</span><span class=
-"number">2.980804385175891e-46</span>,
+        <span class="op">-</span><span class="number">2.980804385175891e-46</span>,
         <span class="number">1.189649914933647e-47</span>,
-        <span class="op">-</span><span class=
-"number">4.561606040822498e-49</span>,
+        <span class="op">-</span><span class="number">4.561606040822498e-49</span>,
         <span class="number">1.683210475548773e-50</span>,
-        <span class="op">-</span><span class=
-"number">5.986050367738978e-52</span>,
+        <span class="op">-</span><span class="number">5.986050367738978e-52</span>,
         <span class="number">2.054656144197655e-53</span>,
-        <span class="op">-</span><span class=
-"number">6.822488374830269e-55</span>,
+        <span class="op">-</span><span class="number">6.822488374830269e-55</span>,
         <span class="number">2.187732548696241e-56</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">5.172423768877196e-25</span>,
-        <span class="op">-</span><span class=
-"number">7.042964451714495e-25</span>,
+        <span class="op">-</span><span class="number">7.042964451714495e-25</span>,
         <span class="number">2.935304089037118e-25</span>,
-        <span class="op">-</span><span class=
-"number">8.676877329273938e-26</span>,
+        <span class="op">-</span><span class="number">8.676877329273938e-26</span>,
         <span class="number">1.976112491556392e-26</span>,
-        <span class="op">-</span><span class=
-"number">3.651444567064306e-27</span>,
+        <span class="op">-</span><span class="number">3.651444567064306e-27</span>,
         <span class="number">5.66958393471057e-28</span>,
-        <span class="op">-</span><span class=
-"number">7.586131808011824e-29</span>,
+        <span class="op">-</span><span class="number">7.586131808011824e-29</span>,
         <span class="number">8.914588723358305e-30</span>,
-        <span class="op">-</span><span class=
-"number">9.33671176089473e-31</span>,
+        <span class="op">-</span><span class="number">9.33671176089473e-31</span>,
         <span class="number">8.818867214965265e-32</span>,
-        <span class="op">-</span><span class=
-"number">7.584659371298539e-33</span>,
+        <span class="op">-</span><span class="number">7.584659371298539e-33</span>,
         <span class="number">5.987420787686834e-34</span>,
-        <span class="op">-</span><span class=
-"number">4.367774482787432e-35</span>,
+        <span class="op">-</span><span class="number">4.367774482787432e-35</span>,
         <span class="number">2.961489700517084e-36</span>,
-        <span class="op">-</span><span class=
-"number">1.875705102448653e-37</span>,
+        <span class="op">-</span><span class="number">1.875705102448653e-37</span>,
         <span class="number">1.114612046338721e-38</span>,
-        <span class="op">-</span><span class=
-"number">6.238252599044707e-40</span>,
+        <span class="op">-</span><span class="number">6.238252599044707e-40</span>,
         <span class="number">3.299667029449956e-41</span>,
-        <span class="op">-</span><span class=
-"number">1.65453417918605e-42</span>,
+        <span class="op">-</span><span class="number">1.65453417918605e-42</span>,
         <span class="number">7.886366538975674e-44</span>,
-        <span class="op">-</span><span class=
-"number">3.582258018062048e-45</span>,
+        <span class="op">-</span><span class="number">3.582258018062048e-45</span>,
         <span class="number">1.554176679397891e-46</span>,
-        <span class="op">-</span><span class=
-"number">6.453679326657175e-48</span>,
+        <span class="op">-</span><span class="number">6.453679326657175e-48</span>,
         <span class="number">2.569824899486169e-49</span>,
-        <span class="op">-</span><span class=
-"number">9.8299099959058e-51</span>,
+        <span class="op">-</span><span class="number">9.8299099959058e-51</span>,
         <span class="number">3.617836232081689e-52</span>,
-        <span class="op">-</span><span class=
-"number">1.283082421069959e-53</span>,
+        <span class="op">-</span><span class="number">1.283082421069959e-53</span>,
         <span class="number">4.391117023218657e-55</span>,
-        <span class="op">-</span><span class=
-"number">1.453474583191439e-56</span>,
+        <span class="op">-</span><span class="number">1.453474583191439e-56</span>,
         <span class="number">4.645099430932636e-58</span>,
     ],
-    <span class="kw-2">&</span>[
+    <span class="kw-2">&amp;</span>[
         <span class="number">1.155796390215178e-26</span>,
-        <span class="op">-</span><span class=
-"number">1.573253571690442e-26</span>,
+        <span class="op">-</span><span class="number">1.573253571690442e-26</span>,
         <span class="number">6.553392390131844e-27</span>,
-        <span class="op">-</span><span class=
-"number">1.936008136991464e-27</span>,
+        <span class="op">-</span><span class="number">1.936008136991464e-27</span>,
         <span class="number">4.406170547261047e-28</span>,
-        <span class="op">-</span><span class=
-"number">8.135813071600767e-29</span>,
+        <span class="op">-</span><span class="number">8.135813071600767e-29</span>,
         <span class="number">1.262283535735897e-29</span>,
-        <span class="op">-</span><span class=
-"number">1.68763778114442e-30</span>,
+        <span class="op">-</span><span class="number">1.68763778114442e-30</span>,
         <span class="number">1.981513433909492e-31</span>,
-        <span class="op">-</span><span class=
-"number">2.073528093940853e-32</span>,
+        <span class="op">-</span><span class="number">2.073528093940853e-32</span>,
         <span class="number">1.956734360540151e-33</span>,
-        <span class="op">-</span><span class=
-"number">1.681281034560638e-34</span>,
+        <span class="op">-</span><span class="number">1.681281034560638e-34</span>,
         <span class="number">1.325898662613274e-35</span>,
-        <span class="op">-</span><span class=
-"number">9.6622257768245e-37</span>,
+        <span class="op">-</span><span class="number">9.6622257768245e-37</span>,
         <span class="number">6.544139509417818e-38</span>,
-        <span class="op">-</span><span class=
-"number">4.140090619941726e-39</span>,
+        <span class="op">-</span><span class="number">4.140090619941726e-39</span>,
         <span class="number">2.45724330138913e-40</span>,
-        <span class="op">-</span><span class=
-"number">1.373539378265881e-41</span>,
+        <span class="op">-</span><span class="number">1.373539378265881e-41</span>,
         <span class="number">7.255625551571402e-43</span>,
-        <span class="op">-</span><span class=
-"number">3.633105625254319e-44</span>,
+        <span class="op">-</span><span class="number">3.633105625254319e-44</span>,
         <span class="number">1.729201650225656e-45</span>,
-        <span class="op">-</span><span class=
-"number">7.842572222693557e-47</span>,
+        <span class="op">-</span><span class="number">7.842572222693557e-47</span>,
         <span class="number">3.397027792596697e-48</span>,
-        <span class="op">-</span><span class=
-"number">1.408200370039516e-49</span>,
+        <span class="op">-</span><span class="number">1.408200370039516e-49</span>,
         <span class="number">5.597282718719957e-51</span>,
-        <span class="op">-</span><span class=
-"number">2.136952314518316e-52</span>,
+        <span class="op">-</span><span class="number">2.136952314518316e-52</span>,
         <span class="number">7.849048808365246e-54</span>,
-        <span class="op">-</span><span class=
-"number">2.777747128622056e-55</span>,
+        <span class="op">-</span><span class="number">2.777747128622056e-55</span>,
         <span class="number">9.48474977321681e-57</span>,
-        <span class="op">-</span><span class=
-"number">3.131889717523598e-58</span>,
+        <span class="op">-</span><span class="number">3.131889717523598e-58</span>,
         <span class="number">9.98341037366e-60</span>,
     ],
 ];
 
-<span class="kw">pub</span> <span class=
-"kw">const</span> <span class="ident">SPLITS</span>: [<span class=
-"ident">f64</span>; <span class="number">32</span>] <span class=
-"op">=</span> [
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SPLITS</span>: [<span class="ident">f64</span>; <span class="number">32</span>] <span class="op">=</span> [
     <span class="number">0.3416070042339728</span>,
     <span class="number">0.4592622436172518</span>,
     <span class="number">0.5769174830005307</span>,
@@ -2812,15 +2295,4 @@ autocomplete="off" spellcheck="false" placeholder=
     <span class="number">60.58108956847281</span>,
 ];
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../../main.js"></script>
-<script src="../../../source-script.js"></script>
-<script src="../../../source-files.js"></script>
-<script defer src="../../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

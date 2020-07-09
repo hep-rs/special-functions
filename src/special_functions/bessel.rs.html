@@ -1,79 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/bessel.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>bessel.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href="../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../rustdoc.css" id=
-"mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../light.css" id=
-"themeStyle">
-<script src="../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/bessel.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bessel.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../special_functions/index.html'>
-<div class='logo-container'><img src='../../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../settings.html"><img src=
-"../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">  1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../special_functions/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -629,14 +623,10 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="554">554</span>
 <span id="555">555</span>
 <span id="556">556</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Bessel functions</span>
 
-<span class="kw">use</span> <span class=
-"ident">std</span>::<span class=
-"ident">convert</span>::<span class="ident">identity</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">identity</span>;
 
 <span class="kw">mod</span> <span class="ident">i0</span>;
 <span class="kw">mod</span> <span class="ident">i1</span>;
@@ -683,975 +673,367 @@ autocomplete="off" spellcheck="false" placeholder=
 <span class="kw">mod</span> <span class="ident">y8</span>;
 <span class="kw">mod</span> <span class="ident">y9</span>;
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_0(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i0</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_i0</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_0(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i0</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_i0</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i0</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i0</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i0</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i0</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i0</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i0</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_1(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i1</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_i1</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_1(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i1</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_i1</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i1</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i1</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i1</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i1</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i1</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i1</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_2(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i2</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_i2</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_2(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i2</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_i2</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i2</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i2</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i2</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i2</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_3(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i3</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_i3</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_3(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i3</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_i3</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i3</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i3</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i3</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i3</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i3</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i3</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_4(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i4</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_i4</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_4(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i4</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_i4</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i4</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i4</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i4</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i4</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i4</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i4</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_5(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i5</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_i5</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_5(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i5</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_i5</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i5</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i5</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i5</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i5</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i5</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i5</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_6(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i6</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_i6</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_6(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i6</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_i6</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i6</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i6</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i6</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i6</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i6</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i6</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_7(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i7</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_i7</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_7(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i7</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_i7</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i7</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i7</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i7</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i7</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i7</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i7</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_8(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i8</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_i8</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_8(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i8</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_i8</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i8</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i8</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i8</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i8</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i8</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i8</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(I_9(x)\\) for all real \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">i9</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_i9</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$I_9(x)$` for all real `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i9</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_i9</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_i9</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_i9</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_i9</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">i9</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_i9</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">i9</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_0(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j0</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_j0</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_0(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j0</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_j0</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j0</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j0</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j0</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j0</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j0</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j0</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_1(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j1</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_j1</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_1(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j1</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_j1</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j1</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j1</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j1</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j1</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j1</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j1</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_2(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j2</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_j2</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_2(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j2</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_j2</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j2</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j2</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j2</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j2</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_3(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j3</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_j3</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_3(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j3</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_j3</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j3</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j3</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j3</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j3</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j3</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j3</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_4(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j4</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_j4</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_4(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j4</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_j4</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j4</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j4</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j4</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j4</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j4</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j4</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_5(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j5</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_j5</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_5(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j5</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_j5</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j5</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j5</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j5</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j5</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j5</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j5</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_6(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j6</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_j6</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_6(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j6</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_j6</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j6</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j6</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j6</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j6</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j6</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j6</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_7(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j7</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_j7</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_7(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j7</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_j7</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j7</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j7</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j7</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j7</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j7</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j7</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_8(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j8</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="ident">_j8</span>(<span class=
-"op">-</span><span class="ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_8(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j8</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="ident">_j8</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j8</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j8</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j8</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j8</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j8</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j8</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Approximation of modified Bessel function \\(J_9(x)\\) for all \\(x\\).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">j9</span>(<span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">0.0</span> {
-        <span class="op">-</span><span class=
-"ident">_j9</span>(<span class="op">-</span><span class=
-"ident">x</span>)
+<span class="doccomment">/// Approximation of modified Bessel function `$J_9(x)$` for all `$x$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">j9</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0.0</span> {
+        <span class="op">-</span><span class="ident">_j9</span>(<span class="op">-</span><span class="ident">x</span>)
     } <span class="kw">else</span> {
-        <span class="ident">_j9</span>(<span class=
-"ident">x</span>)
+        <span class="ident">_j9</span>(<span class="ident">x</span>)
     }
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_j9</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">j9</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_j9</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">j9</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_0(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k0</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k0</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_0(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k0</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k0</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_1(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k1</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k1</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_1(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k1</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k1</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k2</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k2</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_2(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_3(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k3</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k3</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_3(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k3</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k3</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_4(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k4</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k4</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_4(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k4</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k4</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_5(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k5</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k5</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_5(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k5</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k5</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_6(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k6</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k6</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_6(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k6</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k6</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_7(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k7</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k7</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_7(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k7</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k7</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_8(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k8</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k8</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_8(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k8</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k8</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(K_9(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k9</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k9</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$K_9(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k9</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k9</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximatino of the ratio of Bessel function \\(K_1(x) / K_2(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">k1_on_k2</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">k1_on_k2</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximatino of the ratio of Bessel function `$K_1(x) / K_2(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">k1_on_k2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">k1_on_k2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_0(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y0</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y0</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_0(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y0</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y0</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_1(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y1</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y1</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_1(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y1</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y1</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_2(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y2</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y2</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_2(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y2</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y2</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_3(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y3</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y3</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_3(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y3</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y3</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_4(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y4</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y4</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_4(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y4</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y4</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_5(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y5</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y5</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_5(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y5</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y5</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_6(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y6</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y6</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_6(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y6</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y6</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_7(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y7</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y7</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_7(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y7</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y7</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_8(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y8</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y8</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_8(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y8</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y8</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="attribute">#[<span class=
-"ident">doc</span> <span class="op">=</span> <span class=
-"string">r#"Approximation of modified Bessel function \\(Y_9(x)\\) for all \\(x &gt; 0\\)."#</span>]</span>
-    (<span class="kw">pub</span>) <span class=
-"kw">fn</span> <span class="ident">y9</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">y9</span>, <span class="kw">type</span> <span class=
-"op">=</span> <span class="ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">r#&quot;Approximation of modified Bessel function `$Y_9(x)$` for all `$x &gt; 0$`.&quot;#</span>]</span>
+    (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">y9</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">y9</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">utilities</span>::<span class=
-"ident">test</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class=
-"ident">std</span>::{<span class="ident">f64</span>, <span class=
-"ident">fs</span>::<span class="ident">File</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilities</span>::<span class="ident">test</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">f64</span>, <span class="ident">fs</span>::<span class="ident">File</span>};
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">i</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/bessel/i.csv.zst"</span>)<span class=
-"question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> <span class=
-"kw-2">&</span>[
-            <span class="kw">super</span>::<span class=
-"ident">i0</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i1</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i2</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i3</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i4</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i5</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i6</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i7</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i8</span>,
-            <span class="kw">super</span>::<span class=
-"ident">i9</span>,
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">i</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/bessel/i.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="kw">super</span>::<span class="ident">i0</span>,
+            <span class="kw">super</span>::<span class="ident">i1</span>,
+            <span class="kw">super</span>::<span class="ident">i2</span>,
+            <span class="kw">super</span>::<span class="ident">i3</span>,
+            <span class="kw">super</span>::<span class="ident">i4</span>,
+            <span class="kw">super</span>::<span class="ident">i5</span>,
+            <span class="kw">super</span>::<span class="ident">i6</span>,
+            <span class="kw">super</span>::<span class="ident">i7</span>,
+            <span class="kw">super</span>::<span class="ident">i8</span>,
+            <span class="kw">super</span>::<span class="ident">i9</span>,
         ];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">11</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"kw-2">&</span><span class="ident">values</span>[<span class=
-"number">1</span>..];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">11</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">1</span>..];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">x</span>);
-                    <span class=
-"comment">// println!("I{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);</span>
-                    <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">x</span>);
+                    <span class="comment">// println!(&quot;I{}({:e}) = {:e} [{:e}]&quot;, i, x, nyi, yi);</span>
+                    <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                 }
             }
         }
@@ -1659,110 +1041,40 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">j</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/bessel/j.csv.zst"</span>)<span class=
-"question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> <span class=
-"kw-2">&</span>[
-            <span class="kw">super</span>::<span class=
-"ident">j0</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j1</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j2</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j3</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j4</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j5</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j6</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j7</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j8</span>,
-            <span class="kw">super</span>::<span class=
-"ident">j9</span>,
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">j</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/bessel/j.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="kw">super</span>::<span class="ident">j0</span>,
+            <span class="kw">super</span>::<span class="ident">j1</span>,
+            <span class="kw">super</span>::<span class="ident">j2</span>,
+            <span class="kw">super</span>::<span class="ident">j3</span>,
+            <span class="kw">super</span>::<span class="ident">j4</span>,
+            <span class="kw">super</span>::<span class="ident">j5</span>,
+            <span class="kw">super</span>::<span class="ident">j6</span>,
+            <span class="kw">super</span>::<span class="ident">j7</span>,
+            <span class="kw">super</span>::<span class="ident">j8</span>,
+            <span class="kw">super</span>::<span class="ident">j9</span>,
         ];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">11</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"kw-2">&</span><span class="ident">values</span>[<span class=
-"number">1</span>..];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">11</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">1</span>..];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">x</span>);
-                    <span class=
-"comment">// println!("J{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);</span>
-                    <span class="kw">if</span> <span class=
-"ident">x</span>.<span class="ident">abs</span>() <span class=
-"op">&lt;</span> <span class="number">1e6</span> {
-                        <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">x</span>);
+                    <span class="comment">// println!(&quot;J{}({:e}) = {:e} [{:e}]&quot;, i, x, nyi, yi);</span>
+                    <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="number">1e6</span> {
+                        <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                     } <span class="kw">else</span> {
-                        <span class=
-"comment">// The error for large x is large due to cos/sin</span>
-                        <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">4.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                        <span class="comment">// The error for large x is large due to cos/sin</span>
+                        <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">4.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                     }
                 }
             }
@@ -1771,98 +1083,36 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">k</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/bessel/k.csv.zst"</span>)<span class=
-"question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> <span class=
-"kw-2">&</span>[
-            <span class="kw">super</span>::<span class=
-"ident">k0</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k1</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k2</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k3</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k4</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k5</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k6</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k7</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k8</span>,
-            <span class="kw">super</span>::<span class=
-"ident">k9</span>,
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/bessel/k.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="kw">super</span>::<span class="ident">k0</span>,
+            <span class="kw">super</span>::<span class="ident">k1</span>,
+            <span class="kw">super</span>::<span class="ident">k2</span>,
+            <span class="kw">super</span>::<span class="ident">k3</span>,
+            <span class="kw">super</span>::<span class="ident">k4</span>,
+            <span class="kw">super</span>::<span class="ident">k5</span>,
+            <span class="kw">super</span>::<span class="ident">k6</span>,
+            <span class="kw">super</span>::<span class="ident">k7</span>,
+            <span class="kw">super</span>::<span class="ident">k8</span>,
+            <span class="kw">super</span>::<span class="ident">k9</span>,
         ];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">11</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"kw-2">&</span><span class="ident">values</span>[<span class=
-"number">1</span>..];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">11</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">1</span>..];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">x</span>);
-                    <span class=
-"comment">// println!("K{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);</span>
-                    <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">x</span>);
+                    <span class="comment">// println!(&quot;K{}({:e}) = {:e} [{:e}]&quot;, i, x, nyi, yi);</span>
+                    <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                 }
             }
         }
@@ -1870,110 +1120,40 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">y</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/bessel/y.csv.zst"</span>)<span class=
-"question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> <span class=
-"kw-2">&</span>[
-            <span class="kw">super</span>::<span class=
-"ident">y0</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y1</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y2</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y3</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y4</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y5</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y6</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y7</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y8</span>,
-            <span class="kw">super</span>::<span class=
-"ident">y9</span>,
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">y</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/bessel/y.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[
+            <span class="kw">super</span>::<span class="ident">y0</span>,
+            <span class="kw">super</span>::<span class="ident">y1</span>,
+            <span class="kw">super</span>::<span class="ident">y2</span>,
+            <span class="kw">super</span>::<span class="ident">y3</span>,
+            <span class="kw">super</span>::<span class="ident">y4</span>,
+            <span class="kw">super</span>::<span class="ident">y5</span>,
+            <span class="kw">super</span>::<span class="ident">y6</span>,
+            <span class="kw">super</span>::<span class="ident">y7</span>,
+            <span class="kw">super</span>::<span class="ident">y8</span>,
+            <span class="kw">super</span>::<span class="ident">y9</span>,
         ];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">11</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"kw-2">&</span><span class="ident">values</span>[<span class=
-"number">1</span>..];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">11</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">1</span>..];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">x</span>);
-                    <span class=
-"comment">// println!("Y{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);</span>
-                    <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&lt;</span> <span class=
-"number">1e2</span> {
-                        <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">x</span>);
+                    <span class="comment">// println!(&quot;Y{}({:e}) = {:e} [{:e}]&quot;, i, x, nyi, yi);</span>
+                    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">1e2</span> {
+                        <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                     } <span class="kw">else</span> {
-                        <span class=
-"comment">// The error for large x is large due to cos/sin</span>
-                        <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">4.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                        <span class="comment">// The error for large x is large due to cos/sin</span>
+                        <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">4.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                     }
                 }
             }
@@ -1982,55 +1162,18 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">k1_on_k2</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/bessel/k1_on_k2.csv.zst"</span>)<span class=
-"question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">k1_on_k2</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/bessel/k1_on_k2.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> (<span class=
-"ident">x</span>, <span class="ident">y</span>): (<span class=
-"ident">f64</span>, <span class="ident">f64</span>) <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>): (<span class="ident">f64</span>, <span class="ident">f64</span>) <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
 
-            <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">y</span>.<span class=
-"ident">is_nan</span>() {
-                <span class="kw">let</span> <span class=
-"ident">ny</span> <span class="op">=</span> <span class=
-"kw">super</span>::<span class="ident">k1_on_k2</span>(<span class=
-"ident">x</span>);
-                <span class=
-"comment">// println!("K₁ / K₂({:e}) = {:e} [{:e}]", x, ny, y);</span>
-                <span class="ident">approx_eq</span>(<span class=
-"ident">ny</span>, <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">y</span>.<span class="ident">is_nan</span>() {
+                <span class="kw">let</span> <span class="ident">ny</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">k1_on_k2</span>(<span class="ident">x</span>);
+                <span class="comment">// println!(&quot;K₁ / K₂({:e}) = {:e} [{:e}]&quot;, x, ny, y);</span>
+                <span class="ident">approx_eq</span>(<span class="ident">ny</span>, <span class="ident">y</span>, <span class="number">8.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
             }
         }
 
@@ -2038,15 +1181,4 @@ autocomplete="off" spellcheck="false" placeholder=
     }
 }
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../main.js"></script>
-<script src="../../source-script.js"></script>
-<script src="../../source-files.js"></script>
-<script defer src="../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "special_functions";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

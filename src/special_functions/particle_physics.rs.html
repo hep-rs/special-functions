@@ -1,79 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/particle_physics.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>particle_physics.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href="../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../rustdoc.css" id=
-"mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../light.css" id=
-"themeStyle">
-<script src="../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/particle_physics.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>particle_physics.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../special_functions/index.html'>
-<div class='logo-container'><img src='../../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../settings.html"><img src=
-"../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">  1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../special_functions/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -224,361 +218,151 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle statistics</span>
 
-<span class="kw">pub</span> <span class=
-"kw">mod</span> <span class="ident">pave_absorptive</span>;
-<span class="kw">pub</span> <span class=
-"kw">mod</span> <span class="ident">statistics</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pave_absorptive</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">statistics</span>;
 
 <span class="doccomment">/// Kallen lambda function:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// \\begin{equation}</span>
-<span class=
-"doccomment">///   \lambda(a, b, c) = a^2 + b^2 + c^2 - 2ab - 2ac - 2bc</span>
-<span class="doccomment">/// \\end{equation}</span>
+<span class="doccomment">/// ```math</span>
+<span class="doccomment">/// \lambda(a, b, c) = a^2 + b^2 + c^2 - 2ab - 2ac - 2bc</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class=
-"doccomment">/// use special_functions::particle_physics::kallen_lambda;</span>
+<span class="doccomment">/// use special_functions::particle_physics::kallen_lambda;</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// assert_eq!(kallen_lambda(5.0, 2.0, 0.5), 2.25);</span>
-<span class=
-"doccomment">/// assert_eq!(kallen_lambda(1.0, 1.0, 1.0), -3.0);</span>
+<span class="doccomment">/// assert_eq!(kallen_lambda(5.0, 2.0, 0.5), 2.25);</span>
+<span class="doccomment">/// assert_eq!(kallen_lambda(1.0, 1.0, 1.0), -3.0);</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class=
-"ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>: <span class="ident">f64</span>, <span class=
-"ident">b</span>: <span class="ident">f64</span>, <span class=
-"ident">c</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="ident">a</span>.<span class=
-"ident">powi</span>(<span class="number">2</span>) <span class=
-"op">+</span> <span class="ident">b</span>.<span class=
-"ident">powi</span>(<span class="number">2</span>) <span class=
-"op">+</span> <span class="ident">c</span>.<span class=
-"ident">powi</span>(<span class="number">2</span>) <span class=
-"op">-</span> <span class="number">2.0</span> <span class=
-"op">*</span> (<span class="ident">a</span> <span class=
-"op">*</span> <span class="ident">b</span> <span class=
-"op">+</span> <span class="ident">a</span> <span class=
-"op">*</span> <span class="ident">c</span> <span class=
-"op">+</span> <span class="ident">b</span> <span class=
-"op">*</span> <span class="ident">c</span>)
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kallen_lambda</span>(<span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">c</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">a</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">b</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">c</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="number">2.0</span> <span class="op">*</span> (<span class="ident">a</span> <span class="op">*</span> <span class="ident">b</span> <span class="op">+</span> <span class="ident">a</span> <span class="op">*</span> <span class="ident">c</span> <span class="op">+</span> <span class="ident">b</span> <span class="op">*</span> <span class="ident">c</span>)
 }
 
-<span class=
-"doccomment">/// Square root of the Kallen lambda function:</span>
+<span class="doccomment">/// Square root of the Kallen lambda function:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// \\begin{equation}</span>
-<span class=
-"doccomment">///   \lambda^{\frac{1}{2}}(a, b, c) = \sqrt{a^2 + b^2 + c^2 - 2ab - 2ac - 2bc}</span>
-<span class="doccomment">/// \\end{equation}</span>
+<span class="doccomment">/// ```math</span>
+<span class="doccomment">/// \lambda^{\frac{1}{2}}(a, b, c) = \sqrt{a^2 + b^2 + c^2 - 2ab - 2ac - 2bc}</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// This implementation is more precise than taking the square root of</span>
-<span class=
-"doccomment">/// [`kallen_lambda`] in cases where the arguments span several orders of</span>
+<span class="doccomment">/// This implementation is more precise than taking the square root of</span>
+<span class="doccomment">/// [`kallen_lambda`] in cases where the arguments span several orders of</span>
 <span class="doccomment">/// magnitude.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class=
-"doccomment">/// use special_functions::particle_physics::{kallen_lambda, kallen_lambda_sqrt};</span>
+<span class="doccomment">/// use special_functions::particle_physics::{kallen_lambda, kallen_lambda_sqrt};</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// assert!((kallen_lambda_sqrt(5.0, 2.0, 0.5) - 1.5).abs() &lt; 1e-14);</span>
-<span class=
-"doccomment">/// assert!((kallen_lambda(5.0, 2.0, 0.5).sqrt() - kallen_lambda_sqrt(5.0, 2.0, 0.5)).abs() &lt; 1e-14);</span>
-<span class=
-"doccomment">/// assert!((kallen_lambda_sqrt(1.0, 1.0, 1.0) - 3f64.sqrt()).abs() &lt; 1e-14);</span>
+<span class="doccomment">/// assert!((kallen_lambda_sqrt(5.0, 2.0, 0.5) - 1.5).abs() &lt; 1e-14);</span>
+<span class="doccomment">/// assert!((kallen_lambda(5.0, 2.0, 0.5).sqrt() - kallen_lambda_sqrt(5.0, 2.0, 0.5)).abs() &lt; 1e-14);</span>
+<span class="doccomment">/// assert!((kallen_lambda_sqrt(1.0, 1.0, 1.0) - 3f64.sqrt()).abs() &lt; 1e-14);</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Warning</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The result returns the root of the *absolute value*, thus returning a result</span>
-<span class=
-"doccomment">/// even if `kallen_lambda` is negative.  It is up to the user to determine</span>
+<span class="doccomment">/// The result returns the root of the *absolute value*, thus returning a result</span>
+<span class="doccomment">/// even if `kallen_lambda` is negative.  It is up to the user to determine</span>
 <span class="doccomment">/// whether this is valid or not.</span>
-<span class="attribute">#[<span class=
-"ident">must_use</span>]</span>
-<span class="attribute">#[<span class=
-"ident">allow</span>(<span class=
-"ident">clippy</span>::<span class="ident">many_single_char_names</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>: <span class="ident">f64</span>, <span class=
-"ident">b</span>: <span class="ident">f64</span>, <span class=
-"ident">c</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="kw">let</span> (<span class=
-"ident">max</span>, <span class="ident">x</span>) <span class=
-"op">=</span> <span class="kw">if</span> <span class=
-"ident">a</span> <span class="op">&gt;</span> <span class=
-"ident">b</span> { (<span class="ident">a</span>, <span class=
-"ident">b</span>) } <span class="kw">else</span> { (<span class=
-"ident">b</span>, <span class="ident">a</span>) };
-    <span class="kw">let</span> (<span class=
-"ident">max</span>, <span class="ident">y</span>) <span class=
-"op">=</span> <span class="kw">if</span> <span class=
-"ident">max</span> <span class="op">&gt;</span> <span class=
-"ident">c</span> { (<span class="ident">max</span>, <span class=
-"ident">c</span>) } <span class="kw">else</span> { (<span class=
-"ident">c</span>, <span class="ident">max</span>) };
-    <span class="kw">let</span> (<span class=
-"ident">x</span>, <span class="ident">y</span>) <span class=
-"op">=</span> <span class="kw">if</span> <span class=
-"ident">x</span> <span class="op">&gt;</span> <span class=
-"ident">y</span> {
-        (<span class="ident">x</span> <span class=
-"op">/</span> <span class="ident">max</span>, <span class=
-"ident">y</span> <span class="op">/</span> <span class=
-"ident">max</span>)
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">many_single_char_names</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>: <span class="ident">f64</span>, <span class="ident">b</span>: <span class="ident">f64</span>, <span class="ident">c</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">let</span> (<span class="ident">max</span>, <span class="ident">x</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">a</span> <span class="op">&gt;</span> <span class="ident">b</span> { (<span class="ident">a</span>, <span class="ident">b</span>) } <span class="kw">else</span> { (<span class="ident">b</span>, <span class="ident">a</span>) };
+    <span class="kw">let</span> (<span class="ident">max</span>, <span class="ident">y</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">max</span> <span class="op">&gt;</span> <span class="ident">c</span> { (<span class="ident">max</span>, <span class="ident">c</span>) } <span class="kw">else</span> { (<span class="ident">c</span>, <span class="ident">max</span>) };
+    <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">y</span> {
+        (<span class="ident">x</span> <span class="op">/</span> <span class="ident">max</span>, <span class="ident">y</span> <span class="op">/</span> <span class="ident">max</span>)
     } <span class="kw">else</span> {
-        (<span class="ident">y</span> <span class=
-"op">/</span> <span class="ident">max</span>, <span class=
-"ident">x</span> <span class="op">/</span> <span class=
-"ident">max</span>)
+        (<span class="ident">y</span> <span class="op">/</span> <span class="ident">max</span>, <span class="ident">x</span> <span class="op">/</span> <span class="ident">max</span>)
     };
 
-    <span class="ident">max</span> <span class=
-"op">*</span> (<span class="ident">x</span>.<span class=
-"ident">powi</span>(<span class="number">2</span>) <span class=
-"op">-</span> <span class="number">2.0</span> <span class=
-"op">*</span> <span class="ident">x</span> <span class=
-"op">*</span> (<span class="ident">y</span> <span class=
-"op">+</span> <span class="number">1.0</span>) <span class=
-"op">+</span> (<span class="ident">y</span> <span class=
-"op">-</span> <span class="number">1.0</span>).<span class=
-"ident">powi</span>(<span class="number">2</span>))
+    <span class="ident">max</span> <span class="op">*</span> (<span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">x</span> <span class="op">*</span> (<span class="ident">y</span> <span class="op">+</span> <span class="number">1.0</span>) <span class="op">+</span> (<span class="ident">y</span> <span class="op">-</span> <span class="number">1.0</span>).<span class="ident">powi</span>(<span class="number">2</span>))
         .<span class="ident">abs</span>()
         .<span class="ident">sqrt</span>()
 }
 
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">utilities</span>::<span class=
-"ident">test</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class=
-"ident">std</span>::<span class="ident">error</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilities</span>::<span class="ident">test</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>;
 
-    <span class="attribute">#[<span class=
-"ident">allow</span>(<span class=
-"ident">clippy</span>::<span class="ident">float_cmp</span>)]</span>
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">kallen_lambda</span>() <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">error</span>::<span class="ident">Error</span><span class=
-"op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class=
-"kw-2">mut</span> <span class="ident">a</span>, <span class=
-"ident">b</span>, <span class="ident">c</span>) <span class=
-"op">=</span> (<span class="number">1.0</span>, <span class=
-"number">2.0</span>, <span class="number">3.0</span>);
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="op">-</span><span class=
-"number">8.0</span>);
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">kallen_lambda</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>) <span class="op">=</span> (<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="op">-</span><span class="number">8.0</span>);
 
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">c</span>, <span class=
-"ident">b</span>));
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">b</span>, <span class="ident">a</span>, <span class=
-"ident">c</span>));
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">b</span>, <span class="ident">c</span>, <span class=
-"ident">a</span>));
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">c</span>, <span class="ident">a</span>, <span class=
-"ident">b</span>));
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="kw">super</span>::<span class=
-"ident">kallen_lambda</span>(<span class=
-"ident">c</span>, <span class="ident">b</span>, <span class=
-"ident">a</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">c</span>, <span class="ident">b</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">b</span>, <span class="ident">a</span>, <span class="ident">c</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">a</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">c</span>, <span class="ident">a</span>, <span class="ident">b</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="kw">super</span>::<span class="ident">kallen_lambda</span>(<span class="ident">c</span>, <span class="ident">b</span>, <span class="ident">a</span>));
 
-        <span class="ident">a</span> <span class=
-"op">=</span> <span class="number">10.0</span>;
-        <span class="ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="number">1.0</span>, <span class=
-"number">12.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+        <span class="ident">a</span> <span class="op">=</span> <span class="number">10.0</span>;
+        <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="number">1.0</span>, <span class="number">12.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">c</span>, <span class=
-"ident">b</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">c</span>, <span class="ident">b</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">b</span>, <span class="ident">a</span>, <span class=
-"ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">b</span>, <span class="ident">a</span>, <span class="ident">c</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">b</span>, <span class="ident">c</span>, <span class=
-"ident">a</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">a</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">c</span>, <span class="ident">a</span>, <span class=
-"ident">b</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">c</span>, <span class="ident">a</span>, <span class="ident">b</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">c</span>, <span class="ident">b</span>, <span class=
-"ident">a</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">c</span>, <span class="ident">b</span>, <span class="ident">a</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
 
-        <span class="ident">a</span> <span class=
-"op">=</span> <span class="number">1e16</span>;
-        <span class="ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>), <span class="number">1e16</span>, <span class=
-"number">12.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+        <span class="ident">a</span> <span class="op">=</span> <span class="number">1e16</span>;
+        <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>), <span class="number">1e16</span>, <span class="number">12.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">c</span>, <span class=
-"ident">b</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">c</span>, <span class="ident">b</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">b</span>, <span class="ident">a</span>, <span class=
-"ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">b</span>, <span class="ident">a</span>, <span class="ident">c</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">b</span>, <span class="ident">c</span>, <span class=
-"ident">a</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">a</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">c</span>, <span class="ident">a</span>, <span class=
-"ident">b</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">c</span>, <span class="ident">a</span>, <span class="ident">b</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
         <span class="ident">approx_eq</span>(
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">a</span>, <span class="ident">b</span>, <span class=
-"ident">c</span>),
-            <span class="kw">super</span>::<span class=
-"ident">kallen_lambda_sqrt</span>(<span class=
-"ident">c</span>, <span class="ident">b</span>, <span class=
-"ident">a</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>),
+            <span class="kw">super</span>::<span class="ident">kallen_lambda_sqrt</span>(<span class="ident">c</span>, <span class="ident">b</span>, <span class="ident">a</span>),
             <span class="number">12.0</span>,
             <span class="number">0.0</span>,
         )<span class="question-mark">?</span>;
@@ -587,15 +371,4 @@ autocomplete="off" spellcheck="false" placeholder=
     }
 }
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../main.js"></script>
-<script src="../../source-script.js"></script>
-<script src="../../source-files.js"></script>
-<script defer src="../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "special_functions";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

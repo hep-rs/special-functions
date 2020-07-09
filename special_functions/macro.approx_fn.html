@@ -1,243 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"API documentation for the Rust `approx_fn` macro in crate `special_functions`.">
-<meta name="keywords" content=
-"rust, rustlang, rust-lang, approx_fn">
-<title>special_functions::approx_fn - Rust</title>
-<link rel="stylesheet" type="text/css" href="../normalize.css">
-<link rel="stylesheet" type="text/css" href="../rustdoc.css" id=
-"mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../dark.css">
-<link rel="stylesheet" type="text/css" href="../light.css" id=
-"themeStyle">
-<script src="../storage.js"></script><noscript>
-<link rel="stylesheet" href="../noscript.css"></noscript>
-<link rel="shortcut icon" href="../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `approx_fn` macro in crate `special_functions`."><meta name="keywords" content="rust, rustlang, rust-lang, approx_fn"><title>special_functions::approx_fn - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc macro">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../special_functions/index.html'>
-<div class='logo-container'><img src='../rust-logo.png' alt=
-'logo'></div>
-</a>
-<div class="sidebar-elems">
-<p class='location'><a href='index.html'>special_functions</a></p>
-<script>
-window.sidebarCurrent = {name: 'approx_fn', ty: 'macro', relpath: ''};
-</script>
-<script defer src="sidebar-items.js"></script></div>
-</nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../settings.html"><img src=
-"../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<h1 class='fqn'><span class='out-of-band'><span id=
-'render-detail'><a id="toggle-all-docs" href="javascript:void(0)"
-title="collapse all docs">[<span class=
-'inner'>−</span>]</a></span><a class='srclink' href=
-'../src/special_functions/approximations.rs.html#237-336' title=
-'goto source code'>[src]</a></span><span class='in-band'>Macro
-<a href='index.html'>special_functions</a>::<wbr><a class="macro"
-href=''>approx_fn</a></span></h1>
-<div class="docblock type-decl hidden-by-usual-hider">
-<div class="example-wrap">
-<pre class="rust macro">
-<span class="macro">macro_rules</span><span class=
-"macro">!</span> <span class="ident">approx_fn</span> {
+
+<style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../special_functions/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>special_functions</a></p><script>window.sidebarCurrent = {name: 'approx_fn', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/special_functions/approximations.rs.html#237-336' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>special_functions</a>::<wbr><a class="macro" href=''>approx_fn</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">approx_fn</span> {
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        <span class="kw">fn</span> <span class=
-"macro-nonterminal">$</span><span class="kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        <span class="kw">pub</span> <span class=
-"kw">fn</span> <span class="macro-nonterminal">$</span><span class=
-"kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        <span class="kw">pub</span>(<span class=
-"kw">crate</span>) <span class="kw">fn</span> <span class=
-"macro-nonterminal">$</span><span class="kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">tt</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>)$(;)<span class="question-mark">?</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        ($(<span class="macro-nonterminal">$</span><span class=
-"macro-nonterminal">vis</span>:<span class=
-"ident">tt</span>)<span class="kw-2">*</span>) <span class=
-"kw">fn</span> <span class="macro-nonterminal">$</span><span class=
-"kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">polynomial</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vis</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">polynomial</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        ($(<span class="macro-nonterminal">$</span><span class=
-"macro-nonterminal">vis</span>:<span class=
-"ident">tt</span>)<span class="kw-2">*</span>) <span class=
-"kw">fn</span> <span class="macro-nonterminal">$</span><span class=
-"kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">ratio</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vis</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">ratio</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (
-        $(<span class="attribute">#[<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">outer</span>:<span class=
-"ident">meta</span>]</span>)<span class="op">*</span>
-        ($(<span class="macro-nonterminal">$</span><span class=
-"macro-nonterminal">vis</span>:<span class=
-"ident">tt</span>)<span class="kw-2">*</span>) <span class=
-"kw">fn</span> <span class="macro-nonterminal">$</span><span class=
-"kw">fn</span>:<span class=
-"macro-nonterminal">ident</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"macro-nonterminal">$</span><span class=
-"kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
-    ) <span class="op">=</span><span class=
-"op">&gt;</span> { ... };
+        $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">outer</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
+        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vis</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">mod</span>:<span class="macro-nonterminal">ident</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">o</span>:<span class="ident">path</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">path</span>);
+    ) <span class="op">=</span><span class="op">&gt;</span> { ... };
 }</pre></div>
-</div>
-<div class='docblock'>
-<p>Create a function from a module containing all the information
-for the split.</p>
+</div><div class='docblock'><p>Create a function from a module containing all the information for the split.</p>
 <p>The module must contain the following:</p>
 <ul>
-<li><code>fn lower(x: f64) -&gt; f64</code> which provides a
-(generally Taylor series) approximation near the lower bound of the
-domain. This function is used for values of <code>x</code> smaller
-than the first split.</li>
-<li><code>fn upper(x: f64) -&gt; f64</code> which provides a
-(generally Taylor series) approximation near the upper bound of the
-domain. This functinon is used for values of <code>x</code> larger
-than the last split.</li>
-<li><code>const COEFFICIENTS: &amp;[...]</code> contains a list of
-list of coefficients, as used in the relevant
-<code>piecewise</code> function.</li>
-<li><code>const SPLITS: &amp;[f64]</code> contains a list of
-splits. Within the splits, the relevant <code>piecewise</code>
-function is used.</li>
+<li><code>fn lower(x: f64) -&gt; f64</code> which provides a (generally Taylor series)
+approximation near the lower bound of the domain.  This function is used
+for values of <code>x</code> smaller than the first split.</li>
+<li><code>fn upper(x: f64) -&gt; f64</code> which provides a (generally Taylor series)
+approximation near the upper bound of the domain.  This functinon is used
+for values of <code>x</code> larger than the last split.</li>
+<li><code>const COEFFICIENTS: &amp;[...]</code> contains a list of list of coefficients, as
+used in the relevant <code>piecewise</code> function.</li>
+<li><code>const SPLITS: &amp;[f64]</code> contains a list of splits.  Within the splits, the
+relevant <code>piecewise</code> function is used.</li>
 </ul>
 <p>The macro is used as:</p>
-<div class='information'>
-<div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example
-is not tested</span></div>
-</div>
-<div class="example-wrap">
-<pre class="rust rust-example-rendered ignore">
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    <span class="kw">fn</span> <span class=
-"ident">foo</span>(<span class="kw">mod</span> <span class=
-"op">=</span> <span class="ident">path</span>::<span class=
-"ident">to</span>::<span class="ident">module</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">approx_type</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"kw">fn</span>, <span class="ident">inner</span> <span class=
-"op">=</span> <span class="kw">fn</span>);
+    <span class="kw">fn</span> <span class="ident">foo</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">path</span>::<span class="ident">to</span>::<span class="ident">module</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">approx_type</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="kw">fn</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="kw">fn</span>);
 }</pre></div>
-<p>The <code>approx_type</code> can be either one of
-<code>polynomial</code>, <code>polynomial_ratio</code> or
-<code>chebyshev</code>. The <code>outer</code> and
-<code>inner</code> are names of functions which apply to the result
-and argument before they go in the piecewise approximation. These
-<em>do not</em> apply to <code>lower</code> and
-<code>upper</code>.</p>
-</div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../";window.currentCrate = "special_functions";
-</script>
-<script src="../main.js"></script>
-<script defer src="../search-index.js"></script>
-</body>
-</html>
+<p>The <code>approx_type</code> can be either one of <code>polynomial</code>, <code>polynomial_ratio</code> or
+<code>chebyshev</code>.  The <code>outer</code> and <code>inner</code> are names of functions which apply to
+the result and argument before they go in the piecewise approximation.
+These <em>do not</em> apply to <code>lower</code> and <code>upper</code>.</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "special_functions";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

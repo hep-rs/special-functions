@@ -1,199 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content="List of all items in this crate">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>List of all items in this crate</title>
-<link rel="stylesheet" type="text/css" href="../normalize.css">
-<link rel="stylesheet" type="text/css" href="../rustdoc.css" id=
-"mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../dark.css">
-<link rel="stylesheet" type="text/css" href="../light.css" id=
-"themeStyle">
-<script src="../storage.js"></script><noscript>
-<link rel="stylesheet" href="../noscript.css"></noscript>
-<link rel="shortcut icon" href="../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="List of all items in this crate"><meta name="keywords" content="rust, rustlang, rust-lang"><title>List of all items in this crate</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc mod">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../special_functions/index.html'>
-<div class='logo-container'><img src='../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../settings.html"><img src=
-"../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<h1 class='fqn'><span class='out-of-band'><span id=
-'render-detail'><a id="toggle-all-docs" href="javascript:void(0)"
-title="collapse all docs">[<span class=
-'inner'>−</span>]</a></span></span> <span class='in-band'>List of
-all items</span></h1>
-<h3 id='Macros'>Macros</h3>
-<ul class='macros docblock'>
-<li><a href='macro.approx_fn.html'>approx_fn</a></li>
-</ul>
-<h3 id='Functions'>Functions</h3>
-<ul class='functions docblock'>
-<li><a href=
-'approximations/fn.chebyshev.html'>approximations::chebyshev</a></li>
-<li><a href=
-'approximations/linear/fn.linear.html'>approximations::linear::linear</a></li>
-<li><a href=
-'approximations/fn.piecewise_chebyshev.html'>approximations::piecewise_chebyshev</a></li>
-<li><a href=
-'approximations/fn.piecewise_polynomial.html'>approximations::piecewise_polynomial</a></li>
-<li><a href=
-'approximations/fn.piecewise_polynomial_ratio.html'>approximations::piecewise_polynomial_ratio</a></li>
-<li><a href=
-'approximations/fn.polynomial.html'>approximations::polynomial</a></li>
-<li><a href=
-'approximations/fn.polynomial_ratio.html'>approximations::polynomial_ratio</a></li>
-<li><a href='bessel/fn.i0.html'>bessel::i0</a></li>
-<li><a href='bessel/fn.i1.html'>bessel::i1</a></li>
-<li><a href='bessel/fn.i2.html'>bessel::i2</a></li>
-<li><a href='bessel/fn.i3.html'>bessel::i3</a></li>
-<li><a href='bessel/fn.i4.html'>bessel::i4</a></li>
-<li><a href='bessel/fn.i5.html'>bessel::i5</a></li>
-<li><a href='bessel/fn.i6.html'>bessel::i6</a></li>
-<li><a href='bessel/fn.i7.html'>bessel::i7</a></li>
-<li><a href='bessel/fn.i8.html'>bessel::i8</a></li>
-<li><a href='bessel/fn.i9.html'>bessel::i9</a></li>
-<li><a href='bessel/fn.j0.html'>bessel::j0</a></li>
-<li><a href='bessel/fn.j1.html'>bessel::j1</a></li>
-<li><a href='bessel/fn.j2.html'>bessel::j2</a></li>
-<li><a href='bessel/fn.j3.html'>bessel::j3</a></li>
-<li><a href='bessel/fn.j4.html'>bessel::j4</a></li>
-<li><a href='bessel/fn.j5.html'>bessel::j5</a></li>
-<li><a href='bessel/fn.j6.html'>bessel::j6</a></li>
-<li><a href='bessel/fn.j7.html'>bessel::j7</a></li>
-<li><a href='bessel/fn.j8.html'>bessel::j8</a></li>
-<li><a href='bessel/fn.j9.html'>bessel::j9</a></li>
-<li><a href='bessel/fn.k0.html'>bessel::k0</a></li>
-<li><a href='bessel/fn.k1.html'>bessel::k1</a></li>
-<li><a href='bessel/fn.k1_on_k2.html'>bessel::k1_on_k2</a></li>
-<li><a href='bessel/fn.k2.html'>bessel::k2</a></li>
-<li><a href='bessel/fn.k3.html'>bessel::k3</a></li>
-<li><a href='bessel/fn.k4.html'>bessel::k4</a></li>
-<li><a href='bessel/fn.k5.html'>bessel::k5</a></li>
-<li><a href='bessel/fn.k6.html'>bessel::k6</a></li>
-<li><a href='bessel/fn.k7.html'>bessel::k7</a></li>
-<li><a href='bessel/fn.k8.html'>bessel::k8</a></li>
-<li><a href='bessel/fn.k9.html'>bessel::k9</a></li>
-<li><a href='bessel/fn.y0.html'>bessel::y0</a></li>
-<li><a href='bessel/fn.y1.html'>bessel::y1</a></li>
-<li><a href='bessel/fn.y2.html'>bessel::y2</a></li>
-<li><a href='bessel/fn.y3.html'>bessel::y3</a></li>
-<li><a href='bessel/fn.y4.html'>bessel::y4</a></li>
-<li><a href='bessel/fn.y5.html'>bessel::y5</a></li>
-<li><a href='bessel/fn.y6.html'>bessel::y6</a></li>
-<li><a href='bessel/fn.y7.html'>bessel::y7</a></li>
-<li><a href='bessel/fn.y8.html'>bessel::y8</a></li>
-<li><a href='bessel/fn.y9.html'>bessel::y9</a></li>
-<li><a href='other/fn.binomial.html'>other::binomial</a></li>
-<li><a href='other/fn.gamma.html'>other::gamma</a></li>
-<li><a href=
-'other/fn.harmonic_number.html'>other::harmonic_number</a></li>
-<li><a href=
-'other/polylog/fn.li0.html'>other::polylog::li0</a></li>
-<li><a href=
-'other/polylog/fn.li1.html'>other::polylog::li1</a></li>
-<li><a href=
-'other/polylog/fn.li2.html'>other::polylog::li2</a></li>
-<li><a href=
-'other/polylog/fn.li3.html'>other::polylog::li3</a></li>
-<li><a href=
-'other/polylog/fn.li4.html'>other::polylog::li4</a></li>
-<li><a href=
-'other/polylog/fn.li5.html'>other::polylog::li5</a></li>
-<li><a href=
-'other/polylog/fn.li6.html'>other::polylog::li6</a></li>
-<li><a href=
-'other/polylog/fn.li7.html'>other::polylog::li7</a></li>
-<li><a href=
-'other/polylog/fn.li8.html'>other::polylog::li8</a></li>
-<li><a href=
-'other/polylog/fn.li9.html'>other::polylog::li9</a></li>
-<li><a href=
-'particle_physics/fn.kallen_lambda.html'>particle_physics::kallen_lambda</a></li>
-<li><a href=
-'particle_physics/fn.kallen_lambda_sqrt.html'>particle_physics::kallen_lambda_sqrt</a></li>
-<li><a href=
-'particle_physics/pave_absorptive/fn.a.html'>particle_physics::pave_absorptive::a</a></li>
-<li><a href=
-'particle_physics/pave_absorptive/fn.b.html'>particle_physics::pave_absorptive::b</a></li>
-<li><a href=
-'particle_physics/pave_absorptive/fn.c.html'>particle_physics::pave_absorptive::c</a></li>
-<li><a href=
-'particle_physics/pave_absorptive/fn.d.html'>particle_physics::pave_absorptive::d</a></li>
-<li><a href=
-'particle_physics/statistics/fn.bose_einstein_massive.html'>particle_physics::statistics::bose_einstein_massive</a></li>
-<li><a href=
-'particle_physics/statistics/fn.bose_einstein_massless.html'>particle_physics::statistics::bose_einstein_massless</a></li>
-<li><a href=
-'particle_physics/statistics/fn.bose_einstein_normalized.html'>particle_physics::statistics::bose_einstein_normalized</a></li>
-<li><a href=
-'particle_physics/statistics/fn.fermi_dirac_massive.html'>particle_physics::statistics::fermi_dirac_massive</a></li>
-<li><a href=
-'particle_physics/statistics/fn.fermi_dirac_massless.html'>particle_physics::statistics::fermi_dirac_massless</a></li>
-<li><a href=
-'particle_physics/statistics/fn.fermi_dirac_normalized.html'>particle_physics::statistics::fermi_dirac_normalized</a></li>
-</ul>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../";window.currentCrate = "special_functions";
-</script>
-<script src="../main.js"></script>
-<script defer src="../search-index.js"></script>
-</body>
-</html>
+
+<style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../special_functions/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span>
+        </span>
+        <span class='in-band'>List of all items</span></h1><h3 id='Macros'>Macros</h3><ul class='macros docblock'><li><a href='macro.approx_fn.html'>approx_fn</a></li></ul><h3 id='Functions'>Functions</h3><ul class='functions docblock'><li><a href='approximations/fn.chebyshev.html'>approximations::chebyshev</a></li><li><a href='approximations/linear/fn.linear.html'>approximations::linear::linear</a></li><li><a href='approximations/fn.piecewise_chebyshev.html'>approximations::piecewise_chebyshev</a></li><li><a href='approximations/fn.piecewise_polynomial.html'>approximations::piecewise_polynomial</a></li><li><a href='approximations/fn.piecewise_polynomial_ratio.html'>approximations::piecewise_polynomial_ratio</a></li><li><a href='approximations/fn.polynomial.html'>approximations::polynomial</a></li><li><a href='approximations/fn.polynomial_ratio.html'>approximations::polynomial_ratio</a></li><li><a href='bessel/fn.i0.html'>bessel::i0</a></li><li><a href='bessel/fn.i1.html'>bessel::i1</a></li><li><a href='bessel/fn.i2.html'>bessel::i2</a></li><li><a href='bessel/fn.i3.html'>bessel::i3</a></li><li><a href='bessel/fn.i4.html'>bessel::i4</a></li><li><a href='bessel/fn.i5.html'>bessel::i5</a></li><li><a href='bessel/fn.i6.html'>bessel::i6</a></li><li><a href='bessel/fn.i7.html'>bessel::i7</a></li><li><a href='bessel/fn.i8.html'>bessel::i8</a></li><li><a href='bessel/fn.i9.html'>bessel::i9</a></li><li><a href='bessel/fn.j0.html'>bessel::j0</a></li><li><a href='bessel/fn.j1.html'>bessel::j1</a></li><li><a href='bessel/fn.j2.html'>bessel::j2</a></li><li><a href='bessel/fn.j3.html'>bessel::j3</a></li><li><a href='bessel/fn.j4.html'>bessel::j4</a></li><li><a href='bessel/fn.j5.html'>bessel::j5</a></li><li><a href='bessel/fn.j6.html'>bessel::j6</a></li><li><a href='bessel/fn.j7.html'>bessel::j7</a></li><li><a href='bessel/fn.j8.html'>bessel::j8</a></li><li><a href='bessel/fn.j9.html'>bessel::j9</a></li><li><a href='bessel/fn.k0.html'>bessel::k0</a></li><li><a href='bessel/fn.k1.html'>bessel::k1</a></li><li><a href='bessel/fn.k1_on_k2.html'>bessel::k1_on_k2</a></li><li><a href='bessel/fn.k2.html'>bessel::k2</a></li><li><a href='bessel/fn.k3.html'>bessel::k3</a></li><li><a href='bessel/fn.k4.html'>bessel::k4</a></li><li><a href='bessel/fn.k5.html'>bessel::k5</a></li><li><a href='bessel/fn.k6.html'>bessel::k6</a></li><li><a href='bessel/fn.k7.html'>bessel::k7</a></li><li><a href='bessel/fn.k8.html'>bessel::k8</a></li><li><a href='bessel/fn.k9.html'>bessel::k9</a></li><li><a href='bessel/fn.y0.html'>bessel::y0</a></li><li><a href='bessel/fn.y1.html'>bessel::y1</a></li><li><a href='bessel/fn.y2.html'>bessel::y2</a></li><li><a href='bessel/fn.y3.html'>bessel::y3</a></li><li><a href='bessel/fn.y4.html'>bessel::y4</a></li><li><a href='bessel/fn.y5.html'>bessel::y5</a></li><li><a href='bessel/fn.y6.html'>bessel::y6</a></li><li><a href='bessel/fn.y7.html'>bessel::y7</a></li><li><a href='bessel/fn.y8.html'>bessel::y8</a></li><li><a href='bessel/fn.y9.html'>bessel::y9</a></li><li><a href='other/fn.binomial.html'>other::binomial</a></li><li><a href='other/fn.gamma.html'>other::gamma</a></li><li><a href='other/fn.harmonic_number.html'>other::harmonic_number</a></li><li><a href='other/polylog/fn.li0.html'>other::polylog::li0</a></li><li><a href='other/polylog/fn.li1.html'>other::polylog::li1</a></li><li><a href='other/polylog/fn.li2.html'>other::polylog::li2</a></li><li><a href='other/polylog/fn.li3.html'>other::polylog::li3</a></li><li><a href='other/polylog/fn.li4.html'>other::polylog::li4</a></li><li><a href='other/polylog/fn.li5.html'>other::polylog::li5</a></li><li><a href='other/polylog/fn.li6.html'>other::polylog::li6</a></li><li><a href='other/polylog/fn.li7.html'>other::polylog::li7</a></li><li><a href='other/polylog/fn.li8.html'>other::polylog::li8</a></li><li><a href='other/polylog/fn.li9.html'>other::polylog::li9</a></li><li><a href='particle_physics/fn.kallen_lambda.html'>particle_physics::kallen_lambda</a></li><li><a href='particle_physics/fn.kallen_lambda_sqrt.html'>particle_physics::kallen_lambda_sqrt</a></li><li><a href='particle_physics/pave_absorptive/fn.a.html'>particle_physics::pave_absorptive::a</a></li><li><a href='particle_physics/pave_absorptive/fn.b.html'>particle_physics::pave_absorptive::b</a></li><li><a href='particle_physics/pave_absorptive/fn.c.html'>particle_physics::pave_absorptive::c</a></li><li><a href='particle_physics/pave_absorptive/fn.d.html'>particle_physics::pave_absorptive::d</a></li><li><a href='particle_physics/statistics/fn.bose_einstein_massive.html'>particle_physics::statistics::bose_einstein_massive</a></li><li><a href='particle_physics/statistics/fn.bose_einstein_massless.html'>particle_physics::statistics::bose_einstein_massless</a></li><li><a href='particle_physics/statistics/fn.bose_einstein_normalized.html'>particle_physics::statistics::bose_einstein_normalized</a></li><li><a href='particle_physics/statistics/fn.fermi_dirac_massive.html'>particle_physics::statistics::fermi_dirac_massive</a></li><li><a href='particle_physics/statistics/fn.fermi_dirac_massless.html'>particle_physics::statistics::fermi_dirac_massless</a></li><li><a href='particle_physics/statistics/fn.fermi_dirac_normalized.html'>particle_physics::statistics::fermi_dirac_normalized</a></li></ul></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "special_functions";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

@@ -1,80 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/approximations/linear.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>linear.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href=
-"../../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
-id="mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../../light.css"
-id="themeStyle">
-<script src="../../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/approximations/linear.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>linear.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../../special_functions/index.html'>
-<div class='logo-container'><img src='../../../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../../settings.html"><img src=
-"../../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">  1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -189,347 +182,121 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Linear interpolation</span>
 
-<span class=
-"doccomment">/// Perform linear interpolation on data.</span>
+<span class="doccomment">/// Perform linear interpolation on data.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The data should be provided in an array of the shape `[(x0, y0), (x1, y1),</span>
-<span class=
-"doccomment">/// ...]`.  The interpolation is done linearly such that a point half-way in</span>
-<span class=
-"doccomment">/// between `x0` and `x1` will yield a value half-way between `y0` and `y1`.</span>
+<span class="doccomment">/// The data should be provided in an array of the shape `[(x0, y0), (x1, y1),</span>
+<span class="doccomment">/// ...]`.  The interpolation is done linearly such that a point half-way in</span>
+<span class="doccomment">/// between `x0` and `x1` will yield a value half-way between `y0` and `y1`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Warning</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The slice if input values must be sorted in strictly ascending `x` values.</span>
-<span class=
-"doccomment">/// Any repeated values, unordered entries or `NaN` values will result in</span>
+<span class="doccomment">/// The slice if input values must be sorted in strictly ascending `x` values.</span>
+<span class="doccomment">/// Any repeated values, unordered entries or `NaN` values will result in</span>
 <span class="doccomment">/// undefined behaviour.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Extrapolation</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// This linear interpolation repeats the boundary value for all values outside</span>
-<span class=
-"doccomment">/// the domain of the interpolation data.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">linear</span>(<span class="ident">data</span>: <span class=
-"kw-2">&</span>[(<span class="ident">f64</span>, <span class=
-"ident">f64</span>)], <span class="ident">x</span>: <span class=
-"ident">f64</span>) <span class="op">-</span><span class=
-"op">&gt;</span> <span class="ident">f64</span> {
-    <span class="macro">debug_assert</span><span class=
-"macro">!</span>(
-        <span class="op">!</span><span class=
-"ident">data</span>.<span class="ident">is_empty</span>(),
-        <span class=
-"string">"Interpolation data must contain at least one element."</span>
+<span class="doccomment">/// This linear interpolation repeats the boundary value for all values outside</span>
+<span class="doccomment">/// the domain of the interpolation data.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">linear</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span>[(<span class="ident">f64</span>, <span class="ident">f64</span>)], <span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="macro">debug_assert</span><span class="macro">!</span>(
+        <span class="op">!</span><span class="ident">data</span>.<span class="ident">is_empty</span>(),
+        <span class="string">&quot;Interpolation data must contain at least one element.&quot;</span>
     );
-    <span class="macro">debug_assert</span><span class=
-"macro">!</span>(
-        <span class="op">!</span><span class=
-"ident">x</span>.<span class="ident">is_nan</span>(),
-        <span class=
-"string">"Interpolation to a NaN value is not supported."</span>
+    <span class="macro">debug_assert</span><span class="macro">!</span>(
+        <span class="op">!</span><span class="ident">x</span>.<span class="ident">is_nan</span>(),
+        <span class="string">&quot;Interpolation to a NaN value is not supported.&quot;</span>
     );
 
     <span class="kw">unsafe</span> {
-        <span class="kw">match</span> <span class=
-"ident">data</span>.<span class=
-"ident">binary_search_by</span>(<span class=
-"op">|</span><span class="kw-2">&</span>(<span class=
-"ident">xi</span>, <span class="kw">_</span>)<span class=
-"op">|</span> <span class="ident">xi</span>.<span class=
-"ident">partial_cmp</span>(<span class="kw-2">&</span><span class=
-"ident">x</span>).<span class="ident">unwrap</span>()) {
-            <span class="prelude-val">Ok</span>(<span class=
-"ident">idx</span>) <span class="op">=</span><span class=
-"op">&gt;</span> <span class="ident">data</span>.<span class=
-"ident">get_unchecked</span>(<span class=
-"ident">idx</span>).<span class="number">1</span>,
-            <span class="prelude-val">Err</span>(<span class=
-"number">0</span>) <span class="op">=</span><span class=
-"op">&gt;</span> <span class="ident">data</span>.<span class=
-"ident">get_unchecked</span>(<span class=
-"number">0</span>).<span class="number">1</span>,
-            <span class="prelude-val">Err</span>(<span class=
-"ident">idx</span>) <span class="kw">if</span> <span class=
-"ident">idx</span> <span class="op">&gt;</span><span class=
-"op">=</span> <span class="ident">data</span>.<span class=
-"ident">len</span>() <span class="op">=</span><span class=
-"op">&gt;</span> <span class="ident">data</span>.<span class=
-"ident">get_unchecked</span>(<span class=
-"ident">idx</span> <span class="op">-</span> <span class=
-"number">1</span>).<span class="number">1</span>,
-            <span class="prelude-val">Err</span>(<span class=
-"ident">idx</span>) <span class="op">=</span><span class=
-"op">&gt;</span> {
-                <span class="kw">let</span> <span class=
-"kw-2">&</span>(<span class="ident">x0</span>, <span class=
-"ident">y0</span>) <span class="op">=</span> <span class=
-"ident">data</span>.<span class=
-"ident">get_unchecked</span>(<span class=
-"ident">idx</span> <span class="op">-</span> <span class=
-"number">1</span>);
-                <span class="kw">let</span> <span class=
-"kw-2">&</span>(<span class="ident">x1</span>, <span class=
-"ident">y1</span>) <span class="op">=</span> <span class=
-"ident">data</span>.<span class=
-"ident">get_unchecked</span>(<span class="ident">idx</span>);
-                (<span class="ident">y0</span> <span class=
-"op">*</span> (<span class="ident">x1</span> <span class=
-"op">-</span> <span class="ident">x</span>) <span class=
-"op">+</span> <span class="ident">y1</span> <span class=
-"op">*</span> (<span class="ident">x</span> <span class=
-"op">-</span> <span class="ident">x0</span>)) <span class=
-"op">/</span> (<span class="ident">x1</span> <span class=
-"op">-</span> <span class="ident">x0</span>)
+        <span class="kw">match</span> <span class="ident">data</span>.<span class="ident">binary_search_by</span>(<span class="op">|</span><span class="kw-2">&amp;</span>(<span class="ident">xi</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">xi</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>).<span class="ident">unwrap</span>()) {
+            <span class="prelude-val">Ok</span>(<span class="ident">idx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">data</span>.<span class="ident">get_unchecked</span>(<span class="ident">idx</span>).<span class="number">1</span>,
+            <span class="prelude-val">Err</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">data</span>.<span class="ident">get_unchecked</span>(<span class="number">0</span>).<span class="number">1</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">idx</span>) <span class="kw">if</span> <span class="ident">idx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="ident">data</span>.<span class="ident">get_unchecked</span>(<span class="ident">idx</span> <span class="op">-</span> <span class="number">1</span>).<span class="number">1</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">idx</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="kw-2">&amp;</span>(<span class="ident">x0</span>, <span class="ident">y0</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">get_unchecked</span>(<span class="ident">idx</span> <span class="op">-</span> <span class="number">1</span>);
+                <span class="kw">let</span> <span class="kw-2">&amp;</span>(<span class="ident">x1</span>, <span class="ident">y1</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">get_unchecked</span>(<span class="ident">idx</span>);
+                (<span class="ident">y0</span> <span class="op">*</span> (<span class="ident">x1</span> <span class="op">-</span> <span class="ident">x</span>) <span class="op">+</span> <span class="ident">y1</span> <span class="op">*</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">x0</span>)) <span class="op">/</span> (<span class="ident">x1</span> <span class="op">-</span> <span class="ident">x0</span>)
             }
         }
     }
 }
 
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">utilities</span>::<span class=
-"ident">test</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class=
-"ident">std</span>::{<span class="ident">error</span>, <span class=
-"ident">f64</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilities</span>::<span class="ident">test</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">error</span>, <span class="ident">f64</span>};
 
-    <span class="kw">pub</span>(<span class=
-"kw">crate</span>) <span class="kw">const</span> <span class=
-"ident">DATA</span>: [(<span class="ident">f64</span>, <span class=
-"ident">f64</span>); <span class="number">4</span>] <span class=
-"op">=</span> [(<span class="number">0.0</span>, <span class=
-"number">0.0</span>), (<span class=
-"number">1.0</span>, <span class="number">1.0</span>), (<span class="number">10.0</span>, <span class="number">0.0</span>), (<span class="number">20.0</span>, <span class="number">1.0</span>)];
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">DATA</span>: [(<span class="ident">f64</span>, <span class="ident">f64</span>); <span class="number">4</span>] <span class="op">=</span> [(<span class="number">0.0</span>, <span class="number">0.0</span>), (<span class="number">1.0</span>, <span class="number">1.0</span>), (<span class="number">10.0</span>, <span class="number">0.0</span>), (<span class="number">20.0</span>, <span class="number">1.0</span>)];
 
-    <span class="attribute">#[<span class=
-"ident">allow</span>(<span class=
-"ident">clippy</span>::<span class="ident">float_cmp</span>)]</span>
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">linear</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">error</span>::<span class="ident">Error</span><span class=
-"op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="number">1_001</span> {
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">1_000.0</span>;
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">1_000.0</span>;
-            <span class="ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class="ident">linear</span>(<span class=
-"kw-2">&</span><span class="ident">DATA</span>, <span class=
-"ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">linear</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1_001</span> {
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">1_000.0</span>;
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">1_000.0</span>;
+            <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="ident">x</span>), <span class="ident">y</span>, <span class="number">8.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
         }
 
-        <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">1_000</span>..<span class="number">10_001</span> {
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">1_000.0</span>;
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> (<span class=
-"number">10_000</span> <span class="op">-</span> <span class=
-"ident">i</span>) <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">9_000.0</span>;
-            <span class="ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class="ident">linear</span>(<span class=
-"kw-2">&</span><span class="ident">DATA</span>, <span class=
-"ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">1_000</span>..<span class="number">10_001</span> {
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">1_000.0</span>;
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> (<span class="number">10_000</span> <span class="op">-</span> <span class="ident">i</span>) <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">9_000.0</span>;
+            <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="ident">x</span>), <span class="ident">y</span>, <span class="number">8.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
         }
 
-        <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">10_000</span>..<span class="number">20_001</span> {
-            <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">1_000.0</span>;
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> (<span class=
-"ident">i</span> <span class="op">-</span> <span class=
-"number">10_000</span>) <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">10_000.0</span>;
-            <span class="ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class="ident">linear</span>(<span class=
-"kw-2">&</span><span class="ident">DATA</span>, <span class=
-"ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>)<span class=
-"question-mark">?</span>;
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">10_000</span>..<span class="number">20_001</span> {
+            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">1_000.0</span>;
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> (<span class="ident">i</span> <span class="op">-</span> <span class="number">10_000</span>) <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">10_000.0</span>;
+            <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="ident">x</span>), <span class="ident">y</span>, <span class="number">8.0</span>, <span class="number">0.0</span>)<span class="question-mark">?</span>;
         }
 
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">linear</span>(<span class="kw-2">&</span><span class=
-"ident">DATA</span>, <span class="ident">f64</span>::<span class=
-"ident">NEG_INFINITY</span>), <span class="number">0.0</span>);
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">linear</span>(<span class="kw-2">&</span><span class=
-"ident">DATA</span>, <span class="op">-</span><span class=
-"number">100.0</span>), <span class="number">0.0</span>);
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">linear</span>(<span class="kw-2">&</span><span class=
-"ident">DATA</span>, <span class=
-"number">100.0</span>), <span class="number">1.0</span>);
-        <span class="macro">assert_eq</span><span class=
-"macro">!</span>(<span class="kw">super</span>::<span class=
-"ident">linear</span>(<span class="kw-2">&</span><span class=
-"ident">DATA</span>, <span class="ident">f64</span>::<span class=
-"ident">INFINITY</span>), <span class="number">1.0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="ident">f64</span>::<span class="ident">NEG_INFINITY</span>), <span class="number">0.0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="op">-</span><span class="number">100.0</span>), <span class="number">0.0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="number">100.0</span>), <span class="number">1.0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">DATA</span>, <span class="ident">f64</span>::<span class="ident">INFINITY</span>), <span class="number">1.0</span>);
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">feature</span> <span class=
-"op">=</span> <span class="string">"nightly"</span>)]</span>
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;nightly&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">benches</span> {
-    <span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">utilities</span>::<span class=
-"ident">test</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class=
-"ident">std</span>::<span class="ident">f64</span>;
-    <span class="kw">use</span> <span class=
-"ident">test</span>::<span class="ident">Bencher</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilities</span>::<span class="ident">test</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>;
+    <span class="kw">use</span> <span class="ident">test</span>::<span class="ident">Bencher</span>;
 
-    <span class="macro">macro_rules</span><span class=
-"macro">!</span> <span class="ident">linear</span> {
-        (<span class="macro-nonterminal">$</span><span class=
-"macro-nonterminal">f</span>:<span class=
-"ident">ident</span>, <span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">n</span>:<span class=
-"ident">expr</span>) <span class="op">=</span><span class=
-"op">&gt;</span> {
-            <span class="attribute">#[<span class=
-"ident">bench</span>]</span>
-            <span class="kw">fn</span> <span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">f</span>(<span class=
-"ident">b</span>: <span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">Bencher</span>) {
-                <span class="kw">let</span> <span class=
-"ident">data</span>: <span class="ident">Vec</span><span class=
-"op">&lt;</span><span class="kw">_</span><span class=
-"op">&gt;</span> <span class="op">=</span> (<span class=
-"number">0</span>..<span class="op">=</span><span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">n</span>)
-                    .<span class="ident">map</span>(<span class=
-"op">|</span><span class="ident">i</span><span class=
-"op">|</span> {
-                        <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> (<span class=
-"macro-nonterminal">$</span><span class=
-"macro-nonterminal">n</span> <span class=
-"kw">as</span> <span class="ident">f64</span>);
-                        (<span class="ident">x</span>, <span class=
-"ident">x</span>)
+    <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">linear</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="attribute">#[<span class="ident">bench</span>]</span>
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
+                <span class="kw">let</span> <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="op">=</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>)
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
+                        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="kw">as</span> <span class="ident">f64</span>);
+                        (<span class="ident">x</span>, <span class="ident">x</span>)
                     })
                     .<span class="ident">collect</span>();
-                <span class="ident">b</span>.<span class=
-"ident">iter</span>(<span class="op">|</span><span class=
-"op">|</span> {
-                    <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="number">100_001</span> {
-                        <span class="kw">let</span> <span class=
-"ident">x</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">100_000.0</span>;
-                        <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"ident">i</span> <span class="kw">as</span> <span class=
-"ident">f64</span> <span class="op">/</span> <span class=
-"number">100_000.0</span>;
-                        <span class=
-"ident">approx_eq</span>(<span class=
-"kw">super</span>::<span class="ident">linear</span>(<span class=
-"kw-2">&</span><span class="ident">data</span>, <span class=
-"ident">x</span>), <span class="ident">y</span>, <span class=
-"number">8.0</span>, <span class="number">0.0</span>).<span class=
-"ident">unwrap</span>();
+                <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+                    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100_001</span> {
+                        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">100_000.0</span>;
+                        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">f64</span> <span class="op">/</span> <span class="number">100_000.0</span>;
+                        <span class="ident">approx_eq</span>(<span class="kw">super</span>::<span class="ident">linear</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>, <span class="ident">x</span>), <span class="ident">y</span>, <span class="number">8.0</span>, <span class="number">0.0</span>).<span class="ident">unwrap</span>();
                     }
                 });
             }
         };
     }
 
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class="ident">linear_1</span>, <span class=
-"number">1</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class="ident">linear_10</span>, <span class=
-"number">10</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class=
-"ident">linear_100</span>, <span class="number">100</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class=
-"ident">linear_1000</span>, <span class="number">1_000</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class=
-"ident">linear_10000</span>, <span class="number">10_000</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class=
-"ident">linear_100000</span>, <span class="number">100_000</span>);
-    <span class="macro">linear</span><span class=
-"macro">!</span>(<span class=
-"ident">linear_1000000</span>, <span class=
-"number">1_000_000</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_1</span>, <span class="number">1</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_10</span>, <span class="number">10</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_100</span>, <span class="number">100</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_1000</span>, <span class="number">1_000</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_10000</span>, <span class="number">10_000</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_100000</span>, <span class="number">100_000</span>);
+    <span class="macro">linear</span><span class="macro">!</span>(<span class="ident">linear_1000000</span>, <span class="number">1_000_000</span>);
 }
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../../main.js"></script>
-<script src="../../../source-script.js"></script>
-<script src="../../../source-files.js"></script>
-<script defer src="../../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

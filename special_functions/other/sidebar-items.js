@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["binomial","Binomial coefficient"],["gamma","Approximatino of the gamma function for \\(x > 0\\)."],["harmonic_number","Approximation of the Harmonic number extended to all number \\(x > 0\\)."]],"mod":[["polylog","Polylogarithms functions"]]});
+initSidebarItems({"fn":[["binomial","Binomial coefficient"],["gamma","Approximatino of the gamma function for `$x > 0$`."],["harmonic_number","Approximation of the Harmonic number extended to all number `$x > 0$`."]],"mod":[["polylog","Polylogarithms functions"]]});

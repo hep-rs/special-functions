@@ -1,80 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"Source to the Rust file `src/particle_physics/statistics.rs`.">
-<meta name="keywords" content="rust, rustlang, rust-lang">
-<title>statistics.rs.html -- source</title>
-<link rel="stylesheet" type="text/css" href=
-"../../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
-id="mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../../light.css"
-id="themeStyle">
-<script src="../../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/particle_physics/statistics.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>statistics.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc source">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../../special_functions/index.html'>
-<div class='logo-container'><img src='../../../rust-logo.png' alt=
-'logo'></div>
-</a></nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../../settings.html"><img src=
-"../../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<pre class="line-numbers"><span id="1">  1</span>
+
+<style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -245,359 +238,138 @@ autocomplete="off" spellcheck="false" placeholder=
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
-</pre>
-<div class="example-wrap">
-<pre class="rust">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Particle Statistics</span>
 <span class="doccomment">//!</span>
-<span class=
-"doccomment">//! Compute Bose-Einstein and Fermi-Dirac integrals, in both massive (\\(\mu =</span>
-<span class=
-"doccomment">//! 0\\)) and massless (\\(\mu \in \mathbb{R}\\)) cases as well as normalized to</span>
-<span class=
-"doccomment">//! a single massless bosonic degree of freedom for the massive case.</span>
+<span class="doccomment">//! Compute Bose-Einstein and Fermi-Dirac integrals, in both massive (`$\mu =</span>
+<span class="doccomment">//! 0$`) and massless (`$\mu \inR$`) cases as well as normalized to a single</span>
+<span class="doccomment">//! massless bosonic degree of freedom for the massive case.</span>
 
-<span class="kw">use</span> <span class=
-"ident">std</span>::{<span class=
-"ident">convert</span>::<span class=
-"ident">identity</span>, <span class="ident">f64</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert</span>::<span class="ident">identity</span>, <span class="ident">f64</span>};
 
-<span class="kw">mod</span> <span class=
-"ident">bose_einstein_massive</span>;
-<span class="kw">mod</span> <span class=
-"ident">bose_einstein_massless</span>;
-<span class="kw">mod</span> <span class=
-"ident">bose_einstein_normalized</span>;
-<span class="kw">mod</span> <span class=
-"ident">fermi_dirac_massive</span>;
-<span class="kw">mod</span> <span class=
-"ident">fermi_dirac_massless</span>;
-<span class="kw">mod</span> <span class=
-"ident">fermi_dirac_normalized</span>;
+<span class="kw">mod</span> <span class="ident">bose_einstein_massive</span>;
+<span class="kw">mod</span> <span class="ident">bose_einstein_massless</span>;
+<span class="kw">mod</span> <span class="ident">bose_einstein_normalized</span>;
+<span class="kw">mod</span> <span class="ident">fermi_dirac_massive</span>;
+<span class="kw">mod</span> <span class="ident">fermi_dirac_massless</span>;
+<span class="kw">mod</span> <span class="ident">fermi_dirac_normalized</span>;
 
-<span class=
-"doccomment">/// Equilibrium number density of a massless Bose-Einstein particle with</span>
-<span class=
-"doccomment">/// chemical potential \\(\mu \leq 0\\).</span>
+<span class="doccomment">/// Equilibrium number density of a massless Bose-Einstein particle with</span>
+<span class="doccomment">/// chemical potential `$\mu \leq 0$`.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
-<span class="doccomment">/// units of GeV^3.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">bose_einstein_massless</span>(<span class=
-"ident">mu</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="ident">beta</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">3</span>) <span class="op">*</span> <span class=
-"ident">_bose_einstein_massless</span>(<span class=
-"op">-</span><span class="ident">mu</span> <span class=
-"op">*</span> <span class="ident">beta</span>)
+<span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
+<span class="doccomment">/// units of GeV`$^{3}$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massless</span>(<span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_bose_einstein_massless</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">bose_einstein_massless</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_massless</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_massless</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Equilibrium number density of massive Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class=
-"doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
-<span class="doccomment">/// result is in units of `[m^3]`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">bose_einstein_massive</span>(<span class=
-"ident">m</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">m</span> <span class="op">=</span><span class=
-"op">=</span> <span class="number">0.0</span> {
-        <span class=
-"comment">// ζ(3) / π² ≅ 0.12179382823357308</span>
-        <span class=
-"number">0.121_793_828_233_573_08</span> <span class=
-"op">*</span> <span class="ident">beta</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">3</span>)
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
+<span class="doccomment">/// result is in units of `[m`$^{3}$`]`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+        <span class="comment">// ζ(3) / π² ≅ 0.12179382823357308</span>
+        <span class="number">0.121_793_828_233_573_08</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
     } <span class="kw">else</span> {
-        <span class="ident">m</span>.<span class=
-"ident">powi</span>(<span class="number">3</span>) <span class=
-"op">*</span> <span class=
-"ident">_bose_einstein_massive</span>(<span class=
-"ident">m</span> <span class="op">*</span> <span class=
-"ident">beta</span>)
+        <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
     }
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_bose_einstein_massive</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">bose_einstein_massive</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">exp</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_massive</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_massive</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class=
-"doccomment">/// Equilibrium number density of massive Bose-Einstein particle normalized to a</span>
-<span class=
-"doccomment">/// massless Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle normalized to a</span>
+<span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class=
-"doccomment">/// unitless, where `m` is the particle's mass and `beta` is the inverse</span>
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">bose_einstein_normalized</span>(<span class=
-"ident">m</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class=
-"ident">_bose_einstein_normalized</span>(<span class=
-"ident">m</span> <span class="op">*</span> <span class=
-"ident">beta</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">_bose_einstein_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_bose_einstein_normalized</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">bose_einstein_normalized</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">exp</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_bose_einstein_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">bose_einstein_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class=
-"doccomment">/// Equilibrium number density of a massless Fermi-Dirac particle with chemical</span>
-<span class=
-"doccomment">/// potential \\(\mu \in \mathbb{R}\\).</span>
+<span class="doccomment">/// Equilibrium number density of a massless Fermi-Dirac particle with chemical</span>
+<span class="doccomment">/// potential `$\mu \inR$`.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
-<span class="doccomment">/// units of GeV^3.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">fermi_dirac_massless</span>(<span class=
-"ident">mu</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="ident">beta</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">3</span>) <span class="op">*</span> <span class=
-"ident">_fermi_dirac_massless</span>(<span class=
-"ident">mu</span> <span class="op">*</span> <span class=
-"ident">beta</span>)
+<span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
+<span class="doccomment">/// units of GeV`$^{3}$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massless</span>(<span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_fermi_dirac_massless</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">fermi_dirac_massless</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">identity</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">identity</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_massless</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_massless</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
 }
 
-<span class=
-"doccomment">/// Equilibrium number density of massive Fermi-Dirac particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class=
-"doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
-<span class="doccomment">/// result is in units of `[m^3]`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">fermi_dirac_massive</span>(<span class=
-"ident">m</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="kw">if</span> <span class=
-"ident">m</span> <span class="op">=</span><span class=
-"op">=</span> <span class="number">0.0</span> {
-        <span class=
-"comment">// 3 ζ(3) / 4 π² ≅ 0.09134537117517981</span>
-        <span class=
-"number">0.091_345_371_175_179_81</span> <span class=
-"op">*</span> <span class="ident">beta</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">3</span>)
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
+<span class="doccomment">/// result is in units of [m`$^{3}$`].</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+        <span class="comment">// 3 ζ(3) / 4 π² ≅ 0.09134537117517981</span>
+        <span class="number">0.091_345_371_175_179_81</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
     } <span class="kw">else</span> {
-        <span class="ident">m</span>.<span class=
-"ident">powi</span>(<span class="number">3</span>) <span class=
-"op">*</span> <span class=
-"ident">_fermi_dirac_massive</span>(<span class=
-"ident">m</span> <span class="op">*</span> <span class=
-"ident">beta</span>)
+        <span class="ident">m</span>.<span class="ident">powi</span>(<span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massive</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
     }
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_fermi_dirac_massive</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">fermi_dirac_massive</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">exp</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_massive</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_massive</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class=
-"doccomment">/// Equilibrium number density of massive Fermi-Dirac particle normalized to a</span>
-<span class=
-"doccomment">/// massless Bose-Einstein particle.</span>
+<span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle normalized to a</span>
+<span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class=
-"doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class=
-"doccomment">/// unitless, where `m` is the particle's mass and `beta` is the inverse</span>
+<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
+<span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class=
-"ident">fermi_dirac_normalized</span>(<span class=
-"ident">m</span>: <span class="ident">f64</span>, <span class=
-"ident">beta</span>: <span class="ident">f64</span>) <span class=
-"op">-</span><span class="op">&gt;</span> <span class=
-"ident">f64</span> {
-    <span class="ident">_fermi_dirac_normalized</span>(<span class=
-"ident">m</span> <span class="op">*</span> <span class=
-"ident">beta</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="ident">_fermi_dirac_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn</span><span class="macro">!</span> {
-    () <span class="kw">fn</span> <span class=
-"ident">_fermi_dirac_normalized</span>(<span class=
-"kw">mod</span> <span class="op">=</span> <span class=
-"ident">fermi_dirac_normalized</span>, <span class=
-"kw">type</span> <span class="op">=</span> <span class=
-"ident">chebyshev</span>, <span class=
-"ident">outer</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">exp</span>, <span class=
-"ident">inner</span> <span class="op">=</span> <span class=
-"ident">f64</span>::<span class="ident">ln</span>);
+    () <span class="kw">fn</span> <span class="ident">_fermi_dirac_normalized</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">fermi_dirac_normalized</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">exp</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">f64</span>::<span class="ident">ln</span>);
 }
 
-<span class="attribute">#[<span class=
-"ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class=
-"kw">crate</span>::<span class=
-"ident">utilities</span>::<span class=
-"ident">test</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class=
-"ident">std</span>::{<span class="ident">f64</span>, <span class=
-"ident">fs</span>::<span class="ident">File</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilities</span>::<span class="ident">test</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">f64</span>, <span class="ident">fs</span>::<span class="ident">File</span>};
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">massless</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/particle_physics/statistics/massless.csv.zst"</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">massless</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/particle_physics/statistics/massless.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
 
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> [<span class=
-"kw">super</span>::<span class=
-"ident">bose_einstein_massless</span>, <span class=
-"kw">super</span>::<span class=
-"ident">fermi_dirac_massless</span>];
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> [<span class="kw">super</span>::<span class="ident">bose_einstein_massless</span>, <span class="kw">super</span>::<span class="ident">fermi_dirac_massless</span>];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">7</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">_m</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">mu</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">1</span>];
-            <span class="kw">let</span> <span class=
-"ident">beta</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">2</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> [<span class=
-"ident">values</span>[<span class="number">3</span>], <span class=
-"ident">values</span>[<span class="number">5</span>]];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">7</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">_m</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">mu</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">1</span>];
+            <span class="kw">let</span> <span class="ident">beta</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">2</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> [<span class="ident">values</span>[<span class="number">3</span>], <span class="ident">values</span>[<span class="number">5</span>]];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">mu</span>, <span class=
-"ident">beta</span>);
-                    <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">mu</span>, <span class="ident">beta</span>);
+                    <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                 }
             }
         }
@@ -605,90 +377,32 @@ autocomplete="off" spellcheck="false" placeholder=
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class=
-"ident">test</span>]</span>
-    <span class="kw">fn</span> <span class=
-"ident">massive</span>() <span class="op">-</span><span class=
-"op">&gt;</span> <span class="prelude-ty">Result</span><span class=
-"op">&lt;</span>(), <span class="ident">Box</span><span class=
-"op">&lt;</span><span class="kw">dyn</span> <span class=
-"ident">std</span>::<span class="ident">error</span>::<span class=
-"ident">Error</span><span class="op">&gt;</span><span class=
-"op">&gt;</span> {
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">f</span> <span class=
-"op">=</span> <span class="ident">File</span>::<span class=
-"ident">open</span>(<span class=
-"string">"tests/data/particle_physics/statistics/massive.csv.zst"</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class=
-"kw-2">mut</span> <span class="ident">rdr</span> <span class=
-"op">=</span> <span class="ident">csv</span>::<span class=
-"ident">Reader</span>::<span class=
-"ident">from_reader</span>(<span class=
-"ident">ruzstd</span>::<span class=
-"ident">StreamingDecoder</span>::<span class=
-"ident">new</span>(<span class="kw-2">&</span><span class=
-"kw-2">mut</span> <span class="ident">f</span>)<span class=
-"question-mark">?</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">massive</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/particle_physics/statistics/massive.csv.zst&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
 
-        <span class="kw">let</span> <span class=
-"ident">f</span> <span class="op">=</span> [
-            <span class="kw">super</span>::<span class=
-"ident">bose_einstein_massive</span>,
-            <span class="kw">super</span>::<span class=
-"ident">bose_einstein_normalized</span>,
-            <span class="kw">super</span>::<span class=
-"ident">fermi_dirac_massive</span>,
-            <span class="kw">super</span>::<span class=
-"ident">fermi_dirac_normalized</span>,
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> [
+            <span class="kw">super</span>::<span class="ident">bose_einstein_massive</span>,
+            <span class="kw">super</span>::<span class="ident">bose_einstein_normalized</span>,
+            <span class="kw">super</span>::<span class="ident">fermi_dirac_massive</span>,
+            <span class="kw">super</span>::<span class="ident">fermi_dirac_normalized</span>,
         ];
 
-        <span class="kw">for</span> <span class=
-"ident">result</span> <span class="kw">in</span> <span class=
-"ident">rdr</span>.<span class="ident">deserialize</span>() {
-            <span class="kw">let</span> <span class=
-"ident">values</span>: [<span class=
-"ident">f64</span>; <span class="number">7</span>] <span class=
-"op">=</span> <span class="ident">result</span><span class=
-"question-mark">?</span>;
-            <span class="kw">let</span> <span class=
-"ident">m</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">0</span>];
-            <span class="kw">let</span> <span class=
-"ident">_mu</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">1</span>];
-            <span class="kw">let</span> <span class=
-"ident">beta</span> <span class="op">=</span> <span class=
-"ident">values</span>[<span class="number">2</span>];
-            <span class="kw">let</span> <span class=
-"ident">y</span> <span class="op">=</span> <span class=
-"kw-2">&</span><span class="ident">values</span>[<span class=
-"number">3</span>..];
+        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">7</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
+            <span class="kw">let</span> <span class="ident">_mu</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">1</span>];
+            <span class="kw">let</span> <span class="ident">beta</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">2</span>];
+            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">values</span>[<span class="number">3</span>..];
 
-            <span class="kw">for</span> <span class=
-"ident">i</span> <span class="kw">in</span> <span class=
-"number">0</span>..<span class="ident">f</span>.<span class=
-"ident">len</span>() {
-                <span class="kw">let</span> <span class=
-"ident">fi</span> <span class="op">=</span> <span class=
-"ident">f</span>[<span class="ident">i</span>];
-                <span class="kw">let</span> <span class=
-"ident">yi</span> <span class="op">=</span> <span class=
-"ident">y</span>[<span class="ident">i</span>];
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">f</span>.<span class="ident">len</span>() {
+                <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="ident">f</span>[<span class="ident">i</span>];
+                <span class="kw">let</span> <span class="ident">yi</span> <span class="op">=</span> <span class="ident">y</span>[<span class="ident">i</span>];
 
-                <span class="kw">if</span> <span class=
-"op">!</span><span class="ident">yi</span>.<span class=
-"ident">is_nan</span>() {
-                    <span class="kw">let</span> <span class=
-"ident">nyi</span> <span class="op">=</span> <span class=
-"ident">fi</span>(<span class="ident">m</span>, <span class=
-"ident">beta</span>);
-                    <span class=
-"ident">approx_eq</span>(<span class=
-"ident">nyi</span>, <span class="ident">yi</span>, <span class=
-"number">8.0</span>, <span class="number">10f64</span>.<span class=
-"ident">powi</span>(<span class="op">-</span><span class=
-"number">200</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">yi</span>.<span class="ident">is_nan</span>() {
+                    <span class="kw">let</span> <span class="ident">nyi</span> <span class="op">=</span> <span class="ident">fi</span>(<span class="ident">m</span>, <span class="ident">beta</span>);
+                    <span class="ident">approx_eq</span>(<span class="ident">nyi</span>, <span class="ident">yi</span>, <span class="number">8.0</span>, <span class="number">10f64</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">200</span>))<span class="question-mark">?</span>;
                 }
             }
         }
@@ -697,15 +411,4 @@ autocomplete="off" spellcheck="false" placeholder=
     }
 }
 </pre></div>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../../main.js"></script>
-<script src="../../../source-script.js"></script>
-<script src="../../../source-files.js"></script>
-<script defer src="../../../search-index.js"></script>
-</body>
-</html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

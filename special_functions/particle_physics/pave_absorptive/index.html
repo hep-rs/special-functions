@@ -1,178 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<meta name="viewport" content=
-"width=device-width, initial-scale=1.0">
-<meta name="generator" content="rustdoc">
-<meta name="description" content=
-"API documentation for the Rust `pave_absorptive` mod in crate `special_functions`.">
-<meta name="keywords" content=
-"rust, rustlang, rust-lang, pave_absorptive">
-<title>special_functions::particle_physics::pave_absorptive -
-Rust</title>
-<link rel="stylesheet" type="text/css" href=
-"../../../normalize.css">
-<link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
-id="mainThemeStyle">
-<link rel="stylesheet" type="text/css" href="../../../dark.css">
-<link rel="stylesheet" type="text/css" href="../../../light.css"
-id="themeStyle">
-<script src="../../../storage.js"></script><noscript>
-<link rel="stylesheet" href="../../../noscript.css"></noscript>
-<link rel="shortcut icon" href="../../../favicon.ico">
-<style type="text/css">
-#crate-search{background-image:url("../../../down-arrow.svg");}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `pave_absorptive` mod in crate `special_functions`."><meta name="keywords" content="rust, rustlang, rust-lang, pave_absorptive"><title>special_functions::particle_physics::pave_absorptive - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
 <script>
-  MathJax = {
-    tex: {
-      macros: {
-        dd: "{\\mathop{}\\!\\mathrm{d}}",
-        textsc: ["\\mathrm{\\scriptsize #1}", 1],
-        vt: ["\\boldsymbol{#1}", 1],
-        pfrac: ["\\frac{\\partial #1}{\\partial #2}", 2],
-        ddfrac: ["\\frac{\\dd #1}{\\dd #2}", 2],
-        defeq: "\\mathrel{\\vcenter:}=",
-        abs: ["\\lvert #1 \\rvert", 1],
-        angles: ["\\langle #1 \\rangle", 1]
+  "use strict";
+  const macros = {
+    "\\vt": "\\boldsymbol{#1}",
+    "\\pfrac": "\\frac{\\partial{#1}}{\\partial{#2}}",
+    "\\dd": "\\mathop{}\\!\\mathrm{d}",
+    "\\ddfrac": "\\frac{\dd{#1}}{\dd{#2}}",
+    "\\defeq": "\\vcentcolon=",
+    "\\abs": "\\left\\lvert{#1}\\right\\rvert",
+    "\\Li": "\\mathop{\\mathrm{Li}}",
+    "\\inR": "\\in \\mathbb{R}",
+  };
+
+  // Display math is inputted in the documentation as:
+  //
+  // ```math
+  //   \int_0^1 x
+  // ```
+  //
+  // and in the HTML appears as
+  //
+  // ```html
+  // <pre><code class="language-math">...</code></pre>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing display maths");
+    const maths = document.getElementsByClassName("language-math");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      el.parentNode.replaceWith(el);
+      katex.render(el.innerText, el, { displayMode: true, macros: macros });
+    }
+  });
+
+  // Inline math is inputted in the documentation as `$...$` (with the
+  // backticks) and in the HTML appears as
+  //
+  // ```html
+  // <code>$...$</code>
+  // ```
+  document.addEventListener("DOMContentLoaded", function () {
+    // console.log("Replacing inline maths");
+    const maths = document.getElementsByTagName("code");
+    for (let i = 0; i < maths.length; i++) {
+      const el = maths[i];
+      console.log("Replacing element: " + el.innerText);
+      if (el.innerText.startsWith("$") && el.innerText.endsWith("$")) {
+        katex.render(el.innerText.substring(1, el.innerText.length - 1), el, {
+          macros: macros,
+        });
+        el.parentNode.insertBefore(el.firstChild, el);
+        el.remove();
+
+        // After being removed, the current index points to the next element.
+        i--;
       }
     }
-  };
+  });
 </script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
-></script>
-</head>
-<body class="rustdoc mod">
-<!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]-->
-<nav class="sidebar">
-<div class="sidebar-menu">☰</div>
-<a href='../../../special_functions/index.html'>
-<div class='logo-container'><img src='../../../rust-logo.png' alt=
-'logo'></div>
-</a>
-<p class='location'>Module pave_absorptive</p>
-<div class="sidebar-elems">
-<div class="block items">
+
+<style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../special_functions/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a><p class='location'>Module pave_absorptive</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../../index.html'>special_functions</a>::<wbr><a href='../index.html'>particle_physics</a></p><script>window.sidebarCurrent = {name: 'pave_absorptive', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../../src/special_functions/particle_physics/pave_absorptive.rs.html#1-107' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../../index.html'>special_functions</a>::<wbr><a href='../index.html'>particle_physics</a>::<wbr><a class="mod" href=''>pave_absorptive</a></span></h1><div class='docblock'><p>Passarino-Veltman coefficient functions.</p>
+<p>Calculation of the imaginary component of Passarino-Veltman coefficient
+functions.  The code is generated algorithmically from the Mathematica
+package <a href="https://packagex.hepforge.org/">Package-X</a>
+(<a href="https://arxiv.org/abs/1503.01469">arXiv:1503.01469</a>).</p>
+<p>As the general reduction algorithm is not implemented, only the following
+functions are implemented:</p>
 <ul>
-<li><a href="#functions">Functions</a></li>
-</ul>
-</div>
-<p class='location'><a href=
-'../../index.html'>special_functions</a>::<wbr><a href=
-'../index.html'>particle_physics</a></p>
-<script>
-window.sidebarCurrent = {name: 'pave_absorptive', ty: 'mod', relpath: '../'};
-</script>
-<script defer src="../sidebar-items.js"></script></div>
-</nav>
-<div class="theme-picker"><button id="theme-picker" aria-label=
-"Pick another theme!"><img src="../../../brush.svg" width="18" alt=
-"Pick another theme!"></button>
-<div id="theme-choices"></div>
-</div>
-<script src="../../../theme.js"></script>
-<nav class="sub">
-<form class="search-form">
-<div class="search-container">
-<div><select id="crate-search">
-<option value="All crates">All crates</option>
-</select><input class="search-input" name="search" disabled
-autocomplete="off" spellcheck="false" placeholder=
-"Click or press ‘S’ to search, ‘?’ for more options…" type=
-"search"></div>
-<a id="settings-menu" href="../../../settings.html"><img src=
-"../../../wheel.svg" width="18" alt="Change settings"></a></div>
-</form>
-</nav>
-<section id="main" class="content">
-<h1 class='fqn'><span class='out-of-band'><span id=
-'render-detail'><a id="toggle-all-docs" href="javascript:void(0)"
-title="collapse all docs">[<span class=
-'inner'>−</span>]</a></span><a class='srclink' href=
-'../../../src/special_functions/particle_physics/pave_absorptive.rs.html#1-107'
-title='goto source code'>[src]</a></span><span class=
-'in-band'>Module <a href=
-'../../index.html'>special_functions</a>::<wbr><a href=
-'../index.html'>particle_physics</a>::<wbr><a class="mod" href=
-''>pave_absorptive</a></span></h1>
-<div class='docblock'>
-<p>Passarino-Veltman coefficient functions.</p>
-<p>Calculation of the imaginary component of Passarino-Veltman
-coefficient functions. The code is generated algorithmically from
-the Mathematica package <a href=
-"https://packagex.hepforge.org/">Package-X</a> (<a href=
-"https://arxiv.org/abs/1503.01469">arXiv:1503.01469</a>).</p>
-<p>As the general reduction algorithm is not implemented, only the
-following functions are implemented:</p>
-<ul>
-<li>\(\boldsymbol{A}<em>{\underbrace{0\dots0}</em>{2r}}\) for all
-values of <code>r</code>;</li>
-<li>
-\(\boldsymbol{B}<em>{\underbrace{0\dots0}</em>{2r}\underbrace{1\dots1}_{n_1}}\)
+<li><code>$\boldsymbol{A}_{\underbrace{0\dots0}_{2r}}$</code> for all values of <code>r</code>;</li>
+<li><code>$\boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}$</code>
 for all values of <code>r</code>, <code>n1</code>;</li>
-<li>
-\(\boldsymbol{C}<em>{\underbrace{0\dots0}</em>{2r}\underbrace{1\dots1}<em>{n_1}\underbrace{2\dots2}</em>{n_2}}\)
-for all combinations of <code>r</code>, <code>n1</code> and
-<code>n2</code> in <code>[0, 1, 2]</code>;</li>
-<li>
-\(\boldsymbol{D}<em>{\underbrace{0\dots0}</em>{2r}\underbrace{1\dots1}<em>{n_1}\underbrace{2\dots2}</em>{n_2}\underbrace{3\dots3}_{n_3}}\)
-for the scalar case and for one of <code>r</code>, <code>n1</code>,
-<code>n2</code> or <code>n3</code> being <code>1</code>.</li>
+<li><code>$\boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}$</code>
+for all combinations of <code>r</code>, <code>n1</code> and <code>n2</code> in <code>[0, 1, 2]</code>;</li>
+<li><code>$\boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}$</code>
+for the scalar case and for one of <code>r</code>, <code>n1</code>, <code>n2</code> or <code>n3</code> being <code>1</code>.</li>
 </ul>
-<p>In all cases, the higher order functions are generally less
-accurate. Furthermore, parameter space which can lead to numerical
-instabilities are not accounted explicitly handled at this
-stage.</p>
-</div>
-<h2 id='functions' class='section-header'><a href=
-"#functions">Functions</a></h2>
-<table>
-<tr class='module-item'>
-<td><a class="fn" href="fn.a.html" title=
-'special_functions::particle_physics::pave_absorptive::a fn'>a</a></td>
-<td class='docblock-short'>
-<p>Absorptive part of the Passarin-Veltman coefficient function
-\(\boldsymbol{A}\).</p>
-</td>
-</tr>
-<tr class='module-item'>
-<td><a class="fn" href="fn.b.html" title=
-'special_functions::particle_physics::pave_absorptive::b fn'>b</a></td>
-<td class='docblock-short'>
-<p>Absorptive part of the Passarin-Veltman coefficient function
-\(\boldsymbol{B}\).</p>
-</td>
-</tr>
-<tr class='module-item'>
-<td><a class="fn" href="fn.c.html" title=
-'special_functions::particle_physics::pave_absorptive::c fn'>c</a></td>
-<td class='docblock-short'>
-<p>Absorptive part of the Passarin-Veltman coefficient function
-\(\boldsymbol{C}\).</p>
-</td>
-</tr>
-<tr class='module-item'>
-<td><a class="fn" href="fn.d.html" title=
-'special_functions::particle_physics::pave_absorptive::d fn'>d</a></td>
-<td class='docblock-short'>
-<p>Absorptive part of the Passarin-Veltman coefficient function
-\(\boldsymbol{C}\).</p>
-</td>
-</tr>
-</table>
-</section>
-<section id="search" class="content hidden"></section>
-<section class="footer"></section>
-<script>
-window.rootPath = "../../../";window.currentCrate = "special_functions";
-</script>
-<script src="../../../main.js"></script>
-<script defer src="../../../search-index.js"></script>
-</body>
-</html>
+<p>In all cases, the higher order functions are generally less accurate.
+Furthermore, parameter space which can lead to numerical instabilities are
+not accounted explicitly handled at this stage.</p>
+</div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.a.html" title='special_functions::particle_physics::pave_absorptive::a fn'>a</a></td><td class='docblock-short'><p>Absorptive part of the Passarin-Veltman coefficient function
+<code>$\boldsymbol{A}$</code>.</p>
+</td></tr><tr class='module-item'><td><a class="fn" href="fn.b.html" title='special_functions::particle_physics::pave_absorptive::b fn'>b</a></td><td class='docblock-short'><p>Absorptive part of the Passarin-Veltman coefficient function
+<code>$\boldsymbol{B}$</code>.</p>
+</td></tr><tr class='module-item'><td><a class="fn" href="fn.c.html" title='special_functions::particle_physics::pave_absorptive::c fn'>c</a></td><td class='docblock-short'><p>Absorptive part of the Passarin-Veltman coefficient function
+<code>$\boldsymbol{C}$</code>.</p>
+</td></tr><tr class='module-item'><td><a class="fn" href="fn.d.html" title='special_functions::particle_physics::pave_absorptive::d fn'>d</a></td><td class='docblock-short'><p>Absorptive part of the Passarin-Veltman coefficient function
+<code>$\boldsymbol{C}$</code>.</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "special_functions";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>
