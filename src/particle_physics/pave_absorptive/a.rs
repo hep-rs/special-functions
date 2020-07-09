@@ -1,9 +1,9 @@
 /// Absorptive part of the Passarin-Veltman coefficient function
-/// \\(\boldsymbol{A}\\).
+/// `$\boldsymbol{A}$`.
 ///
-/// \\begin{equation}
-///   \boldsymbol{A}_{\underbrace{0\dots0}_{2r}}(m)
-/// \\end{equation}
+/// ```math
+/// \boldsymbol{A}_{\underbrace{0\dots0}_{2r}}(m)
+/// ```
 ///
 /// Note that this is always 0 for all input values.  This is implemented for
 /// the sake of completeness with the other functions.

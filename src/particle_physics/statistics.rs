@@ -1,8 +1,8 @@
 //! Particle Statistics
 //!
-//! Compute Bose-Einstein and Fermi-Dirac integrals, in both massive (\\(\mu =
-//! 0\\)) and massless (\\(\mu \in \mathbb{R}\\)) cases as well as normalized to
-//! a single massless bosonic degree of freedom for the massive case.
+//! Compute Bose-Einstein and Fermi-Dirac integrals, in both massive (`$\mu =
+//! 0$`) and massless (`$\mu \inR$`) cases as well as normalized to a single
+//! massless bosonic degree of freedom for the massive case.
 
 use std::{convert::identity, f64};
 
@@ -14,10 +14,10 @@ mod fermi_dirac_massless;
 mod fermi_dirac_normalized;
 
 /// Equilibrium number density of a massless Bose-Einstein particle with
-/// chemical potential \\(\mu \leq 0\\).
+/// chemical potential `$\mu \leq 0$`.
 ///
 /// The inverse temperature is in units of inverse GeV, and the result is in
-/// units of GeV^3.
+/// units of GeV`$^{3}$`.
 pub fn bose_einstein_massless(mu: f64, beta: f64) -> f64 {
     beta.powi(-3) * _bose_einstein_massless(-mu * beta)
 }
@@ -30,7 +30,7 @@ approx_fn! {
 ///
 /// The arguments `m` and `beta` must be in units such that `m * beta` is
 /// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
-/// result is in units of `[m^3]`.
+/// result is in units of `[m`$^{3}$`]`.
 pub fn bose_einstein_massive(m: f64, beta: f64) -> f64 {
     if m == 0.0 {
         // ζ(3) / π² ≅ 0.12179382823357308
@@ -59,10 +59,10 @@ approx_fn! {
 }
 
 /// Equilibrium number density of a massless Fermi-Dirac particle with chemical
-/// potential \\(\mu \in \mathbb{R}\\).
+/// potential `$\mu \inR$`.
 ///
 /// The inverse temperature is in units of inverse GeV, and the result is in
-/// units of GeV^3.
+/// units of GeV`$^{3}$`.
 pub fn fermi_dirac_massless(mu: f64, beta: f64) -> f64 {
     beta.powi(-3) * _fermi_dirac_massless(mu * beta)
 }
@@ -75,7 +75,7 @@ approx_fn! {
 ///
 /// The arguments `m` and `beta` must be in units such that `m * beta` is
 /// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
-/// result is in units of `[m^3]`.
+/// result is in units of [m`$^{3}$`].
 pub fn fermi_dirac_massive(m: f64, beta: f64) -> f64 {
     if m == 0.0 {
         // 3 ζ(3) / 4 π² ≅ 0.09134537117517981

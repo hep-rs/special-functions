@@ -4,12 +4,12 @@ pub mod linear;
 
 /// Evaluates an arbitrary single-variable polynomial at a particular point.
 ///
-/// Given an array of coefficients \\(c = [c_0, c_1, \dots, c_n]\\), evaluates
+/// Given an array of coefficients `$c = [c_0, c_1, \dots, c_n]$`, evaluates
 /// the polynomial
-/// \\begin{equation}
-///     p(x) = c_0 + c_1 x + c_2 x\^2 + \dots + c_n x\^n
-/// \\end{equation}
-/// at the specified value of \\(x\\).
+/// ```math
+/// p(x) = c_0 + c_1 x + c_2 x^2 + \dots + c_n x^n
+/// ```
+/// at the specified value of `$x$`.
 ///
 /// If the list of coefficients is empty, the function returns `0.0`.
 ///
@@ -18,7 +18,7 @@ pub mod linear;
 pub fn polynomial(x: f64, c: &[f64]) -> f64 {
     // The Clenshaw algorithm relation is:
     //
-    // >b(k, x) := a(k) + x b(k + 1, x)
+    // > b(k, x) := a(k) + x b(k + 1, x)
     //
     // with the final value being simply b(0, x).
     c.iter().rev().fold(0.0, |ans, &ci| ans.mul_add(x, ci))

@@ -32,11 +32,11 @@ impl Parameters {
 }
 
 /// Absorptive part of the Passarin-Veltman coefficient function
-/// \\(\boldsymbol{B}\\).
+/// `$\boldsymbol{B}$`.
 ///
-/// \\begin{equation}
-///   \boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}(s; m0, m1)
-/// \\end{equation}
+/// ```math
+/// \boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}(s; m0, m1)
+/// ```
 ///
 /// This is implemented using the general recursion relation and thus in
 /// principal works for all values of `r` and `n1`; however, higher order values
@@ -83,9 +83,9 @@ fn b_internal(r: i32, n1: i32, param: &Parameters) -> f64 {
 
 /// Scalar Passarino-Veltmann coefficient function:
 ///
-/// \\begin{equation}
+/// ```math
 ///   \boldsymbol{B}_{0}(s; m0, m1)
-/// \\end{equation}
+/// ```
 fn scalar(param: &Parameters) -> f64 {
     disc(param)
 }

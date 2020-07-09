@@ -5,9 +5,9 @@ pub mod statistics;
 
 /// Kallen lambda function:
 ///
-/// \\begin{equation}
-///   \lambda(a, b, c) = a^2 + b^2 + c^2 - 2ab - 2ac - 2bc
-/// \\end{equation}
+/// ```math
+/// \lambda(a, b, c) = a^2 + b^2 + c^2 - 2ab - 2ac - 2bc
+/// ```
 ///
 /// # Example
 ///
@@ -24,9 +24,9 @@ pub fn kallen_lambda(a: f64, b: f64, c: f64) -> f64 {
 
 /// Square root of the Kallen lambda function:
 ///
-/// \\begin{equation}
-///   \lambda^{\frac{1}{2}}(a, b, c) = \sqrt{a^2 + b^2 + c^2 - 2ab - 2ac - 2bc}
-/// \\end{equation}
+/// ```math
+/// \lambda^{\frac{1}{2}}(a, b, c) = \sqrt{a^2 + b^2 + c^2 - 2ab - 2ac - 2bc}
+/// ```
 ///
 /// This implementation is more precise than taking the square root of
 /// [`kallen_lambda`] in cases where the arguments span several orders of

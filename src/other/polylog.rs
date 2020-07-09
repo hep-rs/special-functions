@@ -11,53 +11,53 @@ mod li7;
 mod li8;
 mod li9;
 
-/// Approximation of polylogarithm function \\(Li_0(x)\\) for all \\(x < 1\\).
+/// Approximation of polylogarithm function `$\Li_0(x)$` for all `$x < 1$`.
 pub fn li0(x: f64) -> f64 {
     x / (1.0 - x)
 }
 
-/// Approximation of polylogarithm function \\(Li_1(x)\\) for all \\(x < 1\\).
+/// Approximation of polylogarithm function `$\Li_1(x)$` for all `$x < 1$`.
 pub fn li1(x: f64) -> f64 {
     -(-x).ln_1p()
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_2(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_2(x)$` for all `$x < 1$`."]
     (pub) fn li2(mod = li2, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_3(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_3(x)$` for all `$x < 1$`."]
     (pub) fn li3(mod = li3, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_4(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_4(x)$` for all `$x < 1$`."]
     (pub) fn li4(mod = li4, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_5(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_5(x)$` for all `$x < 1$`."]
     (pub) fn li5(mod = li5, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_6(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_6(x)$` for all `$x < 1$`."]
     (pub) fn li6(mod = li6, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_7(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_7(x)$` for all `$x < 1$`."]
     (pub) fn li7(mod = li7, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_8(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_8(x)$` for all `$x < 1$`."]
     (pub) fn li8(mod = li8, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = "Approximation of polylogarithm function \\(Li_9(x)\\) for all \\(x < 1\\)."]
+    #[doc = r"Approximation of polylogarithm function `$\Li_9(x)$` for all `$x < 1$`."]
     (pub) fn li9(mod = li9, type = chebyshev, outer = identity, inner = identity);
 }
 

@@ -8,27 +8,27 @@ mod gamma;
 mod harmonic_number;
 
 approx_fn! {
-    #[doc = r#"Approximation of the Harmonic number extended to all number \\(x > 0\\).
+    #[doc = r#"Approximation of the Harmonic number extended to all number `$x > 0$`.
 
-The \\(n\\)th harmonic number is defined as
+The `$n$`th harmonic number is defined as
 
-\\begin{equation}
-    H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
-\\end{equation}
+```math
+H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
+```
 "#]
     (pub) fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = r#"Approximatino of the gamma function for \\(x > 0\\)."#]
+    #[doc = r#"Approximatino of the gamma function for `$x > 0$`."#]
     (pub) fn gamma(mod = gamma, type = chebyshev, outer = identity, inner = identity);
 }
 
 /// Binomial coefficient
 ///
-/// \\begin{equation}
-///   \binom{n}{k}
-/// \\end{equation}
+/// ```math
+/// \binom{n}{k}
+/// ```
 pub fn binomial(n: i32, k: i32) -> f64 {
     if k > n || k < 0 {
         0.0

@@ -45,11 +45,11 @@ impl Parameters {
     }
 }
 /// Absorptive part of the Passarin-Veltman coefficient function
-/// \\(\boldsymbol{C}\\).
+/// `$\boldsymbol{C}$`.
 ///
-/// \\begin{equation}
-///   \boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}(s_1, s_{12}, s_2; m0, m1, m_2)
-/// \\end{equation}
+/// ```math
+/// \boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}(s_1, s_{12}, s_2; m0, m1, m_2)
+/// ```
 ///
 /// This is implemented using explicit expressions exported from the Mathematica
 /// package [Package-X](https://packagex.hepforge.org/)

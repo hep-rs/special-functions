@@ -8,12 +8,12 @@
 //! As the general reduction algorithm is not implemented, only the following
 //! functions are implemented:
 //!
-//! - \\(\boldsymbol{A}_{\underbrace{0\dots0}_{2r}}\\) for all values of `r`;
-//! - \\(\boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}\\)
+//! - `$\boldsymbol{A}_{\underbrace{0\dots0}_{2r}}$` for all values of `r`;
+//! - `$\boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}$`
 //!   for all values of `r`, `n1`;
-//! - \\(\boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}\\)
+//! - `$\boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}$`
 //!   for all combinations of `r`, `n1` and `n2` in `[0, 1, 2]`;
-//! - \\(\boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}\\)
+//! - `$\boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}$`
 //!   for the scalar case and for one of `r`, `n1`, `n2` or `n3` being `1`.
 //!
 //! In all cases, the higher order functions are generally less accurate.
@@ -32,11 +32,11 @@ pub use d::d;
 
 /// Evaluates
 ///
-/// \\begin{equation}
+/// ```math
 ///   \Re \log\left( \frac{a + b}{a - b} \right)
-/// \\end{equation}
+/// ```
 ///
-/// in a way that is numerically stable when \\(b \ll a\\) and \\(b \gg a\\).
+/// in a way that is numerically stable when `$b \ll a$` and `$b \gg a$`.
 fn log_diff(a: f64, b: f64) -> f64 {
     let x = b / a;
 

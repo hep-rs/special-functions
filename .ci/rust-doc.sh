@@ -18,21 +18,6 @@ cp -R ./target/doc/* gh-pages/
 
 cd gh-pages
 
-# Prettify HTML code to allow editing
-sudo apt install tidy
-find . -type f -name "*.html" -print0 |
-    xargs -0 -P$(nproc) tidy -m 2>/dev/null ||
-    true
-
-# Add MathJax support
-find . -type f -name "*.html" -print0 |
-    xargs -0 -P$(nproc) \
-        sed -n -i \
-            -e '/<\/head>/r ../.ci/mathjax.html' \
-            -e '1x' \
-            -e '2,${x;p}' \
-            -e '${x;p}'
-
 # Commit the changes
 git config --global user.email "CI"
 git config --global user.name "CI"

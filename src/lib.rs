@@ -12,11 +12,6 @@
 //! [![Codecov](https://img.shields.io/codecov/c/github/hep-rs/special-functions/master.svg)](https://codecov.io/gh/hep-rs/special-functions)
 //!
 //! Licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
-//!
-//! The documentation makes use of [MathJax](https://www.mathjax.org/) in order
-//! to display mathematics.  A version of the documentation with MathJax
-//! integrated is available
-//! [here](https://hep.rs/special-functions/special_functions).
 
 #![cfg_attr(feature = "nightly", feature(test))]
 

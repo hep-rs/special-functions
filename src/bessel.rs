@@ -47,7 +47,7 @@ mod y7;
 mod y8;
 mod y9;
 
-/// Approximation of modified Bessel function \\(I_0(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_0(x)$` for all real `$x$`.
 pub fn i0(x: f64) -> f64 {
     if x < 0.0 {
         _i0(-x)
@@ -59,7 +59,7 @@ approx_fn! {
     () fn _i0(mod = i0, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_1(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_1(x)$` for all real `$x$`.
 pub fn i1(x: f64) -> f64 {
     if x < 0.0 {
         -_i1(-x)
@@ -71,7 +71,7 @@ approx_fn! {
     () fn _i1(mod = i1, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_2(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_2(x)$` for all real `$x$`.
 pub fn i2(x: f64) -> f64 {
     if x < 0.0 {
         _i2(-x)
@@ -83,7 +83,7 @@ approx_fn! {
     () fn _i2(mod = i2, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_3(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_3(x)$` for all real `$x$`.
 pub fn i3(x: f64) -> f64 {
     if x < 0.0 {
         -_i3(-x)
@@ -95,7 +95,7 @@ approx_fn! {
     () fn _i3(mod = i3, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_4(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_4(x)$` for all real `$x$`.
 pub fn i4(x: f64) -> f64 {
     if x < 0.0 {
         _i4(-x)
@@ -107,7 +107,7 @@ approx_fn! {
     () fn _i4(mod = i4, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_5(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_5(x)$` for all real `$x$`.
 pub fn i5(x: f64) -> f64 {
     if x < 0.0 {
         -_i5(-x)
@@ -119,7 +119,7 @@ approx_fn! {
     () fn _i5(mod = i5, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_6(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_6(x)$` for all real `$x$`.
 pub fn i6(x: f64) -> f64 {
     if x < 0.0 {
         _i6(-x)
@@ -131,7 +131,7 @@ approx_fn! {
     () fn _i6(mod = i6, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_7(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_7(x)$` for all real `$x$`.
 pub fn i7(x: f64) -> f64 {
     if x < 0.0 {
         -_i7(-x)
@@ -143,7 +143,7 @@ approx_fn! {
     () fn _i7(mod = i7, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_8(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_8(x)$` for all real `$x$`.
 pub fn i8(x: f64) -> f64 {
     if x < 0.0 {
         _i8(-x)
@@ -155,7 +155,7 @@ approx_fn! {
     () fn _i8(mod = i8, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(I_9(x)\\) for all real \\(x\\).
+/// Approximation of modified Bessel function `$I_9(x)$` for all real `$x$`.
 pub fn i9(x: f64) -> f64 {
     if x < 0.0 {
         -_i9(-x)
@@ -167,7 +167,7 @@ approx_fn! {
     () fn _i9(mod = i9, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_0(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_0(x)$` for all `$x$`.
 pub fn j0(x: f64) -> f64 {
     if x < 0.0 {
         _j0(-x)
@@ -179,7 +179,7 @@ approx_fn! {
     () fn _j0(mod = j0, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_1(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_1(x)$` for all `$x$`.
 pub fn j1(x: f64) -> f64 {
     if x < 0.0 {
         -_j1(-x)
@@ -191,7 +191,7 @@ approx_fn! {
     () fn _j1(mod = j1, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_2(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_2(x)$` for all `$x$`.
 pub fn j2(x: f64) -> f64 {
     if x < 0.0 {
         _j2(-x)
@@ -203,7 +203,7 @@ approx_fn! {
     () fn _j2(mod = j2, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_3(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_3(x)$` for all `$x$`.
 pub fn j3(x: f64) -> f64 {
     if x < 0.0 {
         -_j3(-x)
@@ -215,7 +215,7 @@ approx_fn! {
     () fn _j3(mod = j3, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_4(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_4(x)$` for all `$x$`.
 pub fn j4(x: f64) -> f64 {
     if x < 0.0 {
         _j4(-x)
@@ -227,7 +227,7 @@ approx_fn! {
     () fn _j4(mod = j4, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_5(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_5(x)$` for all `$x$`.
 pub fn j5(x: f64) -> f64 {
     if x < 0.0 {
         -_j5(-x)
@@ -239,7 +239,7 @@ approx_fn! {
     () fn _j5(mod = j5, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_6(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_6(x)$` for all `$x$`.
 pub fn j6(x: f64) -> f64 {
     if x < 0.0 {
         _j6(-x)
@@ -251,7 +251,7 @@ approx_fn! {
     () fn _j6(mod = j6, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_7(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_7(x)$` for all `$x$`.
 pub fn j7(x: f64) -> f64 {
     if x < 0.0 {
         -_j7(-x)
@@ -263,7 +263,7 @@ approx_fn! {
     () fn _j7(mod = j7, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_8(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_8(x)$` for all `$x$`.
 pub fn j8(x: f64) -> f64 {
     if x < 0.0 {
         _j8(-x)
@@ -275,7 +275,7 @@ approx_fn! {
     () fn _j8(mod = j8, type = chebyshev, outer = identity, inner = identity);
 }
 
-/// Approximation of modified Bessel function \\(J_9(x)\\) for all \\(x\\).
+/// Approximation of modified Bessel function `$J_9(x)$` for all `$x$`.
 pub fn j9(x: f64) -> f64 {
     if x < 0.0 {
         -_j9(-x)
@@ -288,88 +288,88 @@ approx_fn! {
 }
 
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_0(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_0(x)$` for all `$x > 0$`."#]
     (pub) fn k0(mod = k0, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_1(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_1(x)$` for all `$x > 0$`."#]
     (pub) fn k1(mod = k1, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_2(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_2(x)$` for all `$x > 0$`."#]
     (pub) fn k2(mod = k2, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_3(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_3(x)$` for all `$x > 0$`."#]
     (pub) fn k3(mod = k3, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_4(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_4(x)$` for all `$x > 0$`."#]
     (pub) fn k4(mod = k4, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_5(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_5(x)$` for all `$x > 0$`."#]
     (pub) fn k5(mod = k5, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_6(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_6(x)$` for all `$x > 0$`."#]
     (pub) fn k6(mod = k6, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_7(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_7(x)$` for all `$x > 0$`."#]
     (pub) fn k7(mod = k7, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_8(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_8(x)$` for all `$x > 0$`."#]
     (pub) fn k8(mod = k8, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(K_9(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$K_9(x)$` for all `$x > 0$`."#]
     (pub) fn k9(mod = k9, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximatino of the ratio of Bessel function \\(K_1(x) / K_2(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximatino of the ratio of Bessel function `$K_1(x) / K_2(x)$` for all `$x > 0$`."#]
     (pub) fn k1_on_k2(mod = k1_on_k2, type = chebyshev, outer = identity, inner = identity);
 }
 
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_0(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_0(x)$` for all `$x > 0$`."#]
     (pub) fn y0(mod = y0, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_1(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_1(x)$` for all `$x > 0$`."#]
     (pub) fn y1(mod = y1, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_2(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_2(x)$` for all `$x > 0$`."#]
     (pub) fn y2(mod = y2, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_3(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_3(x)$` for all `$x > 0$`."#]
     (pub) fn y3(mod = y3, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_4(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_4(x)$` for all `$x > 0$`."#]
     (pub) fn y4(mod = y4, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_5(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_5(x)$` for all `$x > 0$`."#]
     (pub) fn y5(mod = y5, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_6(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_6(x)$` for all `$x > 0$`."#]
     (pub) fn y6(mod = y6, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_7(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_7(x)$` for all `$x > 0$`."#]
     (pub) fn y7(mod = y7, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_8(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_8(x)$` for all `$x > 0$`."#]
     (pub) fn y8(mod = y8, type = chebyshev, outer = identity, inner = identity);
 }
 approx_fn! {
-    #[doc = r#"Approximation of modified Bessel function \\(Y_9(x)\\) for all \\(x > 0\\)."#]
+    #[doc = r#"Approximation of modified Bessel function `$Y_9(x)$` for all `$x > 0$`."#]
     (pub) fn y9(mod = y9, type = chebyshev, outer = identity, inner = identity);
 }
 
