@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/other.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>other.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><link
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/other.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>other.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
   crossorigin="anonymous"
@@ -190,7 +190,7 @@
 The `$n$`th harmonic number is defined as
 
 ```math
-H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
+H_n \defeq \sum_{i = 1}^n \frac{1}{i}
 ```
 &quot;#</span>]</span>
     (<span class="kw">pub</span>) <span class="kw">fn</span> <span class="ident">harmonic_number</span>(<span class="kw">mod</span> <span class="op">=</span> <span class="ident">harmonic_number</span>, <span class="kw">type</span> <span class="op">=</span> <span class="ident">chebyshev</span>, <span class="ident">outer</span> <span class="op">=</span> <span class="ident">identity</span>, <span class="ident">inner</span> <span class="op">=</span> <span class="ident">identity</span>);
@@ -206,8 +206,8 @@ H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
 <span class="doccomment">/// ```math</span>
 <span class="doccomment">/// \binom{n}{k}</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">binomial</span>(<span class="ident">n</span>: <span class="ident">i32</span>, <span class="ident">k</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class="ident">k</span> <span class="op">&gt;</span> <span class="ident">n</span> <span class="op">|</span><span class="op">|</span> <span class="ident">k</span> <span class="op">&lt;</span> <span class="number">0</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">binomial</span>(<span class="ident">n</span>: <span class="ident">i32</span>, <span class="ident">k</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">k</span> <span class="op">&gt;</span> <span class="ident">n</span> <span class="op">||</span> <span class="ident">k</span> <span class="op">&lt;</span> <span class="number">0</span> {
         <span class="number">0.0</span>
     } <span class="kw">else</span> <span class="kw">if</span> (<span class="ident">n</span> <span class="op">-</span> <span class="ident">k</span>) <span class="op">&lt;</span> <span class="ident">k</span> {
         (<span class="number">1</span>..<span class="op">=</span>(<span class="ident">n</span> <span class="op">-</span> <span class="ident">k</span>))
@@ -224,7 +224,7 @@ H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
     <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">f64</span>, <span class="ident">fs</span>::<span class="ident">File</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">harmonic_number</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">harmonic_number</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/other/harmonic_number.csv.zst&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">harmonic_number</span>;
@@ -243,7 +243,7 @@ H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">gamma</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">gamma</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/other/gamma.csv.zst&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">gamma</span>;
@@ -262,7 +262,7 @@ H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">binomial</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">binomial</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/other/binomial.csv.zst&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">binomial</span>;

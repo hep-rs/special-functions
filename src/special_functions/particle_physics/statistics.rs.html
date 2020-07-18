@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/particle_physics/statistics.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>statistics.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/particle_physics/statistics.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>statistics.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/katex@0.11/dist/katex.min.css"
   crossorigin="anonymous"
@@ -259,7 +259,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
 <span class="doccomment">/// units of GeV`$^{3}$`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massless</span>(<span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
@@ -269,11 +269,11 @@
 
 <span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
-<span class="doccomment">/// result is in units of `[m`$^{3}$`]`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+<span class="doccomment">/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is</span>
+<span class="doccomment">/// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.</span>
+<span class="doccomment">/// The result is in units of \[m\]`$^{3}$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">==</span> <span class="number">0.0</span> {
         <span class="comment">// ζ(3) / π² ≅ 0.12179382823357308</span>
         <span class="number">0.121_793_828_233_573_08</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
     } <span class="kw">else</span> {
@@ -288,10 +288,10 @@
 <span class="doccomment">/// Equilibrium number density of massive Bose-Einstein particle normalized to a</span>
 <span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
+<span class="doccomment">/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is</span>
+<span class="doccomment">/// unitless, where `$m$` is the particle&#39;s mass and `$\beta$` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="ident">_bose_einstein_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
@@ -304,7 +304,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
 <span class="doccomment">/// units of GeV`$^{3}$`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_fermi_dirac_massless</span>(<span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
@@ -314,11 +314,11 @@
 
 <span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class="doccomment">/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The</span>
-<span class="doccomment">/// result is in units of [m`$^{3}$`].</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+<span class="doccomment">/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is</span>
+<span class="doccomment">/// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.  The</span>
+<span class="doccomment">/// result is in units of \[m\]`$^{3}$`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_massive</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">if</span> <span class="ident">m</span> <span class="op">==</span> <span class="number">0.0</span> {
         <span class="comment">// 3 ζ(3) / 4 π² ≅ 0.09134537117517981</span>
         <span class="number">0.091_345_371_175_179_81</span> <span class="op">*</span> <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>)
     } <span class="kw">else</span> {
@@ -333,10 +333,10 @@
 <span class="doccomment">/// Equilibrium number density of massive Fermi-Dirac particle normalized to a</span>
 <span class="doccomment">/// massless Bose-Einstein particle.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The arguments `m` and `beta` must be in units such that `m * beta` is</span>
-<span class="doccomment">/// unitless, where `m` is the particle&#39;s mass and `beta` is the inverse</span>
+<span class="doccomment">/// The arguments `$m$` and `$beta$` must be in units such that `$m \beta$` is</span>
+<span class="doccomment">/// unitless, where `$m$` is the particle&#39;s mass and `$\beta$` is the inverse</span>
 <span class="doccomment">/// temperature.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fermi_dirac_normalized</span>(<span class="ident">m</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
     <span class="ident">_fermi_dirac_normalized</span>(<span class="ident">m</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
@@ -350,7 +350,7 @@
     <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">f64</span>, <span class="ident">fs</span>::<span class="ident">File</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">massless</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">massless</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/particle_physics/statistics/massless.csv.zst&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
 
@@ -378,7 +378,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">massive</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">massive</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="string">&quot;tests/data/particle_physics/statistics/massive.csv.zst&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv</span>::<span class="ident">Reader</span>::<span class="ident">from_reader</span>(<span class="ident">ruzstd</span>::<span class="ident">StreamingDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">f</span>)<span class="question-mark">?</span>);
 
