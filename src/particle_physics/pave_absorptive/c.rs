@@ -54,7 +54,8 @@ impl Parameters {
 /// This is implemented using explicit expressions exported from the Mathematica
 /// package [Package-X](https://packagex.hepforge.org/)
 /// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been
-/// implemented for all combinations of `r`, `n1` and `n2` in `[0, 1, 2]`.
+/// implemented for all combinations of `$r$`, `$n_1$` and `$n_2$` in `$\{0, 1,
+/// 2\}$`.
 ///
 /// Note that higher order functions will generally be less accurate as the code
 /// does not check for numerical stability.

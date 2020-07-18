@@ -90,8 +90,8 @@ impl Parameters {
 /// This is implemented using explicit expressions exported from the Mathematica
 /// package [Package-X](https://packagex.hepforge.org/)
 /// ([arXiv:1503.01469](https://arxiv.org/abs/1503.01469)), and has been
-/// implemented for the scalar loop function, and where one of `r`, `n1`, `n2`
-/// or `n3` is `1`.
+/// implemented for the scalar loop function, and where one of `$r$`, `$n_1$`,
+/// `$n_2$` or `$n_3$` is 1.
 ///
 /// Note that higher order functions will generally be less accurate as the code
 /// does not check for numerical stability.

@@ -28,9 +28,9 @@ approx_fn! {
 
 /// Equilibrium number density of massive Bose-Einstein particle.
 ///
-/// The arguments `m` and `beta` must be in units such that `m * beta` is
-/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
-/// result is in units of `[m`$^{3}$`]`.
+/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
+/// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.
+/// The result is in units of \[m\]`$^{3}$`.
 pub fn bose_einstein_massive(m: f64, beta: f64) -> f64 {
     if m == 0.0 {
         // ζ(3) / π² ≅ 0.12179382823357308
@@ -47,8 +47,8 @@ approx_fn! {
 /// Equilibrium number density of massive Bose-Einstein particle normalized to a
 /// massless Bose-Einstein particle.
 ///
-/// The arguments `m` and `beta` must be in units such that `m * beta` is
-/// unitless, where `m` is the particle's mass and `beta` is the inverse
+/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
+/// unitless, where `$m$` is the particle's mass and `$\beta$` is the inverse
 /// temperature.
 pub fn bose_einstein_normalized(m: f64, beta: f64) -> f64 {
     _bose_einstein_normalized(m * beta)
@@ -73,9 +73,9 @@ approx_fn! {
 
 /// Equilibrium number density of massive Fermi-Dirac particle.
 ///
-/// The arguments `m` and `beta` must be in units such that `m * beta` is
-/// unitless, where `m` is the mass and `beta` is the inverse temperature.  The
-/// result is in units of [m`$^{3}$`].
+/// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
+/// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.  The
+/// result is in units of \[m\]`$^{3}$`.
 pub fn fermi_dirac_massive(m: f64, beta: f64) -> f64 {
     if m == 0.0 {
         // 3 ζ(3) / 4 π² ≅ 0.09134537117517981
@@ -92,8 +92,8 @@ approx_fn! {
 /// Equilibrium number density of massive Fermi-Dirac particle normalized to a
 /// massless Bose-Einstein particle.
 ///
-/// The arguments `m` and `beta` must be in units such that `m * beta` is
-/// unitless, where `m` is the particle's mass and `beta` is the inverse
+/// The arguments `$m$` and `$beta$` must be in units such that `$m \beta$` is
+/// unitless, where `$m$` is the particle's mass and `$\beta$` is the inverse
 /// temperature.
 pub fn fermi_dirac_normalized(m: f64, beta: f64) -> f64 {
     _fermi_dirac_normalized(m * beta)

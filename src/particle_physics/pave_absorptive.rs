@@ -8,13 +8,14 @@
 //! As the general reduction algorithm is not implemented, only the following
 //! functions are implemented:
 //!
-//! - `$\boldsymbol{A}_{\underbrace{0\dots0}_{2r}}$` for all values of `r`;
+//! - `$\boldsymbol{A}_{\underbrace{0\dots0}_{2r}}$` for all values of `$r$`;
 //! - `$\boldsymbol{B}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}}$`
-//!   for all values of `r`, `n1`;
+//!   for all values of `$r$` and  `$n_1$`;
 //! - `$\boldsymbol{C}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}}$`
-//!   for all combinations of `r`, `n1` and `n2` in `[0, 1, 2]`;
+//!   for all combinations of `$r$`, `$n_1$` and `$n_2$` in `$\{0, 1, 2\}$`;
 //! - `$\boldsymbol{D}_{\underbrace{0\dots0}_{2r}\underbrace{1\dots1}_{n_1}\underbrace{2\dots2}_{n_2}\underbrace{3\dots3}_{n_3}}$`
-//!   for the scalar case and for one of `r`, `n1`, `n2` or `n3` being `1`.
+//!   for the scalar case and for one of `$r$`, `$n_1$`, `$n_2$` or `$n_3$`
+//!   being 1.
 //!
 //! In all cases, the higher order functions are generally less accurate.
 //! Furthermore, parameter space which can lead to numerical instabilities are

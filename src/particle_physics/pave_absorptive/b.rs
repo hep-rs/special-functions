@@ -39,8 +39,8 @@ impl Parameters {
 /// ```
 ///
 /// This is implemented using the general recursion relation and thus in
-/// principal works for all values of `r` and `n1`; however, higher order values
-/// are prone to numerical instabilities.
+/// principal works for all values of `$r$` and `$n_1$`; however, higher order
+/// values are prone to numerical instabilities.
 pub fn b(r: i32, n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
     debug_assert!(r >= -1, "r cannot be smaller than -1");
     debug_assert!(n1 >= 0, "n1 must be non-negative");

@@ -13,7 +13,7 @@ approx_fn! {
 The `$n$`th harmonic number is defined as
 
 ```math
-H_n \\defeq \\sum_{i = 1}^n \\frac{1}{i}
+H_n \defeq \sum_{i = 1}^n \frac{1}{i}
 ```
 "#]
     (pub) fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = identity);
