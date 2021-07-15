@@ -238,6 +238,11 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Particle Statistics</span>
 <span class="doccomment">//!</span>
@@ -255,12 +260,12 @@
 <span class="kw">mod</span> <span class="ident">fermi_dirac_normalized</span>;
 
 <span class="doccomment">/// Equilibrium number density of a massless Bose-Einstein particle with</span>
-<span class="doccomment">/// chemical potential `$\mu \leq 0$`.</span>
+<span class="doccomment">/// chemical potential `$\mu \inR$`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The inverse temperature is in units of inverse GeV, and the result is in</span>
 <span class="doccomment">/// units of GeV`$^{3}$`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bose_einstein_massless</span>(<span class="ident">mu</span>: <span class="ident">f64</span>, <span class="ident">beta</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massless</span>(<span class="op">-</span><span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
+    <span class="ident">beta</span>.<span class="ident">powi</span>(<span class="op">-</span><span class="number">3</span>) <span class="op">*</span> <span class="ident">_bose_einstein_massless</span>(<span class="ident">mu</span> <span class="op">*</span> <span class="ident">beta</span>)
 }
 
 <span class="macro">approx_fn!</span> {
@@ -356,7 +361,12 @@
 
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> [<span class="kw">super</span><span class="ident">::bose_einstein_massless</span>, <span class="kw">super</span><span class="ident">::fermi_dirac_massless</span>];
 
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">1</span>;
         <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">deserialize</span>() {
+            <span class="macro">println!</span>(<span class="string">&quot;iteration: {}&quot;</span>, {
+                <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="ident">i</span>
+            });
             <span class="kw">let</span> <span class="ident">values</span>: [<span class="ident">f64</span>; <span class="number">7</span>] <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">_m</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">0</span>];
             <span class="kw">let</span> <span class="ident">mu</span> <span class="op">=</span> <span class="ident">values</span>[<span class="number">1</span>];
