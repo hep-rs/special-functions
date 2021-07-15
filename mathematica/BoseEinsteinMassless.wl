@@ -7,22 +7,19 @@ by:
 
 Integrate[1 / (E^(β (u - mu)) - 1) u^2, {u, 0, ∞}] / (2 * Pi^2)
 
-
-NOTE: We are using the opposite sign (u + mu) throughout!
-
  *)
 
-$Assumptions = x > 0;
+$Assumptions = x \[Element] Reals;
 
-ps[x_, u_] = 1/(Exp[u + x] - 1);
-f[x_] = Integrate[
+ps[x_, u_] = 1/(Exp[u - x] - 1);
+f[x_] = Re@Integrate[
   ps[x, u] u^2,
   {u, 0, Infinity}] / (2 Pi^2);
 
 Print["Approximating Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_physics/bose_einstein_massless.rs"
+  "../src/particle_physics/statistics/bose_einstein_massless.rs"
   }]];
 
 WriteString[
@@ -33,34 +30,29 @@ use crate::approximations::polynomial;\n\n"
 ];
 
 (*Find the series approximation for small x*)
-lower = Normal@Series[f[x], {x, 0, 10}];
+lower = FullSimplify@Normal@Series[f[x], {x, -Infinity, 10}];
 xLower = x /. FindRoot[
   Abs[lower/f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
-  {x, 2, 0, Infinity},
+  {x, -2, -Infinity, 0},
   WorkingPrecision -> 5 $MachinePrecision,
   MaxIterations -> Infinity];
 Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]]];
 
 (* Write out the approximation valid for small x. *)
-lower = CoefficientList[lower + x^2 Log[x^2] / (4 Pi^2), x] // FullSimplify;
+lower = CoefficientList[lower, Exp[x]];
 WriteString[
   output,
   StringTemplate["pub fn lower(x: f64) -> f64 {
-    if x == 0.0 {
-        0.1217938282335731
-    } else {
-        let x2 = x.powi(2);
-        polynomial(
-            x,
-            &`lower`,
-        ) - x2 * x2.ln() * 0.025330295910584444
-    }
+    polynomial(
+      x.exp(),
+      &`lower`
+    )
 }\n\n"][<|
   "lower" -> RustForm@lower
   |>]];
 
 (* Find the approximation for large x *)
-upper = Normal@Series[f[x], {x, Infinity, 10}];
+upper = FullSimplify@Normal@Series[f[x], {x, Infinity, 10}];
 xUpper = x /. FindRoot[
   Abs[upper/f[x] - 1] - SetPrecision[$MachineEpsilon, \[Infinity]],
   {x, 2, 0, Infinity},
@@ -69,16 +61,23 @@ xUpper = x /. FindRoot[
 Print[StringTemplate["Upper approximation valid from `` to ``."][N[xUpper, 4]], \[Infinity]];
 
 (* Write out the approximation valid for large x. *)
-upper = CoefficientList[upper, Exp[-x]];
+upper = CoefficientList[upper, x];
+upperExp = CoefficientList[upper[[1]], Exp[-x]];
+upperPoly = {0} ~ Join ~ Rest@upper;
 WriteString[
   output,
   StringTemplate["pub fn upper(x: f64) -> f64 {
     polynomial(
+        x,
+        &`upperPoly`,
+    )
+    + polynomial(
         (-x).exp(),
-        &`upper`,
-      )
+        &`upperExp`
+    )
 }\n\n"][<|
-  "upper" -> RustForm@upper
+  "upperPoly" -> RustForm@upperPoly,
+  "upperExp" -> RustForm@upperExp
   |>]
 ];
 

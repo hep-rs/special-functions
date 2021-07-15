@@ -309,7 +309,7 @@ If[MemberQ[sections, "particle_physics/statistics"],
     Assumptions -> beta > 0
   ];
   FermiDirac[0 | 0., mu_, beta_] = "NaN";
-  BoseEinstein[0 | 0., mu_, beta_] /; (mu <= 0 && Abs[mu * beta] < 10^8) = 1/(2 Pi^2) Integrate[
+  BoseEinstein[0 | 0., mu_, beta_] /; (Abs[mu * beta] < 10^8) = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[beta (u - mu)] - 1),
     {u, 0, \[Infinity]},
     Assumptions -> beta > 0 && mu < 0

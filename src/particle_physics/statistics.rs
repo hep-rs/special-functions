@@ -14,12 +14,12 @@ mod fermi_dirac_massless;
 mod fermi_dirac_normalized;
 
 /// Equilibrium number density of a massless Bose-Einstein particle with
-/// chemical potential `$\mu \leq 0$`.
+/// chemical potential `$\mu \inR$`.
 ///
 /// The inverse temperature is in units of inverse GeV, and the result is in
 /// units of GeV`$^{3}$`.
 pub fn bose_einstein_massless(mu: f64, beta: f64) -> f64 {
-    beta.powi(-3) * _bose_einstein_massless(-mu * beta)
+    beta.powi(-3) * _bose_einstein_massless(mu * beta)
 }
 
 approx_fn! {
@@ -115,7 +115,12 @@ mod tests {
 
         let f = [super::bose_einstein_massless, super::fermi_dirac_massless];
 
+        let mut i = 1;
         for result in rdr.deserialize() {
+            println!("iteration: {}", {
+                i += 1;
+                i
+            });
             let values: [f64; 7] = result?;
             let _m = values[0];
             let mu = values[1];
