@@ -55,7 +55,9 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     wp = OptionValue[WorkingPrecision] /. Automatic -> 4 * OptionValue[PrecisionGoal];
     ap = OptionValue[AccuracyGoal] /. Automatic -> Min[10^(- OptionValue[PrecisionGoal]), GeometricMean[Abs@{f[a], f[b]}] / 1000];
 
-    Print[StringTemplate["[Depth ``]: Finding coefficients for interval [``, ``]"][OptionValue["RecursionDepth"], N[a, 4], N[b, 4]]];
+    Print[StringTemplate[
+      StringJoin@Table[" ", OptionValue["RecursionDepth"]] <> "[Depth ``]: Finding coefficients for interval [``, ``]"
+    ][OptionValue["RecursionDepth"], N[a, 4], N[b, 4]]];
     steps = Reap[
       Quiet@NIntegrate[
         f, {x, a, b},
@@ -68,7 +70,8 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
         MaxRecursion -> 0,
         Evaluate@FilterRules[{opts}, Options[NIntegrate]]
       ],
-      sowTag][[2, 1]];
+      sowTag
+    ][[2, 1]];
 
     sampling = Join[
       Flatten[Table[
@@ -80,7 +83,7 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
         {s, steps[[n]]}
               ], 1],
       DeleteCases[Last@steps, {{-Infinity, Infinity}, __}]
-               ];
+    ];
 
     sampling = SortBy[N[#[[1, 1]]] &]@MapAt[ChebyshevSeries@*Reverse, sampling, {All, 2}];
 
@@ -93,12 +96,17 @@ ChebyshevSplits[f_, {x_, a_, b_}, opts : OptionsPattern[]] :=
     ];
 
     If[
-      err > 10^(- OptionValue[PrecisionGoal]) && OptionValue["RecursionDepth"] < OptionValue[MaxRecursion],
-      Join[
-        ChebyshevSplits[f, {x, a, (a + b) / 2}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts],
-        ChebyshevSplits[f, {x, (a + b) / 2, b}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts]
-      ],
-      sampling
+      err < 10^(- OptionValue[PrecisionGoal]),
+      sampling,
+      If[
+        OptionValue["RecursionDepth"] < OptionValue[MaxRecursion],
+        Join[
+          ChebyshevSplits[f, {x, a, (a + b) / 2}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts],
+          ChebyshevSplits[f, {x, (a + b) / 2, b}, "RecursionDepth" -> OptionValue["RecursionDepth"] + 1, opts]
+        ],
+        Print["Max depth reached"];
+        sampling
+      ]
     ]
   ];
 
@@ -153,12 +161,19 @@ ChebyshevEval[{{a_?NumericQ, b_?NumericQ}, cs : {_?NumericQ .. }}] := Function[
   Evaluate[
     cs.Table[
       ChebyshevT[n, Rescale[x, {a, b}, {-1, 1}]],
-      {n, Range[0, Length@cs - 1]}]]];
+      {n, Range[0, Length@cs - 1]}
+    ]
+  ]
+];
 ChebyshevEval[splits : {{{_?NumericQ, _?NumericQ}, {_?NumericQ .. }} ..}] := Function[
   {x},
   Evaluate@Piecewise[
-    Table[{ChebyshevEval[s][x], s[[1, 1]] <= x <= s[[1, 2]]},
-          {s, splits}]]];
+    Table[
+      {ChebyshevEval[s][x], s[[1, 1]] <= x <= s[[1, 2]]},
+      {s, splits}
+    ]
+  ]
+];
 
 (* Local Variables: *)
 (* mode: wolfram *)
