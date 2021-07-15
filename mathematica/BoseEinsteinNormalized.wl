@@ -29,7 +29,7 @@ f[x_] := numerator[x] / denominator[x];
 Print["Approximating normalized Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_physics/bose_einstein_normalized.rs"
+  "../src/particle_physics/statistics/bose_einstein_normalized.rs"
   }]];
 
 WriteString[

@@ -22,7 +22,7 @@ f[x_?NumericQ] := Quiet@NIntegrate[
 Print["Approximating Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_physics/bose_einstein_massive.rs"
+  "../src/particle_physics/statistics/bose_einstein_massive.rs"
   }]];
 
 WriteString[
