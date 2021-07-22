@@ -403,7 +403,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
   ];
 
   Echo["Defining discPVA"];
-  $f = FileNameJoin[{$TemporaryDirectory, "discPVA.mx"}];
+  $f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVA.mx"}];
   If[FileExistsQ[$f],
     Get[$f]
     ,
@@ -412,7 +412,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
   ];
 
   Echo["Defining discPVB"];
-  $f = FileNameJoin[{$TemporaryDirectory, "discPVB.mx"}];
+  $f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVB.mx"}];
   If[FileExistsQ[$f],
     Get[$f]
     ,
@@ -431,7 +431,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
   ];
 
   Echo["Defining discPVC"];
-  $f = FileNameJoin[{$TemporaryDirectory, "discPVC.mx"}];
+  $f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVC.mx"}];
   If[FileExistsQ[$f],
     Get[$f]
     ,
@@ -459,7 +459,7 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
   ];
 
   Echo["Defining discPVD"];
-  $f = FileNameJoin[{$TemporaryDirectory, "discPVD.mx"}];
+  $f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVD.mx"}];
   If[FileExistsQ[$f],
     Get[$f]
     ,

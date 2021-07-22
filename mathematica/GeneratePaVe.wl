@@ -163,7 +163,7 @@ RustForm[Log[x_]] := StringTemplate["log_diff(`a`, `b`)"][<|
 (* The logarithmic parts take the form of `Log[(a + b)/(a - b)]` which is define
   to handle accurately when b << a. *)
 Echo["Defining discPVC"];
-$f = FileNameJoin[{$TemporaryDirectory, "discPVC.mx"}];
+$f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVC.mx"}];
 
 If[FileExistsQ[$f],
   Get[$f]
@@ -250,7 +250,7 @@ pub(crate) fn c`r``n1``n2`(param: &Parameters) -> f64 {
 (*********************************************************)
 
 Echo["Defining discPVD"];
-$f = FileNameJoin[{$TemporaryDirectory, "discPVD.mx"}];
+$f = FileNameJoin[{DirectoryName[First@$ScriptCommandLine], "discPVD.mx"}];
 
 If[FileExistsQ[$f],
   Get[$f]
