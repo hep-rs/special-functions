@@ -29,18 +29,22 @@ If[MemberQ[sections, "all"],
   sections = $Sections
 ];
 
-LaunchKernels[];
+LaunchKernels[2 $ProcessorCount];
 $KernelIDs = ParallelEvaluate[$KernelID];
 
 (*****************************************************************************)
 (* Definitions *)
 (*****************************************************************************)
 
-$Precision = 20;
-$MaxExtraPrecision = 4 $Precision;
+$MaxExtraPrecision = 100;
 $DataDir = ExpandFileName@FileNameJoin[{DirectoryName[$InputFileName], "..", "tests", "data"}];
 Echo[$DataDir, "Base output directory: "];
 
+ExactMachinePrecision::usage = "Convert the input into an exact machine precision number.";
+Attributes[ExactMachinePrecision] = {Listable};
+ExactMachinePrecision[x_] := SetPrecision[N[x], Infinity];
+
+CreateDataDir::usage = "Create the directory structure in the output and return the resulting path.";
 CreateDataDir[subdirs___String] := Block[{dir},
   dir = FileNameJoin[{$DataDir} ~Join~ {subdirs}];
 
@@ -77,12 +81,15 @@ GenerateCSV[
     WriteString[$csv,
       StringRiffle[
         If[Head[#] === String, #, ToString[#, CForm]] & /@ (
-          N[f @@ x, $Precision] //. {
+          N[f @@ ExactMachinePrecision[x]] //. {
             _Complex -> "NaN",
             Indeterminate -> "NaN",
             ComplexInfinity -> "NaN",
             -Infinity -> "-inf",
             Infinity -> "inf",
+            -Overflow[] -> "-inf",
+            Overflow[] -> "inf",
+            Underflow[] -> 0,
             x_ :> 0         /; Abs[x] < $MinMachineNumber,
             x_ :>  Infinity /; x > $MaxMachineNumber,
             x_ :> -Infinity /; x < -$MaxMachineNumber
@@ -195,8 +202,8 @@ If[MemberQ[sections, "basic"],
   (* Trigonometric Functions *)
   GenerateCSV[
     FileNameJoin[{dir, "trig.csv"}],
-    {"x", "sin", "cos"},
-    {#, Sin[#], Cos[#], Tan[#]} &,
+    {"x", "sin", "cos", "tan", "sinh", "cosh", "tanh"},
+    {#, Sin[#], Cos[#], Tan[#], Sinh[#], Cosh[#], Tanh[#]} &,
     RealSample[1000]
   ];
 ];

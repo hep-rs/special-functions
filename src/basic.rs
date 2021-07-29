@@ -10,10 +10,17 @@ mod tests {
     fn trig() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/basic/trig.csv.zst")?;
         let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
-        let f = &[f64::sin, f64::cos, f64::tan];
+        let f = &[
+            f64::sin,
+            f64::cos,
+            f64::tan,
+            f64::sinh,
+            f64::cosh,
+            f64::tanh,
+        ];
 
         for result in rdr.deserialize() {
-            let values: [f64; 4] = result?;
+            let values: [f64; 7] = result?;
             let x = values[0];
             let y = &values[1..];
 
@@ -23,8 +30,7 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    // println!("Trig{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
+                    approx_eq(nyi, yi, 16.0, 1e-200)?;
                 }
             }
         }
