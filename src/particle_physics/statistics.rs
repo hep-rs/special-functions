@@ -111,7 +111,7 @@ mod tests {
     #[test]
     fn massless() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/statistics/massless.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
 
         let f = [super::bose_einstein_massless, super::fermi_dirac_massless];
 
@@ -144,7 +144,7 @@ mod tests {
     #[test]
     fn massive() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/statistics/massive.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
 
         let f = [
             super::bose_einstein_massive,

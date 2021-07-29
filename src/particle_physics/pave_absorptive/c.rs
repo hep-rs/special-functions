@@ -121,7 +121,7 @@ mod tests {
     #[ignore]
     fn c() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/pave_absorptive/c.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::c;
 
         for result in rdr.deserialize() {

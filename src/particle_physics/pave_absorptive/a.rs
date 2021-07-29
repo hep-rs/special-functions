@@ -22,7 +22,7 @@ mod tests {
     #[test]
     fn a() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/pave_absorptive/a.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::a;
 
         for result in rdr.deserialize() {

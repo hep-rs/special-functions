@@ -49,7 +49,7 @@ mod tests {
     #[test]
     fn harmonic_number() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/other/harmonic_number.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::harmonic_number;
 
         for result in rdr.deserialize() {
@@ -68,7 +68,7 @@ mod tests {
     #[test]
     fn gamma() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/other/gamma.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::gamma;
 
         for result in rdr.deserialize() {
@@ -87,7 +87,7 @@ mod tests {
     #[test]
     fn binomial() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/other/binomial.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::binomial;
 
         for result in rdr.deserialize() {

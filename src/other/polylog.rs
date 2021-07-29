@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn li() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/other/polylog.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
 
         let f = &[
             super::li0,

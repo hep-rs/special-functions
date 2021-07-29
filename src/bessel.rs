@@ -381,7 +381,7 @@ mod tests {
     #[test]
     fn i() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/bessel/i.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = &[
             super::i0,
             super::i1,
@@ -418,7 +418,7 @@ mod tests {
     #[test]
     fn j() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/bessel/j.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = &[
             super::j0,
             super::j1,
@@ -460,7 +460,7 @@ mod tests {
     #[test]
     fn k() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/bessel/k.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = &[
             super::k0,
             super::k1,
@@ -497,7 +497,7 @@ mod tests {
     #[test]
     fn y() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/bessel/y.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = &[
             super::y0,
             super::y1,
@@ -539,7 +539,7 @@ mod tests {
     #[test]
     fn k1_on_k2() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/bessel/k1_on_k2.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
 
         for result in rdr.deserialize() {
             let (x, y): (f64, f64) = result?;

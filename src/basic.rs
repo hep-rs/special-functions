@@ -6,10 +6,9 @@ mod tests {
     use std::{f64, fs::File};
 
     #[test]
-    #[ignore]
     fn trig() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/basic/trig.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = &[
             f64::sin,
             f64::cos,

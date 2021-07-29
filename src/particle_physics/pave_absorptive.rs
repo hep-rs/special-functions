@@ -90,7 +90,7 @@ mod tests {
     #[test]
     fn log_diff() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/pave_absorptive/log_diff.csv.zst")?;
-        let mut rdr = csv::Reader::from_reader(ruzstd::StreamingDecoder::new(&mut f)?);
+        let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::log_diff;
 
         for result in rdr.deserialize() {
