@@ -39,47 +39,22 @@ pub use d::d;
 ///
 /// in a way that is numerically stable when `$b \ll a$` and `$b \gg a$`.
 fn log_diff(a: f64, b: f64) -> f64 {
-    let x = b / a;
-
-    match x.abs() {
-        y if (y - 1.0).abs() < f64::EPSILON => x.signum() * f64::INFINITY,
-        y if y < 0.2 => {
-            x * crate::approximations::polynomial(
-                x.powi(2),
-                &[
-                    2.0,
-                    0.6666666666666667,
-                    0.4,
-                    0.2857142857142857,
-                    0.2222222222222222,
-                    0.1818181818181818,
-                    0.1538461538461538,
-                    0.1333333333333333,
-                    0.1176470588235294,
-                    0.1052631578947368,
-                ],
-            )
-        }
-        y if y > 5.0 => {
-            let xr = x.recip();
-            xr * crate::approximations::polynomial(
-                xr.powi(2),
-                &[
-                    2.0,
-                    0.6666666666666667,
-                    0.4,
-                    0.2857142857142857,
-                    0.2222222222222222,
-                    0.1818181818181818,
-                    0.1538461538461538,
-                    0.1333333333333333,
-                    0.1176470588235294,
-                    0.1052631578947368,
-                ],
-            )
-        }
-        _ => ((a + b) / (a - b)).abs().ln(),
+    let (aabs, babs) = (a.abs(), b.abs());
+    #[allow(clippy::float_cmp)]
+    if aabs == babs {
+        a.signum() * b.signum() * f64::INFINITY
+    } else if aabs > 5.0 * babs {
+        2.0 * (b / a).atanh()
+    } else {
+        2.0 * (a / b).recip().atan()
     }
+
+    // match x.abs() {
+    //     xabs if (xabs - 1.0).abs() < f64::EPSILON => x.signum() * f64::INFINITY,
+    //     xabs if xabs < 0.5 => 2.0 * x.atanh(),
+    //     xabs if xabs > 2.0 => 2.0 * x.recip().atanh(),
+    //     _ => ((a + b) / (a - b)).abs().ln(),
+    // }
 }
 
 #[cfg(test)]
@@ -88,18 +63,24 @@ mod tests {
     use std::{f64, fs::File};
 
     #[test]
+    #[ignore]
     fn log_diff() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/pave_absorptive/log_diff.csv.zst")?;
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::log_diff;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (a, b, y): (f64, f64, f64) = result?;
 
             if !y.is_nan() {
                 let ny = f(a, b);
-                // println!("log_diff({:e}, {:e}) = {:e} [{:e}]", a, b, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))?
+                approx_eq(ny, y, 1.0, 10f64.powi(-200)).map_err(|err| {
+                    println!(
+                        "[{}] log_diff({:e}, {:e}) = {:e} but expected {:e}.",
+                        row, a, b, ny, y
+                    );
+                    err
+                })?
             }
         }
 
