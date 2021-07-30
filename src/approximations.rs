@@ -253,43 +253,14 @@ pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
 /// These *do not* apply to `lower` and `upper`.
 #[macro_export]
 macro_rules! approx_fn {
-    (
-        $(#[$outer:meta])*
-        fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
-    ) => {
-        approx_fn!{
-            $(#[$outer])*
-            () $fn(mod = $mod, type = $t, outer = $o, inner = $i);
-        }
-    };
-
-    (
-        $(#[$outer:meta])*
-        pub fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
-    ) => {
-        approx_fn!{
-            $(#[$outer])*
-            (pub) $fn(mod = $mod, type = $t, outer = $o, inner = $i);
-        }
-    };
-
-    (
-        $(#[$outer:meta])*
-        pub(crate) fn $fn:ident(mod = $mod:ident, type = $t:tt, outer = $o:path, inner = $i:path)$(;)?
-    ) => {
-        approx_fn!{
-            $(#[$outer])*
-            (pub(crate)) $fn(mod = $mod, type = $t, outer = $o, inner = $i);
-        }
-    };
 
     // Polynomial approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = polynomial, outer = $o:path, inner = $i:path);
+        $vis:vis fn $fn:ident(mod = $mod:ident, type = polynomial, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
-        $($vis)* fn $fn(x: f64) -> f64 {
+        $vis fn $fn(x: f64) -> f64 {
             let ix = $i(x);
 
             if ix < *$mod::SPLITS.first().unwrap() {
@@ -309,10 +280,10 @@ macro_rules! approx_fn {
     // Polynomial ratio approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = ratio, outer = $o:path, inner = $i:path);
+        $vis:vis fn $fn:ident(mod = $mod:ident, type = ratio, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
-        $($vis)* fn $fn(x: f64) -> f64 {
+        $vis fn $fn(x: f64) -> f64 {
             let ix = $i(x);
 
             if ix < *$mod::SPLITS.first().unwrap() {
@@ -332,10 +303,10 @@ macro_rules! approx_fn {
     // Chebyshev approximation
     (
         $(#[$outer:meta])*
-        ($($vis:tt)*) fn $fn:ident(mod = $mod:ident, type = chebyshev, outer = $o:path, inner = $i:path);
+        $vis:vis fn $fn:ident(mod = $mod:ident, type = chebyshev, outer = $o:path, inner = $i:path);
     ) => {
         $(#[$outer])*
-        $($vis)* fn $fn(x: f64) -> f64 {
+        $vis fn $fn(x: f64) -> f64 {
             let ix = $i(x);
 
             if ix < *$mod::SPLITS.first().unwrap() {
