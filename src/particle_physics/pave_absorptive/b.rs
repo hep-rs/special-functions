@@ -110,6 +110,7 @@ mod tests {
     use std::{f64, fs::File};
 
     #[test]
+    #[ignore]
     fn b() -> Result<(), Box<dyn std::error::Error>> {
         let mut f = File::open("tests/data/particle_physics/pave_absorptive/b.csv.zst")?;
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
