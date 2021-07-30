@@ -80,7 +80,9 @@ use crate::approximations::polynomial;\n\n"
 
 
   (* Subdivide the remaining interval using Chebyshev polynomials *)
-  splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
+  outer = Exp;
+  inner = Log;
+  splits = ChebyshevSplits[InverseFunction[outer]@f[InverseFunction[inner]@x], {x, inner@xLower, inner@xUpper}];
   ChebyshevSplitsRustForm[splits, output];
 
   Close[output];
