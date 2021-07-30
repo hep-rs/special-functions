@@ -41,6 +41,12 @@ pub fn piecewise_polynomial(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
         "The number of splits must be one longer than number of coefficient arrays."
     );
 
+    // Any NaN inputs will be returned as NaN.  This also guarantees that the
+    // floats are comparable for the binary search.
+    if x.is_nan() {
+        return x;
+    }
+
     unsafe {
         match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
             Ok(idx) if idx == splits.len() - 1 => polynomial(x, c.get_unchecked(idx - 2)),
@@ -94,6 +100,12 @@ pub fn piecewise_polynomial_ratio(x: f64, c: &[(&[f64], &[f64])], splits: &[f64]
         c.len() + 1,
         "The number of splits must be one longer than number of coefficient arrays."
     );
+
+    // Any NaN inputs will be returned as NaN.  This also guarantees that the
+    // floats are comparable for the binary search.
+    if x.is_nan() {
+        return x;
+    }
 
     unsafe {
         match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
@@ -164,6 +176,12 @@ pub fn piecewise_chebyshev(x: f64, c: &[&[f64]], splits: &[f64]) -> f64 {
         c.len() + 1,
         "The number of splits must be one longer than number of coefficient arrays."
     );
+
+    // Any NaN inputs will be returned as NaN.  This also guarantees that the
+    // floats are comparable for the binary search.
+    if x.is_nan() {
+        return x;
+    }
 
     unsafe {
         match splits.binary_search_by(|s| s.partial_cmp(&x).unwrap()) {
