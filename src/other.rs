@@ -16,12 +16,12 @@ The `$n$`th harmonic number is defined as
 H_n \defeq \sum_{i = 1}^n \frac{1}{i}
 ```
 "#]
-    (pub) fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = identity);
+    pub fn harmonic_number(mod = harmonic_number, type = chebyshev, outer = identity, inner = f64::ln);
 }
 
 approx_fn! {
     #[doc = r#"Approximatino of the gamma function for `$x > 0$`."#]
-    (pub) fn gamma(mod = gamma, type = chebyshev, outer = identity, inner = identity);
+    pub fn gamma(mod = gamma, type = chebyshev, outer = f64::exp, inner = f64::ln);
 }
 
 /// Binomial coefficient
@@ -52,13 +52,15 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::harmonic_number;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (x, y): (f64, f64) = result?;
 
             if !y.is_nan() {
                 let ny = f(x);
-                // println!("H({:e}) = {:e} [{:e}]", x, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))?;
+                approx_eq(ny, y, 8.0, 10f64.powi(-200)).map_err(|err| {
+                    println!("[{}] H({:e}) = {:e} but got {:e}.", row, x, ny, y);
+                    err
+                })?;
             }
         }
 
@@ -71,13 +73,15 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::gamma;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (x, y): (f64, f64) = result?;
 
             if !y.is_nan() {
                 let ny = f(x);
-                // println!("Γ({:e}) = {:e} [{:e}]", x, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))?;
+                approx_eq(ny, y, 8.0, 10f64.powi(-200)).map_err(|err| {
+                    println!("[{}] Γ({:e}) = {:e} but got {:e}.", row, x, ny, y);
+                    err
+                })?;
             }
         }
 
@@ -90,15 +94,20 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::binomial;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (n, k, y): (f64, f64, f64) = result?;
             let n = n as i32;
             let k = k as i32;
 
             if !y.is_nan() {
                 let ny = f(n, k);
-                // println!("Binom({}, {}) = {:e} [{:e}]", n, k, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))?;
+                approx_eq(ny, y, 8.0, 10f64.powi(-200)).map_err(|err| {
+                    println!(
+                        "[{}] Binom({}, {}) = {:e} but expected {:e}.",
+                        row, n, k, ny, y
+                    );
+                    err
+                })?;
             }
         }
 

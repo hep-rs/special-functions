@@ -1,7 +1,5 @@
 //! Polylogarithms functions
 
-use std::convert::identity;
-
 mod li2;
 mod li3;
 mod li4;
@@ -21,44 +19,44 @@ pub fn li1(x: f64) -> f64 {
     -(-x).ln_1p()
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_2(x)$` for all `$x < 1$`."]
-    (pub) fn li2(mod = li2, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_2(x)$` for all `$x < 1$`.
+pub fn li2(x: f64) -> f64 {
+    li2::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_3(x)$` for all `$x < 1$`."]
-    (pub) fn li3(mod = li3, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_3(x)$` for all `$x < 1$`.
+pub fn li3(x: f64) -> f64 {
+    li3::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_4(x)$` for all `$x < 1$`."]
-    (pub) fn li4(mod = li4, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_4(x)$` for all `$x < 1$`.
+pub fn li4(x: f64) -> f64 {
+    li4::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_5(x)$` for all `$x < 1$`."]
-    (pub) fn li5(mod = li5, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_5(x)$` for all `$x < 1$`.
+pub fn li5(x: f64) -> f64 {
+    li5::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_6(x)$` for all `$x < 1$`."]
-    (pub) fn li6(mod = li6, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_6(x)$` for all `$x < 1$`.
+pub fn li6(x: f64) -> f64 {
+    li6::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_7(x)$` for all `$x < 1$`."]
-    (pub) fn li7(mod = li7, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_7(x)$` for all `$x < 1$`.
+pub fn li7(x: f64) -> f64 {
+    li7::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_8(x)$` for all `$x < 1$`."]
-    (pub) fn li8(mod = li8, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_8(x)$` for all `$x < 1$`.
+pub fn li8(x: f64) -> f64 {
+    li8::eval(x)
 }
 
-approx_fn! {
-    #[doc = r"Approximation of polylogarithm function `$\Li_9(x)$` for all `$x < 1$`."]
-    (pub) fn li9(mod = li9, type = chebyshev, outer = identity, inner = identity);
+/// Approximation of polylogarithm function `$\Li_9(x)$` for all `$x < 1$`.
+pub fn li9(x: f64) -> f64 {
+    li9::eval(x)
 }
 
 #[cfg(test)]
@@ -84,7 +82,7 @@ mod tests {
             super::li9,
         ];
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let values: [f64; 11] = result?;
             let x = values[0];
             let y = &values[1..];
@@ -95,12 +93,15 @@ mod tests {
 
                 if !yi.is_nan() {
                     let nyi = fi(x);
-                    // println!("Li{}({:e}) = {:e} [{:e}]", i, x, nyi, yi);
-                    if (i == 0 || i == 1) && (1.0 - x).abs() < 1e-7 {
-                        approx_eq(nyi, yi, 4.0, 10f64.powi(-15))?;
-                    } else {
-                        approx_eq(nyi, yi, 8.0, 10f64.powi(-15))?;
-                    }
+                    approx_eq(nyi, yi, if i == 1 { 5.0 } else { 7.0 }, 10f64.powi(-300)).map_err(
+                        |err| {
+                            println!(
+                                "[{}] Li{}({:e}) = {:e} but expected {:e}.",
+                                row, i, x, nyi, yi
+                            );
+                            err
+                        },
+                    )?;
                 }
             }
         }
