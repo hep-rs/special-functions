@@ -61,7 +61,7 @@ pub fn b(r: i32, n1: i32, s: f64, m0: f64, m1: f64) -> f64 {
 /// All checks for the validity of input parameters should be already done.
 fn b_internal(r: i32, n1: i32, param: &Parameters) -> f64 {
     match (r, n1) {
-        (0, 0) => scalar(&param),
+        (0, 0) => scalar(param),
         (0, n1) => {
             neg_power(n1) / (n1 + 1) as f64
                 * (0..=(n1 / 2))

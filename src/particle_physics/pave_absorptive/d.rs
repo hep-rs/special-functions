@@ -141,11 +141,11 @@ pub fn d(
 /// All checks for the validity of input parameters should be already done.
 fn d_internal(r: i32, n1: i32, n2: i32, n3: i32, param: &Parameters) -> f64 {
     match (r, n1, n2, n3) {
-        (0, 0, 0, 0) => explicit::d0000(&param),
-        (0, 0, 0, 1) => explicit::d0001(&param),
-        (0, 0, 1, 0) => explicit::d0010(&param),
-        (0, 1, 0, 0) => explicit::d0100(&param),
-        (1, 0, 0, 0) => explicit::d1000(&param),
+        (0, 0, 0, 0) => explicit::d0000(param),
+        (0, 0, 0, 1) => explicit::d0001(param),
+        (0, 0, 1, 0) => explicit::d0010(param),
+        (0, 1, 0, 0) => explicit::d0100(param),
+        (1, 0, 0, 0) => explicit::d1000(param),
         _ => unimplemented!(),
     }
 }
