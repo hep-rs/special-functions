@@ -22,7 +22,7 @@ Options[ChebyshevSplits] = Join[
   {
     "Points" -> 16,
     "RecursionDepth" -> 0,
-    PrecisionGoal -> 2 * $MachinePrecision,
+    PrecisionGoal -> $MachinePrecision,
     WorkingPrecision -> Automatic,
     AccuracyGoal -> Automatic,
     MaxRecursion -> 12

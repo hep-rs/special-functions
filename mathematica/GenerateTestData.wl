@@ -202,8 +202,16 @@ If[MemberQ[sections, "basic"],
   (* Trigonometric Functions *)
   GenerateCSV[
     FileNameJoin[{dir, "trig.csv"}],
-    {"x", "sin", "cos", "tan", "sinh", "cosh", "tanh"},
-    {#, Sin[#], Cos[#], Tan[#], Sinh[#], Cosh[#], Tanh[#]} &,
+    {"x", "sin", "cos", "tan", "asin", "acos", "atan"},
+    {#, Sin[#], Cos[#], Tan[#], ArcSin[#], ArcCos[#], ArcTan[#]} &,
+    RealSample[1000]
+  ];
+
+  (* Hyerpolic Trigonometric Functions *)
+  GenerateCSV[
+    FileNameJoin[{dir, "hyperbolic_trig.csv"}],
+    {"x", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh"},
+    {#, Sinh[#], Cosh[#], Tanh[#], ArcSinh[#], ArcCosh[#], ArcTanh[#]} &,
     RealSample[1000]
   ];
 ];
@@ -240,7 +248,9 @@ If[MemberQ[sections, "bessel"],
   GenerateCSV[
     FileNameJoin[{dir, "k1_on_k2.csv"}],
     {"x", "K1/K2"},
-    {#, BesselK[1, #] / BesselK[2, #]} &,
+    (* We need this to be evaluated to a high degree of precision to avoid 0/0
+    for large arguments. *)
+    {#, N[BesselK[1, #] / BesselK[2, #], 50]} &,
     PositiveSample[1000]
   ];
 
@@ -270,7 +280,7 @@ If[MemberQ[sections, "other"],
     FileNameJoin[{dir, "gamma.csv"}],
     {"x", "Gamma"},
     {#, Gamma[#]} &,
-    Setprecision[PositiveSample[1000], 2 $Precision]
+    PositiveSample[1000]
   ];
 
   nMax = 9;
@@ -310,103 +320,133 @@ If[MemberQ[sections, "particle_physics/statistics"],
   ];
 
   (* Massless case can be done analytically *)
-  FermiDirac[0 | 0., mu_, beta_] /; Abs[mu * beta] < 10^8 = 1/(2 Pi^2) Integrate[
+  (* For large values, PolyLog[3, ...] fails to allocate enough memory, so we
+  use the series expansion *)
+  FermiDirac[beta_, m_?PossibleZeroQ, mu_] = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[beta (u - mu)] + 1),
     {u, 0, \[Infinity]},
     Assumptions -> beta > 0
   ];
-  FermiDirac[0 | 0., mu_, beta_] = "NaN";
-  BoseEinstein[0 | 0., mu_, beta_] /; (Abs[mu * beta] < 10^8) = 1/(2 Pi^2) Integrate[
+  FermiDirac[beta_, m_?PossibleZeroQ, mu_] /; beta mu > 10^5 = Block[{},
+    Normal@Series[FermiDirac[beta, 0, mu] /. {beta -> x / mu}, {x, \[Infinity], 10}] /. x -> beta mu
+  ];
+  BoseEinstein[beta_, m_?PossibleZeroQ, mu_] /; mu > 0 = "NaN";
+  BoseEinstein[beta_, m_?PossibleZeroQ, mu_] = 1/(2 Pi^2) Integrate[
     u^2 / (Exp[beta (u - mu)] - 1),
     {u, 0, \[Infinity]},
     Assumptions -> beta > 0 && mu < 0
   ];
-  BoseEinstein[0, mu_, beta_] = "NaN";
 
   (* Massive case must be done numerically *)
-  FermiDirac[m_, 0 | 0., beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
+  FermiDirac[beta_?NumericQ, m_, mu_?PossibleZeroQ] := 1/(2 Pi^2) NIntegrate[
     u Sqrt[u^2 - m^2] / (Exp[u beta] + 1),
     {u, m, \[Infinity]},
-    Method -> {"DoubleExponential", "SymbolicProcessing" -> False},
-    WorkingPrecision -> $MaxExtraPrecision
+    WorkingPrecision -> 2 $MachinePrecision,
+    PrecisionGoal -> 10,
+    MaxRecursion -> Infinity
   ];
-  BoseEinstein[m_, 0 | 0., beta_?NumericQ] := 1/(2 Pi^2) Quiet@NIntegrate[
+  BoseEinstein[beta_?NumericQ, m_, mu_?PossibleZeroQ] := 1/(2 Pi^2) NIntegrate[
     u Sqrt[u^2 - m^2] / (Exp[u beta] - 1),
     {u, m, \[Infinity]},
-    Method -> {"DoubleExponential", "SymbolicProcessing" -> False},
-    WorkingPrecision -> $MaxExtraPrecision
+    WorkingPrecision -> 2 $MachinePrecision,
+    PrecisionGoal -> 10,
+    MaxRecursion -> Infinity
   ];
 
   (* Turn off warning *)
   ParallelEvaluate[
-    Off[General::munfl];
-    Off[Power::indet];
-    Off[Power::infy];
+    Off[
+      General::munfl,
+      General::ovfl,
+      Infinity::indet,
+      NIntegrate::eincr,
+      NIntegrate::izero,
+      NIntegrate::slwcon,
+      Power::indet,
+      Power::infy
+    ];
   ]
 
   GenerateCSV[
     FileNameJoin[{dir, "massless.csv"}],
-    {"m", "mu", "beta", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
-    Function[{m, mu, beta}, Block[{
-        be = BoseEinstein[m, mu, beta],
-        fd = FermiDirac[m, mu, beta]
+    {"beta", "m", "mu", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
+    Function[{beta, m, mu}, Block[{
+        be = BoseEinstein[beta, m, mu],
+        fd = FermiDirac[beta, m, mu]
       },
       {
-      m, mu, beta,
+      beta, m, mu,
       be, If[be =!= "NaN", be / Normalization[beta], "NaN"],
       fd, If[fd =!= "NaN", fd / Normalization[beta], "NaN"]
       }]],
     Flatten[
-      Table[{0, mu, beta},
-      {mu, RealSample[200]},
-      {beta, Select[# > 0&] @ PositiveSample[200]}],
+      Table[{beta, 0, mu},
+      {beta, Select[# > 0&] @ PositiveSample[200]},
+      {mu, RealSample[200]}],
       {{1, 2}}
     ]
   ];
 
   GenerateCSV[
     FileNameJoin[{dir, "massive.csv"}],
-    {"m", "mu", "beta", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
-    Function[{m, mu, beta}, Block[{
-        be = BoseEinstein[m, mu, beta],
-        fd = FermiDirac[m, mu, beta]
+    {"beta", "m", "mu", "bose-einstein", "normalized bose-einstein", "fermi-dirac", "normalized fermi-dirac"},
+    Function[{beta, m, mu}, Block[{
+        be = BoseEinstein[beta, m, mu],
+        fd = FermiDirac[beta, m, mu]
       },
       {
-      m, mu, beta,
+      beta, m, mu,
       be, If[be =!= "NaN", be / Normalization[beta], "NaN"],
       fd, If[fd =!= "NaN", fd / Normalization[beta], "NaN"]
       }]],
     Flatten[
-      Table[{m, 0, beta},
-      {m, PositiveSample[200]},
-      {beta, Select[# > 0&] @ PositiveSample[200]}],
+      Table[{beta, m, 0},
+      {beta, Select[# > 0&] @ PositiveSample[200]},
+      {m, PositiveSample[200]}],
       {{1, 2}}
     ]
   ];
 
   (* Turn on warning *)
   ParallelEvaluate[
-    On[General::munfl];
-    On[Power::indet];
-    On[Power::infy];
+    On[
+      General::munfl,
+      General::ovfl,
+      Infinity::indet,
+      NIntegrate::eincr,
+      NIntegrate::izero,
+      NIntegrate::slwcon,
+      Power::indet,
+      Power::infy
+    ];
   ]
 ];
 
 (*****************************************************************************)
-(* Passarino Velmtna *)
+(* Passarino Veltman *)
 (*****************************************************************************)
 
-Needs["X`"];
-ParallelNeeds["X`"];
-
 If[MemberQ[sections, "particle_physics/pave_absorptive"],
+
+  PrependTo[$Path, FileNameJoin[{DirectoryName@First[$ScriptCommandLine], "Dependencies"}]];
+  Needs["X`"];
+  With[{newPath = $Path},
+    ParallelEvaluate[
+      $Path = newPath;
+      Needs["X`"];
+    ];
+  ]
+  ParallelNeeds["X`"];
+
   dir = CreateDataDir["particle_physics", "pave_absorptive"];
 
   ParallelEvaluate[
-    Off[Divide::infy];
-    Off[Infinity::indet];
-    Off[N::meprec];
-    Off[Power::infy];
+    Off[
+      Divide::infy,
+      Infinity::indet,
+      N::meprec,
+      Power::infy
+    ];
   ];
 
   Echo["Defining discPVA"];
@@ -526,7 +566,6 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     ]
   ];
 
-  $n = 100;
   GenerateCSV[
     FileNameJoin[{dir, "b.csv"}],
     {"r", "n1", "s", "m0", "m1", "b"},
@@ -539,13 +578,12 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
       {r, n1, s, m0, m1},
       {r, 0, 5},
       {n1, 0, 5},
-      {s, RealSample[$n]},
-      {m0, PositiveSample[$n]},
-      {m1, PositiveSample[$n]}
+      {s, RealSample[200]},
+      {m0, PositiveSample[200]},
+      {m1, PositiveSample[200]}
     ]
   ];
 
-  $n = 100;
   GenerateCSV[
     FileNameJoin[{dir, "c.csv"}],
     {"r", "n1", "n2", "s1", "s12", "s2", "m0", "m1", "m2", "c"},
@@ -559,16 +597,15 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
       {r, 0, 2},
       {n1, 0, 2},
       {n2, 0, 2},
-      {s1, RealSample[$n]},
-      {s12, RealSample[$n]},
-      {s2, RealSample[$n]},
-      {m0, PositiveSample[$n]},
-      {m1, PositiveSample[$n]},
-      {m2, PositiveSample[$n]}
+      {s1, RealSample[200]},
+      {s12, RealSample[200]},
+      {s2, RealSample[200]},
+      {m0, PositiveSample[200]},
+      {m1, PositiveSample[200]},
+      {m2, PositiveSample[200]}
     ]
   ];
 
-  $n = 100;
   GenerateCSV[
     FileNameJoin[{dir, "d.csv"}],
     {"r", "n1", "n2", "n3", "s1", "s2", "s3", "s4", "s12", "s23", "m0", "m1", "m2", "m3", "d"},
@@ -579,7 +616,8 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
     ]
     ,
     SeedRandom[123454321];
-    RandomAccessSample[10^6,
+    (* Of the combinations of {r, n1, n2, n3}, only 5 / 16 are not `Nothing`, hence the scaling *)
+    RandomAccessSample[Round[(16 / 5) * 10^6],
       If[r + n1 + n2 + n3 > 1,
         Nothing,
         {r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3}
@@ -588,23 +626,25 @@ If[MemberQ[sections, "particle_physics/pave_absorptive"],
       {n1, 0, 1},
       {n2, 0, 1},
       {n3, 0, 1},
-      {s1, RealSample[$n]},
-      {s2, RealSample[$n]},
-      {s3, RealSample[$n]},
-      {s4, RealSample[$n]},
-      {s12, RealSample[$n]},
-      {s23, RealSample[$n]},
-      {m0, PositiveSample[$n]},
-      {m1, PositiveSample[$n]},
-      {m2, PositiveSample[$n]},
-      {m3, PositiveSample[$n]}
+      {s1, RealSample[200]},
+      {s2, RealSample[200]},
+      {s3, RealSample[200]},
+      {s4, RealSample[200]},
+      {s12, RealSample[200]},
+      {s23, RealSample[200]},
+      {m0, PositiveSample[200]},
+      {m1, PositiveSample[200]},
+      {m2, PositiveSample[200]},
+      {m3, PositiveSample[200]}
     ]
   ];
 
   ParallelEvaluate[
-    On[Divide::infy];
-    On[Infinity::indet];
-    On[N::meprec];
-    On[Power::infy];
+    On[
+      Divide::infy,
+      Infinity::indet,
+      N::meprec,
+      Power::infy
+    ];
   ];
 ];
