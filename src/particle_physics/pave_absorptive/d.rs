@@ -161,7 +161,7 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::d;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             #[allow(clippy::type_complexity)]
             let (r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3, y): (
                 f64,
@@ -187,11 +187,13 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3);
-                // println!(
-                //     "D({}, {}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
-                //     r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3, ny, y
-                // );
-                approx_eq(ny, y, 1.0, 10f64.powi(-200))?
+                approx_eq(ny, y, 1.0, 10f64.powi(-200)).map_err(|err| {
+                    println!(
+                        "[{}] D({}, {}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} but expected {:e}.",
+                        row, r, n1, n2, n3, s1, s2, s3, s4, s12, s23, m0, m1, m2, m3, ny, y
+                    );
+                    err
+                })?
             }
         }
 

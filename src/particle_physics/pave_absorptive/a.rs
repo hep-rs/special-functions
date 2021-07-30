@@ -25,14 +25,19 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::a;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (r, m0, y): (f64, f64, f64) = result?;
             let r = r as i32;
 
             if !y.is_nan() {
                 let ny = f(r, m0);
-                // println!("A({}, {:e}) = {:e} [{:e}]", r, m0, ny, y);
-                approx_eq(ny, y, 8.0, 10f64.powi(-200))?;
+                approx_eq(ny, y, 8.0, 10f64.powi(-200)).map_err(|err| {
+                    println!(
+                        "[{}] A({}, {:e}) = {:e} but expected {:e}.",
+                        row, r, m0, ny, y
+                    );
+                    err
+                })?;
             }
         }
 

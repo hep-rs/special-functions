@@ -124,7 +124,7 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::c;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (r, n1, n2, s1, s12, s2, m0, m1, m2, y): (
                 f64,
                 f64,
@@ -143,11 +143,13 @@ mod tests {
 
             if !y.is_nan() {
                 let ny = f(r, n1, n2, s1, s12, s2, m0, m1, m2);
-                // println!(
-                //     "C({}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
-                //     r, n1, n2, s1, s12, s2, m0, m1, m2, ny, y
-                // );
-                approx_eq(ny, y, 4.0, 10f64.powi(-200))?
+                approx_eq(ny, y, 4.0, 10f64.powi(-200)).map_err(|err| {
+                    println!(
+                        "[{}] C({}, {}, {}, {:e}, {:e}, {:e}, {:e}, {:e}, {:e}) = {:e} but expected {:e}.",
+                        row, r, n1, n2, s1, s12, s2, m0, m1, m2, ny, y
+                    );
+                    err
+                })?;
             }
         }
 

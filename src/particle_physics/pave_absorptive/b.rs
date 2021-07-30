@@ -115,28 +115,31 @@ mod tests {
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
         let f = super::b;
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let (r, n1, s, m0, m1, y): (f64, f64, f64, f64, f64, f64) = result?;
             let r = r as i32;
             let n1 = n1 as i32;
 
             if !y.is_nan() {
                 let ny = f(r, n1, s, m0, m1);
-                // println!(
-                //     "B({}, {}, {:e}, {:e}, {:e}) = {:e} [{:e}]",
-                //     r, n1, s, m0, m1, ny, y
-                // );
                 match (r, n1) {
-                    (0, n1) if n1 < 5 => approx_eq(ny, y, 8.0, 10f64.powi(-200))?,
-                    (0, 5) => approx_eq(ny, y, 7.0, 10f64.powi(-200))?,
-                    (1, n1) if n1 < 4 => approx_eq(ny, y, 8.0, 10f64.powi(-200))?,
-                    (1, 4) => approx_eq(ny, y, 6.0, 10f64.powi(-200))?,
-                    (1, 5) => approx_eq(ny, y, 5.0, 10f64.powi(-200))?,
-                    (2, _) => approx_eq(ny, y, 4.0, 10f64.powi(-200))?,
-                    (3, 0) | (3, 1) => approx_eq(ny, y, 2.0, 10f64.powi(-200))?,
-                    (3, _) | (4, _) | (5, _) => (),
+                    (0, n1) if n1 < 5 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
+                    (0, 5) => approx_eq(ny, y, 7.0, 10f64.powi(-200)),
+                    (1, n1) if n1 < 4 => approx_eq(ny, y, 8.0, 10f64.powi(-200)),
+                    (1, 4) => approx_eq(ny, y, 6.0, 10f64.powi(-200)),
+                    (1, 5) => approx_eq(ny, y, 5.0, 10f64.powi(-200)),
+                    (2, _) => approx_eq(ny, y, 4.0, 10f64.powi(-200)),
+                    (3, 0) | (3, 1) => approx_eq(ny, y, 2.0, 10f64.powi(-200)),
+                    (3, _) | (4, _) | (5, _) => continue,
                     _ => unreachable!(),
                 }
+                .map_err(|err| {
+                    println!(
+                        "[{}] B({}, {}, {:e}, {:e} {:e}) = {:e} but expected {:e}.",
+                        row, r, n1, s, m0, m1, ny, y
+                    );
+                    err
+                })?;
             }
         }
 
