@@ -8,22 +8,38 @@ use std::{convert::identity, f64};
 
 mod bose_einstein_massive;
 mod bose_einstein_massless;
-mod bose_einstein_normalized;
+mod bose_einstein_normalized_massive;
+mod bose_einstein_normalized_massless;
 mod fermi_dirac_massive;
 mod fermi_dirac_massless;
-mod fermi_dirac_normalized;
+mod fermi_dirac_normalized_massive;
+mod fermi_dirac_normalized_massless;
 
 /// Equilibrium number density of a massless Bose-Einstein particle with
 /// chemical potential `$\mu \inR$`.
 ///
 /// The inverse temperature is in units of inverse GeV, and the result is in
 /// units of GeV`$^{3}$`.
-pub fn bose_einstein_massless(mu: f64, beta: f64) -> f64 {
+pub fn bose_einstein_massless(beta: f64, mu: f64) -> f64 {
     beta.powi(-3) * _bose_einstein_massless(mu * beta)
 }
 
 approx_fn! {
-    () fn _bose_einstein_massless(mod = bose_einstein_massless, type = chebyshev, outer = identity, inner = identity);
+    fn _bose_einstein_massless(mod = bose_einstein_massless, type = chebyshev, outer = f64::exp, inner = identity);
+}
+
+/// Equilibrium number density of massless Bose-Einstein particle with chemical
+/// potential `$\mu \inR$` normalized to a massless Bose-Einstein particle.
+///
+/// The arguments `$mu$` and `$\beta$` must be in units such that `$mu \beta$`
+/// is unitless, where `$mu$` is the particle's chemical potential and `$\beta$`
+/// is the inverse temperature.
+pub fn bose_einstein_normalized_massless(beta: f64, mu: f64) -> f64 {
+    _bose_einstein_normalized_massless(mu * beta)
+}
+
+approx_fn! {
+    fn _bose_einstein_normalized_massless(mod = bose_einstein_normalized_massless, type = chebyshev, outer = f64::exp, inner = identity);
 }
 
 /// Equilibrium number density of massive Bose-Einstein particle.
@@ -31,7 +47,7 @@ approx_fn! {
 /// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
 /// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.
 /// The result is in units of \[m\]`$^{3}$`.
-pub fn bose_einstein_massive(m: f64, beta: f64) -> f64 {
+pub fn bose_einstein_massive(beta: f64, m: f64) -> f64 {
     if m == 0.0 {
         // ζ(3) / π² ≅ 0.12179382823357308
         0.121_793_828_233_573_08 * beta.powi(-3)
@@ -41,7 +57,7 @@ pub fn bose_einstein_massive(m: f64, beta: f64) -> f64 {
 }
 
 approx_fn! {
-    () fn _bose_einstein_massive(mod = bose_einstein_massive, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    fn _bose_einstein_massive(mod = bose_einstein_massive, type = chebyshev, outer = f64::exp, inner = f64::ln);
 }
 
 /// Equilibrium number density of massive Bose-Einstein particle normalized to a
@@ -50,12 +66,12 @@ approx_fn! {
 /// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
 /// unitless, where `$m$` is the particle's mass and `$\beta$` is the inverse
 /// temperature.
-pub fn bose_einstein_normalized(m: f64, beta: f64) -> f64 {
-    _bose_einstein_normalized(m * beta)
+pub fn bose_einstein_normalized_massive(beta: f64, m: f64) -> f64 {
+    _bose_einstein_normalized_massive(m * beta)
 }
 
 approx_fn! {
-    () fn _bose_einstein_normalized(mod = bose_einstein_normalized, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    fn _bose_einstein_normalized_massive(mod = bose_einstein_normalized_massive, type = chebyshev, outer = identity, inner = f64::ln);
 }
 
 /// Equilibrium number density of a massless Fermi-Dirac particle with chemical
@@ -63,12 +79,26 @@ approx_fn! {
 ///
 /// The inverse temperature is in units of inverse GeV, and the result is in
 /// units of GeV`$^{3}$`.
-pub fn fermi_dirac_massless(mu: f64, beta: f64) -> f64 {
+pub fn fermi_dirac_massless(beta: f64, mu: f64) -> f64 {
     beta.powi(-3) * _fermi_dirac_massless(mu * beta)
 }
 
 approx_fn! {
-    () fn _fermi_dirac_massless(mod = fermi_dirac_massless, type = chebyshev, outer = identity, inner = identity);
+    fn _fermi_dirac_massless(mod = fermi_dirac_massless, type = chebyshev, outer = f64::exp, inner = identity);
+}
+
+/// Equilibrium number density of massless Fermi-Dirac particle with chemical
+/// potential `$\mu \inR$` normalized to a massless Bose-Einstein particle.
+///
+/// The arguments `$mu$` and `$beta$` must be in units such that `$mu \beta$` is
+/// unitless, where `$mu$` is the particle's chemical potential and `$\beta$` is
+/// the inverse temperature.
+pub fn fermi_dirac_normalized_massless(beta: f64, mu: f64) -> f64 {
+    _fermi_dirac_normalized_massless(mu * beta)
+}
+
+approx_fn! {
+    fn _fermi_dirac_normalized_massless(mod = fermi_dirac_normalized_massless, type = chebyshev, outer = f64::exp, inner = identity);
 }
 
 /// Equilibrium number density of massive Fermi-Dirac particle.
@@ -76,7 +106,7 @@ approx_fn! {
 /// The arguments `$m$` and `$\beta$` must be in units such that `$m \beta$` is
 /// unitless, where `$m$` is the mass and `$\beta$` is the inverse temperature.  The
 /// result is in units of \[m\]`$^{3}$`.
-pub fn fermi_dirac_massive(m: f64, beta: f64) -> f64 {
+pub fn fermi_dirac_massive(beta: f64, m: f64) -> f64 {
     if m == 0.0 {
         // 3 ζ(3) / 4 π² ≅ 0.09134537117517981
         0.091_345_371_175_179_81 * beta.powi(-3)
@@ -86,7 +116,7 @@ pub fn fermi_dirac_massive(m: f64, beta: f64) -> f64 {
 }
 
 approx_fn! {
-    () fn _fermi_dirac_massive(mod = fermi_dirac_massive, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    fn _fermi_dirac_massive(mod = fermi_dirac_massive, type = chebyshev, outer = f64::exp, inner = f64::ln);
 }
 
 /// Equilibrium number density of massive Fermi-Dirac particle normalized to a
@@ -95,12 +125,12 @@ approx_fn! {
 /// The arguments `$m$` and `$beta$` must be in units such that `$m \beta$` is
 /// unitless, where `$m$` is the particle's mass and `$\beta$` is the inverse
 /// temperature.
-pub fn fermi_dirac_normalized(m: f64, beta: f64) -> f64 {
-    _fermi_dirac_normalized(m * beta)
+pub fn fermi_dirac_normalized_massive(beta: f64, m: f64) -> f64 {
+    _fermi_dirac_normalized_massive(m * beta)
 }
 
 approx_fn! {
-    () fn _fermi_dirac_normalized(mod = fermi_dirac_normalized, type = chebyshev, outer = f64::exp, inner = f64::ln);
+    fn _fermi_dirac_normalized_massive(mod = fermi_dirac_normalized_massive, type = chebyshev, outer = identity, inner = f64::ln);
 }
 
 #[cfg(test)]
@@ -113,27 +143,33 @@ mod tests {
         let mut f = File::open("tests/data/particle_physics/statistics/massless.csv.zst")?;
         let mut rdr = csv::Reader::from_reader(zstd::Decoder::new(&mut f)?);
 
-        let f = [super::bose_einstein_massless, super::fermi_dirac_massless];
+        let f = [
+            super::bose_einstein_massless,
+            super::bose_einstein_normalized_massless,
+            super::fermi_dirac_massless,
+            super::fermi_dirac_normalized_massless,
+        ];
 
-        let mut i = 1;
-        for result in rdr.deserialize() {
-            println!("iteration: {}", {
-                i += 1;
-                i
-            });
+        for (row, result) in rdr.deserialize().enumerate() {
             let values: [f64; 7] = result?;
-            let _m = values[0];
-            let mu = values[1];
-            let beta = values[2];
-            let y = [values[3], values[5]];
+            let beta = values[0];
+            let m = values[1];
+            let mu = values[2];
+            let y = &values[3..];
 
             for i in 0..f.len() {
                 let fi = f[i];
                 let yi = y[i];
 
                 if !yi.is_nan() {
-                    let nyi = fi(mu, beta);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
+                    let nyi = fi(beta, mu);
+                    approx_eq(nyi, yi, 7.0, 10f64.powi(-300)).map_err(|err| {
+                        println!(
+                            "[{}] N{}(beta = {:e}, m = {:e}, mu = {:e}) = {:e} but expected {:e}",
+                            row, i, beta, m, mu, nyi, yi
+                        );
+                        err
+                    })?;
                 }
             }
         }
@@ -148,16 +184,16 @@ mod tests {
 
         let f = [
             super::bose_einstein_massive,
-            super::bose_einstein_normalized,
+            super::bose_einstein_normalized_massive,
             super::fermi_dirac_massive,
-            super::fermi_dirac_normalized,
+            super::fermi_dirac_normalized_massive,
         ];
 
-        for result in rdr.deserialize() {
+        for (row, result) in rdr.deserialize().enumerate() {
             let values: [f64; 7] = result?;
-            let m = values[0];
-            let _mu = values[1];
-            let beta = values[2];
+            let beta = values[0];
+            let m = values[1];
+            let mu = values[2];
             let y = &values[3..];
 
             for i in 0..f.len() {
@@ -165,8 +201,14 @@ mod tests {
                 let yi = y[i];
 
                 if !yi.is_nan() {
-                    let nyi = fi(m, beta);
-                    approx_eq(nyi, yi, 8.0, 10f64.powi(-200))?;
+                    let nyi = fi(beta, m);
+                    approx_eq(nyi, yi, 7.0, 10f64.powi(-300)).map_err(|err| {
+                        print!(
+                            "[{}] N{}(beta = {:e}, m = {:e}, mu = {:e}) = {:e} but expected {:e}",
+                            row, i, beta, m, mu, nyi, yi
+                        );
+                        err
+                    })?;
                 }
             }
         }

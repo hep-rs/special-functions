@@ -16,7 +16,7 @@ f[x_] = Re@Integrate[
   ps[x, u] u^2,
   {u, 0, Infinity}] / (2 Pi^2);
 
-Print["Approximating Bose-Einstein statistic"];
+Print["Approximating massless Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
   "../src/particle_physics/statistics/bose_einstein_massless.rs"
@@ -36,7 +36,7 @@ xLower = x /. FindRoot[
   {x, -2, -Infinity, 0},
   WorkingPrecision -> 5 $MachinePrecision,
   MaxIterations -> Infinity];
-Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]]];
+Print[StringTemplate["Lower approximation valid from `` to ``."][-\[Infinity], N[xLower, 4]]];
 
 (* Write out the approximation valid for small x. *)
 lower = CoefficientList[lower, Exp[x]];
@@ -82,7 +82,9 @@ WriteString[
 ];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
+outer = Exp;
+inner = Identity;
+splits = ChebyshevSplits[InverseFunction[outer]@f[InverseFunction[inner]@x], {x, inner@xLower, inner@xUpper}];
 ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

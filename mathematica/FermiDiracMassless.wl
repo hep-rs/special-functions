@@ -10,13 +10,14 @@ Integrate[1 / (E^(β (u - mu)) + 1) u^2, {u, 0, ∞}] / (2 * Pi^2)
  *)
 
 $Assumptions = x \[Element] Reals;
+RustForm[x] = "x";
 
 ps[x_, u_] = 1/(Exp[u - x] + 1);
 f[x_] = Integrate[
   ps[x, u] u^2,
   {u, 0, Infinity}] / (2 Pi^2);
 
-Print["Approximating Bose-Einstein statistic"];
+Print["Approximating massless Fermi-Dirac statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
   "../src/particle_physics/statistics/fermi_dirac_massless.rs"
@@ -59,7 +60,7 @@ xUpper = x /. FindRoot[
   {x, 2, -Infinity, Infinity},
   WorkingPrecision -> 5 $MachinePrecision,
   MaxIterations -> Infinity];
-Print[StringTemplate["Upper approximation valid from `` to ``."][N[xUpper, 4], 0]];
+Print[StringTemplate["Upper approximation valid from `` to ``."][N[xUpper, 4], \[Infinity]]];
 
 (* Write out the approximation valid for large x. *)
 upper = CoefficientList[upper, x];
@@ -82,7 +83,9 @@ WriteString[
   |>]];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[f[x], {x, xLower, xUpper}];
+outer = Exp;
+inner = Identity;
+splits = ChebyshevSplits[InverseFunction[outer]@f[InverseFunction[inner]@x], {x, inner@xLower, inner@xUpper}];
 ChebyshevSplitsRustForm[splits, output];
 
 Close[output];

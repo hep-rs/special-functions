@@ -21,15 +21,15 @@ numerator[x_?NumericQ] := Quiet@NIntegrate[
   ps[x, u] u Sqrt[u^2 - 1],
   {u, 1, Infinity},
   Method -> {"DoubleExponential", "SymbolicProcessing" -> False},
-  WorkingPrecision -> 400,
-  AccuracyGoal -> 300];
+  WorkingPrecision -> 2 $MachinePrecision,
+  PrecisionGoal -> $MachinePrecision];
 
 f[x_] := numerator[x] / denominator[x];
 
-Print["Approximating normalized Bose-Einstein statistic"];
+Print["Approximating normalized massive Bose-Einstein statistic"];
 output = OpenWrite[FileNameJoin[{
   Directory[],
-  "../src/particle_physics/statistics/bose_einstein_normalized.rs"
+  "../src/particle_physics/statistics/bose_einstein_normalized_massive.rs"
   }]];
 
 WriteString[
@@ -40,11 +40,11 @@ WriteString[
 (* Write out the approximation valid for small x. *)
 data = Table[{x, f[x]}, {x, 10^Subdivide[-30, -20, 20]}];
 fit = NonlinearModelFit[data, 1 + x^2 (a + b Log[x]), {a, b}, x];
-lower[x_] = fit["BestFit"];
+lower = fit["BestFit"];
 xLower = x /. FindRoot[
-  Abs[lower[x] / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
+  Abs[lower / f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
   {x, 2, 0, Infinity},
-  WorkingPrecision -> 5 $MachinePrecision,
+  WorkingPrecision -> 2 $MachinePrecision,
   MaxIterations -> Infinity
 ];
 Print[StringTemplate["Lower approximation valid from `` to ``."][0, N[xLower, 4]]];
@@ -62,11 +62,11 @@ WriteString[
        |>]];
 
 (* Write out the approximation valid for large x. *)
-upper[x_] = x^2 * BesselK[2, x] / (2 * Zeta[3]);
+upper = x^2 * BesselK[2, x] / (2 * Zeta[3]);
 xUpper = x /. FindRoot[
-  Abs[upper[x]/f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
+  Abs[upper/f[x] - 1] - SetPrecision[$MachineEpsilon, Infinity],
   {x, 2, 0, Infinity},
-  WorkingPrecision -> 5 $MachinePrecision,
+  WorkingPrecision -> 2 $MachinePrecision,
   MaxIterations -> Infinity];
 Print[StringTemplate["Upper approximation valid from `` to ``."][N[xUpper, 4], \[Infinity]]];
 WriteString[
@@ -76,7 +76,9 @@ WriteString[
 }\n\n"];
 
 (* Subdivide the remaining interval using Chebyshev polynomials *)
-splits = ChebyshevSplits[Log@f[Exp@x], {x, Log@xLower, Log@xUpper}];
+outer = Identity;
+inner = Log;
+splits = ChebyshevSplits[InverseFunction[outer]@f[InverseFunction[inner]@x], {x, inner@xLower, inner@xUpper}];
 ChebyshevSplitsRustForm[splits, output];
 
 Close[output];
