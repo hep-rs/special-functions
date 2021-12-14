@@ -41,15 +41,14 @@ pub fn kallen_lambda(a: f64, b: f64, c: f64) -> f64 {
 /// assert!((kallen_lambda(5.0, 2.0, 0.5).sqrt() - kallen_lambda_sqrt(5.0, 2.0, 0.5)).abs() < 1e-14);
 /// assert!((kallen_lambda_sqrt(1.0, 1.0, 1.0) - 3f64.sqrt()).abs() < 1e-14);
 /// ```
-///
-/// # Warning
-///
-/// The result returns the root of the *absolute value*, thus returning a result
-/// even if `kallen_lambda` is negative.  It is up to the user to determine
-/// whether this is valid or not.
 #[must_use]
 #[allow(clippy::many_single_char_names)]
 pub fn kallen_lambda_sqrt(a: f64, b: f64, c: f64) -> f64 {
+    debug_assert!(
+        a >= 0.0 && b >= 0.0 && c >= 0.0,
+        "The arguments of kallen_lambda_sqrt must be non-negative"
+    );
+
     let (max, x) = if a > b { (a, b) } else { (b, a) };
     let (max, y) = if max > c { (max, c) } else { (c, max) };
     let (x, y) = if x > y {
@@ -58,9 +57,7 @@ pub fn kallen_lambda_sqrt(a: f64, b: f64, c: f64) -> f64 {
         (y / max, x / max)
     };
 
-    max * (x.powi(2) - 2.0 * x * (y + 1.0) + (y - 1.0).powi(2))
-        .abs()
-        .sqrt()
+    max * f64::sqrt(x.powi(2) - 2.0 * x * (y + 1.0) + (y - 1.0).powi(2))
 }
 
 #[cfg(test)]
