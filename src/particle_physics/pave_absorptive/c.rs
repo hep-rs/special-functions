@@ -39,7 +39,7 @@ impl Parameters {
             m2_2,
             lambda_s12_sqrt: kallen_lambda_sqrt(s1, s12, s2),
             lambda_m01_sqrt: kallen_lambda_sqrt(s1, m0_2, m1_2),
-            lambda_m12_sqrt: kallen_lambda_sqrt(s12, m1_2, m1_2),
+            lambda_m12_sqrt: kallen_lambda_sqrt(s12, m1_2, m2_2),
             lambda_m02_sqrt: kallen_lambda_sqrt(s2, m0_2, m2_2),
         }
     }
